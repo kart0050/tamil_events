@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Our Wedding Planner 💍</title>
 
-  <link
-    rel="stylesheet"
-    href="./style.css?v=2"
-  >
+  <!-- CSS -->
 
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -59,9 +50,8 @@ content="width=device-width, initial-scale=1.0"
 ```
 <nav
   class="nav"
-  id="navigation"
-  aria-label="Wedding planner navigation"
-></nav>
+  id="navigation">
+</nav>
 ```
 
   </div>
@@ -79,7 +69,7 @@ content="width=device-width, initial-scale=1.0"
 
 <section id="dashboardPage">
 
-  <div class="page-header dashboard-header">
+  <div class="page-header">
 
     <div>
 
@@ -94,46 +84,10 @@ content="width=device-width, initial-scale=1.0"
 
     </div>
 
-
-    <!-- =========================
-         DATA ACTIONS
-    ========================== -->
-
-    <div class="data-actions">
-
-      <button
-        class="export-button"
-        id="exportButton"
-        type="button"
-      >
-        📥 Export data
-      </button>
-
-
-      <button
-        class="import-button"
-        id="importButton"
-        type="button"
-      >
-        📤 Import data
-      </button>
-
-
-      <input
-        type="file"
-        id="importFile"
-        accept=".json,application/json"
-        hidden
-      >
-
-    </div>
-
   </div>
 
 
-  <!-- =========================
-       STATS
-  ========================== -->
+  <!-- STATS -->
 
   <div class="stats">
 
@@ -145,8 +99,7 @@ content="width=device-width, initial-scale=1.0"
 
       <div
         class="stat-number"
-        id="totalCount"
-      >
+        id="totalCount">
         0
       </div>
 
@@ -165,8 +118,7 @@ content="width=device-width, initial-scale=1.0"
 
       <div
         class="stat-number"
-        id="doneCount"
-      >
+        id="doneCount">
         0
       </div>
 
@@ -185,8 +137,7 @@ content="width=device-width, initial-scale=1.0"
 
       <div
         class="stat-number"
-        id="progressCount"
-      >
+        id="progressCount">
         0
       </div>
 
@@ -205,8 +156,7 @@ content="width=device-width, initial-scale=1.0"
 
       <div
         class="stat-number"
-        id="categoryCount"
-      >
+        id="categoryCount">
         0
       </div>
 
@@ -219,9 +169,7 @@ content="width=device-width, initial-scale=1.0"
   </div>
 
 
-  <!-- =========================
-       OVERALL PROGRESS
-  ========================== -->
+  <!-- OVERALL PROGRESS -->
 
   <div class="progress-card">
 
@@ -237,22 +185,19 @@ content="width=device-width, initial-scale=1.0"
 
     </div>
 
-
     <div class="progress-bar">
 
       <div
         class="progress-fill"
-        id="overallFill"
-      ></div>
+        id="overallFill">
+      </div>
 
     </div>
 
   </div>
 
 
-  <!-- =========================
-       CATEGORY LIST
-  ========================== -->
+  <!-- CATEGORY LIST -->
 
   <div class="page-header">
 
@@ -273,8 +218,8 @@ content="width=device-width, initial-scale=1.0"
 
   <div
     class="category-summary-grid"
-    id="summaryGrid"
-  ></div>
+    id="summaryGrid">
+  </div>
 
 </section>
 
@@ -285,14 +230,14 @@ content="width=device-width, initial-scale=1.0"
 
 <section
   id="categoryPage"
-  hidden
->
+  style="display:none;">
 
   <div class="page-header">
 
     <div>
 
-      <h2 id="categoryTitle"></h2>
+      <h2 id="categoryTitle">
+      </h2>
 
       <p>
         Select an item to see more details.
@@ -316,9 +261,7 @@ content="width=device-width, initial-scale=1.0"
   </div>
 
 
-  <!-- =========================
-       SEARCH
-  ========================== -->
+  <!-- SEARCH -->
 
   <div class="search-area">
 
@@ -352,21 +295,18 @@ content="width=device-width, initial-scale=1.0"
   </div>
 
 
-  <!-- =========================
-       ITEMS
-  ========================== -->
+  <!-- ITEMS -->
 
   <div
     class="items-grid"
-    id="itemsGrid"
-  ></div>
+    id="itemsGrid">
+  </div>
 
 
   <div
     class="empty"
     id="emptyMessage"
-    hidden
-  >
+    style="display:none;">
 
     <h3>
       No items found
@@ -397,22 +337,12 @@ content="width=device-width, initial-scale=1.0"
 
   <div
     class="overlay"
-    id="overlay"
-    hidden
-  >
+    id="overlay">
 
 ```
-<div
-  class="modal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="modalTitle"
->
+<div class="modal">
 
-
-  <!-- =========================
-       MODAL HEADER
-  ========================== -->
+  <!-- MODAL HEADER -->
 
   <div class="modal-header">
 
@@ -420,29 +350,28 @@ content="width=device-width, initial-scale=1.0"
 
       <div
         class="modal-category"
-        id="modalCategory"
-      ></div>
+        id="modalCategory">
+      </div>
 
-      <h2 id="modalTitle"></h2>
+      <h2 id="modalTitle">
+      </h2>
 
     </div>
 
 
     <button
       class="close"
-      id="closeModalButton"
       type="button"
-      aria-label="Close"
-    >
+      onclick="closeModal()">
+
       ×
+
     </button>
 
   </div>
 
 
-  <!-- =========================
-       MODAL BODY
-  ========================== -->
+  <!-- MODAL BODY -->
 
   <div class="modal-body">
 
@@ -459,29 +388,35 @@ content="width=device-width, initial-scale=1.0"
       <div class="status-buttons">
 
         <button
+          type="button"
           class="status-button not"
           id="notButton"
-          type="button"
-        >
+          onclick="chooseStatus('not')">
+
           ○ Not started
+
         </button>
 
 
         <button
+          type="button"
           class="status-button progress"
           id="progressButton"
-          type="button"
-        >
+          onclick="chooseStatus('progress')">
+
           ◐ In progress
+
         </button>
 
 
         <button
+          type="button"
           class="status-button done"
           id="doneButton"
-          type="button"
-        >
+          onclick="chooseStatus('done')">
+
           ✓ Completed
+
         </button>
 
       </div>
@@ -493,12 +428,13 @@ content="width=device-width, initial-scale=1.0"
 
     <div class="form-group">
 
-      <label for="vendorInput">
+      <label>
         Vendor / Person
       </label>
 
       <input
         id="vendorInput"
+        type="text"
         placeholder="Who is responsible?"
       >
 
@@ -509,12 +445,13 @@ content="width=device-width, initial-scale=1.0"
 
     <div class="form-group">
 
-      <label for="priceInput">
+      <label>
         Price
       </label>
 
       <input
         id="priceInput"
+        type="text"
         placeholder="e.g. 2,500 kr"
       >
 
@@ -525,7 +462,7 @@ content="width=device-width, initial-scale=1.0"
 
     <div class="form-group">
 
-      <label for="deadlineInput">
+      <label>
         Deadline
       </label>
 
@@ -541,12 +478,13 @@ content="width=device-width, initial-scale=1.0"
 
     <div class="form-group">
 
-      <label for="linkInput">
+      <label>
         Website / Instagram / Link
       </label>
 
       <input
         id="linkInput"
+        type="url"
         placeholder="https://..."
       >
 
@@ -557,7 +495,7 @@ content="width=device-width, initial-scale=1.0"
 
     <div class="form-group">
 
-      <label for="notesInput">
+      <label>
         Notes
       </label>
 
@@ -574,20 +512,22 @@ content="width=device-width, initial-scale=1.0"
     <div class="modal-actions">
 
       <button
-        class="clear"
-        id="clearButton"
         type="button"
-      >
+        class="clear"
+        onclick="clearItem()">
+
         Clear
+
       </button>
 
 
       <button
-        class="save"
-        id="saveButton"
         type="button"
-      >
+        class="save"
+        onclick="saveItem()">
+
         Save changes
+
       </button>
 
     </div>
@@ -603,11 +543,7 @@ content="width=device-width, initial-scale=1.0"
        JAVASCRIPT
   ========================== -->
 
-  <script
-    src="./script.js?v=2"
-    defer
-  ></script>
+  <script src="./script.js"></script>
 
 </body>
-
 </html>
