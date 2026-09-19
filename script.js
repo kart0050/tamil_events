@@ -14,11 +14,8 @@ const categories = [
     name:"Gæster",
     icon:"👥",
     items:[
-      "Guest list",
-      "RSVP",
-      "Seating plan",
-      "Hotels",
-      "Transportation"
+      "Palaharam (Goodie bag)",
+      "Hotels"
     ]
   },
 
@@ -31,8 +28,8 @@ const categories = [
       "Koorai saree (Rød)",
       "Vetti sattai",
       "Sko",
-      "Vetti sattai friends",
-      "Saree bridesmaid",
+      "Vetti Sattai Grooms Mate",
+      "Saree Bridesmaid",
       "Tøj til preshoot"
     ]
   },
@@ -57,8 +54,7 @@ const categories = [
     items:[
       "Aviraa Creations",
       "Ponthayadesigns",
-      "Kopuramevents.fr",
-      "Tamil wedding program"
+      "Kopuramevents.fr"
     ]
   },
 
@@ -67,10 +63,7 @@ const categories = [
     name:"Decoration Kovil",
     icon:"🛕",
     items:[
-      "Kopuramevents.fr",
-      "Udendørs decoration",
-      "Flowers",
-      "Entrance decoration"
+      "Kopuramevents.fr"
     ]
   },
 
@@ -80,7 +73,7 @@ const categories = [
     icon:"✨",
     items:[
       "360 Booth",
-      "Bridal corner setup"
+      "Bridal Corner Setup"
     ]
   },
 
@@ -106,7 +99,7 @@ const categories = [
       "Civil Weds (Ring)",
       "Udlandet",
       "Amorasareesdk",
-      "ranyasarees"
+      "Ranyasarees"
     ]
   },
 
@@ -165,10 +158,10 @@ const categories = [
     items:[
       "Poovi Mama Horsens",
       "Kammali Randers",
-      "Tamil ondrai Aarhus",
+      "Tamil Ondrai Aarhus",
       "Dhoni",
       "Appam",
-      "Vaathali og pako"
+      "Vaathali og Pako"
     ]
   },
 
@@ -177,7 +170,7 @@ const categories = [
     name:"Bryllupskage",
     icon:"🎂",
     items:[
-      "Wedding cake",
+      "Wedding Cake",
       "Lighter + Knife"
     ]
   },
@@ -187,7 +180,7 @@ const categories = [
     name:"Preshoot",
     icon:"📸",
     items:[
-      "Views of nivi",
+      "Views of Nivi",
       "Sana",
       "Visual Eyes",
       "Nomad",
