@@ -3,882 +3,518 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Our Wedding Planner 💍</title>
 
-  <style>
-    :root {
-      --burgundy: #7d1f3b;
-      --dark-burgundy: #57152b;
-      --rose: #c96b86;
-      --pink: #f8e8ed;
-      --cream: #fffaf5;
-      --gold: #c89b3c;
-      --green: #3f8c62;
-      --orange: #d88635;
-      --text: #332b2e;
-      --muted: #81767a;
-      --white: #ffffff;
-      --border: #eadde0;
-      --shadow: 0 8px 30px rgba(91, 34, 51, 0.08);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        Helvetica, Arial, sans-serif;
-      background: var(--cream);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    /* HERO */
-
-    .hero {
-      background:
-        linear-gradient(135deg, rgba(87,21,43,.96), rgba(125,31,59,.92)),
-        radial-gradient(circle at top right, #e5b66a, transparent 35%);
-      color: white;
-      padding: 50px 20px 70px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before,
-    .hero::after {
-      content: "✦";
-      position: absolute;
-      color: rgba(255,255,255,.2);
-      font-size: 100px;
-    }
-
-    .hero::before {
-      top: 10px;
-      left: 5%;
-    }
-
-    .hero::after {
-      bottom: -20px;
-      right: 8%;
-    }
-
-    .hero-inner {
-      max-width: 1250px;
-      margin: auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .eyebrow {
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 12px;
-      opacity: .8;
-      margin-bottom: 12px;
-    }
-
-    .hero h1 {
-      font-family: Georgia, serif;
-      font-size: clamp(42px, 7vw, 76px);
-      font-weight: 400;
-      margin-bottom: 10px;
-    }
-
-    .hero p {
-      font-size: 18px;
-      opacity: .9;
-      max-width: 650px;
-    }
-
-    .hero-date {
-      margin-top: 25px;
-      display: inline-flex;
-      gap: 10px;
-      align-items: center;
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.2);
-      padding: 12px 18px;
-      border-radius: 999px;
-    }
-
-    /* APP */
-
-    .app {
-      max-width: 1250px;
-      margin: -35px auto 60px;
-      padding: 0 20px;
-      position: relative;
-      z-index: 3;
-    }
-
-    /* STATS */
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-
-    .stat {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: var(--shadow);
-    }
-
-    .stat-icon {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    .stat-number {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--burgundy);
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 4px;
-    }
-
-    /* PROGRESS */
-
-    .progress-card {
-      background: white;
-      border-radius: 20px;
-      padding: 25px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      margin-bottom: 25px;
-    }
-
-    .progress-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .progress-top h2 {
-      font-family: Georgia, serif;
-      font-size: 24px;
-      font-weight: 400;
-    }
-
-    .progress-percent {
-      color: var(--burgundy);
-      font-weight: 700;
-      font-size: 20px;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 12px;
-      background: #f0e5e8;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--burgundy), var(--gold));
-      width: 0%;
-      transition: width .4s ease;
-      border-radius: 999px;
-    }
-
-    /* CONTROLS */
-
-    .controls {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 18px;
-      display: flex;
-      gap: 12px;
-      margin-bottom: 25px;
-      box-shadow: var(--shadow);
-      flex-wrap: wrap;
-    }
-
-    .search {
-      flex: 1;
-      min-width: 220px;
-      position: relative;
-    }
-
-    .search input,
-    .controls select {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 13px 15px;
-      background: #fff;
-      color: var(--text);
-      outline: none;
-    }
-
-    .search input:focus,
-    .controls select:focus {
-      border-color: var(--rose);
-      box-shadow: 0 0 0 3px rgba(201,107,134,.1);
-    }
-
-    .filter {
-      min-width: 180px;
-    }
-
-    .reset-btn {
-      border: none;
-      background: var(--pink);
-      color: var(--burgundy);
-      border-radius: 12px;
-      padding: 12px 18px;
-      font-weight: 600;
-    }
-
-    .reset-btn:hover {
-      background: #f0d8df;
-    }
-
-    /* CATEGORY GRID */
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 35px 0 18px;
-    }
-
-    .section-title h2 {
-      font-family: Georgia, serif;
-      font-size: 30px;
-      font-weight: 400;
-    }
-
-    .section-title span {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .category-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 22px;
-      box-shadow: var(--shadow);
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .category-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 35px rgba(91,34,51,.12);
-    }
-
-    .category-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 17px;
-      gap: 10px;
-    }
-
-    .category-name {
-      font-weight: 700;
-      font-size: 18px;
-    }
-
-    .category-count {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .category-progress {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: conic-gradient(
-        var(--burgundy) var(--progress, 0%),
-        #f0e5e8 var(--progress, 0%)
-      );
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .category-progress::after {
-      content: attr(data-percent);
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--burgundy);
-    }
-
-    .item-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 12px;
-      border-radius: 12px;
-      background: #fcf8f9;
-      border: 1px solid transparent;
-      transition: .2s;
-      cursor: pointer;
-    }
-
-    .item:hover {
-      border-color: var(--rose);
-      background: #fff;
-    }
-
-    .item-check {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid #d9c7cd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 11px;
-      color: white;
-    }
-
-    .item.done .item-check {
-      background: var(--green);
-      border-color: var(--green);
-    }
-
-    .item-text {
-      flex: 1;
-      font-size: 14px;
-    }
-
-    .item.done .item-text {
-      text-decoration: line-through;
-      color: #999;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #d6cbd0;
-    }
-
-    .item.in-progress .status-dot {
-      background: var(--orange);
-    }
-
-    .item.done .status-dot {
-      background: var(--green);
-    }
-
-    /* MODAL */
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(34, 20, 25, .65);
-      backdrop-filter: blur(5px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 100;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal {
-      width: min(650px, 100%);
-      max-height: 90vh;
-      overflow-y: auto;
-      background: white;
-      border-radius: 24px;
-      box-shadow: 0 25px 80px rgba(0,0,0,.25);
-      animation: modalIn .2s ease;
-    }
-
-    @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .modal-header {
-      padding: 25px 28px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .modal-category {
-      color: var(--rose);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 700;
-      margin-bottom: 7px;
-    }
-
-    .modal-header h2 {
-      font-family: Georgia, serif;
-      font-size: 27px;
-      font-weight: 400;
-    }
-
-    .close-btn {
-      width: 36px;
-      height: 36px;
-      border: none;
-      border-radius: 50%;
-      background: #f7edef;
-      color: var(--burgundy);
-      font-size: 20px;
-    }
-
-    .modal-body {
-      padding: 25px 28px 30px;
-    }
-
-    .form-group {
-      margin-bottom: 18px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 7px;
-      color: #55494d;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      outline: none;
-      background: #fff;
-    }
-
-    .form-group textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      border-color: var(--rose);
-    }
-
-    .status-buttons {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .status-btn {
-      border: 1px solid var(--border);
-      background: white;
-      padding: 11px;
-      border-radius: 10px;
-      font-size: 13px;
-    }
-
-    .status-btn.active.not-started {
-      background: #f4eef0;
-      border-color: #bba7ae;
-    }
-
-    .status-btn.active.in-progress {
-      background: #fff1df;
-      border-color: var(--orange);
-      color: #9a5c18;
-    }
-
-    .status-btn.active.done {
-      background: #e5f4eb;
-      border-color: var(--green);
-      color: #2c6e4a;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 25px;
-    }
-
-    .save-btn {
-      flex: 1;
-      border: none;
-      background: var(--burgundy);
-      color: white;
-      padding: 13px 20px;
-      border-radius: 11px;
-      font-weight: 700;
-    }
-
-    .save-btn:hover {
-      background: var(--dark-burgundy);
-    }
-
-    .delete-btn {
-      border: 1px solid #e2c9cf;
-      color: #a03552;
-      background: white;
-      padding: 13px 20px;
-      border-radius: 11px;
-    }
-
-    /* EMPTY */
-
-    .empty {
-      background: white;
-      border: 1px dashed var(--border);
-      border-radius: 20px;
-      padding: 50px 20px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    .empty-icon {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
-
-    /* FOOTER */
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      padding: 30px 20px 50px;
-      font-size: 13px;
-    }
-
-    footer strong {
-      color: var(--burgundy);
-    }
-
-    /* RESPONSIVE */
-
-    @media (max-width: 1000px) {
-      .category-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 700px) {
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .category-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        padding: 35px 20px 60px;
-      }
-
-      .hero h1 {
-        font-size: 46px;
-      }
-
-      .controls {
-        flex-direction: column;
-      }
-
-      .filter {
-        width: 100%;
-      }
-
-      .section-title {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 5px;
-      }
-
-      .status-buttons {
-        grid-template-columns: 1fr;
-      }
-
-      .modal-header,
-      .modal-body {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-    }
-
-    @media (max-width: 450px) {
-      .stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .stat {
-        padding: 15px;
-      }
-
-      .stat-number {
-        font-size: 23px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- HERO -->
+  <!-- =========================
+       HERO
+  ========================== -->
+
   <header class="hero">
+
     <div class="hero-inner">
-      <div class="eyebrow">Our Wedding Planner</div>
-      <h1>💍 Our Big Day</h1>
+
+      <div class="eyebrow">
+        Tamil Wedding Planner
+      </div>
+
+      <h1>
+        💍 Our Big Day
+      </h1>
+
       <p>
-        Everything for our Tamil wedding, all in one beautiful place.
+        Everything we need for our wedding,
+        beautifully organised.
       </p>
 
-      <div class="hero-date">
-        ✨ <span id="todayText">Wedding Planning Dashboard</span>
-      </div>
     </div>
+
   </header>
+
+
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+
+  <div class="nav-wrapper">
+
+    <nav
+      class="nav"
+      id="navigation">
+    </nav>
+
+  </div>
+
+
+  <!-- =========================
+       MAIN APP
+  ========================== -->
 
   <main class="app">
 
-    <!-- STATS -->
-    <section class="stats">
-      <div class="stat">
-        <div class="stat-icon">📋</div>
-        <div class="stat-number" id="totalItems">0</div>
-        <div class="stat-label">Total things to plan</div>
+
+    <!-- =========================
+         DASHBOARD
+    ========================== -->
+
+    <section id="dashboardPage">
+
+      <div class="page-header">
+
+        <div>
+
+          <h2>
+            Wedding Dashboard
+          </h2>
+
+          <p>
+            Keep track of everything
+            for the big day.
+          </p>
+
+        </div>
+
       </div>
 
-      <div class="stat">
-        <div class="stat-icon">✅</div>
-        <div class="stat-number" id="doneItems">0</div>
-        <div class="stat-label">Completed</div>
+
+      <!-- STATS -->
+
+      <div class="stats">
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            📋
+          </div>
+
+          <div
+            class="stat-number"
+            id="totalCount">
+            0
+          </div>
+
+          <div class="stat-label">
+            Total items
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            ✅
+          </div>
+
+          <div
+            class="stat-number"
+            id="doneCount">
+            0
+          </div>
+
+          <div class="stat-label">
+            Completed
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            ⏳
+          </div>
+
+          <div
+            class="stat-number"
+            id="progressCount">
+            0
+          </div>
+
+          <div class="stat-label">
+            In progress
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            🗂️
+          </div>
+
+          <div
+            class="stat-number"
+            id="categoryCount">
+            0
+          </div>
+
+          <div class="stat-label">
+            Categories
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="stat">
-        <div class="stat-icon">⏳</div>
-        <div class="stat-number" id="progressItems">0</div>
-        <div class="stat-label">In progress</div>
+
+      <!-- OVERALL PROGRESS -->
+
+      <div class="progress-card">
+
+        <div class="progress-heading">
+
+          <h2>
+            Overall progress
+          </h2>
+
+          <span id="overallPercent">
+            0%
+          </span>
+
+        </div>
+
+        <div class="progress-bar">
+
+          <div
+            class="progress-fill"
+            id="overallFill">
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="stat">
-        <div class="stat-icon">🗂️</div>
-        <div class="stat-number" id="categoryCount">0</div>
-        <div class="stat-label">Categories</div>
+
+      <!-- CATEGORY LIST -->
+
+      <div class="page-header">
+
+        <div>
+
+          <h2>
+            Categories
+          </h2>
+
+          <p>
+            Select a category to start planning.
+          </p>
+
+        </div>
+
       </div>
+
+
+      <div
+        class="category-summary-grid"
+        id="summaryGrid">
+      </div>
+
     </section>
 
-    <!-- PROGRESS -->
-    <section class="progress-card">
-      <div class="progress-top">
-        <h2>Wedding planning progress</h2>
-        <div class="progress-percent" id="progressPercent">0%</div>
+
+    <!-- =========================
+         CATEGORY PAGE
+    ========================== -->
+
+    <section
+      id="categoryPage"
+      style="display:none;">
+
+      <div class="page-header">
+
+        <div>
+
+          <h2 id="categoryTitle">
+          </h2>
+
+          <p>
+            Select an item to see more details.
+          </p>
+
+        </div>
+
+
+        <div class="category-progress">
+
+          <strong id="categoryPercent">
+            0%
+          </strong>
+
+          <span id="categoryProgressText">
+            0 / 0 completed
+          </span>
+
+        </div>
+
       </div>
 
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
-    </section>
 
-    <!-- SEARCH -->
-    <section class="controls">
+      <!-- SEARCH -->
 
-      <div class="search">
+      <div class="search-area">
+
         <input
+          id="itemSearch"
           type="search"
-          id="searchInput"
-          placeholder="🔎 Search anything... e.g. saree, DJ, food"
+          placeholder="🔎 Search within this category..."
         >
-      </div>
 
-      <div class="filter">
-        <select id="categoryFilter">
-          <option value="all">All categories</option>
+
+        <select id="itemStatusFilter">
+
+          <option value="all">
+            All items
+          </option>
+
+          <option value="not">
+            Not started
+          </option>
+
+          <option value="progress">
+            In progress
+          </option>
+
+          <option value="done">
+            Completed
+          </option>
+
         </select>
+
       </div>
 
-      <div class="filter">
-        <select id="statusFilter">
-          <option value="all">All statuses</option>
-          <option value="not-started">Not started</option>
-          <option value="in-progress">In progress</option>
-          <option value="done">Done</option>
-        </select>
+
+      <!-- ITEMS -->
+
+      <div
+        class="items-grid"
+        id="itemsGrid">
       </div>
 
-      <button class="reset-btn" onclick="resetAll()">
-        Reset progress
-      </button>
 
-    </section>
+      <div
+        class="empty"
+        id="emptyMessage"
+        style="display:none;">
 
-    <!-- CONTENT -->
-    <section>
-      <div class="section-title">
-        <h2>Wedding checklist</h2>
-        <span>Click any item to open it ✨</span>
+        <h3>
+          No items found
+        </h3>
+
+        <p>
+          Try another search or status filter.
+        </p>
+
       </div>
 
-      <div id="categoriesContainer" class="category-grid"></div>
-
-      <div id="emptyState" class="empty" style="display:none;">
-        <div class="empty-icon">🔎</div>
-        <h3>No items found</h3>
-        <p>Try another search or category.</p>
-      </div>
     </section>
 
   </main>
 
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
   <footer>
-    Made with ❤️ for <strong>our wedding</strong>
+    Made with ❤️ for our wedding
   </footer>
 
 
-  <!-- ITEM MODAL -->
-  <div class="modal-overlay" id="modalOverlay">
+  <!-- =========================
+       MODAL
+  ========================== -->
+
+  <div
+    class="overlay"
+    id="overlay">
 
     <div class="modal">
+
+
+      <!-- MODAL HEADER -->
 
       <div class="modal-header">
 
         <div>
-          <div class="modal-category" id="modalCategory"></div>
-          <h2 id="modalTitle"></h2>
+
+          <div
+            class="modal-category"
+            id="modalCategory">
+          </div>
+
+          <h2 id="modalTitle">
+          </h2>
+
         </div>
 
-        <button class="close-btn" onclick="closeModal()">×</button>
+
+        <button
+          class="close"
+          onclick="closeModal()">
+
+          ×
+
+        </button>
 
       </div>
 
+
+      <!-- MODAL BODY -->
+
       <div class="modal-body">
+
+
+        <!-- STATUS -->
 
         <div class="form-group">
 
-          <label>Status</label>
+          <label>
+            Status
+          </label>
+
 
           <div class="status-buttons">
 
             <button
-              class="status-btn not-started"
-              id="statusNotStarted"
-              onclick="setModalStatus('not-started')"
-            >
+              class="status-button not"
+              id="notButton"
+              onclick="chooseStatus('not')">
+
               ○ Not started
+
             </button>
 
+
             <button
-              class="status-btn in-progress"
-              id="statusInProgress"
-              onclick="setModalStatus('in-progress')"
-            >
+              class="status-button progress"
+              id="progressButton"
+              onclick="chooseStatus('progress')">
+
               ◐ In progress
+
             </button>
 
+
             <button
-              class="status-btn done"
-              id="statusDone"
-              onclick="setModalStatus('done')"
-            >
-              ✓ Done
+              class="status-button done"
+              id="doneButton"
+              onclick="chooseStatus('done')">
+
+              ✓ Completed
+
             </button>
 
           </div>
 
         </div>
 
-        <div class="form-group">
-          <label>Vendor / Person</label>
-          <input id="modalVendor" placeholder="Who is responsible?">
-        </div>
+
+        <!-- VENDOR -->
 
         <div class="form-group">
-          <label>Price</label>
-          <input id="modalPrice" placeholder="e.g. 2,500 kr">
+
+          <label>
+            Vendor / Person
+          </label>
+
+          <input
+            id="vendorInput"
+            placeholder="Who is responsible?"
+          >
+
         </div>
 
-        <div class="form-group">
-          <label>Deadline</label>
-          <input id="modalDeadline" type="date">
-        </div>
+
+        <!-- PRICE -->
 
         <div class="form-group">
-          <label>Website / Instagram / Link</label>
-          <input id="modalLink" placeholder="https://...">
+
+          <label>
+            Price
+          </label>
+
+          <input
+            id="priceInput"
+            placeholder="e.g. 2,500 kr"
+          >
+
         </div>
 
+
+        <!-- DEADLINE -->
+
         <div class="form-group">
-          <label>Notes</label>
+
+          <label>
+            Deadline
+          </label>
+
+          <input
+            id="deadlineInput"
+            type="date"
+          >
+
+        </div>
+
+
+        <!-- LINK -->
+
+        <div class="form-group">
+
+          <label>
+            Website / Instagram / Link
+          </label>
+
+          <input
+            id="linkInput"
+            placeholder="https://..."
+          >
+
+        </div>
+
+
+        <!-- NOTES -->
+
+        <div class="form-group">
+
+          <label>
+            Notes
+          </label>
+
           <textarea
-            id="modalNotes"
-            placeholder="Add notes, ideas, measurements, contact information..."
+            id="notesInput"
+            placeholder="Add notes, ideas, contact details, measurements..."
           ></textarea>
+
         </div>
+
+
+        <!-- BUTTONS -->
 
         <div class="modal-actions">
 
-          <button class="delete-btn" onclick="clearItemDetails()">
+          <button
+            class="clear"
+            onclick="clearItem()">
+
             Clear
+
           </button>
 
-          <button class="save-btn" onclick="saveModal()">
+
+          <button
+            class="save"
+            onclick="saveItem()">
+
             Save changes
+
           </button>
 
         </div>
@@ -890,930 +526,9 @@
   </div>
 
 
-  <script>
+  <!-- JAVASCRIPT -->
 
-    /*
-      ==========================================================
-      WEDDING PLANNER DATA
-      ==========================================================
-    */
-
-    const weddingData = [
-
-      {
-        category: "Styr på ting",
-        items: [
-          "Gæster",
-          "Tøj",
-          "Reception Songs",
-          "Wedding Sign + Card (Tamil wedding program)",
-          "Decoration Kovil (Udendørs ?)",
-          "Accessories",
-          "Henna Fest",
-          "Kalyaanam Veedu",
-          "Makeup + Hair (stylish)",
-          "Jewellery",
-          "Melam",
-          "Maalai",
-          "Food",
-          "Bryllupskage",
-          "Preshoot",
-          "Photo + Video",
-          "DJ",
-          "Hall",
-          "Entertainment",
-          "Operator",
-          "Host"
-        ]
-      },
-
-      {
-        category: "Games (Yndlingsting)",
-        items: [
-          "Palaharam (Goodie bag)"
-        ]
-      },
-
-      {
-        category: "Speech",
-        items: [
-          "Hotels"
-        ]
-      },
-
-      {
-        category: "Tøj",
-        items: [
-          "Manavarai saree",
-          "Koorai saree (Rød)",
-          "Vetti sattai",
-          "Sko",
-          "Vetti sattai friends",
-          "Saree bridesmaid",
-          "Tøj til preshoot"
-        ]
-      },
-
-      {
-        category: "Reception Songs",
-        items: [
-          "Entrance",
-          "Pardans",
-          "Preshoot",
-          "Bryllupsvideo",
-          "After Party"
-        ]
-      },
-
-      {
-        category: "Wedding Sign + Card",
-        items: [
-          "Aviraa Creations",
-          "Ponthayadesigns",
-          "Kopuramevents.fr"
-        ]
-      },
-
-      {
-        category: "Decoration Kovil",
-        items: [
-          "Kopuramevents.fr"
-        ]
-      },
-
-      {
-        category: "Accessories",
-        items: [
-          "360 Booth",
-          "Bridal corner setup"
-        ]
-      },
-
-      {
-        category: "Henna Fest",
-        items: [
-          "Uduupu ?",
-          "Mehendi (rosedecoration.dk)",
-          "Tamilhennecreation",
-          "Tent",
-          "Visual Eyes"
-        ]
-      },
-
-      {
-        category: "Kalyaanam Veedu",
-        items: [
-          "Herning Kovil",
-          "Civil Weds (Ring)",
-          "Udlandet",
-          "Amorasareesdk",
-          "ranyasarees"
-        ]
-      },
-
-      {
-        category: "Makeup + Hair",
-        items: [
-          "Janani",
-          "abinii_makeupartist",
-          "thiva_mua"
-        ]
-      },
-
-      {
-        category: "Jewellery",
-        items: [
-          "Thaali (15 Pound)",
-          "Øreringe",
-          "Necklace",
-          "Kappu",
-          "Ring (mothiram)",
-          "Tikka (Nethi Pattam)",
-          "Kaal Sangali",
-          "Mukuthi",
-          "Waist Chain",
-          "Nails"
-        ]
-      },
-
-      {
-        category: "Melam",
-        items: [
-          "Chinna Mams",
-          "Mami ?"
-        ]
-      },
-
-      {
-        category: "Maalai",
-        items: [
-          "Herning Maalai"
-        ]
-      },
-
-      {
-        category: "Food",
-        items: [
-          "Poovi Mama Horsens",
-          "Kammali Randers",
-          "Tamil ondrai Aarhus",
-          "Dhoni",
-          "Appam",
-          "Vaathali og pako"
-        ]
-      },
-
-      {
-        category: "Bryllupskage",
-        items: [
-          "Lighter + Knife"
-        ]
-      },
-
-      {
-        category: "Preshoot",
-        items: [
-          "Views of nivi",
-          "Sana",
-          "Visual Eyes",
-          "Nomad",
-          "Through the ringer",
-          "Swiss (Interlaken)"
-        ]
-      },
-
-      {
-        category: "Photo + Video",
-        items: [
-          "Visual Eyes",
-          "Vividmemoir.dk",
-          "infocus"
-        ]
-      },
-
-      {
-        category: "DJ",
-        items: [
-          "Playloud",
-          "Keeth Entertainment",
-          "Microphone",
-          "Iqon Musik",
-          "Resound"
-        ]
-      },
-
-      {
-        category: "Hall",
-        items: [
-          "Sana Palace RA",
-          "E-Plaza AA",
-          "Babylon AA",
-          "Food & Drinks (Sweets for children)",
-          "Bar",
-          "Dessert",
-          "Palaharam",
-          "Tea Can",
-          "Decoration"
-        ]
-      },
-
-      {
-        category: "Entertainment",
-        items: [
-          "Pardans + Cinema Paattu",
-          "Bollywood Dance",
-          "Gruppedans",
-          "Abi, Vaishu og Asmi",
-          "Suji Akka solo + Bharatanatyam med os",
-          "Aishani + Aatish",
-          "Thilipa, Sonja, Deilany, Praveena og Nantheya",
-          "Family Dance",
-          "Karthie + Nantheya",
-          "Charmilie",
-          "Aalborg Kootam"
-        ]
-      },
-
-      {
-        category: "Operator",
-        items: [
-          "Lighting",
-          "Projector"
-        ]
-      },
-
-      {
-        category: "Host",
-        items: [
-          "Vinu",
-          "Mams",
-          "Saddi",
-          "Speech",
-          "Games"
-        ]
-      }
-
-    ];
-
-
-    /*
-      ==========================================================
-      STATE
-      ==========================================================
-    */
-
-    let itemDatabase = {};
-    let currentItemId = null;
-
-    const STORAGE_KEY = "ourWeddingPlanner_v1";
-
-
-    /*
-      ==========================================================
-      INITIALISE DATABASE
-      ==========================================================
-    */
-
-    function createId(category, item) {
-      return (
-        category.toLowerCase().replace(/[^a-z0-9]+/g, "-") +
-        "__" +
-        item.toLowerCase().replace(/[^a-z0-9]+/g, "-")
-      );
-    }
-
-
-    function initialiseDatabase() {
-
-      weddingData.forEach(group => {
-
-        group.items.forEach(item => {
-
-          const id = createId(group.category, item);
-
-          itemDatabase[id] = {
-            id,
-            category: group.category,
-            name: item,
-            status: "not-started",
-            vendor: "",
-            price: "",
-            deadline: "",
-            link: "",
-            notes: ""
-          };
-
-        });
-
-      });
-
-      loadSavedData();
-    }
-
-
-    /*
-      ==========================================================
-      STORAGE
-      ==========================================================
-    */
-
-    function loadSavedData() {
-
-      const saved = localStorage.getItem(STORAGE_KEY);
-
-      if (!saved) return;
-
-      try {
-
-        const parsed = JSON.parse(saved);
-
-        Object.keys(parsed).forEach(id => {
-
-          if (itemDatabase[id]) {
-            itemDatabase[id] = {
-              ...itemDatabase[id],
-              ...parsed[id]
-            };
-          }
-
-        });
-
-      } catch (error) {
-
-        console.error("Could not load saved wedding data.", error);
-
-      }
-
-    }
-
-
-    function saveAllData() {
-
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(itemDatabase)
-      );
-
-    }
-
-
-    /*
-      ==========================================================
-      RENDER
-      ==========================================================
-    */
-
-    function render() {
-
-      renderCategories();
-      updateStats();
-      updateCategoryFilter();
-
-    }
-
-
-    function renderCategories() {
-
-      const container =
-        document.getElementById("categoriesContainer");
-
-      const emptyState =
-        document.getElementById("emptyState");
-
-      const search =
-        document.getElementById("searchInput").value
-          .toLowerCase()
-          .trim();
-
-      const categoryFilter =
-        document.getElementById("categoryFilter").value;
-
-      const statusFilter =
-        document.getElementById("statusFilter").value;
-
-
-      container.innerHTML = "";
-
-      let visibleItems = 0;
-
-
-      weddingData.forEach(group => {
-
-        if (
-          categoryFilter !== "all" &&
-          group.category !== categoryFilter
-        ) {
-          return;
-        }
-
-
-        const filteredItems = group.items.filter(item => {
-
-          const id = createId(group.category, item);
-          const data = itemDatabase[id];
-
-          const matchesSearch =
-            !search ||
-            data.name.toLowerCase().includes(search) ||
-            data.category.toLowerCase().includes(search) ||
-            data.vendor.toLowerCase().includes(search) ||
-            data.notes.toLowerCase().includes(search);
-
-          const matchesStatus =
-            statusFilter === "all" ||
-            data.status === statusFilter;
-
-          return matchesSearch && matchesStatus;
-
-        });
-
-
-        if (!filteredItems.length) return;
-
-        visibleItems += filteredItems.length;
-
-
-        const card =
-          document.createElement("div");
-
-        card.className = "category-card";
-
-
-        const allItems =
-          group.items.map(item =>
-            itemDatabase[createId(group.category, item)]
-          );
-
-
-        const done =
-          allItems.filter(i => i.status === "done").length;
-
-
-        const percentage =
-          allItems.length
-            ? Math.round((done / allItems.length) * 100)
-            : 0;
-
-
-        card.innerHTML = `
-
-          <div class="category-header">
-
-            <div>
-              <div class="category-name">
-                ${escapeHTML(group.category)}
-              </div>
-
-              <div class="category-count">
-                ${done} of ${allItems.length} completed
-              </div>
-            </div>
-
-            <div
-              class="category-progress"
-              style="--progress:${percentage}%"
-              data-percent="${percentage}%"
-            ></div>
-
-          </div>
-
-          <div class="item-list"></div>
-
-        `;
-
-
-        const list =
-          card.querySelector(".item-list");
-
-
-        filteredItems.forEach(item => {
-
-          const id =
-            createId(group.category, item);
-
-          const data =
-            itemDatabase[id];
-
-
-          const itemElement =
-            document.createElement("div");
-
-          itemElement.className =
-            `item ${data.status === "done" ? "done" : ""} ${
-              data.status === "in-progress" ? "in-progress" : ""
-            }`;
-
-
-          itemElement.innerHTML = `
-
-            <div class="item-check">
-              ${data.status === "done" ? "✓" : ""}
-            </div>
-
-            <div class="item-text">
-              ${escapeHTML(data.name)}
-            </div>
-
-            <div class="status-dot"></div>
-
-          `;
-
-
-          itemElement.addEventListener(
-            "click",
-            () => openModal(id)
-          );
-
-
-          list.appendChild(itemElement);
-
-        });
-
-
-        container.appendChild(card);
-
-      });
-
-
-      emptyState.style.display =
-        visibleItems === 0 ? "block" : "none";
-
-    }
-
-
-    /*
-      ==========================================================
-      STATS
-      ==========================================================
-    */
-
-    function updateStats() {
-
-      const items =
-        Object.values(itemDatabase);
-
-      const total =
-        items.length;
-
-      const done =
-        items.filter(i => i.status === "done").length;
-
-      const inProgress =
-        items.filter(i => i.status === "in-progress").length;
-
-
-      const percentage =
-        total
-          ? Math.round((done / total) * 100)
-          : 0;
-
-
-      document.getElementById("totalItems")
-        .textContent = total;
-
-      document.getElementById("doneItems")
-        .textContent = done;
-
-      document.getElementById("progressItems")
-        .textContent = inProgress;
-
-      document.getElementById("categoryCount")
-        .textContent = weddingData.length;
-
-      document.getElementById("progressPercent")
-        .textContent = percentage + "%";
-
-      document.getElementById("progressFill")
-        .style.width = percentage + "%";
-
-    }
-
-
-    /*
-      ==========================================================
-      CATEGORY FILTER
-      ==========================================================
-    */
-
-    function updateCategoryFilter() {
-
-      const select =
-        document.getElementById("categoryFilter");
-
-      const current =
-        select.value;
-
-      const categories =
-        weddingData.map(group => group.category);
-
-
-      select.innerHTML =
-        `<option value="all">All categories</option>`;
-
-
-      categories.forEach(category => {
-
-        const option =
-          document.createElement("option");
-
-        option.value = category;
-        option.textContent = category;
-
-        select.appendChild(option);
-
-      });
-
-
-      select.value =
-        categories.includes(current)
-          ? current
-          : "all";
-
-    }
-
-
-    /*
-      ==========================================================
-      MODAL
-      ==========================================================
-    */
-
-    function openModal(id) {
-
-      currentItemId = id;
-
-      const item =
-        itemDatabase[id];
-
-      if (!item) return;
-
-
-      document.getElementById("modalCategory")
-        .textContent = item.category;
-
-      document.getElementById("modalTitle")
-        .textContent = item.name;
-
-      document.getElementById("modalVendor")
-        .value = item.vendor;
-
-      document.getElementById("modalPrice")
-        .value = item.price;
-
-      document.getElementById("modalDeadline")
-        .value = item.deadline;
-
-      document.getElementById("modalLink")
-        .value = item.link;
-
-      document.getElementById("modalNotes")
-        .value = item.notes;
-
-
-      setModalStatus(item.status, false);
-
-
-      document.getElementById("modalOverlay")
-        .classList.add("active");
-
-    }
-
-
-    function closeModal() {
-
-      document.getElementById("modalOverlay")
-        .classList.remove("active");
-
-      currentItemId = null;
-
-    }
-
-
-    function setModalStatus(status, save = true) {
-
-      if (!currentItemId) return;
-
-      itemDatabase[currentItemId].status = status;
-
-
-      document
-        .getElementById("statusNotStarted")
-        .classList.toggle(
-          "active",
-          status === "not-started"
-        );
-
-      document
-        .getElementById("statusInProgress")
-        .classList.toggle(
-          "active",
-          status === "in-progress"
-        );
-
-      document
-        .getElementById("statusDone")
-        .classList.toggle(
-          "active",
-          status === "done"
-        );
-
-
-      if (save) {
-
-        saveAllData();
-        render();
-
-      }
-
-    }
-
-
-    function saveModal() {
-
-      if (!currentItemId) return;
-
-      const item =
-        itemDatabase[currentItemId];
-
-
-      item.vendor =
-        document.getElementById("modalVendor").value;
-
-      item.price =
-        document.getElementById("modalPrice").value;
-
-      item.deadline =
-        document.getElementById("modalDeadline").value;
-
-      item.link =
-        document.getElementById("modalLink").value;
-
-      item.notes =
-        document.getElementById("modalNotes").value;
-
-
-      saveAllData();
-
-      closeModal();
-
-      render();
-
-    }
-
-
-    function clearItemDetails() {
-
-      if (!currentItemId) return;
-
-      const item =
-        itemDatabase[currentItemId];
-
-
-      item.status = "not-started";
-      item.vendor = "";
-      item.price = "";
-      item.deadline = "";
-      item.link = "";
-      item.notes = "";
-
-
-      saveAllData();
-
-      closeModal();
-
-      render();
-
-    }
-
-
-    /*
-      ==========================================================
-      RESET
-      ==========================================================
-    */
-
-    function resetAll() {
-
-      const confirmed =
-        confirm(
-          "Are you sure you want to reset ALL wedding planning progress?"
-        );
-
-      if (!confirmed) return;
-
-
-      Object.values(itemDatabase).forEach(item => {
-
-        item.status = "not-started";
-        item.vendor = "";
-        item.price = "";
-        item.deadline = "";
-        item.link = "";
-        item.notes = "";
-
-      });
-
-
-      saveAllData();
-
-      render();
-
-    }
-
-
-    /*
-      ==========================================================
-      ESCAPE HTML
-      ==========================================================
-    */
-
-    function escapeHTML(value) {
-
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-    }
-
-
-    /*
-      ==========================================================
-      EVENTS
-      ==========================================================
-    */
-
-    document
-      .getElementById("searchInput")
-      .addEventListener("input", render);
-
-
-    document
-      .getElementById("categoryFilter")
-      .addEventListener("change", render);
-
-
-    document
-      .getElementById("statusFilter")
-      .addEventListener("change", render);
-
-
-    document
-      .getElementById("modalOverlay")
-      .addEventListener("click", function(event) {
-
-        if (event.target === this) {
-          closeModal();
-        }
-
-      });
-
-
-    document.addEventListener(
-      "keydown",
-      function(event) {
-
-        if (event.key === "Escape") {
-          closeModal();
-        }
-
-      }
-    );
-
-
-    /*
-      ==========================================================
-      DATE
-      ==========================================================
-    */
-
-    const today =
-      new Date();
-
-    document.getElementById("todayText")
-      .textContent =
-        today.toLocaleDateString(
-          "en-DK",
-          {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-          }
-        );
-
-
-    /*
-      ==========================================================
-      START APP
-      ==========================================================
-    */
-
-    initialiseDatabase();
-    render();
-
-  </script>
+  <script src="script.js"></script>
 
 </body>
 </html>
