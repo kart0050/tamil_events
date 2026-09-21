@@ -2,19 +2,26 @@
    WEDDING PLANNER
    ============================================================ */
 
-const STORAGE_KEY = "tamilWeddingPlanner_v5";
+const STORAGE_KEY =
+  "tamilWeddingPlanner_v5";
+
 
 /* ============================================================
    DEFAULT CATEGORIES
    ============================================================ */
 
 const defaultCategories = [
+
   {
     id: "guests",
     name: "Gæster",
     icon: "👥",
-    items: ["Palaharam (Goodie bag)", "Hotels"]
+    items: [
+      "Palaharam (Goodie bag)",
+      "Hotels"
+    ]
   },
+
   {
     id: "toej",
     name: "Tøj",
@@ -29,6 +36,7 @@ const defaultCategories = [
       "Tøj til preshoot"
     ]
   },
+
   {
     id: "reception",
     name: "Reception Songs",
@@ -41,6 +49,7 @@ const defaultCategories = [
       "After Party"
     ]
   },
+
   {
     id: "sign-card",
     name: "Wedding Sign + Card",
@@ -51,18 +60,26 @@ const defaultCategories = [
       "Kopuramevents.fr"
     ]
   },
+
   {
     id: "kovil-decoration",
     name: "Decoration Kovil",
     icon: "🛕",
-    items: ["Kopuramevents.fr"]
+    items: [
+      "Kopuramevents.fr"
+    ]
   },
+
   {
     id: "accessories",
     name: "Accessories",
     icon: "✨",
-    items: ["360 Booth", "Bridal Corner Setup"]
+    items: [
+      "360 Booth",
+      "Bridal Corner Setup"
+    ]
   },
+
   {
     id: "henna",
     name: "Henna Fest",
@@ -75,6 +92,7 @@ const defaultCategories = [
       "Visual Eyes"
     ]
   },
+
   {
     id: "kalyaanam",
     name: "Kalyaanam Veedu",
@@ -87,6 +105,7 @@ const defaultCategories = [
       "Ranyasarees"
     ]
   },
+
   {
     id: "makeup",
     name: "Makeup + Hair",
@@ -97,6 +116,7 @@ const defaultCategories = [
       "thiva_mua"
     ]
   },
+
   {
     id: "jewellery",
     name: "Jewellery",
@@ -114,18 +134,26 @@ const defaultCategories = [
       "Nails"
     ]
   },
+
   {
     id: "melam",
     name: "Melam",
     icon: "🥁",
-    items: ["Chinna Mams", "Mami ?"]
+    items: [
+      "Chinna Mams",
+      "Mami ?"
+    ]
   },
+
   {
     id: "maalai",
     name: "Maalai",
     icon: "🌸",
-    items: ["Herning Maalai"]
+    items: [
+      "Herning Maalai"
+    ]
   },
+
   {
     id: "food",
     name: "Food",
@@ -139,12 +167,17 @@ const defaultCategories = [
       "Vaathali og Pako"
     ]
   },
+
   {
     id: "cake",
     name: "Bryllupskage",
     icon: "🎂",
-    items: ["Wedding Cake", "Lighter + Knife"]
+    items: [
+      "Wedding Cake",
+      "Lighter + Knife"
+    ]
   },
+
   {
     id: "preshoot",
     name: "Preshoot",
@@ -158,6 +191,7 @@ const defaultCategories = [
       "Swiss (Interlaken)"
     ]
   },
+
   {
     id: "photo-video",
     name: "Photo + Video",
@@ -168,6 +202,7 @@ const defaultCategories = [
       "infocus"
     ]
   },
+
   {
     id: "dj",
     name: "DJ",
@@ -180,6 +215,7 @@ const defaultCategories = [
       "Resound"
     ]
   },
+
   {
     id: "hall",
     name: "Hall",
@@ -197,6 +233,7 @@ const defaultCategories = [
       "Decoration"
     ]
   },
+
   {
     id: "entertainment",
     name: "Entertainment",
@@ -215,12 +252,17 @@ const defaultCategories = [
       "Aalborg Kootam"
     ]
   },
+
   {
     id: "operator",
     name: "Operator",
     icon: "🎛️",
-    items: ["Lighting", "Projector"]
+    items: [
+      "Lighting",
+      "Projector"
+    ]
   },
+
   {
     id: "host",
     name: "Host",
@@ -233,12 +275,16 @@ const defaultCategories = [
       "Games"
     ]
   },
+
   {
     id: "games",
     name: "Games (Yndlingsting)",
     icon: "🎲",
-    items: ["Palaharam (Goodie bag)"]
+    items: [
+      "Palaharam (Goodie bag)"
+    ]
   },
+
   {
     id: "speech",
     name: "Speech",
@@ -249,7 +295,9 @@ const defaultCategories = [
       "Order of speeches"
     ]
   }
+
 ];
+
 
 /* ============================================================
    DATA
@@ -258,160 +306,282 @@ const defaultCategories = [
 let categories = [];
 let savedData = {};
 
-let currentCategory = "dashboard";
+let currentCategory =
+  "dashboard";
+
 let currentItem = null;
 
+let modalStatus =
+  "not";
+
+
+/* ============================================================
+   MANAGEMENT MODAL STATE
+   ============================================================ */
+
 let managementMode = null;
+
 let managementCategoryId = null;
+
 
 /* ============================================================
    HELPERS
    ============================================================ */
 
 function createId(text) {
+
   return (
     String(text)
       .toLowerCase()
       .trim()
-      .replace(/[^a-z0-9æøå]+/gi, "-")
-      .replace(/^-+|-+$/g, "") +
+      .replace(
+        /[^a-z0-9æøå]+/gi,
+        "-"
+      )
+      .replace(
+        /^-+|-+$/g,
+        ""
+      ) +
     "-" +
     Date.now().toString(36)
   );
+
 }
+
 
 function escapeHTML(value) {
+
   return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
 }
 
+
 function formatDate(dateString) {
+
   if (!dateString) {
     return "";
   }
 
-  const date = new Date(dateString + "T00:00:00");
+  const date =
+    new Date(
+      dateString +
+      "T00:00:00"
+    );
 
-  if (Number.isNaN(date.getTime())) {
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
     return dateString;
   }
 
-  return date.toLocaleDateString("da-DK", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric"
-  });
+  return date.toLocaleDateString(
+    "da-DK",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }
+  );
+
 }
+
 
 /* ============================================================
    LOAD DATA
    ============================================================ */
 
 function loadData() {
+
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+
+    const stored =
+      localStorage.getItem(
+        STORAGE_KEY
+      );
 
     if (!stored) {
-      categories = structuredClone(defaultCategories);
+
+      categories =
+        structuredClone(
+          defaultCategories
+        );
+
       savedData = {};
+
+      normaliseCategories();
+
       saveData();
+
       return;
     }
 
-    const parsed = JSON.parse(stored);
+
+    const parsed =
+      JSON.parse(stored);
+
 
     if (
       parsed &&
       typeof parsed === "object" &&
       !Array.isArray(parsed) &&
-      Array.isArray(parsed.categories)
+      Array.isArray(
+        parsed.categories
+      )
     ) {
-      categories = parsed.categories;
+
+      categories =
+        parsed.categories;
 
       savedData =
         parsed.savedData &&
         typeof parsed.savedData === "object"
           ? parsed.savedData
           : {};
-    } else {
-      categories = structuredClone(defaultCategories);
-      savedData = {};
-      saveData();
-    }
-  } catch (error) {
-    console.error("Could not load planner data:", error);
 
-    categories = structuredClone(defaultCategories);
+    } else {
+
+      categories =
+        structuredClone(
+          defaultCategories
+        );
+
+      savedData = {};
+
+      normaliseCategories();
+
+      saveData();
+
+      return;
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Could not load planner data:",
+      error
+    );
+
+    categories =
+      structuredClone(
+        defaultCategories
+      );
+
     savedData = {};
+
   }
 
   normaliseCategories();
+
 }
 
+
 /* ============================================================
-   NORMALISE CATEGORIES
+   NORMALISE
    ============================================================ */
 
 function normaliseCategories() {
+
   if (!Array.isArray(categories)) {
     categories = [];
   }
 
-  categories = categories
-    .filter(
-      category =>
-        category &&
-        typeof category === "object"
-    )
-    .map(category => {
-      return {
-        id:
-          category.id ||
-          createId(category.name || "category"),
 
-        name:
-          String(
-            category.name ||
-            "Unnamed category"
-          ),
+  categories =
+    categories
+      .filter(
+        category =>
+          category &&
+          typeof category === "object"
+      )
+      .map(
+        category => {
 
-        icon:
-          String(
-            category.icon ||
-            "📋"
-          ),
+          return {
 
-        items:
-          Array.isArray(category.items)
-            ? category.items.map(item =>
-                String(item)
+            id:
+              category.id ||
+              createId(
+                category.name ||
+                "category"
+              ),
+
+            name:
+              String(
+                category.name ||
+                "Unnamed category"
+              ),
+
+            icon:
+              String(
+                category.icon ||
+                "📋"
+              ),
+
+            items:
+              Array.isArray(
+                category.items
               )
-            : []
-      };
-    });
+                ? category.items.map(
+                    item =>
+                      String(item)
+                  )
+                : []
+
+          };
+
+        }
+      );
+
 }
+
 
 /* ============================================================
    SAVE DATA
    ============================================================ */
 
 function saveData() {
+
   try {
+
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({
-        version: 5,
-        categories,
-        savedData
-      })
+      JSON.stringify(
+        {
+          version: 5,
+          categories:
+            categories,
+          savedData:
+            savedData
+        }
+      )
     );
 
     return true;
+
   } catch (error) {
+
     console.error(
       "Could not save planner data:",
       error
@@ -422,123 +592,245 @@ function saveData() {
     );
 
     return false;
+
   }
+
 }
+
 
 /* ============================================================
    ITEM KEY
    ============================================================ */
 
-function itemKey(categoryId, item) {
-  return categoryId + "::" + item;
+function itemKey(
+  categoryId,
+  item
+) {
+
+  return (
+    categoryId +
+    "::" +
+    item
+  );
+
 }
+
 
 /* ============================================================
    GET ITEM
    ============================================================ */
 
-function getItem(categoryId, item) {
-  const key = itemKey(categoryId, item);
+function getItem(
+  categoryId,
+  item
+) {
+
+  const key =
+    itemKey(
+      categoryId,
+      item
+    );
+
 
   if (
     !savedData[key] ||
     typeof savedData[key] !== "object"
   ) {
+
     savedData[key] = {
-      status: "not",
-      vendor: "",
-      price: "",
-      deadline: "",
-      link: "",
-      notes: "",
-      enabled: true
+
+      status:
+        "not",
+
+      vendor:
+        "",
+
+      price:
+        "",
+
+      deadline:
+        "",
+
+      link:
+        "",
+
+      notes:
+        "",
+
+      enabled:
+        true
+
     };
+
   }
 
-  const data = savedData[key];
+
+  const data =
+    savedData[key];
+
 
   data.status =
-    ["not", "progress", "done"].includes(
+    [
+      "not",
+      "progress",
+      "done"
+    ].includes(
       data.status
     )
       ? data.status
       : "not";
 
-  data.vendor = data.vendor || "";
-  data.price = data.price || "";
-  data.deadline = data.deadline || "";
-  data.link = data.link || "";
-  data.notes = data.notes || "";
 
-  if (typeof data.enabled !== "boolean") {
-    data.enabled = true;
+  data.vendor =
+    data.vendor || "";
+
+  data.price =
+    data.price || "";
+
+  data.deadline =
+    data.deadline || "";
+
+  data.link =
+    data.link || "";
+
+  data.notes =
+    data.notes || "";
+
+
+  if (
+    typeof data.enabled !==
+    "boolean"
+  ) {
+
+    data.enabled =
+      true;
+
   }
 
+
   return data;
+
 }
+
 
 /* ============================================================
    EXPORT
    ============================================================ */
 
 function exportData() {
+
   try {
+
     saveData();
 
+
     const backup = {
-      app: "Tamil Wedding Planner",
-      version: 5,
-      exportedAt: new Date().toISOString(),
-      categories,
-      savedData
+
+      app:
+        "Tamil Wedding Planner",
+
+      version:
+        5,
+
+      exportedAt:
+        new Date().toISOString(),
+
+      categories:
+        categories,
+
+      savedData:
+        savedData
+
     };
 
-    const json = JSON.stringify(
-      backup,
-      null,
-      2
-    );
 
-    const blob = new Blob(
-      [json],
-      {
-        type: "application/json"
-      }
-    );
+    const json =
+      JSON.stringify(
+        backup,
+        null,
+        2
+      );
+
+
+    const blob =
+      new Blob(
+        [json],
+        {
+          type:
+            "application/json"
+        }
+      );
+
 
     const url =
-      URL.createObjectURL(blob);
+      URL.createObjectURL(
+        blob
+      );
+
 
     const link =
-      document.createElement("a");
+      document.createElement(
+        "a"
+      );
 
-    link.href = url;
 
-    const now = new Date();
+    link.href =
+      url;
 
-    link.download =
+
+    const now =
+      new Date();
+
+
+    const filename =
       "wedding-planner-backup-" +
       now.getFullYear() +
       "-" +
       String(
         now.getMonth() + 1
-      ).padStart(2, "0") +
+      ).padStart(
+        2,
+        "0"
+      ) +
       "-" +
       String(
         now.getDate()
-      ).padStart(2, "0") +
+      ).padStart(
+        2,
+        "0"
+      ) +
       ".json";
 
-    document.body.appendChild(link);
+
+    link.download =
+      filename;
+
+
+    document.body.appendChild(
+      link
+    );
+
 
     link.click();
 
-    document.body.removeChild(link);
 
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
+    document.body.removeChild(
+      link
+    );
+
+
+    setTimeout(
+      () => {
+        URL.revokeObjectURL(
+          url
+        );
+      },
+      1000
+    );
+
+
   } catch (error) {
+
     console.error(
       "Export failed:",
       error
@@ -547,34 +839,48 @@ function exportData() {
     alert(
       "Sorry, the planner data could not be exported."
     );
+
   }
+
 }
+
 
 /* ============================================================
    IMPORT
    ============================================================ */
 
 function importData(event) {
+
   const file =
     event.target.files[0];
+
 
   if (!file) {
     return;
   }
 
+
   const reader =
     new FileReader();
 
+
   reader.onload =
     function (e) {
+
       try {
+
         const imported =
           JSON.parse(
             e.target.result
           );
 
-        let importedCategories = null;
-        let importedSavedData = null;
+
+        let importedCategories =
+          null;
+
+        let importedSavedData =
+          null;
+
 
         if (
           imported &&
@@ -582,16 +888,24 @@ function importData(event) {
             imported.categories
           )
         ) {
+
           importedCategories =
             imported.categories;
 
           importedSavedData =
-            imported.savedData || {};
-        } else if (
+            imported.savedData ||
+            {};
+
+        }
+
+
+        else if (
           imported &&
           imported.data &&
-          typeof imported.data === "object"
+          typeof imported.data ===
+            "object"
         ) {
+
           importedCategories =
             structuredClone(
               defaultCategories
@@ -599,19 +913,25 @@ function importData(event) {
 
           importedSavedData =
             imported.data;
+
         }
+
 
         if (
           !Array.isArray(
             importedCategories
           ) ||
           !importedSavedData ||
-          typeof importedSavedData !== "object"
+          typeof importedSavedData !==
+            "object"
         ) {
+
           throw new Error(
             "Invalid backup"
           );
+
         }
+
 
         const confirmed =
           confirm(
@@ -619,10 +939,16 @@ function importData(event) {
             "Your current planner data will be replaced."
           );
 
+
         if (!confirmed) {
-          event.target.value = "";
+
+          event.target.value =
+            "";
+
           return;
+
         }
+
 
         categories =
           importedCategories;
@@ -630,16 +956,23 @@ function importData(event) {
         savedData =
           importedSavedData;
 
+
         normaliseCategories();
 
+
         if (saveData()) {
+
           showDashboard();
 
           alert(
             "Wedding planner data imported successfully! ❤️"
           );
+
         }
+
+
       } catch (error) {
+
         console.error(
           "Import failed:",
           error
@@ -648,77 +981,110 @@ function importData(event) {
         alert(
           "This file is not a valid wedding planner backup."
         );
+
       }
 
-      event.target.value = "";
+
+      event.target.value =
+        "";
+
     };
+
 
   reader.onerror =
     function () {
+
       alert(
         "Could not read the selected file."
       );
 
-      event.target.value = "";
+      event.target.value =
+        "";
+
     };
 
+
   reader.readAsText(file);
+
 }
+
 
 /* ============================================================
    NAVIGATION
    ============================================================ */
 
 function buildNavigation() {
+
   const nav =
     document.getElementById(
       "navigation"
     );
 
+
   if (!nav) {
     return;
   }
 
-  nav.innerHTML = "";
+
+  nav.innerHTML =
+    "";
+
 
   const dashboard =
-    document.createElement("button");
+    document.createElement(
+      "button"
+    );
 
-  dashboard.type = "button";
+
+  dashboard.type =
+    "button";
 
   dashboard.textContent =
     "🏠 Dashboard";
 
   dashboard.className =
-    currentCategory === "dashboard"
+    currentCategory ===
+    "dashboard"
       ? "active"
       : "";
+
 
   dashboard.addEventListener(
     "click",
     showDashboard
   );
 
-  nav.appendChild(dashboard);
+
+  nav.appendChild(
+    dashboard
+  );
+
 
   categories.forEach(
     category => {
+
       const button =
         document.createElement(
           "button"
         );
 
-      button.type = "button";
+
+      button.type =
+        "button";
+
 
       button.textContent =
         category.icon +
         " " +
         category.name;
 
+
       button.className =
-        currentCategory === category.id
+        currentCategory ===
+        category.id
           ? "active"
           : "";
+
 
       button.addEventListener(
         "click",
@@ -728,18 +1094,26 @@ function buildNavigation() {
           )
       );
 
-      nav.appendChild(button);
+
+      nav.appendChild(
+        button
+      );
+
     }
   );
+
 }
+
 
 /* ============================================================
    DASHBOARD
    ============================================================ */
 
 function showDashboard() {
+
   currentCategory =
     "dashboard";
+
 
   const dashboardPage =
     document.getElementById(
@@ -751,74 +1125,105 @@ function showDashboard() {
       "categoryPage"
     );
 
+  const managePage =
+    document.getElementById(
+      "managePage"
+    );
+
+
   if (dashboardPage) {
     dashboardPage.style.display =
       "block";
   }
+
 
   if (categoryPage) {
     categoryPage.style.display =
       "none";
   }
 
-  closeManagementModal();
+
+  if (managePage) {
+    managePage.style.display =
+      "none";
+  }
+
 
   buildNavigation();
+
   renderDashboard();
+
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
 }
+
 
 /* ============================================================
    DASHBOARD RENDER
    ============================================================ */
 
 function renderDashboard() {
+
   let total = 0;
   let done = 0;
   let progress = 0;
 
+
   categories.forEach(
     category => {
+
       category.items.forEach(
         item => {
+
           const data =
             getItem(
               category.id,
               item
             );
 
+
           if (!data.enabled) {
             return;
           }
 
+
           total++;
 
+
           if (
-            data.status === "done"
+            data.status ===
+            "done"
           ) {
             done++;
           }
 
+
           if (
-            data.status === "progress"
+            data.status ===
+            "progress"
           ) {
             progress++;
           }
+
         }
       );
+
     }
   );
+
 
   const percent =
     total > 0
       ? Math.round(
-          (done / total) * 100
+          (done / total) *
+          100
         )
       : 0;
+
 
   const totalCount =
     document.getElementById(
@@ -850,84 +1255,106 @@ function renderDashboard() {
       "overallFill"
     );
 
+
   if (totalCount) {
     totalCount.textContent =
       total;
   }
+
 
   if (doneCount) {
     doneCount.textContent =
       done;
   }
 
+
   if (progressCount) {
     progressCount.textContent =
       progress;
   }
+
 
   if (categoryCount) {
     categoryCount.textContent =
       categories.length;
   }
 
+
   if (overallPercent) {
     overallPercent.textContent =
       percent + "%";
   }
+
 
   if (overallFill) {
     overallFill.style.width =
       percent + "%";
   }
 
+
   const grid =
     document.getElementById(
       "summaryGrid"
     );
 
+
   if (!grid) {
     return;
   }
 
-  grid.innerHTML = "";
+
+  grid.innerHTML =
+    "";
+
 
   categories.forEach(
     category => {
+
       const stats =
         getCategoryStats(
           category
         );
+
 
       const card =
         document.createElement(
           "div"
         );
 
+
       card.className =
         "summary-card";
 
+
       card.innerHTML =
+
         '<div class="summary-icon">' +
         escapeHTML(
           category.icon
         ) +
         "</div>" +
+
         "<h3>" +
         escapeHTML(
           category.name
         ) +
         "</h3>" +
+
         "<p>" +
         stats.done +
         " / " +
         stats.total +
         " completed" +
         "</p>" +
+
         '<div class="summary-bar">' +
-        '<div style="width:' +
-        stats.percent +
-        '%"></div>' +
+
+          '<div style="width:' +
+          stats.percent +
+          '%"></div>' +
+
         "</div>";
+
 
       card.addEventListener(
         "click",
@@ -937,26 +1364,37 @@ function renderDashboard() {
           )
       );
 
-      grid.appendChild(card);
+
+      grid.appendChild(
+        card
+      );
+
     }
   );
+
 }
+
 
 /* ============================================================
    CATEGORY
    ============================================================ */
 
 function showCategory(id) {
+
   const category =
     categories.find(
       c => c.id === id
     );
 
+
   if (!category) {
     return;
   }
 
-  currentCategory = id;
+
+  currentCategory =
+    id;
+
 
   const dashboardPage =
     document.getElementById(
@@ -968,27 +1406,45 @@ function showCategory(id) {
       "categoryPage"
     );
 
+  const managePage =
+    document.getElementById(
+      "managePage"
+    );
+
+
   if (dashboardPage) {
     dashboardPage.style.display =
       "none";
   }
+
 
   if (categoryPage) {
     categoryPage.style.display =
       "block";
   }
 
+
+  if (managePage) {
+    managePage.style.display =
+      "none";
+  }
+
+
   const categoryTitle =
     document.getElementById(
       "categoryTitle"
     );
 
+
   if (categoryTitle) {
+
     categoryTitle.textContent =
       category.icon +
       " " +
       category.name;
+
   }
+
 
   const search =
     document.getElementById(
@@ -1000,24 +1456,31 @@ function showCategory(id) {
       "itemStatusFilter"
     );
 
+
   if (search) {
-    search.value = "";
+    search.value =
+      "";
   }
+
 
   if (filter) {
-    filter.value = "all";
+    filter.value =
+      "all";
   }
 
-  closeManagementModal();
 
   buildNavigation();
+
   renderCategory();
+
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
 }
+
 
 /* ============================================================
    CATEGORY STATS
@@ -1026,63 +1489,82 @@ function showCategory(id) {
 function getCategoryStats(
   category
 ) {
+
   let total = 0;
   let done = 0;
 
+
   category.items.forEach(
     item => {
+
       const data =
         getItem(
           category.id,
           item
         );
 
+
       if (!data.enabled) {
         return;
       }
 
+
       total++;
 
+
       if (
-        data.status === "done"
+        data.status ===
+        "done"
       ) {
         done++;
       }
+
     }
   );
+
 
   const percent =
     total > 0
       ? Math.round(
-          (done / total) * 100
+          (done / total) *
+          100
         )
       : 0;
+
 
   return {
     total,
     done,
     percent
   };
+
 }
+
 
 /* ============================================================
    CATEGORY RENDER
    ============================================================ */
 
 function renderCategory() {
+
   const category =
     categories.find(
-      c => c.id === currentCategory
+      c =>
+        c.id ===
+        currentCategory
     );
+
 
   if (!category) {
     return;
   }
 
+
   const stats =
     getCategoryStats(
       category
     );
+
 
   const categoryPercent =
     document.getElementById(
@@ -1094,18 +1576,23 @@ function renderCategory() {
       "categoryProgressText"
     );
 
+
   if (categoryPercent) {
     categoryPercent.textContent =
       stats.percent + "%";
   }
 
+
   if (categoryProgressText) {
+
     categoryProgressText.textContent =
       stats.done +
       " / " +
       stats.total +
       " completed";
+
   }
+
 
   const searchInput =
     document.getElementById(
@@ -1117,6 +1604,7 @@ function renderCategory() {
       "itemStatusFilter"
     );
 
+
   const search =
     searchInput
       ? searchInput.value
@@ -1124,48 +1612,61 @@ function renderCategory() {
           .trim()
       : "";
 
+
   const status =
     statusInput
       ? statusInput.value
       : "all";
+
 
   const grid =
     document.getElementById(
       "itemsGrid"
     );
 
+
   if (!grid) {
     return;
   }
 
-  grid.innerHTML = "";
+
+  grid.innerHTML =
+    "";
+
 
   let visible = 0;
 
+
   category.items.forEach(
     item => {
+
       const data =
         getItem(
           category.id,
           item
         );
 
+
       if (!data.enabled) {
         return;
       }
 
+
       const itemText =
         item.toLowerCase();
+
 
       const vendorText =
         String(
           data.vendor || ""
         ).toLowerCase();
 
+
       const notesText =
         String(
           data.notes || ""
         ).toLowerCase();
+
 
       const matchesSearch =
         !search ||
@@ -1179,9 +1680,12 @@ function renderCategory() {
           search
         );
 
+
       const matchesStatus =
         status === "all" ||
-        data.status === status;
+        data.status ===
+          status;
+
 
       if (
         !matchesSearch ||
@@ -1190,49 +1694,64 @@ function renderCategory() {
         return;
       }
 
+
       visible++;
+
 
       const card =
         document.createElement(
           "div"
         );
 
+
       card.className =
         "item-card";
 
+
       if (
-        data.status === "done"
+        data.status ===
+        "done"
       ) {
         card.classList.add(
           "done"
         );
       }
 
+
       let statusText =
         "Not started";
 
-      let statusClass = "";
+      let statusClass =
+        "";
+
 
       if (
         data.status ===
         "progress"
       ) {
+
         statusText =
           "In progress";
 
         statusClass =
           " progress";
+
       }
 
+
       if (
-        data.status === "done"
+        data.status ===
+        "done"
       ) {
+
         statusText =
           "Completed";
 
         statusClass =
           " done";
+
       }
+
 
       const vendorHTML =
         data.vendor
@@ -1242,6 +1761,7 @@ function renderCategory() {
             ) +
             "</p>"
           : "<p>Click to add details</p>";
+
 
       const deadlineHTML =
         data.deadline
@@ -1254,24 +1774,33 @@ function renderCategory() {
             "</div>"
           : "";
 
+
       card.innerHTML =
+
         '<div class="item-top">' +
-        '<div class="item-icon">' +
-        escapeHTML(
-          category.icon
-        ) +
+
+          '<div class="item-icon">' +
+            escapeHTML(
+              category.icon
+            ) +
+          "</div>" +
+
+          '<div class="item-status' +
+            statusClass +
+          '">' +
+            statusText +
+          "</div>" +
+
         "</div>" +
-        '<div class="item-status' +
-        statusClass +
-        '">' +
-        statusText +
-        "</div>" +
-        "</div>" +
+
         "<h3>" +
-        escapeHTML(item) +
+          escapeHTML(item) +
         "</h3>" +
+
         vendorHTML +
+
         deadlineHTML;
+
 
       card.addEventListener(
         "click",
@@ -1282,22 +1811,32 @@ function renderCategory() {
           )
       );
 
-      grid.appendChild(card);
+
+      grid.appendChild(
+        card
+      );
+
     }
   );
+
 
   const emptyMessage =
     document.getElementById(
       "emptyMessage"
     );
 
+
   if (emptyMessage) {
+
     emptyMessage.style.display =
       visible > 0
         ? "none"
         : "block";
+
   }
+
 }
+
 
 /* ============================================================
    ITEM MODAL
@@ -1307,25 +1846,32 @@ function openModal(
   categoryId,
   item
 ) {
+
   currentItem = {
     categoryId,
     item
   };
 
+
   const category =
     categories.find(
-      c => c.id === categoryId
+      c =>
+        c.id ===
+        categoryId
     );
+
 
   if (!category) {
     return;
   }
+
 
   const data =
     getItem(
       categoryId,
       item
     );
+
 
   const modalCategory =
     document.getElementById(
@@ -1362,85 +1908,115 @@ function openModal(
       "notesInput"
     );
 
+
   if (modalCategory) {
     modalCategory.textContent =
       category.name;
   }
+
 
   if (modalTitle) {
     modalTitle.textContent =
       item;
   }
 
+
   if (vendorInput) {
     vendorInput.value =
       data.vendor;
   }
+
 
   if (priceInput) {
     priceInput.value =
       data.price;
   }
 
+
   if (deadlineInput) {
     deadlineInput.value =
       data.deadline;
   }
+
 
   if (linkInput) {
     linkInput.value =
       data.link;
   }
 
+
   if (notesInput) {
     notesInput.value =
       data.notes;
   }
 
-  updateStatusButtons(
-    data.status
-  );
+
+  modalStatus =
+    data.status;
+
+
+  updateStatusButtons();
+
 
   const overlay =
     document.getElementById(
       "overlay"
     );
+
 
   if (overlay) {
     overlay.classList.add(
       "active"
     );
   }
+
 }
 
+
+/* ============================================================
+   CLOSE ITEM MODAL
+   ============================================================ */
+
 function closeModal() {
+
   const overlay =
     document.getElementById(
       "overlay"
     );
 
+
   if (overlay) {
+
     overlay.classList.remove(
       "active"
     );
+
   }
 
-  currentItem = null;
+
+  currentItem =
+    null;
+
 }
 
-let modalStatus = "not";
 
-function chooseStatus(status) {
-  modalStatus = status;
-  updateStatusButtons(
-    modalStatus
-  );
-}
+/* ============================================================
+   STATUS
+   ============================================================ */
 
-function updateStatusButtons(
-  status = modalStatus
+function chooseStatus(
+  status
 ) {
-  modalStatus = status;
+
+  modalStatus =
+    status;
+
+  updateStatusButtons();
+
+}
+
+
+function updateStatusButtons() {
 
   const notButton =
     document.getElementById(
@@ -1457,42 +2033,59 @@ function updateStatusButtons(
       "doneButton"
     );
 
+
   if (notButton) {
+
     notButton.classList.toggle(
       "active",
-      modalStatus === "not"
+      modalStatus ===
+        "not"
     );
+
   }
+
 
   if (progressButton) {
+
     progressButton.classList.toggle(
       "active",
-      modalStatus === "progress"
+      modalStatus ===
+        "progress"
     );
+
   }
 
+
   if (doneButton) {
+
     doneButton.classList.toggle(
       "active",
-      modalStatus === "done"
+      modalStatus ===
+        "done"
     );
+
   }
+
 }
+
 
 /* ============================================================
    SAVE ITEM
    ============================================================ */
 
 function saveItem() {
+
   if (!currentItem) {
     return;
   }
+
 
   const data =
     getItem(
       currentItem.categoryId,
       currentItem.item
     );
+
 
   const vendorInput =
     document.getElementById(
@@ -1519,60 +2112,85 @@ function saveItem() {
       "notesInput"
     );
 
+
   data.status =
     modalStatus;
+
 
   data.vendor =
     vendorInput
       ? vendorInput.value.trim()
       : "";
 
+
   data.price =
     priceInput
       ? priceInput.value.trim()
       : "";
+
 
   data.deadline =
     deadlineInput
       ? deadlineInput.value
       : "";
 
+
   data.link =
     linkInput
       ? linkInput.value.trim()
       : "";
+
 
   data.notes =
     notesInput
       ? notesInput.value.trim()
       : "";
 
-  data.enabled = true;
+
+  data.enabled =
+    true;
+
 
   saveData();
 
   closeModal();
 
+
   if (
     currentCategory ===
     "dashboard"
   ) {
+
     showDashboard();
+
+  } else if (
+    currentCategory ===
+    "manage"
+  ) {
+
+    showManagePlanner();
+
   } else {
+
     showCategory(
       currentCategory
     );
+
   }
+
 }
+
 
 /* ============================================================
    CLEAR ITEM
    ============================================================ */
 
 function clearItem() {
+
   if (!currentItem) {
     return;
   }
+
 
   const data =
     getItem(
@@ -1580,28 +2198,48 @@ function clearItem() {
       currentItem.item
     );
 
-  data.status = "not";
-  data.vendor = "";
-  data.price = "";
-  data.deadline = "";
-  data.link = "";
-  data.notes = "";
+
+  data.status =
+    "not";
+
+  data.vendor =
+    "";
+
+  data.price =
+    "";
+
+  data.deadline =
+    "";
+
+  data.link =
+    "";
+
+  data.notes =
+    "";
+
 
   saveData();
 
   closeModal();
 
+
   if (
     currentCategory ===
     "dashboard"
   ) {
+
     showDashboard();
+
   } else {
+
     showCategory(
       currentCategory
     );
+
   }
+
 }
+
 
 /* ============================================================
    MANAGEMENT MODAL
@@ -1611,9 +2249,6 @@ function openManagementModal(
   mode,
   categoryId = null
 ) {
-  managementMode = mode;
-  managementCategoryId =
-    categoryId;
 
   const overlay =
     document.getElementById(
@@ -1640,114 +2275,142 @@ function openManagementModal(
       "iconGroup"
     );
 
-  const saveButton =
-    document.getElementById(
-      "saveManagementButton"
+
+  if (
+    !overlay ||
+    !title ||
+    !nameInput ||
+    !iconInput ||
+    !iconGroup
+  ) {
+
+    console.error(
+      "Management modal elements not found."
     );
 
-  if (!overlay) {
     return;
+
   }
 
-  if (nameInput) {
-    nameInput.value = "";
+
+  managementMode =
+    mode;
+
+  managementCategoryId =
+    categoryId;
+
+
+  nameInput.value =
+    "";
+
+  iconInput.value =
+    "";
+
+
+  if (
+    mode ===
+    "category"
+  ) {
+
+    title.textContent =
+      "Add category";
+
+    iconGroup.style.display =
+      "block";
+
+    nameInput.placeholder =
+      "Enter category name";
+
+    iconInput.placeholder =
+      "💍";
+
   }
 
-  if (iconInput) {
-    iconInput.value = "";
-  }
 
-  if (mode === "category") {
-    if (title) {
-      title.textContent =
-        "Add category";
-    }
+  else if (
+    mode ===
+    "item"
+  ) {
 
-    if (iconGroup) {
-      iconGroup.style.display =
-        "block";
-    }
-
-    if (nameInput) {
-      nameInput.placeholder =
-        "Category name";
-    }
-
-    if (iconInput) {
-      iconInput.placeholder =
-        "💍";
-    }
-
-    if (saveButton) {
-      saveButton.textContent =
-        "Add category";
-    }
-  }
-
-  if (mode === "item") {
     const category =
       categories.find(
-        c =>
-          c.id === categoryId
+        category =>
+          category.id ===
+          categoryId
       );
+
 
     if (!category) {
       return;
     }
 
-    if (title) {
-      title.textContent =
-        "Add item";
-    }
 
-    if (iconGroup) {
-      iconGroup.style.display =
-        "none";
-    }
+    title.textContent =
+      "Add item to " +
+      category.name;
 
-    if (nameInput) {
-      nameInput.placeholder =
-        "Item name";
-    }
 
-    if (saveButton) {
-      saveButton.textContent =
-        "Add item";
-    }
+    iconGroup.style.display =
+      "none";
+
+
+    nameInput.placeholder =
+      "Enter item name";
+
   }
+
 
   overlay.classList.add(
     "active"
   );
 
-  setTimeout(() => {
-    if (nameInput) {
+
+  setTimeout(
+    () => {
       nameInput.focus();
-    }
-  }, 100);
+    },
+    100
+  );
+
 }
 
+
+/* ============================================================
+   CLOSE MANAGEMENT MODAL
+   ============================================================ */
+
 function closeManagementModal() {
+
   const overlay =
     document.getElementById(
       "managementOverlay"
     );
 
+
   if (overlay) {
+
     overlay.classList.remove(
       "active"
     );
+
   }
 
-  managementMode = null;
-  managementCategoryId = null;
+
+  managementMode =
+    null;
+
+  managementCategoryId =
+    null;
+
 }
 
+
 /* ============================================================
-   SAVE MANAGEMENT MODAL
+   SAVE MANAGEMENT
    ============================================================ */
 
 function saveManagement() {
+
   const nameInput =
     document.getElementById(
       "managementNameInput"
@@ -1758,31 +2421,44 @@ function saveManagement() {
       "managementIconInput"
     );
 
+
+  if (!nameInput) {
+    return;
+  }
+
+
   const name =
-    nameInput
-      ? nameInput.value.trim()
+    nameInput.value.trim();
+
+
+  const icon =
+    iconInput
+      ? iconInput.value.trim()
       : "";
 
+
   if (!name) {
+
     alert(
       "Please enter a name."
     );
 
-    if (nameInput) {
-      nameInput.focus();
-    }
+    nameInput.focus();
 
     return;
+
   }
 
-  /* ----------------------------------------------------------
-     ADD CATEGORY
-     ---------------------------------------------------------- */
+
+  /* ==========================================================
+     CATEGORY
+     ========================================================== */
 
   if (
     managementMode ===
     "category"
   ) {
+
     const exists =
       categories.some(
         category =>
@@ -1791,72 +2467,101 @@ function saveManagement() {
           name.toLowerCase()
       );
 
+
     if (exists) {
+
       alert(
         "A category with this name already exists."
       );
 
-      if (nameInput) {
-        nameInput.focus();
-      }
+      nameInput.focus();
 
       return;
+
     }
 
-    const icon =
-      iconInput &&
-      iconInput.value.trim()
-        ? iconInput.value.trim()
-        : "📋";
 
     const category = {
-      id: createId(name),
-      name,
-      icon,
-      items: []
+
+      id:
+        createId(name),
+
+      name:
+        name,
+
+      icon:
+        icon || "📋",
+
+      items:
+        []
+
     };
+
 
     categories.push(
       category
     );
 
+
     if (!saveData()) {
       return;
     }
 
+
     closeManagementModal();
 
     buildNavigation();
+
     renderDashboard();
+
+
+    if (
+      currentCategory ===
+      "manage"
+    ) {
+      renderManagePlanner();
+    }
+
 
     alert(
       '"' +
-        name +
-        '" has been added successfully. ❤️'
+      name +
+      '" has been added successfully.'
     );
 
+
     return;
+
   }
 
-  /* ----------------------------------------------------------
-     ADD ITEM
-     ---------------------------------------------------------- */
+
+  /* ==========================================================
+     ITEM
+     ========================================================== */
 
   if (
     managementMode ===
     "item"
   ) {
+
     const category =
       categories.find(
-        c =>
-          c.id ===
+        category =>
+          category.id ===
           managementCategoryId
       );
 
+
     if (!category) {
-      closeManagementModal();
+
+      alert(
+        "Category could not be found."
+      );
+
       return;
+
     }
+
 
     const exists =
       category.items.some(
@@ -1865,47 +2570,410 @@ function saveManagement() {
           name.toLowerCase()
       );
 
+
     if (exists) {
+
       alert(
-        "This item already exists."
+        "This item already exists in this category."
       );
 
-      if (nameInput) {
-        nameInput.focus();
-      }
+      nameInput.focus();
 
       return;
+
     }
+
 
     category.items.push(
       name
     );
+
 
     getItem(
       category.id,
       name
     );
 
+
     if (!saveData()) {
       return;
     }
 
+
     closeManagementModal();
+
 
     if (
       currentCategory ===
       category.id
     ) {
+
       showCategory(
         category.id
       );
-    } else {
-      renderDashboard();
+
     }
 
+
+    else if (
+      currentCategory ===
+      "manage"
+    ) {
+
+      renderManagePlanner();
+
+    }
+
+
+    else {
+
+      renderDashboard();
+
+    }
+
+
+    alert(
+      '"' +
+      name +
+      '" has been added successfully.'
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   ADD CATEGORY
+   ============================================================ */
+
+function addCategory() {
+
+  openManagementModal(
+    "category"
+  );
+
+}
+
+
+/* ============================================================
+   ADD ITEM
+   ============================================================ */
+
+function addItem(
+  categoryId
+) {
+
+  const category =
+    categories.find(
+      c =>
+        c.id ===
+        categoryId
+    );
+
+
+  if (!category) {
+
+    alert(
+      "Category could not be found."
+    );
+
+    return;
+
+  }
+
+
+  openManagementModal(
+    "item",
+    categoryId
+  );
+
+}
+
+
+/* ============================================================
+   MANAGE PLANNER
+   ============================================================ */
+
+function showManagePlanner() {
+
+  currentCategory =
+    "manage";
+
+
+  const dashboardPage =
+    document.getElementById(
+      "dashboardPage"
+    );
+
+  const categoryPage =
+    document.getElementById(
+      "categoryPage"
+    );
+
+  const managePage =
+    document.getElementById(
+      "managePage"
+    );
+
+
+  if (dashboardPage) {
+    dashboardPage.style.display =
+      "none";
+  }
+
+
+  if (categoryPage) {
+    categoryPage.style.display =
+      "none";
+  }
+
+
+  if (managePage) {
+    managePage.style.display =
+      "block";
+  }
+
+
+  buildNavigation();
+
+  renderManagePlanner();
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+/* ============================================================
+   RENDER MANAGEMENT
+   ============================================================ */
+
+function renderManagePlanner() {
+
+  const container =
+    document.getElementById(
+      "manageCategories"
+    );
+
+
+  if (!container) {
     return;
   }
+
+
+  container.innerHTML =
+    "";
+
+
+  categories.forEach(
+    category => {
+
+      const wrapper =
+        document.createElement(
+          "div"
+        );
+
+
+      wrapper.className =
+        "manage-category";
+
+
+      wrapper.innerHTML =
+
+        '<div class="manage-category-header">' +
+
+          '<div class="manage-category-title">' +
+
+            '<span class="manage-category-icon">' +
+              escapeHTML(
+                category.icon
+              ) +
+            "</span>" +
+
+            "<strong>" +
+              escapeHTML(
+                category.name
+              ) +
+            "</strong>" +
+
+          "</div>" +
+
+          '<div class="manage-category-actions">' +
+
+            '<button type="button" class="manage-add-item">' +
+              "+ Add item" +
+            "</button>" +
+
+            '<button type="button" class="manage-delete-category">' +
+              "Delete category" +
+            "</button>" +
+
+          "</div>" +
+
+        "</div>" +
+
+        '<div class="manage-items"></div>';
+
+
+      const itemsContainer =
+        wrapper.querySelector(
+          ".manage-items"
+        );
+
+
+      category.items.forEach(
+        item => {
+
+          const data =
+            getItem(
+              category.id,
+              item
+            );
+
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+
+          row.className =
+            "manage-item";
+
+
+          if (!data.enabled) {
+
+            row.classList.add(
+              "disabled"
+            );
+
+          }
+
+
+          row.innerHTML =
+
+            "<span>" +
+              escapeHTML(item) +
+            "</span>" +
+
+            '<div class="manage-item-actions">' +
+
+              '<button type="button" class="toggle-item">' +
+                (
+                  data.enabled
+                    ? "Disable"
+                    : "Enable"
+                ) +
+              "</button>" +
+
+              '<button type="button" class="delete-item">' +
+                "Delete" +
+              "</button>" +
+
+            "</div>";
+
+
+          const toggleButton =
+            row.querySelector(
+              ".toggle-item"
+            );
+
+
+          if (toggleButton) {
+
+            toggleButton.addEventListener(
+              "click",
+              () =>
+                toggleItem(
+                  category.id,
+                  item
+                )
+            );
+
+          }
+
+
+          const deleteButton =
+            row.querySelector(
+              ".delete-item"
+            );
+
+
+          if (deleteButton) {
+
+            deleteButton.addEventListener(
+              "click",
+              () =>
+                deleteItem(
+                  category.id,
+                  item
+                )
+            );
+
+          }
+
+
+          itemsContainer.appendChild(
+            row
+          );
+
+        }
+      );
+
+
+      const addItemButton =
+        wrapper.querySelector(
+          ".manage-add-item"
+        );
+
+
+      if (addItemButton) {
+
+        addItemButton.addEventListener(
+          "click",
+          () =>
+            addItem(
+              category.id
+            )
+        );
+
+      }
+
+
+      const deleteCategoryButton =
+        wrapper.querySelector(
+          ".manage-delete-category"
+        );
+
+
+      if (
+        deleteCategoryButton
+      ) {
+
+        deleteCategoryButton.addEventListener(
+          "click",
+          () =>
+            deleteCategory(
+              category.id
+            )
+        );
+
+      }
+
+
+      container.appendChild(
+        wrapper
+      );
+
+    }
+  );
+
 }
+
 
 /* ============================================================
    DELETE CATEGORY
@@ -1914,69 +2982,75 @@ function saveManagement() {
 function deleteCategory(
   categoryId
 ) {
+
   const category =
     categories.find(
       c =>
-        c.id === categoryId
+        c.id ===
+        categoryId
     );
+
 
   if (!category) {
     return;
   }
 
+
   const confirmed =
     confirm(
       'Delete the category "' +
-        category.name +
-        '"?\n\nAll items in this category will be removed.'
+      category.name +
+      '"?\n\n' +
+      "All items in this category will be removed."
     );
+
 
   if (!confirmed) {
     return;
   }
 
+
   categories =
     categories.filter(
       c =>
-        c.id !== categoryId
+        c.id !==
+        categoryId
     );
+
 
   Object.keys(
     savedData
-  ).forEach(key => {
-    if (
-      key.startsWith(
-        categoryId + "::"
-      )
-    ) {
-      delete savedData[key];
+  ).forEach(
+    key => {
+
+      if (
+        key.startsWith(
+          categoryId +
+          "::"
+        )
+      ) {
+
+        delete savedData[key];
+
+      }
+
     }
-  });
+  );
+
 
   saveData();
 
-  if (
-    currentCategory ===
-    categoryId
-  ) {
-    currentCategory =
-      "dashboard";
-  }
+
+  currentCategory =
+    "dashboard";
+
 
   buildNavigation();
-  renderDashboard();
+
+  showDashboard();
+
 }
 
-/* ============================================================
-   ADD ITEM FROM MANAGEMENT
-   ============================================================ */
-
-function addItem(categoryId) {
-  openManagementModal(
-    "item",
-    categoryId
-  );
-}
 
 /* ============================================================
    TOGGLE ITEM
@@ -1986,28 +3060,38 @@ function toggleItem(
   categoryId,
   item
 ) {
+
   const data =
     getItem(
       categoryId,
       item
     );
 
+
   data.enabled =
     !data.enabled;
 
+
   saveData();
 
+
   renderManagePlanner();
+
 
   if (
     currentCategory ===
     categoryId
   ) {
+
     renderCategory();
-  } else {
-    renderDashboard();
+
   }
+
+
+  renderDashboard();
+
 }
+
 
 /* ============================================================
    DELETE ITEM
@@ -2017,32 +3101,40 @@ function deleteItem(
   categoryId,
   item
 ) {
+
   const category =
     categories.find(
       c =>
-        c.id === categoryId
+        c.id ===
+        categoryId
     );
+
 
   if (!category) {
     return;
   }
 
+
   const confirmed =
     confirm(
       'Delete "' +
-        item +
-        '"?'
+      item +
+      '"?'
     );
+
 
   if (!confirmed) {
     return;
   }
 
+
   category.items =
     category.items.filter(
       existing =>
-        existing !== item
+        existing !==
+        item
     );
+
 
   delete savedData[
     itemKey(
@@ -2051,301 +3143,33 @@ function deleteItem(
     )
   ];
 
+
   saveData();
 
+
   renderManagePlanner();
+
 
   if (
     currentCategory ===
     categoryId
   ) {
+
     renderCategory();
-  } else {
-    renderDashboard();
-  }
-}
 
-/* ============================================================
-   MANAGEMENT LIST
-   ============================================================ */
-
-function renderManagePlanner() {
-  /*
-   * Your current HTML doesn't contain a separate
-   * management page. Management happens through the
-   * dashboard management card.
-   *
-   * We therefore use #managementList.
-   */
-
-  const container =
-    document.getElementById(
-      "managementList"
-    );
-
-  if (!container) {
-    return;
   }
 
-  container.innerHTML = "";
 
-  categories.forEach(
-    category => {
-      const wrapper =
-        document.createElement(
-          "div"
-        );
+  renderDashboard();
 
-      wrapper.className =
-        "manage-category";
-
-      const header =
-        document.createElement(
-          "div"
-        );
-
-      header.className =
-        "manage-category-header";
-
-      const title =
-        document.createElement(
-          "div"
-        );
-
-      title.className =
-        "manage-category-title";
-
-      title.innerHTML =
-        '<span class="manage-category-icon">' +
-        escapeHTML(
-          category.icon
-        ) +
-        "</span>" +
-        "<strong>" +
-        escapeHTML(
-          category.name
-        ) +
-        "</strong>";
-
-      const actions =
-        document.createElement(
-          "div"
-        );
-
-      actions.className =
-        "manage-category-actions";
-
-      const addButton =
-        document.createElement(
-          "button"
-        );
-
-      addButton.type =
-        "button";
-
-      addButton.className =
-        "manage-add-item";
-
-      addButton.textContent =
-        "+ Add item";
-
-      addButton.addEventListener(
-        "click",
-        event => {
-          event.stopPropagation();
-
-          addItem(
-            category.id
-          );
-        }
-      );
-
-      const deleteButton =
-        document.createElement(
-          "button"
-        );
-
-      deleteButton.type =
-        "button";
-
-      deleteButton.className =
-        "manage-delete-category";
-
-      deleteButton.textContent =
-        "Delete category";
-
-      deleteButton.addEventListener(
-        "click",
-        event => {
-          event.stopPropagation();
-
-          deleteCategory(
-            category.id
-          );
-        }
-      );
-
-      actions.appendChild(
-        addButton
-      );
-
-      actions.appendChild(
-        deleteButton
-      );
-
-      header.appendChild(
-        title
-      );
-
-      header.appendChild(
-        actions
-      );
-
-      wrapper.appendChild(
-        header
-      );
-
-      const itemsContainer =
-        document.createElement(
-          "div"
-        );
-
-      itemsContainer.className =
-        "manage-items";
-
-      category.items.forEach(
-        item => {
-          const data =
-            getItem(
-              category.id,
-              item
-            );
-
-          const row =
-            document.createElement(
-              "div"
-            );
-
-          row.className =
-            "manage-item";
-
-          if (!data.enabled) {
-            row.classList.add(
-              "disabled"
-            );
-          }
-
-          const itemName =
-            document.createElement(
-              "span"
-            );
-
-          itemName.textContent =
-            item;
-
-          const itemActions =
-            document.createElement(
-              "div"
-            );
-
-          itemActions.className =
-            "manage-item-actions";
-
-          const toggleButton =
-            document.createElement(
-              "button"
-            );
-
-          toggleButton.type =
-            "button";
-
-          toggleButton.className =
-            "toggle-item";
-
-          toggleButton.textContent =
-            data.enabled
-              ? "Disable"
-              : "Enable";
-
-          toggleButton.addEventListener(
-            "click",
-            event => {
-              event.stopPropagation();
-
-              toggleItem(
-                category.id,
-                item
-              );
-            }
-          );
-
-          const deleteItemButton =
-            document.createElement(
-              "button"
-            );
-
-          deleteItemButton.type =
-            "button";
-
-          deleteItemButton.className =
-            "delete-item";
-
-          deleteItemButton.textContent =
-            "Delete";
-
-          deleteItemButton.addEventListener(
-            "click",
-            event => {
-              event.stopPropagation();
-
-              deleteItem(
-                category.id,
-                item
-              );
-            }
-          );
-
-          itemActions.appendChild(
-            toggleButton
-          );
-
-          itemActions.appendChild(
-            deleteItemButton
-          );
-
-          row.appendChild(
-            itemName
-          );
-
-          row.appendChild(
-            itemActions
-          );
-
-          itemsContainer.appendChild(
-            row
-          );
-        }
-      );
-
-      wrapper.appendChild(
-        itemsContainer
-      );
-
-      container.appendChild(
-        wrapper
-      );
-    }
-  );
 }
 
+
 /* ============================================================
-   EVENTS
+   EVENT SETUP
    ============================================================ */
 
 function setupEvents() {
-  /* ----------------------------------------------------------
-     EXPORT / IMPORT
-     ---------------------------------------------------------- */
 
   const exportButton =
     document.getElementById(
@@ -2361,34 +3185,6 @@ function setupEvents() {
     document.getElementById(
       "importFile"
     );
-
-  if (exportButton) {
-    exportButton.addEventListener(
-      "click",
-      exportData
-    );
-  }
-
-  if (
-    importButton &&
-    importFile
-  ) {
-    importButton.addEventListener(
-      "click",
-      () => importFile.click()
-    );
-  }
-
-  if (importFile) {
-    importFile.addEventListener(
-      "change",
-      importData
-    );
-  }
-
-  /* ----------------------------------------------------------
-     ITEM MODAL
-     ---------------------------------------------------------- */
 
   const closeModalButton =
     document.getElementById(
@@ -2425,208 +3221,6 @@ function setupEvents() {
       "overlay"
     );
 
-  if (closeModalButton) {
-    closeModalButton.addEventListener(
-      "click",
-      closeModal
-    );
-  }
-
-  if (saveButton) {
-    saveButton.addEventListener(
-      "click",
-      saveItem
-    );
-  }
-
-  if (clearButton) {
-    clearButton.addEventListener(
-      "click",
-      clearItem
-    );
-  }
-
-  if (notButton) {
-    notButton.addEventListener(
-      "click",
-      () =>
-        chooseStatus(
-          "not"
-        )
-    );
-  }
-
-  if (progressButton) {
-    progressButton.addEventListener(
-      "click",
-      () =>
-        chooseStatus(
-          "progress"
-        )
-    );
-  }
-
-  if (doneButton) {
-    doneButton.addEventListener(
-      "click",
-      () =>
-        chooseStatus(
-          "done"
-        )
-    );
-  }
-
-  if (overlay) {
-    overlay.addEventListener(
-      "click",
-      event => {
-        if (
-          event.target ===
-          overlay
-        ) {
-          closeModal();
-        }
-      }
-    );
-  }
-
-  /* ----------------------------------------------------------
-     MANAGEMENT MODAL
-     ---------------------------------------------------------- */
-
-  const addCategoryButton =
-    document.getElementById(
-      "addCategoryButton"
-    );
-
-  const addItemButton =
-    document.getElementById(
-      "addItemButton"
-    );
-
-  const manageCurrentCategoryButton =
-    document.getElementById(
-      "manageCurrentCategoryButton"
-    );
-
-  const backToDashboardButton =
-    document.getElementById(
-      "backToDashboardButton"
-    );
-
-  const closeManagementButton =
-    document.getElementById(
-      "closeManagementButton"
-    );
-
-  const cancelManagementButton =
-    document.getElementById(
-      "cancelManagementButton"
-    );
-
-  const saveManagementButton =
-    document.getElementById(
-      "saveManagementButton"
-    );
-
-  const managementOverlay =
-    document.getElementById(
-      "managementOverlay"
-    );
-
-  if (addCategoryButton) {
-    addCategoryButton.addEventListener(
-      "click",
-      () =>
-        openManagementModal(
-          "category"
-        )
-    );
-  }
-
-  if (addItemButton) {
-    addItemButton.addEventListener(
-      "click",
-      () => {
-        if (
-          currentCategory &&
-          currentCategory !==
-            "dashboard"
-        ) {
-          addItem(
-            currentCategory
-          );
-        }
-      }
-    );
-  }
-
-  if (
-    manageCurrentCategoryButton
-  ) {
-    manageCurrentCategoryButton.addEventListener(
-      "click",
-      () => {
-        if (
-          currentCategory &&
-          currentCategory !==
-            "dashboard"
-        ) {
-          openManagementModal(
-            "item",
-            currentCategory
-          );
-        }
-      }
-    );
-  }
-
-  if (backToDashboardButton) {
-    backToDashboardButton.addEventListener(
-      "click",
-      showDashboard
-    );
-  }
-
-  if (closeManagementButton) {
-    closeManagementButton.addEventListener(
-      "click",
-      closeManagementModal
-    );
-  }
-
-  if (cancelManagementButton) {
-    cancelManagementButton.addEventListener(
-      "click",
-      closeManagementModal
-    );
-  }
-
-  if (saveManagementButton) {
-    saveManagementButton.addEventListener(
-      "click",
-      saveManagement
-    );
-  }
-
-  if (managementOverlay) {
-    managementOverlay.addEventListener(
-      "click",
-      event => {
-        if (
-          event.target ===
-          managementOverlay
-        ) {
-          closeManagementModal();
-        }
-      }
-    );
-  }
-
-  /* ----------------------------------------------------------
-     SEARCH
-     ---------------------------------------------------------- */
-
   const search =
     document.getElementById(
       "itemSearch"
@@ -2637,89 +3231,426 @@ function setupEvents() {
       "itemStatusFilter"
     );
 
+
+  /* EXPORT */
+
+  if (exportButton) {
+
+    exportButton.addEventListener(
+      "click",
+      exportData
+    );
+
+  }
+
+
+  /* IMPORT */
+
+  if (
+    importButton &&
+    importFile
+  ) {
+
+    importButton.addEventListener(
+      "click",
+      () =>
+        importFile.click()
+    );
+
+  }
+
+
+  if (importFile) {
+
+    importFile.addEventListener(
+      "change",
+      importData
+    );
+
+  }
+
+
+  /* ITEM MODAL */
+
+  if (closeModalButton) {
+
+    closeModalButton.addEventListener(
+      "click",
+      closeModal
+    );
+
+  }
+
+
+  if (saveButton) {
+
+    saveButton.addEventListener(
+      "click",
+      saveItem
+    );
+
+  }
+
+
+  if (clearButton) {
+
+    clearButton.addEventListener(
+      "click",
+      clearItem
+    );
+
+  }
+
+
+  if (notButton) {
+
+    notButton.addEventListener(
+      "click",
+      () =>
+        chooseStatus(
+          "not"
+        )
+    );
+
+  }
+
+
+  if (progressButton) {
+
+    progressButton.addEventListener(
+      "click",
+      () =>
+        chooseStatus(
+          "progress"
+        )
+    );
+
+  }
+
+
+  if (doneButton) {
+
+    doneButton.addEventListener(
+      "click",
+      () =>
+        chooseStatus(
+          "done"
+        )
+    );
+
+  }
+
+
+  if (overlay) {
+
+    overlay.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          overlay
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* SEARCH */
+
   if (search) {
+
     search.addEventListener(
       "input",
       renderCategory
     );
+
   }
 
+
   if (filter) {
+
     filter.addEventListener(
       "change",
       renderCategory
     );
+
   }
 
-  /* ----------------------------------------------------------
-     ENTER KEY IN MANAGEMENT MODAL
-     ---------------------------------------------------------- */
+
+  /* DASHBOARD MANAGEMENT */
+
+  const addCategoryButton =
+    document.getElementById(
+      "addCategoryButton"
+    );
+
+
+  if (addCategoryButton) {
+
+    addCategoryButton.addEventListener(
+      "click",
+      addCategory
+    );
+
+  }
+
+
+  /* CATEGORY ADD ITEM */
+
+  const addItemButton =
+    document.getElementById(
+      "addItemButton"
+    );
+
+
+  if (addItemButton) {
+
+    addItemButton.addEventListener(
+      "click",
+      () => {
+
+        if (
+          currentCategory &&
+          currentCategory !==
+            "dashboard" &&
+          currentCategory !==
+            "manage"
+        ) {
+
+          addItem(
+            currentCategory
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* MANAGE CATEGORY */
+
+  const manageCurrentCategoryButton =
+    document.getElementById(
+      "manageCurrentCategoryButton"
+    );
+
+
+  if (
+    manageCurrentCategoryButton
+  ) {
+
+    manageCurrentCategoryButton.addEventListener(
+      "click",
+      showManagePlanner
+    );
+
+  }
+
+
+  /* BACK TO DASHBOARD */
+
+  const backToDashboardButton =
+    document.getElementById(
+      "backToDashboardButton"
+    );
+
+
+  if (
+    backToDashboardButton
+  ) {
+
+    backToDashboardButton.addEventListener(
+      "click",
+      showDashboard
+    );
+
+  }
+
+
+  /* MANAGE PAGE BACK */
+
+  const manageBackButton =
+    document.getElementById(
+      "manageBackButton"
+    );
+
+
+  if (manageBackButton) {
+
+    manageBackButton.addEventListener(
+      "click",
+      showDashboard
+    );
+
+  }
+
+
+  /* MANAGE PAGE ADD CATEGORY */
+
+  const manageAddCategoryButton =
+    document.getElementById(
+      "manageAddCategoryButton"
+    );
+
+
+  if (
+    manageAddCategoryButton
+  ) {
+
+    manageAddCategoryButton.addEventListener(
+      "click",
+      addCategory
+    );
+
+  }
+
+
+  /* MANAGEMENT MODAL */
+
+  const saveManagementButton =
+    document.getElementById(
+      "saveManagementButton"
+    );
+
+  const cancelManagementButton =
+    document.getElementById(
+      "cancelManagementButton"
+    );
+
+  const closeManagementButton =
+    document.getElementById(
+      "closeManagementButton"
+    );
+
+  const managementOverlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+
+  if (
+    saveManagementButton
+  ) {
+
+    saveManagementButton.addEventListener(
+      "click",
+      saveManagement
+    );
+
+  }
+
+
+  if (
+    cancelManagementButton
+  ) {
+
+    cancelManagementButton.addEventListener(
+      "click",
+      closeManagementModal
+    );
+
+  }
+
+
+  if (
+    closeManagementButton
+  ) {
+
+    closeManagementButton.addEventListener(
+      "click",
+      closeManagementModal
+    );
+
+  }
+
+
+  if (
+    managementOverlay
+  ) {
+
+    managementOverlay.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          managementOverlay
+        ) {
+
+          closeManagementModal();
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* MANAGEMENT INPUT ENTER */
 
   const managementNameInput =
     document.getElementById(
       "managementNameInput"
     );
 
-  if (managementNameInput) {
+
+  if (
+    managementNameInput
+  ) {
+
     managementNameInput.addEventListener(
       "keydown",
       event => {
+
         if (
           event.key ===
           "Enter"
         ) {
+
           event.preventDefault();
+
           saveManagement();
+
         }
+
       }
     );
+
   }
 
-  /* ----------------------------------------------------------
-     ESCAPE KEY
-     ---------------------------------------------------------- */
+
+  /* ESCAPE */
 
   document.addEventListener(
     "keydown",
     event => {
+
       if (
-        event.key !==
+        event.key ===
         "Escape"
       ) {
-        return;
-      }
 
-      const managementOverlay =
-        document.getElementById(
-          "managementOverlay"
-        );
-
-      const itemOverlay =
-        document.getElementById(
-          "overlay"
-        );
-
-      if (
-        managementOverlay &&
-        managementOverlay.classList.contains(
-          "active"
-        )
-      ) {
-        closeManagementModal();
-        return;
-      }
-
-      if (
-        itemOverlay &&
-        itemOverlay.classList.contains(
-          "active"
-        )
-      ) {
         closeModal();
+
+        closeManagementModal();
+
       }
+
     }
   );
+
 }
+
 
 /* ============================================================
    START APPLICATION
@@ -2727,15 +3658,15 @@ function setupEvents() {
 
 document.addEventListener(
   "DOMContentLoaded",
-  () => {
+  function () {
+
     loadData();
 
     setupEvents();
 
     buildNavigation();
 
-    renderManagePlanner();
-
     showDashboard();
+
   }
 );
