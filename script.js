@@ -217,8 +217,8 @@ const defaultCategories = [
     items: ["Lighting", "Projector"]
   },
   {
-    id: "host",
-    name: "Host",
+    id: "speech-host",
+    name: "Speech + Host",
     icon: "🎤",
     items: [
       "Vinu",
@@ -226,6 +226,9 @@ const defaultCategories = [
       "Saddi",
       "Speech",
       "Games"
+      "Speech planning",
+      "Speakers",
+      "Order of speeches"
     ]
   },
   {
@@ -233,16 +236,6 @@ const defaultCategories = [
     name: "Games",
     icon: "🎲",
     items: ["Palaharam (Goodie bag)", "Yndlingsting"]
-  },
-  {
-    id: "speech",
-    name: "Speech",
-    icon: "🎤",
-    items: [
-      "Speech planning",
-      "Speakers",
-      "Order of speeches"
-    ]
   }
 ];
 
