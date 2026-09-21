@@ -768,7 +768,6 @@ function (category) {
   nav.appendChild(button);
 
 }
-```
 
 );
 
