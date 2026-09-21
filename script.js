@@ -301,11 +301,8 @@ STORAGE
 const STORAGE_KEY = "tamilWeddingPlanner_v4";
 
 let savedData = {};
-
 let currentCategory = "dashboard";
-
 let currentItem = null;
-
 let modalStatus = "not";
 
 /* ============================================================
@@ -316,30 +313,13 @@ function loadData() {
 
 try {
 
+```
 const stored = localStorage.getItem(STORAGE_KEY);
 
 if (stored) {
-
-  const parsed = JSON.parse(stored);
-
-  if (
-    parsed &&
-    typeof parsed === "object" &&
-    !Array.isArray(parsed)
-  ) {
-
-    savedData = parsed;
-
-  } else {
-
-    savedData = {};
-
-  }
-
+  savedData = JSON.parse(stored);
 } else {
-
   savedData = {};
-
 }
 ```
 
@@ -397,9 +377,7 @@ function exportData() {
 try {
 
 ```
-if (!saveData()) {
-  return;
-}
+saveData();
 
 const backup = {
   app: "Tamil Wedding Planner",
@@ -425,13 +403,11 @@ const url = URL.createObjectURL(blob);
 
 const link = document.createElement("a");
 
-link.href = url;
+link.setAttribute("href", url);
 
 const now = new Date();
 
-const year = String(
-  now.getFullYear()
-);
+const year = now.getFullYear();
 
 const month = String(
   now.getMonth() + 1
@@ -442,12 +418,13 @@ const day = String(
 ).padStart(2, "0");
 
 /*
- * Deliberately use normal string concatenation here.
- * This avoids the template-literal syntax problem
- * that was causing the previous script to fail.
+ * IMPORTANT:
+ * Do not use a template literal here.
+ * This avoids the syntax error that was
+ * breaking the entire script.
  */
 
-link.download =
+const filename =
   "wedding-planner-backup-" +
   year +
   "-" +
@@ -456,18 +433,22 @@ link.download =
   day +
   ".json";
 
+link.setAttribute(
+  "download",
+  filename
+);
+
+link.style.display = "none";
+
 document.body.appendChild(link);
 
 link.click();
 
 document.body.removeChild(link);
 
-setTimeout(
-  function () {
-    URL.revokeObjectURL(url);
-  },
-  1000
-);
+setTimeout(function() {
+  URL.revokeObjectURL(url);
+}, 1000);
 
 console.log(
   "Wedding planner data exported successfully."
@@ -523,7 +504,7 @@ return;
 
 const reader = new FileReader();
 
-reader.onload = function (e) {
+reader.onload = function(e) {
 
 ```
 try {
@@ -576,7 +557,9 @@ try {
 
   savedData = importedData;
 
-  if (!saveData()) {
+  const saved = saveData();
+
+  if (!saved) {
 
     event.target.value = "";
 
@@ -584,11 +567,13 @@ try {
 
   }
 
-  renderDashboard();
+  if (currentCategory === "dashboard") {
 
-  if (currentCategory !== "dashboard") {
+    showDashboard();
 
-    renderCategory();
+  } else {
+
+    showCategory(currentCategory);
 
   }
 
@@ -614,7 +599,7 @@ event.target.value = "";
 
 };
 
-reader.onerror = function () {
+reader.onerror = function() {
 
 ```
 alert(
@@ -634,16 +619,9 @@ reader.readAsText(file);
 ITEM KEY
 ============================================================ */
 
-function itemKey(
-categoryId,
-item
-) {
+function itemKey(categoryId, item) {
 
-return (
-categoryId +
-"::" +
-item
-);
+return categoryId + "::" + item;
 
 }
 
@@ -651,20 +629,14 @@ item
 GET ITEM
 ============================================================ */
 
-function getItem(
-categoryId,
-item
-) {
+function getItem(categoryId, item) {
 
 const key = itemKey(
 categoryId,
 item
 );
 
-if (
-!savedData[key] ||
-typeof savedData[key] !== "object"
-) {
+if (!savedData[key]) {
 
 ```
 savedData[key] = {
@@ -717,58 +689,51 @@ return;
 
 nav.innerHTML = "";
 
-const dashboard = document.createElement(
-"button"
-);
-
-dashboard.type = "button";
+const dashboard =
+document.createElement("button");
 
 dashboard.textContent =
 "🏠 Dashboard";
+
+dashboard.type = "button";
+
+dashboard.onclick = function() {
+showDashboard();
+};
 
 dashboard.className =
 currentCategory === "dashboard"
 ? "active"
 : "";
 
-dashboard.addEventListener(
-"click",
-showDashboard
-);
-
 nav.appendChild(dashboard);
 
-categories.forEach(
-function (category) {
+categories.forEach(function(category) {
 
 ```
-  const button =
-    document.createElement("button");
+const button =
+  document.createElement("button");
 
-  button.type = "button";
+button.textContent =
+  category.icon +
+  " " +
+  category.name;
 
-  button.textContent =
-    category.icon +
-    " " +
-    category.name;
+button.type = "button";
 
-  button.className =
-    currentCategory === category.id
-      ? "active"
-      : "";
+button.onclick = function() {
+  showCategory(category.id);
+};
 
-  button.addEventListener(
-    "click",
-    function () {
-      showCategory(category.id);
-    }
-  );
+button.className =
+  currentCategory === category.id
+    ? "active"
+    : "";
 
-  nav.appendChild(button);
+nav.appendChild(button);
+```
 
-}
-
-);
+});
 
 }
 
@@ -795,7 +760,6 @@ return;
 }
 
 dashboardPage.style.display = "block";
-
 categoryPage.style.display = "none";
 
 buildNavigation();
@@ -809,89 +773,58 @@ behavior: "smooth"
 
 }
 
-/* ============================================================
-RENDER DASHBOARD
-============================================================ */
-
 function renderDashboard() {
 
 let total = 0;
-
 let done = 0;
-
 let progress = 0;
 
-categories.forEach(
-function (category) {
+categories.forEach(function(category) {
 
 ```
-  category.items.forEach(
-    function (item) {
+category.items.forEach(function(item) {
 
-      total++;
+  total++;
 
-      const data = getItem(
-        category.id,
-        item
-      );
-
-      if (data.status === "done") {
-        done++;
-      }
-
-      if (data.status === "progress") {
-        progress++;
-      }
-
-    }
+  const data = getItem(
+    category.id,
+    item
   );
 
-}
+  if (data.status === "done") {
+    done++;
+  }
+
+  if (data.status === "progress") {
+    progress++;
+  }
+
+});
 ```
 
-);
+});
 
-const percent =
-total > 0
-? Math.round(
-(done / total) * 100
-)
+const percent = total
+? Math.round((done / total) * 100)
 : 0;
 
 const totalCount =
-document.getElementById(
-"totalCount"
-);
+document.getElementById("totalCount");
 
 const doneCount =
-document.getElementById(
-"doneCount"
-);
+document.getElementById("doneCount");
 
 const progressCount =
-document.getElementById(
-"progressCount"
-);
+document.getElementById("progressCount");
 
 const categoryCount =
-document.getElementById(
-"categoryCount"
-);
+document.getElementById("categoryCount");
 
 const overallPercent =
-document.getElementById(
-"overallPercent"
-);
+document.getElementById("overallPercent");
 
 const overallFill =
-document.getElementById(
-"overallFill"
-);
-
-const grid =
-document.getElementById(
-"summaryGrid"
-);
+document.getElementById("overallFill");
 
 if (totalCount) {
 totalCount.textContent = total;
@@ -920,79 +853,78 @@ overallFill.style.width =
 percent + "%";
 }
 
+const grid =
+document.getElementById(
+"summaryGrid"
+);
+
 if (!grid) {
 return;
 }
 
 grid.innerHTML = "";
 
-categories.forEach(
-function (category) {
+categories.forEach(function(category) {
 
 ```
-  const stats =
-    getCategoryStats(category);
+const stats =
+  getCategoryStats(category);
 
-  const card =
-    document.createElement("div");
+const card =
+  document.createElement("div");
 
-  card.className =
-    "summary-card";
+card.className =
+  "summary-card";
 
-  const icon =
-    document.createElement("div");
+const icon =
+  document.createElement("div");
 
-  icon.style.fontSize = "25px";
-  icon.style.marginBottom = "10px";
-  icon.textContent = category.icon;
+icon.style.fontSize = "25px";
+icon.style.marginBottom = "10px";
+icon.textContent = category.icon;
 
-  const title =
-    document.createElement("h3");
+const title =
+  document.createElement("h3");
 
-  title.textContent =
-    category.name;
+title.textContent =
+  category.name;
 
-  const text =
-    document.createElement("p");
+const description =
+  document.createElement("p");
 
-  text.textContent =
-    stats.done +
-    " / " +
-    stats.total +
-    " completed";
+description.textContent =
+  stats.done +
+  " / " +
+  stats.total +
+  " completed";
 
-  const bar =
-    document.createElement("div");
+const bar =
+  document.createElement("div");
 
-  bar.className =
-    "summary-bar";
+bar.className =
+  "summary-bar";
 
-  const fill =
-    document.createElement("div");
+const fill =
+  document.createElement("div");
 
-  fill.style.width =
-    stats.percent + "%";
+fill.style.width =
+  stats.percent + "%";
 
-  bar.appendChild(fill);
+bar.appendChild(fill);
 
-  card.appendChild(icon);
-  card.appendChild(title);
-  card.appendChild(text);
-  card.appendChild(bar);
+card.appendChild(icon);
+card.appendChild(title);
+card.appendChild(description);
+card.appendChild(bar);
 
-  card.addEventListener(
-    "click",
-    function () {
-      showCategory(category.id);
-    }
-  );
+card.onclick = function() {
+  showCategory(category.id);
+};
 
-  grid.appendChild(card);
-
-}
+grid.appendChild(card);
 ```
 
-);
+});
 
 }
 
@@ -1003,11 +935,9 @@ CATEGORY
 function showCategory(id) {
 
 const category =
-categories.find(
-function (c) {
+categories.find(function(c) {
 return c.id === id;
-}
-);
+});
 
 if (!category) {
 return;
@@ -1029,11 +959,8 @@ if (!dashboardPage || !categoryPage) {
 return;
 }
 
-dashboardPage.style.display =
-"none";
-
-categoryPage.style.display =
-"block";
+dashboardPage.style.display = "none";
+categoryPage.style.display = "block";
 
 const title =
 document.getElementById(
@@ -1041,14 +968,10 @@ document.getElementById(
 );
 
 if (title) {
-
-```
 title.textContent =
-  category.icon +
-  " " +
-  category.name;
-```
-
+category.icon +
+" " +
+category.name;
 }
 
 const search =
@@ -1084,34 +1007,26 @@ behavior: "smooth"
 CATEGORY STATS
 ============================================================ */
 
-function getCategoryStats(
-category
-) {
+function getCategoryStats(category) {
 
 const total =
 category.items.length;
 
 const done =
-category.items.filter(
-function (item) {
+category.items.filter(function(item) {
 
 ```
-    return (
-      getItem(
-        category.id,
-        item
-      ).status === "done"
-    );
+  return getItem(
+    category.id,
+    item
+  ).status === "done";
 
-  }
-).length;
+}).length;
 ```
 
 const percent =
-total > 0
-? Math.round(
-(done / total) * 100
-)
+total
+? Math.round((done / total) * 100)
 : 0;
 
 return {
@@ -1129,11 +1044,9 @@ RENDER CATEGORY
 function renderCategory() {
 
 const category =
-categories.find(
-function (c) {
+categories.find(function(c) {
 return c.id === currentCategory;
-}
-);
+});
 
 if (!category) {
 return;
@@ -1142,281 +1055,212 @@ return;
 const stats =
 getCategoryStats(category);
 
-const percent =
+const categoryPercent =
 document.getElementById(
 "categoryPercent"
 );
 
-const progressText =
+const categoryProgressText =
 document.getElementById(
 "categoryProgressText"
 );
 
-const searchInput =
+if (categoryPercent) {
+categoryPercent.textContent =
+stats.percent + "%";
+}
+
+if (categoryProgressText) {
+categoryProgressText.textContent =
+stats.done +
+" / " +
+stats.total +
+" completed";
+}
+
+const searchElement =
 document.getElementById(
 "itemSearch"
 );
 
-const statusFilter =
+const filterElement =
 document.getElementById(
 "itemStatusFilter"
 );
+
+const search =
+searchElement
+? searchElement.value
+.toLowerCase()
+.trim()
+: "";
+
+const status =
+filterElement
+? filterElement.value
+: "all";
 
 const grid =
 document.getElementById(
 "itemsGrid"
 );
 
-const empty =
-document.getElementById(
-"emptyMessage"
-);
-
-if (percent) {
-
-```
-percent.textContent =
-  stats.percent + "%";
-```
-
-}
-
-if (progressText) {
-
-```
-progressText.textContent =
-  stats.done +
-  " / " +
-  stats.total +
-  " completed";
-```
-
-}
-
 if (!grid) {
 return;
 }
-
-const search =
-searchInput
-? searchInput.value
-.toLowerCase()
-.trim()
-: "";
-
-const status =
-statusFilter
-? statusFilter.value
-: "all";
 
 grid.innerHTML = "";
 
 let visible = 0;
 
-category.items.forEach(
-function (item) {
+category.items.forEach(function(item) {
 
 ```
-  const data =
-    getItem(
-      category.id,
-      item
-    );
+const data =
+  getItem(
+    category.id,
+    item
+  );
 
+const vendor =
+  String(data.vendor || "");
 
-  const vendor =
-    String(data.vendor || "")
-      .toLowerCase();
+const notes =
+  String(data.notes || "");
 
-  const notes =
-    String(data.notes || "")
-      .toLowerCase();
+const matchesSearch =
+  !search ||
+  item.toLowerCase().includes(search) ||
+  vendor.toLowerCase().includes(search) ||
+  notes.toLowerCase().includes(search);
 
+const matchesStatus =
+  status === "all" ||
+  data.status === status;
 
-  const itemName =
-    item.toLowerCase();
+if (!matchesSearch || !matchesStatus) {
+  return;
+}
 
+visible++;
 
-  const matchesSearch =
-    !search ||
-    itemName.includes(search) ||
-    vendor.includes(search) ||
-    notes.includes(search);
+const card =
+  document.createElement("div");
 
+card.className =
+  "item-card";
 
-  const matchesStatus =
-    status === "all" ||
-    data.status === status;
+if (data.status === "done") {
+  card.classList.add("done");
+}
 
+const top =
+  document.createElement("div");
 
-  if (
-    !matchesSearch ||
-    !matchesStatus
-  ) {
+top.className =
+  "item-top";
 
-    return;
+const icon =
+  document.createElement("div");
 
-  }
+icon.className =
+  "item-icon";
 
+icon.textContent =
+  category.icon;
 
-  visible++;
+const statusBadge =
+  document.createElement("div");
 
+statusBadge.className =
+  "item-status";
 
-  const card =
-    document.createElement("div");
+if (data.status === "progress") {
+  statusBadge.classList.add("progress");
+}
 
-  card.className =
-    "item-card";
+if (data.status === "done") {
+  statusBadge.classList.add("done");
+}
 
-
-  if (data.status === "done") {
-    card.classList.add("done");
-  }
-
-
-  const top =
-    document.createElement("div");
-
-  top.className =
-    "item-top";
-
-
-  const icon =
-    document.createElement("div");
-
-  icon.className =
-    "item-icon";
-
-  icon.textContent =
-    category.icon;
-
-
-  const statusElement =
-    document.createElement("div");
-
-  statusElement.className =
-    "item-status";
-
-
-  let statusText =
+if (data.status === "progress") {
+  statusBadge.textContent =
+    "In progress";
+} else if (data.status === "done") {
+  statusBadge.textContent =
+    "Completed";
+} else {
+  statusBadge.textContent =
     "Not started";
+}
 
+top.appendChild(icon);
+top.appendChild(statusBadge);
 
-  if (data.status === "progress") {
+const title =
+  document.createElement("h3");
 
-    statusText =
-      "In progress";
+title.textContent = item;
 
-    statusElement.classList.add(
-      "progress"
-    );
+const vendorText =
+  document.createElement("p");
 
-  }
+if (data.vendor) {
 
+  vendorText.textContent =
+    "👤 " + data.vendor;
 
-  if (data.status === "done") {
+} else {
 
-    statusText =
-      "Completed";
-
-    statusElement.classList.add(
-      "done"
-    );
-
-  }
-
-
-  statusElement.textContent =
-    statusText;
-
-
-  top.appendChild(icon);
-
-  top.appendChild(
-    statusElement
-  );
-
-
-  const title =
-    document.createElement("h3");
-
-  title.textContent =
-    item;
-
-
-  card.appendChild(top);
-
-  card.appendChild(title);
-
-
-  const vendorElement =
-    document.createElement("p");
-
-
-  if (data.vendor) {
-
-    vendorElement.textContent =
-      "👤 " + data.vendor;
-
-  } else {
-
-    vendorElement.textContent =
-      "Click to add details";
-
-  }
-
-
-  card.appendChild(
-    vendorElement
-  );
-
-
-  if (data.deadline) {
-
-    const deadline =
-      document.createElement("div");
-
-    deadline.className =
-      "item-meta";
-
-    deadline.textContent =
-      "📅 " +
-      formatDate(
-        data.deadline
-      );
-
-    card.appendChild(
-      deadline
-    );
-
-  }
-
-
-  card.addEventListener(
-    "click",
-    function () {
-
-      openModal(
-        category.id,
-        item
-      );
-
-    }
-  );
-
-
-  grid.appendChild(card);
+  vendorText.textContent =
+    "Click to add details";
 
 }
+
+card.appendChild(top);
+card.appendChild(title);
+card.appendChild(vendorText);
+
+if (data.deadline) {
+
+  const deadline =
+    document.createElement("div");
+
+  deadline.className =
+    "item-meta";
+
+  deadline.textContent =
+    "📅 " +
+    formatDate(data.deadline);
+
+  card.appendChild(deadline);
+
+}
+
+card.onclick = function() {
+
+  openModal(
+    category.id,
+    item
+  );
+
+};
+
+grid.appendChild(card);
 ```
 
+});
+
+const empty =
+document.getElementById(
+"emptyMessage"
 );
 
 if (empty) {
 
 ```
 empty.style.display =
-  visible > 0
+  visible
     ? "none"
     : "block";
 ```
@@ -1429,10 +1273,7 @@ empty.style.display =
 MODAL
 ============================================================ */
 
-function openModal(
-categoryId,
-item
-) {
+function openModal(categoryId, item) {
 
 currentItem = {
 categoryId: categoryId,
@@ -1440,11 +1281,9 @@ item: item
 };
 
 const category =
-categories.find(
-function (c) {
+categories.find(function(c) {
 return c.id === categoryId;
-}
-);
+});
 
 if (!category) {
 return;
@@ -1467,47 +1306,64 @@ document.getElementById(
 );
 
 if (modalCategory) {
-
-```
 modalCategory.textContent =
-  category.name;
-```
-
+category.name;
 }
 
 if (modalTitle) {
-
-```
 modalTitle.textContent =
-  item;
-```
-
+item;
 }
 
-setInputValue(
-"vendorInput",
-data.vendor
+const vendorInput =
+document.getElementById(
+"vendorInput"
 );
 
-setInputValue(
-"priceInput",
-data.price
+const priceInput =
+document.getElementById(
+"priceInput"
 );
 
-setInputValue(
-"deadlineInput",
-data.deadline
+const deadlineInput =
+document.getElementById(
+"deadlineInput"
 );
 
-setInputValue(
-"linkInput",
-data.link
+const linkInput =
+document.getElementById(
+"linkInput"
 );
 
-setInputValue(
-"notesInput",
-data.notes
+const notesInput =
+document.getElementById(
+"notesInput"
 );
+
+if (vendorInput) {
+vendorInput.value =
+data.vendor;
+}
+
+if (priceInput) {
+priceInput.value =
+data.price;
+}
+
+if (deadlineInput) {
+deadlineInput.value =
+data.deadline;
+}
+
+if (linkInput) {
+linkInput.value =
+data.link;
+}
+
+if (notesInput) {
+notesInput.value =
+data.notes;
+}
 
 modalStatus =
 data.status;
@@ -1520,39 +1376,10 @@ document.getElementById(
 );
 
 if (overlay) {
-
-```
-overlay.classList.add(
-  "active"
-);
-```
-
+overlay.classList.add("active");
 }
 
 }
-
-function setInputValue(
-id,
-value
-) {
-
-const element =
-document.getElementById(id);
-
-if (element) {
-
-```
-element.value =
-  value || "";
-```
-
-}
-
-}
-
-/* ============================================================
-CLOSE MODAL
-============================================================ */
 
 function closeModal() {
 
@@ -1562,29 +1389,16 @@ document.getElementById(
 );
 
 if (overlay) {
-
-```
-overlay.classList.remove(
-  "active"
-);
-```
-
+overlay.classList.remove("active");
 }
 
 currentItem = null;
 
 }
 
-/* ============================================================
-STATUS
-============================================================ */
+function chooseStatus(status) {
 
-function chooseStatus(
-status
-) {
-
-modalStatus =
-status;
+modalStatus = status;
 
 updateStatusButtons();
 
@@ -1658,57 +1472,67 @@ currentItem.categoryId,
 currentItem.item
 );
 
+const vendorInput =
+document.getElementById(
+"vendorInput"
+);
+
+const priceInput =
+document.getElementById(
+"priceInput"
+);
+
+const deadlineInput =
+document.getElementById(
+"deadlineInput"
+);
+
+const linkInput =
+document.getElementById(
+"linkInput"
+);
+
+const notesInput =
+document.getElementById(
+"notesInput"
+);
+
 data.status =
 modalStatus;
 
 data.vendor =
-getInputValue(
-"vendorInput"
-);
+vendorInput
+? vendorInput.value
+: "";
 
 data.price =
-getInputValue(
-"priceInput"
-);
+priceInput
+? priceInput.value
+: "";
 
 data.deadline =
-getInputValue(
-"deadlineInput"
-);
+deadlineInput
+? deadlineInput.value
+: "";
 
 data.link =
-getInputValue(
-"linkInput"
-);
+linkInput
+? linkInput.value
+: "";
 
 data.notes =
-getInputValue(
-"notesInput"
-);
+notesInput
+? notesInput.value
+: "";
 
-if (!saveData()) {
-return;
-}
+saveData();
 
 closeModal();
 
-if (
-currentCategory ===
-"dashboard"
-) {
-
-```
+if (currentCategory === "dashboard") {
 showDashboard();
-```
-
 } else {
-
-```
-buildNavigation();
-
-renderCategory();
-```
-
+showCategory(currentCategory);
 }
 
 }
@@ -1730,58 +1554,21 @@ currentItem.item
 );
 
 data.status = "not";
-
 data.vendor = "";
-
 data.price = "";
-
 data.deadline = "";
-
 data.link = "";
-
 data.notes = "";
 
-if (!saveData()) {
-return;
-}
+saveData();
 
 closeModal();
 
-if (
-currentCategory ===
-"dashboard"
-) {
-
-```
+if (currentCategory === "dashboard") {
 showDashboard();
-```
-
 } else {
-
-```
-buildNavigation();
-
-renderCategory();
-```
-
+showCategory(currentCategory);
 }
-
-}
-
-/* ============================================================
-GET INPUT
-============================================================ */
-
-function getInputValue(id) {
-
-const element =
-document.getElementById(id);
-
-if (!element) {
-return "";
-}
-
-return element.value;
 
 }
 
@@ -1789,9 +1576,7 @@ return element.value;
 FORMAT DATE
 ============================================================ */
 
-function formatDate(
-date
-) {
+function formatDate(date) {
 
 if (!date) {
 return "";
@@ -1801,10 +1586,6 @@ const d =
 new Date(
 date + "T00:00:00"
 );
-
-if (Number.isNaN(d.getTime())) {
-return date;
-}
 
 return d.toLocaleDateString(
 "en-DK",
@@ -1821,280 +1602,90 @@ year: "numeric"
 EVENTS
 ============================================================ */
 
-function setupEvents() {
+document.addEventListener(
+"DOMContentLoaded",
+function() {
 
+```
 const search =
-document.getElementById(
-"itemSearch"
-);
+  document.getElementById(
+    "itemSearch"
+  );
 
 if (search) {
 
-```
-search.addEventListener(
-  "input",
-  function () {
-    renderCategory();
-  }
-);
-```
+  search.addEventListener(
+    "input",
+    renderCategory
+  );
 
 }
 
 const statusFilter =
-document.getElementById(
-"itemStatusFilter"
-);
+  document.getElementById(
+    "itemStatusFilter"
+  );
 
 if (statusFilter) {
 
-```
-statusFilter.addEventListener(
-  "change",
-  function () {
-    renderCategory();
-  }
-);
-```
+  statusFilter.addEventListener(
+    "change",
+    renderCategory
+  );
 
 }
-
-const exportButton =
-document.getElementById(
-"exportButton"
-);
-
-if (exportButton) {
-
-```
-exportButton.addEventListener(
-  "click",
-  exportData
-);
-```
-
-}
-
-const importButton =
-document.getElementById(
-"importButton"
-);
 
 const importFile =
-document.getElementById(
-"importFile"
-);
-
-if (
-importButton &&
-importFile
-) {
-
-```
-importButton.addEventListener(
-  "click",
-  function () {
-    importFile.click();
-  }
-);
-```
-
-}
+  document.getElementById(
+    "importFile"
+  );
 
 if (importFile) {
 
-```
-importFile.addEventListener(
-  "change",
-  importData
-);
-```
-
-}
-
-const closeButton =
-document.getElementById(
-"closeModalButton"
-);
-
-if (closeButton) {
-
-```
-closeButton.addEventListener(
-  "click",
-  closeModal
-);
-```
-
-}
-
-const notButton =
-document.getElementById(
-"notButton"
-);
-
-if (notButton) {
-
-```
-notButton.addEventListener(
-  "click",
-  function () {
-    chooseStatus("not");
-  }
-);
-```
-
-}
-
-const progressButton =
-document.getElementById(
-"progressButton"
-);
-
-if (progressButton) {
-
-```
-progressButton.addEventListener(
-  "click",
-  function () {
-    chooseStatus("progress");
-  }
-);
-```
-
-}
-
-const doneButton =
-document.getElementById(
-"doneButton"
-);
-
-if (doneButton) {
-
-```
-doneButton.addEventListener(
-  "click",
-  function () {
-    chooseStatus("done");
-  }
-);
-```
-
-}
-
-const clearButton =
-document.getElementById(
-"clearButton"
-);
-
-if (clearButton) {
-
-```
-clearButton.addEventListener(
-  "click",
-  clearItem
-);
-```
-
-}
-
-const saveButton =
-document.getElementById(
-"saveButton"
-);
-
-if (saveButton) {
-
-```
-saveButton.addEventListener(
-  "click",
-  saveItem
-);
-```
+  importFile.addEventListener(
+    "change",
+    importData
+  );
 
 }
 
 const overlay =
-document.getElementById(
-"overlay"
-);
+  document.getElementById(
+    "overlay"
+  );
 
 if (overlay) {
 
-```
-overlay.addEventListener(
-  "click",
-  function (event) {
+  overlay.addEventListener(
+    "click",
+    function(event) {
 
-    if (
-      event.target ===
-      overlay
-    ) {
+      if (event.target === overlay) {
+        closeModal();
+      }
 
+    }
+  );
+
+}
+
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Escape") {
       closeModal();
-
     }
 
   }
 );
-```
-
-}
-
-document.addEventListener(
-"keydown",
-function (event) {
-
-```
-  if (
-    event.key === "Escape"
-  ) {
-
-    closeModal();
-
-  }
-
-}
-```
-
-);
-
-}
-
-/* ============================================================
-START APPLICATION
-============================================================ */
-
-function startApplication() {
 
 loadData();
-
-setupEvents();
 
 buildNavigation();
 
 showDashboard();
+```
 
 }
-
-/*
-
-* The script is loaded at the bottom of index.html,
-* but waiting for DOMContentLoaded makes this safe even
-* if the script is moved later in the future.
-  */
-
-if (
-document.readyState === "loading"
-) {
-
-document.addEventListener(
-"DOMContentLoaded",
-startApplication
 );
-
-} else {
-
-startApplication();
-
-}
