@@ -1,6 +1,7 @@
 /* ==========================================================
    TAMIL WEDDING PLANNER
-   Modern rose / burgundy design
+   Elegant rose / burgundy design
+   Responsive category navigation
    ========================================================== */
 
 :root {
@@ -67,7 +68,7 @@ body {
     Arial,
     sans-serif;
 
-  line-height: 1.5;
+  line-height: 1.55;
 
   background:
     radial-gradient(
@@ -161,11 +162,11 @@ textarea:focus-visible {
 }
 
 .eyebrow {
-  margin-bottom: 8px;
+  margin-bottom: 9px;
 
   color: #f5d7e1;
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -179,26 +180,32 @@ textarea:focus-visible {
     "Times New Roman",
     serif;
 
-  font-size: clamp(42px, 6vw, 68px);
+  font-size: clamp(44px, 6vw, 70px);
   line-height: 1.05;
   letter-spacing: -0.03em;
 }
 
 .hero p {
-  max-width: 580px;
+  max-width: 620px;
 
-  margin: 14px auto 0;
+  margin: 16px auto 0;
 
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.84);
 
-  font-size: 16px;
+  font-size: 17px;
 }
 
 /* ==========================================================
    NAVIGATION
-   All categories visible
-   No horizontal scrolling
    ========================================================== */
+
+/*
+   IMPORTANT:
+   Categories no longer scroll horizontally.
+
+   They automatically wrap into multiple rows so the
+   complete category navigation is visible on the page.
+*/
 
 .nav-wrapper {
   position: sticky;
@@ -211,43 +218,41 @@ textarea:focus-visible {
   border-bottom: 1px solid var(--border);
 
   backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 4px 16px rgba(69, 21, 38, 0.04);
 }
 
 .nav {
   width: min(1400px, calc(100% - 40px));
   margin: auto;
 
-  display: grid;
+  display: flex;
 
-  /*
-    Automatically creates multiple rows.
-    Categories never become one long horizontal row.
-  */
-  grid-template-columns:
-    repeat(auto-fit, minmax(125px, 1fr));
+  flex-wrap: wrap;
 
-  gap: 7px;
+  justify-content: center;
 
-  padding: 10px 0;
+  gap: 9px;
 
-  overflow: visible;
+  padding: 14px 0;
 }
 
 .nav button {
-  width: 100%;
+  flex: 0 0 auto;
 
-  min-height: 40px;
-
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  gap: 6px;
+  gap: 7px;
 
-  padding: 8px 10px;
+  min-height: 43px;
+
+  padding: 9px 16px;
 
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 999px;
 
   background: white;
 
@@ -255,10 +260,10 @@ textarea:focus-visible {
 
   cursor: pointer;
 
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 750;
 
-  text-align: center;
+  white-space: nowrap;
 
   transition:
     transform 0.16s ease,
@@ -269,14 +274,16 @@ textarea:focus-visible {
 }
 
 .nav button:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 
   color: var(--wine);
 
   border-color: #dcb7c4;
 
+  background: var(--rose-pale);
+
   box-shadow:
-    0 4px 12px rgba(69, 21, 38, 0.06);
+    0 5px 14px rgba(69, 21, 38, 0.08);
 }
 
 .nav button.active {
@@ -292,7 +299,7 @@ textarea:focus-visible {
     );
 
   box-shadow:
-    0 5px 14px rgba(143, 49, 84, 0.2);
+    0 6px 16px rgba(143, 49, 84, 0.22);
 }
 
 /* ==========================================================
@@ -303,7 +310,7 @@ textarea:focus-visible {
   width: min(1400px, calc(100% - 40px));
   margin: auto;
 
-  padding: 30px 0 60px;
+  padding: 34px 0 65px;
 }
 
 /* ==========================================================
@@ -315,20 +322,20 @@ textarea:focus-visible {
   align-items: flex-end;
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 22px;
 
-  margin: 28px 0 20px;
+  margin: 30px 0 22px;
 }
 
 .page-header h2 {
-  margin: 0 0 4px;
+  margin: 0 0 5px;
 
   font-family:
     Georgia,
     "Times New Roman",
     serif;
 
-  font-size: 32px;
+  font-size: 34px;
   line-height: 1.15;
 }
 
@@ -337,7 +344,7 @@ textarea:focus-visible {
 
   color: var(--muted);
 
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* ==========================================================
@@ -347,7 +354,7 @@ textarea:focus-visible {
 .data-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 
   flex-wrap: wrap;
 }
@@ -359,20 +366,21 @@ textarea:focus-visible {
 .save,
 .disable-item-button,
 .delete-custom-item-button {
-  min-height: 43px;
+  min-height: 45px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
 
-  padding: 9px 15px;
+  gap: 8px;
 
-  border-radius: 12px;
+  padding: 10px 17px;
+
+  border-radius: 13px;
 
   cursor: pointer;
 
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
 
   transition:
@@ -402,7 +410,9 @@ textarea:focus-visible {
   transform: scale(0.98);
 }
 
-/* export */
+/* ==========================================================
+   EXPORT / IMPORT
+   ========================================================== */
 
 .export-button,
 .import-button {
@@ -421,7 +431,9 @@ textarea:focus-visible {
   border-color: #dfbbc8;
 }
 
-/* reset */
+/* ==========================================================
+   RESET
+   ========================================================== */
 
 .reset-button {
   border: 1px solid #ecd1d9;
@@ -445,13 +457,13 @@ textarea:focus-visible {
   grid-template-columns:
     repeat(4, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 16px;
 
-  margin-top: 28px;
+  margin-top: 30px;
 }
 
 .stat {
-  padding: 20px;
+  padding: 22px;
 
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -466,41 +478,41 @@ textarea:focus-visible {
 }
 
 .stat:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 
   box-shadow: var(--shadow);
 }
 
 .stat-icon {
-  width: 42px;
-  height: 42px;
+  width: 45px;
+  height: 45px;
 
   display: grid;
   place-items: center;
 
-  border-radius: 13px;
+  border-radius: 14px;
 
   background: var(--rose-light);
 
-  font-size: 20px;
+  font-size: 21px;
 }
 
 .stat-number {
-  margin-top: 12px;
+  margin-top: 13px;
 
   color: var(--wine-dark);
 
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 850;
   line-height: 1;
 }
 
 .stat-label {
-  margin-top: 7px;
+  margin-top: 8px;
 
   color: var(--muted);
 
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 
@@ -509,9 +521,9 @@ textarea:focus-visible {
    ========================================================== */
 
 .progress-card {
-  margin-top: 14px;
+  margin-top: 16px;
 
-  padding: 23px;
+  padding: 25px;
 
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -526,26 +538,26 @@ textarea:focus-visible {
   align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 14px;
+  margin-bottom: 15px;
 }
 
 .progress-heading h2 {
   margin: 0;
 
   font-family: Georgia, serif;
-  font-size: 21px;
+  font-size: 22px;
 }
 
 .progress-heading span {
   color: var(--wine);
 
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 850;
 }
 
 .progress-bar,
 .summary-bar {
-  height: 9px;
+  height: 10px;
 
   overflow: hidden;
 
@@ -580,7 +592,7 @@ textarea:focus-visible {
   display: flex;
   justify-content: flex-start;
 
-  margin: 18px 0 30px;
+  margin: 20px 0 32px;
 }
 
 .primary-button {
@@ -624,7 +636,7 @@ textarea:focus-visible {
    ========================================================== */
 
 .category-heading {
-  margin-bottom: 13px;
+  margin-bottom: 14px;
 }
 
 .category-summary-grid {
@@ -633,15 +645,15 @@ textarea:focus-visible {
   grid-template-columns:
     repeat(4, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 16px;
 }
 
 .summary-card {
   width: 100%;
 
-  min-height: 174px;
+  min-height: 185px;
 
-  padding: 20px;
+  padding: 21px;
 
   text-align: left;
 
@@ -671,8 +683,8 @@ textarea:focus-visible {
 }
 
 .summary-icon {
-  width: 45px;
-  height: 45px;
+  width: 47px;
+  height: 47px;
 
   display: grid;
   place-items: center;
@@ -681,23 +693,23 @@ textarea:focus-visible {
 
   background: var(--rose-light);
 
-  font-size: 22px;
+  font-size: 23px;
 }
 
 .summary-card h3 {
-  margin: 14px 0 4px;
+  margin: 15px 0 5px;
 
   font-family: Georgia, serif;
 
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .summary-card p {
-  margin: 0 0 14px;
+  margin: 0 0 15px;
 
   color: var(--muted);
 
-  font-size: 12px;
+  font-size: 13px;
 }
 
 /* ==========================================================
@@ -709,15 +721,15 @@ textarea:focus-visible {
   align-items: center;
   justify-content: space-between;
 
-  gap: 10px;
+  gap: 12px;
 
-  margin-bottom: 15px;
+  margin-bottom: 17px;
 }
 
 .category-progress {
-  min-width: 150px;
+  min-width: 165px;
 
-  padding: 12px 16px;
+  padding: 13px 17px;
 
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -734,18 +746,18 @@ textarea:focus-visible {
 
   color: var(--wine);
 
-  font-size: 23px;
+  font-size: 25px;
   line-height: 1;
 }
 
 .category-progress span {
   display: block;
 
-  margin-top: 4px;
+  margin-top: 5px;
 
   color: var(--muted);
 
-  font-size: 11px;
+  font-size: 12px;
 }
 
 /* ==========================================================
@@ -757,28 +769,30 @@ textarea:focus-visible {
 
   grid-template-columns:
     minmax(0, 1fr)
-    190px;
+    200px;
 
-  gap: 10px;
+  gap: 11px;
 
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .search-area input,
 .search-area select {
   width: 100%;
-  min-height: 46px;
+  min-height: 49px;
 
-  padding: 10px 13px;
+  padding: 11px 14px;
 
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 13px;
 
   background: white;
 
   color: var(--text);
 
   box-shadow: var(--shadow-soft);
+
+  font-size: 14px;
 
   transition:
     border-color 0.16s ease,
@@ -803,13 +817,13 @@ textarea:focus-visible {
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 16px;
 }
 
 .item-card {
   width: 100%;
 
-  padding: 18px;
+  padding: 20px;
 
   text-align: left;
 
@@ -831,7 +845,7 @@ textarea:focus-visible {
 }
 
 .item-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 
   border-color: #ddb6c4;
 
@@ -853,21 +867,21 @@ textarea:focus-visible {
 }
 
 .item-icon {
-  width: 41px;
-  height: 41px;
+  width: 43px;
+  height: 43px;
 
   display: grid;
   place-items: center;
 
-  border-radius: 12px;
+  border-radius: 13px;
 
   background: var(--rose-light);
 
-  font-size: 20px;
+  font-size: 21px;
 }
 
 .item-status {
-  padding: 5px 9px;
+  padding: 6px 10px;
 
   border-radius: 999px;
 
@@ -875,7 +889,7 @@ textarea:focus-visible {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 850;
 }
 
@@ -890,12 +904,12 @@ textarea:focus-visible {
 }
 
 .item-card h3 {
-  margin: 15px 0 7px;
+  margin: 16px 0 8px;
 
   font-family: Georgia, serif;
 
-  font-size: 17px;
-  line-height: 1.25;
+  font-size: 18px;
+  line-height: 1.3;
 }
 
 .item-card p {
@@ -903,7 +917,7 @@ textarea:focus-visible {
 
   color: var(--muted);
 
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .item-placeholder {
@@ -911,11 +925,11 @@ textarea:focus-visible {
 }
 
 .item-meta {
-  margin-top: 9px;
+  margin-top: 10px;
 
   color: var(--wine);
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 750;
 }
 
@@ -924,25 +938,29 @@ textarea:focus-visible {
    ========================================================== */
 
 .empty {
-  padding: 60px 20px;
+  padding: 65px 20px;
 
   text-align: center;
 }
 
 .empty-icon {
-  font-size: 38px;
+  font-size: 40px;
 }
 
 .empty h3 {
-  margin: 9px 0 4px;
+  margin: 10px 0 5px;
 
   font-family: Georgia, serif;
+
+  font-size: 21px;
 }
 
 .empty p {
   margin: 0;
 
   color: var(--muted);
+
+  font-size: 14px;
 }
 
 /* ==========================================================
@@ -1019,7 +1037,7 @@ textarea:focus-visible {
 
   gap: 16px;
 
-  padding: 16px 20px;
+  padding: 17px 21px;
 
   border-bottom: 1px solid var(--border);
 
@@ -1032,11 +1050,11 @@ textarea:focus-visible {
 }
 
 .modal-category {
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 
   color: var(--rose);
 
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 850;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1049,13 +1067,13 @@ textarea:focus-visible {
 
   font-family: Georgia, serif;
 
-  font-size: 22px;
+  font-size: 23px;
   line-height: 1.15;
 }
 
 .close {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
 
   flex: 0 0 auto;
 
@@ -1071,7 +1089,7 @@ textarea:focus-visible {
 
   cursor: pointer;
 
-  font-size: 25px;
+  font-size: 26px;
   line-height: 1;
 
   transition:
@@ -1092,16 +1110,10 @@ textarea:focus-visible {
 .modal-body {
   min-height: 0;
 
-  padding: 16px 20px 18px;
+  padding: 17px 21px 19px;
 
   overflow: hidden;
 }
-
-/*
-  The item editor is intentionally compact.
-  Fields are arranged in columns so the complete editor
-  fits inside one viewport instead of requiring scrolling.
-*/
 
 #overlay .modal-body {
   display: grid;
@@ -1109,7 +1121,7 @@ textarea:focus-visible {
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap: 10px 14px;
+  gap: 11px 15px;
 }
 
 #overlay .form-group {
@@ -1130,7 +1142,7 @@ textarea:focus-visible {
 
   color: var(--text);
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 850;
 }
 
@@ -1145,20 +1157,22 @@ textarea:focus-visible {
 
   color: var(--text);
 
+  font-size: 13px;
+
   transition:
     border-color 0.16s ease,
     box-shadow 0.16s ease;
 }
 
 .form-group input {
-  min-height: 39px;
+  min-height: 40px;
 
   padding: 8px 11px;
 }
 
 .form-group textarea {
-  min-height: 54px;
-  max-height: 70px;
+  min-height: 56px;
+  max-height: 72px;
 
   padding: 8px 11px;
 
@@ -1185,13 +1199,13 @@ textarea:focus-visible {
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 7px;
+  gap: 8px;
 }
 
 .status-button {
-  min-height: 38px;
+  min-height: 39px;
 
-  padding: 7px 9px;
+  padding: 7px 10px;
 
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -1202,7 +1216,7 @@ textarea:focus-visible {
 
   cursor: pointer;
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
 
   transition:
@@ -1250,7 +1264,7 @@ textarea:focus-visible {
 
   gap: 15px;
 
-  padding: 10px 12px;
+  padding: 11px 13px;
 
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -1261,7 +1275,7 @@ textarea:focus-visible {
 .item-management strong {
   display: block;
 
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .item-management p {
@@ -1269,13 +1283,13 @@ textarea:focus-visible {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .disable-item-button {
   flex: 0 0 auto;
 
-  min-height: 35px;
+  min-height: 36px;
 
   border: 1px solid #ead0d7;
 
@@ -1283,7 +1297,7 @@ textarea:focus-visible {
 
   color: var(--danger);
 
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .disable-item-button.restore {
@@ -1305,7 +1319,7 @@ textarea:focus-visible {
 }
 
 .delete-custom-item-button {
-  min-height: 34px;
+  min-height: 35px;
 
   border: 1px solid #ead0d7;
 
@@ -1313,7 +1327,7 @@ textarea:focus-visible {
 
   color: var(--danger);
 
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .delete-custom-item-button:hover {
@@ -1329,7 +1343,7 @@ textarea:focus-visible {
   align-items: center;
   justify-content: flex-end;
 
-  gap: 8px;
+  gap: 9px;
 
   padding-top: 4px;
 }
@@ -1347,7 +1361,7 @@ textarea:focus-visible {
 }
 
 .save {
-  min-width: 145px;
+  min-width: 150px;
 
   border: 0;
 
@@ -1373,11 +1387,11 @@ textarea:focus-visible {
 }
 
 .management-modal .modal-body {
-  padding: 20px;
+  padding: 21px;
 }
 
 .management-modal .form-group {
-  margin-bottom: 10px;
+  margin-bottom: 11px;
 }
 
 .management-help {
@@ -1385,14 +1399,14 @@ textarea:focus-visible {
 
   color: var(--muted);
 
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .management-modal-actions {
   display: flex;
   justify-content: flex-end;
 
-  gap: 8px;
+  gap: 9px;
 }
 
 /* ==========================================================
@@ -1409,7 +1423,7 @@ textarea:focus-visible {
 
   max-width: min(440px, calc(100% - 32px));
 
-  padding: 11px 16px;
+  padding: 12px 17px;
 
   border: 1px solid rgba(255,255,255,0.5);
   border-radius: 999px;
@@ -1422,7 +1436,7 @@ textarea:focus-visible {
   box-shadow:
     0 12px 35px rgba(50, 10, 30, 0.2);
 
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 750;
 
   opacity: 0;
@@ -1452,20 +1466,20 @@ textarea:focus-visible {
    ========================================================== */
 
 footer {
-  padding: 25px 20px 40px;
+  padding: 28px 20px 42px;
 
   text-align: center;
 
   color: var(--muted);
 
-  font-size: 11px;
+  font-size: 12px;
 }
 
 /* ==========================================================
-   TABLET
+   LARGE TABLETS
    ========================================================== */
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .category-summary-grid {
     grid-template-columns:
       repeat(3, minmax(0, 1fr));
@@ -1476,16 +1490,39 @@ footer {
       repeat(2, minmax(0, 1fr));
   }
 
-  /*
-    Navigation remains a grid.
-    It never becomes horizontally scrollable.
-  */
-
   .nav {
-    grid-template-columns:
-      repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
 
-    width: min(100% - 24px, 1000px);
+  .nav button {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+}
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 900px) {
+  .nav {
+    justify-content: flex-start;
+  }
+
+  .category-summary-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
   }
 }
 
@@ -1495,7 +1532,6 @@ footer {
 
 @media (max-width: 760px) {
   .hero-inner,
-  .nav,
   .app {
     width: min(100% - 24px, 700px);
   }
@@ -1509,51 +1545,46 @@ footer {
   }
 
   .hero p {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   /*
-    Categories are displayed in two columns.
-    No horizontal scrolling.
+     Mobile navigation also wraps.
+     There is NO horizontal category scrolling.
   */
 
   .nav {
-    width: 100%;
+    width: calc(100% - 20px);
 
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    padding: 10px 0;
 
-    gap: 6px;
+    justify-content: center;
 
-    padding: 8px 12px;
-
-    overflow: visible;
+    gap: 7px;
   }
 
   .nav button {
-    min-height: 36px;
+    min-height: 40px;
 
-    padding: 7px 6px;
+    padding: 8px 12px;
 
-    font-size: 10px;
-
-    border-radius: 10px;
+    font-size: 12px;
   }
 
   .app {
-    padding-top: 14px;
+    padding-top: 16px;
   }
 
   .page-header {
-    align-items: flex-start;
-
-    flex-direction: column;
-
     margin-top: 22px;
   }
 
   .page-header h2 {
-    font-size: 27px;
+    font-size: 29px;
+  }
+
+  .page-header p {
+    font-size: 14px;
   }
 
   .data-actions {
@@ -1567,11 +1598,41 @@ footer {
   .stats {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
+
+    gap: 11px;
+  }
+
+  .stat {
+    padding: 17px;
+  }
+
+  .stat-number {
+    font-size: 29px;
+  }
+
+  .stat-label {
+    font-size: 12px;
   }
 
   .category-summary-grid {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
+
+    gap: 11px;
+  }
+
+  .summary-card {
+    min-height: 160px;
+
+    padding: 16px;
+  }
+
+  .summary-card h3 {
+    font-size: 16px;
+  }
+
+  .summary-card p {
+    font-size: 12px;
   }
 
   .category-toolbar {
@@ -1596,7 +1657,9 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  /* Compact mobile editor */
+  /* ========================================================
+     MOBILE EDITOR
+     ======================================================== */
 
   .overlay {
     padding: 8px;
@@ -1609,24 +1672,24 @@ footer {
   }
 
   .modal-header {
-    padding: 13px 15px;
+    padding: 14px 15px;
   }
 
   .modal-header h2 {
-    font-size: 19px;
+    font-size: 20px;
   }
 
   #overlay .modal-body {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
 
-    gap: 8px 9px;
+    gap: 9px;
 
-    padding: 12px 14px 14px;
+    padding: 13px 14px 14px;
   }
 
   #overlay .form-group input {
-    min-height: 36px;
+    min-height: 37px;
 
     padding: 7px 9px;
 
@@ -1634,8 +1697,8 @@ footer {
   }
 
   #overlay .form-group textarea {
-    min-height: 45px;
-    max-height: 55px;
+    min-height: 47px;
+    max-height: 57px;
 
     padding: 7px 9px;
 
@@ -1649,15 +1712,15 @@ footer {
   }
 
   .status-button {
-    min-height: 35px;
+    min-height: 36px;
 
     padding: 6px;
 
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .item-management {
-    padding: 8px 10px;
+    padding: 9px 10px;
   }
 
   .item-management p {
@@ -1667,9 +1730,9 @@ footer {
   }
 
   .disable-item-button {
-    min-height: 32px;
+    min-height: 33px;
 
-    padding: 6px 9px;
+    padding: 6px 10px;
   }
 
   .modal-actions {
@@ -1678,7 +1741,7 @@ footer {
 
   .clear,
   .save {
-    min-height: 38px;
+    min-height: 39px;
   }
 }
 
@@ -1693,6 +1756,26 @@ footer {
 
   .hero-inner {
     padding: 34px 0;
+  }
+
+  /*
+     Categories stay wrapped even on very small phones.
+  */
+
+  .nav {
+    width: calc(100% - 14px);
+
+    gap: 6px;
+
+    padding: 8px 0;
+  }
+
+  .nav button {
+    min-height: 37px;
+
+    padding: 7px 10px;
+
+    font-size: 11px;
   }
 
   .stats {
@@ -1725,32 +1808,7 @@ footer {
     font-size: 11px;
   }
 
-  /*
-    Keep navigation in two columns even on very small phones.
-    The page scrolls vertically instead of horizontally.
-  */
-
-  .nav {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
-    gap: 5px;
-
-    padding: 7px 10px;
-  }
-
-  .nav button {
-    min-height: 34px;
-
-    padding: 6px 4px;
-
-    font-size: 9px;
-  }
-
-  /*
-    On very small phones, the editor becomes slightly
-    denser rather than introducing scrolling.
-  */
+  /* Compact editor */
 
   #overlay .modal-body {
     gap: 6px 7px;
