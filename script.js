@@ -184,8 +184,6 @@ const defaultCategories = [
       "Udlandet"
     ]
   },
-    ]
-  },
   {
     id: "entertainment",
     name: "Entertainment",
