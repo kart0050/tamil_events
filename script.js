@@ -176,7 +176,7 @@ const defaultCategories = [
       "Sana Palace RA",
       "Uranus Partyhouse",
       "E-Plaza AA",
-      "Elegance Brørup"
+      "Elegance Brørup",
       "Babylon AA",
       "Sociale Palace Silkeborg",
       "Herning Kovil",
