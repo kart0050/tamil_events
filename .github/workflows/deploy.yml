@@ -1,5 +1,5 @@
 ```yaml
-name: Deploy Wedding Planner to GitHub Pages
+name: Deploy Wedding Planner
 
 on:
   push:
@@ -14,7 +14,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
@@ -27,21 +27,45 @@ jobs:
 
     steps:
 
-      # Get ALL files from the repository
+      # Download the complete repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Make sure all website files exist
+      - name: Check website files
+        run: |
+          test -f index.html
+          test -f style.css
+          test -f script.js
+
+          echo "All website files found:"
+          echo "✓ index.html"
+          echo "✓ style.css"
+          echo "✓ script.js"
+
       # Configure GitHub Pages
-      - name: Setup Pages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      # Upload the entire website
+      # Put ALL three website files into the deployment package
+      - name: Prepare website
+        run: |
+          mkdir -p _site
+
+          cp index.html _site/index.html
+          cp style.css _site/style.css
+          cp script.js _site/script.js
+
+          echo "Files being deployed:"
+          ls -la _site
+
+      # Upload all three files together
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: ./_site
 
-      # Deploy everything together
+      # Deploy the complete website
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
