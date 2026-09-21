@@ -1,4 +1,3 @@
-```javascript
 /* ============================================================
    WEDDING PLANNER
 ============================================================ */
@@ -11,20 +10,20 @@
 const categories = [
 
   {
-    id:"guests",
-    name:"Gæster",
-    icon:"👥",
-    items:[
+    id: "guests",
+    name: "Gæster",
+    icon: "👥",
+    items: [
       "Palaharam (Goodie bag)",
       "Hotels"
     ]
   },
 
   {
-    id:"toej",
-    name:"Tøj",
-    icon:"👗",
-    items:[
+    id: "toej",
+    name: "Tøj",
+    icon: "👗",
+    items: [
       "Manavarai saree",
       "Koorai saree (Rød)",
       "Vetti sattai",
@@ -36,10 +35,10 @@ const categories = [
   },
 
   {
-    id:"reception",
-    name:"Reception Songs",
-    icon:"🎵",
-    items:[
+    id: "reception",
+    name: "Reception Songs",
+    icon: "🎵",
+    items: [
       "Entrance",
       "Pardans",
       "Preshoot",
@@ -49,10 +48,10 @@ const categories = [
   },
 
   {
-    id:"sign-card",
-    name:"Wedding Sign + Card",
-    icon:"💌",
-    items:[
+    id: "sign-card",
+    name: "Wedding Sign + Card",
+    icon: "💌",
+    items: [
       "Aviraa Creations",
       "Ponthayadesigns",
       "Kopuramevents.fr"
@@ -60,29 +59,29 @@ const categories = [
   },
 
   {
-    id:"kovil-decoration",
-    name:"Decoration Kovil",
-    icon:"🛕",
-    items:[
+    id: "kovil-decoration",
+    name: "Decoration Kovil",
+    icon: "🛕",
+    items: [
       "Kopuramevents.fr"
     ]
   },
 
   {
-    id:"accessories",
-    name:"Accessories",
-    icon:"✨",
-    items:[
+    id: "accessories",
+    name: "Accessories",
+    icon: "✨",
+    items: [
       "360 Booth",
       "Bridal Corner Setup"
     ]
   },
 
   {
-    id:"henna",
-    name:"Henna Fest",
-    icon:"🌿",
-    items:[
+    id: "henna",
+    name: "Henna Fest",
+    icon: "🌿",
+    items: [
       "Uduupu ?",
       "Mehendi (rosedecoration.dk)",
       "Tamilhennecreation",
@@ -92,10 +91,10 @@ const categories = [
   },
 
   {
-    id:"kalyaanam",
-    name:"Kalyaanam Veedu",
-    icon:"🏠",
-    items:[
+    id: "kalyaanam",
+    name: "Kalyaanam Veedu",
+    icon: "🏠",
+    items: [
       "Herning Kovil",
       "Civil Weds (Ring)",
       "Udlandet",
@@ -105,10 +104,10 @@ const categories = [
   },
 
   {
-    id:"makeup",
-    name:"Makeup + Hair",
-    icon:"💄",
-    items:[
+    id: "makeup",
+    name: "Makeup + Hair",
+    icon: "💄",
+    items: [
       "Janani",
       "abinii_makeupartist",
       "thiva_mua"
@@ -116,10 +115,10 @@ const categories = [
   },
 
   {
-    id:"jewellery",
-    name:"Jewellery",
-    icon:"💎",
-    items:[
+    id: "jewellery",
+    name: "Jewellery",
+    icon: "💎",
+    items: [
       "Thaali (15 Pound)",
       "Øreringe",
       "Necklace",
@@ -134,29 +133,29 @@ const categories = [
   },
 
   {
-    id:"melam",
-    name:"Melam",
-    icon:"🥁",
-    items:[
+    id: "melam",
+    name: "Melam",
+    icon: "🥁",
+    items: [
       "Chinna Mams",
       "Mami ?"
     ]
   },
 
   {
-    id:"maalai",
-    name:"Maalai",
-    icon:"🌸",
-    items:[
+    id: "maalai",
+    name: "Maalai",
+    icon: "🌸",
+    items: [
       "Herning Maalai"
     ]
   },
 
   {
-    id:"food",
-    name:"Food",
-    icon:"🍛",
-    items:[
+    id: "food",
+    name: "Food",
+    icon: "🍛",
+    items: [
       "Poovi Mama Horsens",
       "Kammali Randers",
       "Tamil Ondrai Aarhus",
@@ -167,20 +166,20 @@ const categories = [
   },
 
   {
-    id:"cake",
-    name:"Bryllupskage",
-    icon:"🎂",
-    items:[
+    id: "cake",
+    name: "Bryllupskage",
+    icon: "🎂",
+    items: [
       "Wedding Cake",
       "Lighter + Knife"
     ]
   },
 
   {
-    id:"preshoot",
-    name:"Preshoot",
-    icon:"📸",
-    items:[
+    id: "preshoot",
+    name: "Preshoot",
+    icon: "📸",
+    items: [
       "Views of Nivi",
       "Sana",
       "Visual Eyes",
@@ -191,10 +190,10 @@ const categories = [
   },
 
   {
-    id:"photo-video",
-    name:"Photo + Video",
-    icon:"📷",
-    items:[
+    id: "photo-video",
+    name: "Photo + Video",
+    icon: "📷",
+    items: [
       "Visual Eyes",
       "Vividmemoir.dk",
       "infocus"
@@ -202,10 +201,10 @@ const categories = [
   },
 
   {
-    id:"dj",
-    name:"DJ",
-    icon:"🎧",
-    items:[
+    id: "dj",
+    name: "DJ",
+    icon: "🎧",
+    items: [
       "Playloud",
       "Keeth Entertainment",
       "Microphone",
@@ -215,10 +214,10 @@ const categories = [
   },
 
   {
-    id:"hall",
-    name:"Hall",
-    icon:"🏛️",
-    items:[
+    id: "hall",
+    name: "Hall",
+    icon: "🏛️",
+    items: [
       "Sana Palace RA",
       "E-Plaza AA",
       "Babylon AA",
@@ -233,10 +232,10 @@ const categories = [
   },
 
   {
-    id:"entertainment",
-    name:"Entertainment",
-    icon:"💃",
-    items:[
+    id: "entertainment",
+    name: "Entertainment",
+    icon: "💃",
+    items: [
       "Pardans + Cinema Paattu",
       "Bollywood Dance",
       "Gruppedans",
@@ -252,20 +251,20 @@ const categories = [
   },
 
   {
-    id:"operator",
-    name:"Operator",
-    icon:"🎛️",
-    items:[
+    id: "operator",
+    name: "Operator",
+    icon: "🎛️",
+    items: [
       "Lighting",
       "Projector"
     ]
   },
 
   {
-    id:"host",
-    name:"Host",
-    icon:"🎤",
-    items:[
+    id: "host",
+    name: "Host",
+    icon: "🎤",
+    items: [
       "Vinu",
       "Mams",
       "Saddi",
@@ -275,19 +274,19 @@ const categories = [
   },
 
   {
-    id:"games",
-    name:"Games (Yndlingsting)",
-    icon:"🎲",
-    items:[
+    id: "games",
+    name: "Games (Yndlingsting)",
+    icon: "🎲",
+    items: [
       "Palaharam (Goodie bag)"
     ]
   },
 
   {
-    id:"speech",
-    name:"Speech",
-    icon:"🎤",
-    items:[
+    id: "speech",
+    name: "Speech",
+    icon: "🎤",
+    items: [
       "Speech planning",
       "Speakers",
       "Order of speeches"
@@ -301,38 +300,38 @@ const categories = [
    STORAGE
 ============================================================ */
 
-const STORAGE_KEY =
-  "tamilWeddingPlanner_v4";
+const STORAGE_KEY = "tamilWeddingPlanner_v4";
 
 let savedData = {};
-
-let currentCategory =
-  "dashboard";
-
-let currentItem =
-  null;
-
-let modalStatus =
-  "not";
+let currentCategory = "dashboard";
+let currentItem = null;
+let modalStatus = "not";
 
 
 /* ============================================================
-   LOAD DATA
+   STORAGE - LOAD
 ============================================================ */
 
 function loadData() {
 
   try {
 
-    const stored =
-      localStorage.getItem(
-        STORAGE_KEY
-      );
+    const stored = localStorage.getItem(STORAGE_KEY);
 
-    if (stored) {
+    if (!stored) {
+      savedData = {};
+      return;
+    }
 
-      savedData =
-        JSON.parse(stored);
+    const parsed = JSON.parse(stored);
+
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      !Array.isArray(parsed)
+    ) {
+
+      savedData = parsed;
 
     } else {
 
@@ -342,10 +341,7 @@ function loadData() {
 
   } catch (error) {
 
-    console.error(
-      "Could not load saved data:",
-      error
-    );
+    console.error("Could not load saved data:", error);
 
     savedData = {};
 
@@ -355,7 +351,7 @@ function loadData() {
 
 
 /* ============================================================
-   SAVE DATA
+   STORAGE - SAVE
 ============================================================ */
 
 function saveData() {
@@ -371,10 +367,7 @@ function saveData() {
 
   } catch (error) {
 
-    console.error(
-      "Could not save data:",
-      error
-    );
+    console.error("Could not save saved data:", error);
 
     alert(
       "Your data could not be saved in this browser."
@@ -388,139 +381,70 @@ function saveData() {
 
 
 /* ============================================================
-   EXPORT DATA
+   EXPORT
 ============================================================ */
 
 function exportData() {
 
   try {
 
-    /*
-     * Make sure everything currently in memory
-     * is also stored in localStorage.
-     */
+    const saved = saveData();
 
-    saveData();
-
-
-    /*
-     * Create a complete backup object.
-     */
+    if (!saved) {
+      return;
+    }
 
     const backup = {
-
-      app:
-        "Tamil Wedding Planner",
-
-      version:
-        1,
-
-      exportedAt:
-        new Date().toISOString(),
-
-      data:
-        savedData
-
+      app: "Tamil Wedding Planner",
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      data: savedData
     };
 
+    const json = JSON.stringify(
+      backup,
+      null,
+      2
+    );
 
-    /*
-     * Convert the backup to readable JSON.
-     */
+    const blob = new Blob(
+      [json],
+      {
+        type: "application/json;charset=utf-8"
+      }
+    );
 
-    const json =
-      JSON.stringify(
-        backup,
-        null,
-        2
-      );
+    const url = URL.createObjectURL(blob);
 
+    const link = document.createElement("a");
 
-    /*
-     * Create a downloadable file.
-     */
+    link.href = url;
 
-    const blob =
-      new Blob(
-        [json],
-        {
-          type:
-            "application/json;charset=utf-8"
-        }
-      );
+    const now = new Date();
 
+    const year = now.getFullYear();
 
-    /*
-     * Create a temporary URL.
-     */
+    const month = String(
+      now.getMonth() + 1
+    ).padStart(2, "0");
 
-    const url =
-      URL.createObjectURL(blob);
-
-
-    /*
-     * Create an invisible download link.
-     */
-
-    const link =
-      document.createElement("a");
-
-
-    link.href =
-      url;
-
-
-    /*
-     * Create a filename with today's date.
-     */
-
-    const now =
-      new Date();
-
-    const year =
-      now.getFullYear();
-
-    const month =
-      String(
-        now.getMonth() + 1
-      ).padStart(2,"0");
-
-    const day =
-      String(
-        now.getDate()
-      ).padStart(2,"0");
-
+    const day = String(
+      now.getDate()
+    ).padStart(2, "0");
 
     link.download =
       `wedding-planner-backup-${year}-${month}-${day}.json`;
-
-
-    /*
-     * Trigger the download.
-     */
 
     document.body.appendChild(link);
 
     link.click();
 
-    document.body.removeChild(link);
-
-
-    /*
-     * Release the temporary URL.
-     */
+    link.remove();
 
     setTimeout(
-      () => {
-        URL.revokeObjectURL(url);
-      },
+      () => URL.revokeObjectURL(url),
       1000
     );
-
-
-    /*
-     * Small confirmation.
-     */
 
     console.log(
       "Wedding planner data exported successfully."
@@ -543,26 +467,26 @@ function exportData() {
 
 
 /* ============================================================
-   IMPORT DATA
+   IMPORT
 ============================================================ */
 
 function importData(event) {
 
-  const file =
-    event.target.files[0];
-
-
-  if (!file) {
+  if (
+    !event ||
+    !event.target ||
+    !event.target.files ||
+    !event.target.files.length
+  ) {
     return;
   }
 
-
-  /*
-   * Make sure the file is JSON.
-   */
+  const file = event.target.files[0];
 
   if (
-    !file.name.toLowerCase().endsWith(".json")
+    !file.name
+      .toLowerCase()
+      .endsWith(".json")
   ) {
 
     alert(
@@ -575,181 +499,108 @@ function importData(event) {
 
   }
 
+  const reader = new FileReader();
 
-  const reader =
-    new FileReader();
+  reader.onload = function(e) {
 
+    try {
 
-  reader.onload =
-    function(e) {
+      const imported = JSON.parse(
+        e.target.result
+      );
 
-      try {
+      let importedData;
 
-        const imported =
-          JSON.parse(
-            e.target.result
-          );
+      if (
+        imported &&
+        imported.data &&
+        typeof imported.data === "object" &&
+        !Array.isArray(imported.data)
+      ) {
 
+        importedData = imported.data;
 
-        /*
-         * Accept our backup format:
-         *
-         * {
-         *   app: "...",
-         *   version: 1,
-         *   exportedAt: "...",
-         *   data: {...}
-         * }
-         */
+      } else {
 
-        let importedData;
+        importedData = imported;
 
+      }
 
-        if (
-          imported &&
-          imported.data &&
-          typeof imported.data === "object"
-        ) {
+      if (
+        !importedData ||
+        typeof importedData !== "object" ||
+        Array.isArray(importedData)
+      ) {
 
-          importedData =
-            imported.data;
-
-        } else {
-
-          /*
-           * Also support a plain old
-           * localStorage JSON backup.
-           */
-
-          importedData =
-            imported;
-
-        }
-
-
-        /*
-         * Validate the imported object.
-         */
-
-        if (
-          !importedData ||
-          typeof importedData !== "object" ||
-          Array.isArray(importedData)
-        ) {
-
-          throw new Error(
-            "Invalid backup format"
-          );
-
-        }
-
-
-        /*
-         * Ask the user before replacing
-         * their current data.
-         */
-
-        const confirmed =
-          confirm(
-            "Import this wedding planner backup?\n\n" +
-            "Your current planner data will be replaced by the backup."
-          );
-
-
-        if (!confirmed) {
-
-          event.target.value = "";
-
-          return;
-
-        }
-
-
-        /*
-         * Replace current data.
-         */
-
-        savedData =
-          importedData;
-
-
-        /*
-         * Save imported data.
-         */
-
-        const saved =
-          saveData();
-
-
-        if (!saved) {
-
-          event.target.value = "";
-
-          return;
-
-        }
-
-
-        /*
-         * Refresh the page.
-         */
-
-        if (
-          currentCategory ===
-          "dashboard"
-        ) {
-
-          showDashboard();
-
-        } else {
-
-          showCategory(
-            currentCategory
-          );
-
-        }
-
-
-        alert(
-          "Wedding planner data imported successfully! ❤️"
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Import failed:",
-          error
-        );
-
-        alert(
-          "This file is not a valid wedding planner backup."
+        throw new Error(
+          "Invalid backup format"
         );
 
       }
 
-
-      /*
-       * Clear the file input so the
-       * same file can be selected again.
-       */
-
-      event.target.value = "";
-
-    };
-
-
-  reader.onerror =
-    function() {
-
-      alert(
-        "Could not read the selected file."
+      const confirmed = confirm(
+        "Import this wedding planner backup?\n\n" +
+        "Your current planner data will be replaced by the backup."
       );
 
-      event.target.value = "";
+      if (!confirmed) {
 
-    };
+        event.target.value = "";
 
+        return;
+
+      }
+
+      savedData = importedData;
+
+      if (!saveData()) {
+
+        event.target.value = "";
+
+        return;
+
+      }
+
+      if (currentCategory === "dashboard") {
+
+        showDashboard();
+
+      } else {
+
+        showCategory(currentCategory);
+
+      }
+
+      alert(
+        "Wedding planner data imported successfully! ❤️"
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Import failed:",
+        error
+      );
+
+      alert(
+        "This file is not a valid wedding planner backup."
+      );
+
+    }
+
+    event.target.value = "";
+
+  };
+
+  reader.onerror = function() {
+
+    alert(
+      "Could not read the selected file."
+    );
+
+    event.target.value = "";
+
+  };
 
   reader.readAsText(file);
 
@@ -760,16 +611,9 @@ function importData(event) {
    ITEM KEY
 ============================================================ */
 
-function itemKey(
-  categoryId,
-  item
-) {
+function itemKey(categoryId, item) {
 
-  return (
-    categoryId +
-    "::" +
-    item
-  );
+  return `${categoryId}::${item}`;
 
 }
 
@@ -778,63 +622,55 @@ function itemKey(
    GET ITEM
 ============================================================ */
 
-function getItem(
-  categoryId,
-  item
-) {
+function getItem(categoryId, item) {
 
-  const key =
-    itemKey(
-      categoryId,
-      item
-    );
+  const key = itemKey(
+    categoryId,
+    item
+  );
 
+  if (
+    !savedData[key] ||
+    typeof savedData[key] !== "object"
+  ) {
 
-  if (!savedData[key]) {
-
-    savedData[key] = {
-
-      status:"not",
-
-      vendor:"",
-
-      price:"",
-
-      deadline:"",
-
-      link:"",
-
-      notes:""
-
-    };
+    savedData[key] = {};
 
   }
 
+  const data = savedData[key];
 
-  /*
-   * Protect against old/incomplete data.
-   */
+  data.status =
+    typeof data.status === "string"
+      ? data.status
+      : "not";
 
-  savedData[key].status =
-    savedData[key].status || "not";
+  data.vendor =
+    typeof data.vendor === "string"
+      ? data.vendor
+      : "";
 
-  savedData[key].vendor =
-    savedData[key].vendor || "";
+  data.price =
+    typeof data.price === "string"
+      ? data.price
+      : "";
 
-  savedData[key].price =
-    savedData[key].price || "";
+  data.deadline =
+    typeof data.deadline === "string"
+      ? data.deadline
+      : "";
 
-  savedData[key].deadline =
-    savedData[key].deadline || "";
+  data.link =
+    typeof data.link === "string"
+      ? data.link
+      : "";
 
-  savedData[key].link =
-    savedData[key].link || "";
+  data.notes =
+    typeof data.notes === "string"
+      ? data.notes
+      : "";
 
-  savedData[key].notes =
-    savedData[key].notes || "";
-
-
-  return savedData[key];
+  return data;
 
 }
 
@@ -845,42 +681,39 @@ function getItem(
 
 function buildNavigation() {
 
-  const nav =
-    document.getElementById(
-      "navigation"
-    );
-
+  const nav = document.getElementById(
+    "navigation"
+  );
 
   if (!nav) {
+    console.error(
+      "Wedding Planner: #navigation was not found."
+    );
     return;
   }
 
-
   nav.innerHTML = "";
 
+  const dashboard = document.createElement(
+    "button"
+  );
 
-  const dashboard =
-    document.createElement("button");
-
+  dashboard.type = "button";
 
   dashboard.textContent =
     "🏠 Dashboard";
-
-
-  dashboard.onclick =
-    () => showDashboard();
-
 
   dashboard.className =
     currentCategory === "dashboard"
       ? "active"
       : "";
 
-
-  nav.appendChild(
-    dashboard
+  dashboard.addEventListener(
+    "click",
+    showDashboard
   );
 
+  nav.appendChild(dashboard);
 
   categories.forEach(
     category => {
@@ -888,27 +721,22 @@ function buildNavigation() {
       const button =
         document.createElement("button");
 
+      button.type = "button";
 
       button.textContent =
         `${category.icon} ${category.name}`;
-
-
-      button.onclick =
-        () =>
-          showCategory(
-            category.id
-          );
-
 
       button.className =
         currentCategory === category.id
           ? "active"
           : "";
 
-
-      nav.appendChild(
-        button
+      button.addEventListener(
+        "click",
+        () => showCategory(category.id)
       );
+
+      nav.appendChild(button);
 
     }
   );
@@ -922,46 +750,49 @@ function buildNavigation() {
 
 function showDashboard() {
 
-  currentCategory =
-    "dashboard";
+  currentCategory = "dashboard";
 
+  const dashboardPage =
+    document.getElementById(
+      "dashboardPage"
+    );
 
-  document.getElementById(
-    "dashboardPage"
-  ).style.display =
-    "block";
+  const categoryPage =
+    document.getElementById(
+      "categoryPage"
+    );
 
+  if (!dashboardPage || !categoryPage) {
+    console.error(
+      "Wedding Planner: dashboard/category page elements are missing."
+    );
+    return;
+  }
 
-  document.getElementById(
-    "categoryPage"
-  ).style.display =
-    "none";
-
+  dashboardPage.style.display = "block";
+  categoryPage.style.display = "none";
 
   buildNavigation();
 
   renderDashboard();
 
-
   window.scrollTo({
-    top:0,
-    behavior:"smooth"
+    top: 0,
+    behavior: "smooth"
   });
 
 }
 
 
+/* ============================================================
+   DASHBOARD RENDER
+============================================================ */
+
 function renderDashboard() {
 
-  let total =
-    0;
-
-  let done =
-    0;
-
-  let progress =
-    0;
-
+  let total = 0;
+  let done = 0;
+  let progress = 0;
 
   categories.forEach(
     category => {
@@ -971,29 +802,18 @@ function renderDashboard() {
 
           total++;
 
-
           const data =
             getItem(
               category.id,
               item
             );
 
-
-          if (
-            data.status === "done"
-          ) {
-
+          if (data.status === "done") {
             done++;
-
           }
 
-
-          if (
-            data.status === "progress"
-          ) {
-
+          if (data.status === "progress") {
             progress++;
-
           }
 
         }
@@ -1002,78 +822,76 @@ function renderDashboard() {
     }
   );
 
-
   const percent =
-    total
-      ? Math.round(
-          (done / total) * 100
-        )
+    total > 0
+      ? Math.round((done / total) * 100)
       : 0;
 
+  const totalCount =
+    document.getElementById("totalCount");
 
-  document.getElementById(
-    "totalCount"
-  ).textContent =
-    total;
+  const doneCount =
+    document.getElementById("doneCount");
 
+  const progressCount =
+    document.getElementById("progressCount");
 
-  document.getElementById(
-    "doneCount"
-  ).textContent =
-    done;
+  const categoryCount =
+    document.getElementById("categoryCount");
 
+  const overallPercent =
+    document.getElementById("overallPercent");
 
-  document.getElementById(
-    "progressCount"
-  ).textContent =
-    progress;
-
-
-  document.getElementById(
-    "categoryCount"
-  ).textContent =
-    categories.length;
-
-
-  document.getElementById(
-    "overallPercent"
-  ).textContent =
-    percent + "%";
-
-
-  document.getElementById(
-    "overallFill"
-  ).style.width =
-    percent + "%";
-
+  const overallFill =
+    document.getElementById("overallFill");
 
   const grid =
-    document.getElementById(
-      "summaryGrid"
-    );
+    document.getElementById("summaryGrid");
 
+  if (totalCount) {
+    totalCount.textContent = total;
+  }
+
+  if (doneCount) {
+    doneCount.textContent = done;
+  }
+
+  if (progressCount) {
+    progressCount.textContent = progress;
+  }
+
+  if (categoryCount) {
+    categoryCount.textContent =
+      categories.length;
+  }
+
+  if (overallPercent) {
+    overallPercent.textContent =
+      `${percent}%`;
+  }
+
+  if (overallFill) {
+    overallFill.style.width =
+      `${percent}%`;
+  }
+
+  if (!grid) {
+    return;
+  }
 
   grid.innerHTML = "";
-
 
   categories.forEach(
     category => {
 
       const stats =
-        getCategoryStats(
-          category
-        );
-
+        getCategoryStats(category);
 
       const card =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       card.className =
         "summary-card";
-
 
       card.innerHTML = `
 
@@ -1087,9 +905,7 @@ function renderDashboard() {
         </div>
 
         <h3>
-          ${escapeHTML(
-            category.name
-          )}
+          ${escapeHTML(category.name)}
         </h3>
 
         <p>
@@ -1102,26 +918,19 @@ function renderDashboard() {
         <div class="summary-bar">
 
           <div
-            style="
-              width:${stats.percent}%;
-            "
+            style="width:${stats.percent}%"
           ></div>
 
         </div>
 
       `;
 
-
-      card.onclick =
-        () =>
-          showCategory(
-            category.id
-          );
-
-
-      grid.appendChild(
-        card
+      card.addEventListener(
+        "click",
+        () => showCategory(category.id)
       );
+
+      grid.appendChild(card);
 
     }
   );
@@ -1140,54 +949,65 @@ function showCategory(id) {
       c => c.id === id
     );
 
-
   if (!category) {
     return;
   }
 
+  currentCategory = id;
 
-  currentCategory =
-    id;
+  const dashboardPage =
+    document.getElementById(
+      "dashboardPage"
+    );
 
+  const categoryPage =
+    document.getElementById(
+      "categoryPage"
+    );
 
-  document.getElementById(
-    "dashboardPage"
-  ).style.display =
-    "none";
+  if (!dashboardPage || !categoryPage) {
+    return;
+  }
 
+  dashboardPage.style.display = "none";
 
-  document.getElementById(
-    "categoryPage"
-  ).style.display =
-    "block";
+  categoryPage.style.display = "block";
 
+  const categoryTitle =
+    document.getElementById(
+      "categoryTitle"
+    );
 
-  document.getElementById(
-    "categoryTitle"
-  ).textContent =
-    `${category.icon} ${category.name}`;
+  if (categoryTitle) {
+    categoryTitle.textContent =
+      `${category.icon} ${category.name}`;
+  }
 
+  const search =
+    document.getElementById(
+      "itemSearch"
+    );
 
-  document.getElementById(
-    "itemSearch"
-  ).value =
-    "";
+  const filter =
+    document.getElementById(
+      "itemStatusFilter"
+    );
 
+  if (search) {
+    search.value = "";
+  }
 
-  document.getElementById(
-    "itemStatusFilter"
-  ).value =
-    "all";
-
+  if (filter) {
+    filter.value = "all";
+  }
 
   buildNavigation();
 
   renderCategory();
 
-
   window.scrollTo({
-    top:0,
-    behavior:"smooth"
+    top: 0,
+    behavior: "smooth"
   });
 
 }
@@ -1197,13 +1017,10 @@ function showCategory(id) {
    CATEGORY STATS
 ============================================================ */
 
-function getCategoryStats(
-  category
-) {
+function getCategoryStats(category) {
 
   const total =
     category.items.length;
-
 
   const done =
     category.items.filter(
@@ -1214,14 +1031,10 @@ function getCategoryStats(
         ).status === "done"
     ).length;
 
-
   const percent =
-    total
-      ? Math.round(
-          (done / total) * 100
-        )
+    total > 0
+      ? Math.round((done / total) * 100)
       : 0;
-
 
   return {
     total,
@@ -1243,56 +1056,70 @@ function renderCategory() {
       c => c.id === currentCategory
     );
 
-
   if (!category) {
     return;
   }
 
-
   const stats =
-    getCategoryStats(
-      category
+    getCategoryStats(category);
+
+  const categoryPercent =
+    document.getElementById(
+      "categoryPercent"
     );
 
+  const categoryProgressText =
+    document.getElementById(
+      "categoryProgressText"
+    );
 
-  document.getElementById(
-    "categoryPercent"
-  ).textContent =
-    stats.percent + "%";
-
-
-  document.getElementById(
-    "categoryProgressText"
-  ).textContent =
-    `${stats.done} / ${stats.total} completed`;
-
-
-  const search =
+  const searchInput =
     document.getElementById(
       "itemSearch"
-    ).value
-      .toLowerCase()
-      .trim();
+    );
 
-
-  const status =
+  const statusFilter =
     document.getElementById(
       "itemStatusFilter"
-    ).value;
-
+    );
 
   const grid =
     document.getElementById(
       "itemsGrid"
     );
 
+  const emptyMessage =
+    document.getElementById(
+      "emptyMessage"
+    );
+
+  if (!grid) {
+    return;
+  }
+
+  if (categoryPercent) {
+    categoryPercent.textContent =
+      `${stats.percent}%`;
+  }
+
+  if (categoryProgressText) {
+    categoryProgressText.textContent =
+      `${stats.done} / ${stats.total} completed`;
+  }
+
+  const search =
+    searchInput
+      ? searchInput.value.toLowerCase().trim()
+      : "";
+
+  const status =
+    statusFilter
+      ? statusFilter.value
+      : "all";
 
   grid.innerHTML = "";
 
-
-  let visible =
-    0;
-
+  let visible = 0;
 
   category.items.forEach(
     item => {
@@ -1303,46 +1130,33 @@ function renderCategory() {
           item
         );
 
+      const vendor =
+        data.vendor.toLowerCase();
+
+      const notes =
+        data.notes.toLowerCase();
 
       const matchesSearch =
         !search ||
-
-        item
-          .toLowerCase()
-          .includes(search) ||
-
-        data.vendor
-          .toLowerCase()
-          .includes(search) ||
-
-        data.notes
-          .toLowerCase()
-          .includes(search);
-
+        item.toLowerCase().includes(search) ||
+        vendor.includes(search) ||
+        notes.includes(search);
 
       const matchesStatus =
         status === "all" ||
         data.status === status;
 
-
       if (
         !matchesSearch ||
         !matchesStatus
       ) {
-
         return;
-
       }
-
 
       visible++;
 
-
       const card =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       card.className =
         `item-card ${
@@ -1351,30 +1165,41 @@ function renderCategory() {
             : ""
         }`;
 
+      let statusText = "Not started";
 
-      let statusText =
-        "Not started";
-
-
-      if (
-        data.status === "progress"
-      ) {
-
-        statusText =
-          "In progress";
-
+      if (data.status === "progress") {
+        statusText = "In progress";
       }
 
-
-      if (
-        data.status === "done"
-      ) {
-
-        statusText =
-          "Completed";
-
+      if (data.status === "done") {
+        statusText = "Completed";
       }
 
+      let vendorHTML = `
+        <p>
+          Click to add details
+        </p>
+      `;
+
+      if (data.vendor) {
+        vendorHTML = `
+          <p>
+            👤
+            ${escapeHTML(data.vendor)}
+          </p>
+        `;
+      }
+
+      let deadlineHTML = "";
+
+      if (data.deadline) {
+        deadlineHTML = `
+          <div class="item-meta">
+            📅
+            ${formatDate(data.deadline)}
+          </div>
+        `;
+      }
 
       card.innerHTML = `
 
@@ -1387,18 +1212,8 @@ function renderCategory() {
           <div
             class="
               item-status
-
-              ${
-                data.status === "progress"
-                  ? "progress"
-                  : ""
-              }
-
-              ${
-                data.status === "done"
-                  ? "done"
-                  : ""
-              }
+              ${data.status === "progress" ? "progress" : ""}
+              ${data.status === "done" ? "done" : ""}
             "
           >
             ${statusText}
@@ -1406,72 +1221,35 @@ function renderCategory() {
 
         </div>
 
-
         <h3>
           ${escapeHTML(item)}
         </h3>
 
+        ${vendorHTML}
 
-        ${
-          data.vendor
-
-          ? `
-            <p>
-              👤
-              ${escapeHTML(
-                data.vendor
-              )}
-            </p>
-          `
-
-          : `
-            <p>
-              Click to add details
-            </p>
-          `
-        }
-
-
-        ${
-          data.deadline
-
-          ? `
-            <div class="item-meta">
-              📅
-              ${formatDate(
-                data.deadline
-              )}
-            </div>
-          `
-
-          : ""
-        }
+        ${deadlineHTML}
 
       `;
 
-
-      card.onclick =
-        () =>
-          openModal(
-            category.id,
-            item
-          );
-
-
-      grid.appendChild(
-        card
+      card.addEventListener(
+        "click",
+        () => openModal(
+          category.id,
+          item
+        )
       );
+
+      grid.appendChild(card);
 
     }
   );
 
-
-  document.getElementById(
-    "emptyMessage"
-  ).style.display =
-    visible
-      ? "none"
-      : "block";
+  if (emptyMessage) {
+    emptyMessage.style.display =
+      visible > 0
+        ? "none"
+        : "block";
+  }
 
 }
 
@@ -1480,22 +1258,21 @@ function renderCategory() {
    MODAL
 ============================================================ */
 
-function openModal(
-  categoryId,
-  item
-) {
+function openModal(categoryId, item) {
 
   currentItem = {
     categoryId,
     item
   };
 
-
   const category =
     categories.find(
       c => c.id === categoryId
     );
 
+  if (!category) {
+    return;
+  }
 
   const data =
     getItem(
@@ -1503,87 +1280,128 @@ function openModal(
       item
     );
 
+  const modalCategory =
+    document.getElementById(
+      "modalCategory"
+    );
 
-  document.getElementById(
-    "modalCategory"
-  ).textContent =
-    category.name;
+  const modalTitle =
+    document.getElementById(
+      "modalTitle"
+    );
 
+  const vendorInput =
+    document.getElementById(
+      "vendorInput"
+    );
 
-  document.getElementById(
-    "modalTitle"
-  ).textContent =
-    item;
+  const priceInput =
+    document.getElementById(
+      "priceInput"
+    );
 
+  const deadlineInput =
+    document.getElementById(
+      "deadlineInput"
+    );
 
-  document.getElementById(
-    "vendorInput"
-  ).value =
-    data.vendor;
+  const linkInput =
+    document.getElementById(
+      "linkInput"
+    );
 
+  const notesInput =
+    document.getElementById(
+      "notesInput"
+    );
 
-  document.getElementById(
-    "priceInput"
-  ).value =
-    data.price;
+  if (modalCategory) {
+    modalCategory.textContent =
+      category.name;
+  }
 
+  if (modalTitle) {
+    modalTitle.textContent =
+      item;
+  }
 
-  document.getElementById(
-    "deadlineInput"
-  ).value =
-    data.deadline;
+  if (vendorInput) {
+    vendorInput.value =
+      data.vendor;
+  }
 
+  if (priceInput) {
+    priceInput.value =
+      data.price;
+  }
 
-  document.getElementById(
-    "linkInput"
-  ).value =
-    data.link;
+  if (deadlineInput) {
+    deadlineInput.value =
+      data.deadline;
+  }
 
+  if (linkInput) {
+    linkInput.value =
+      data.link;
+  }
 
-  document.getElementById(
-    "notesInput"
-  ).value =
-    data.notes;
-
+  if (notesInput) {
+    notesInput.value =
+      data.notes;
+  }
 
   modalStatus =
     data.status;
 
-
   updateStatusButtons();
 
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
 
-  document.getElementById(
-    "overlay"
-  ).classList.add(
-    "active"
-  );
+  if (overlay) {
+    overlay.classList.add("active");
+  }
 
 }
 
+
+/* ============================================================
+   CLOSE MODAL
+============================================================ */
 
 function closeModal() {
 
-  document.getElementById(
-    "overlay"
-  ).classList.remove(
-    "active"
-  );
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
 
+  if (overlay) {
+    overlay.classList.remove("active");
+  }
 
-  currentItem =
-    null;
+  currentItem = null;
 
 }
 
 
-function chooseStatus(
-  status
-) {
+/* ============================================================
+   STATUS
+============================================================ */
 
-  modalStatus =
-    status;
+function chooseStatus(status) {
 
+  if (
+    status !== "not" &&
+    status !== "progress" &&
+    status !== "done"
+  ) {
+    return;
+  }
+
+  modalStatus = status;
 
   updateStatusButtons();
 
@@ -1592,28 +1410,41 @@ function chooseStatus(
 
 function updateStatusButtons() {
 
-  document.getElementById(
-    "notButton"
-  ).classList.toggle(
-    "active",
-    modalStatus === "not"
-  );
+  const notButton =
+    document.getElementById(
+      "notButton"
+    );
 
+  const progressButton =
+    document.getElementById(
+      "progressButton"
+    );
 
-  document.getElementById(
-    "progressButton"
-  ).classList.toggle(
-    "active",
-    modalStatus === "progress"
-  );
+  const doneButton =
+    document.getElementById(
+      "doneButton"
+    );
 
+  if (notButton) {
+    notButton.classList.toggle(
+      "active",
+      modalStatus === "not"
+    );
+  }
 
-  document.getElementById(
-    "doneButton"
-  ).classList.toggle(
-    "active",
-    modalStatus === "done"
-  );
+  if (progressButton) {
+    progressButton.classList.toggle(
+      "active",
+      modalStatus === "progress"
+    );
+  }
+
+  if (doneButton) {
+    doneButton.classList.toggle(
+      "active",
+      modalStatus === "done"
+    );
+  }
 
 }
 
@@ -1628,67 +1459,75 @@ function saveItem() {
     return;
   }
 
-
   const data =
     getItem(
       currentItem.categoryId,
       currentItem.item
     );
 
+  const vendorInput =
+    document.getElementById(
+      "vendorInput"
+    );
+
+  const priceInput =
+    document.getElementById(
+      "priceInput"
+    );
+
+  const deadlineInput =
+    document.getElementById(
+      "deadlineInput"
+    );
+
+  const linkInput =
+    document.getElementById(
+      "linkInput"
+    );
+
+  const notesInput =
+    document.getElementById(
+      "notesInput"
+    );
 
   data.status =
     modalStatus;
 
-
   data.vendor =
-    document.getElementById(
-      "vendorInput"
-    ).value;
-
+    vendorInput
+      ? vendorInput.value
+      : "";
 
   data.price =
-    document.getElementById(
-      "priceInput"
-    ).value;
-
+    priceInput
+      ? priceInput.value
+      : "";
 
   data.deadline =
-    document.getElementById(
-      "deadlineInput"
-    ).value;
-
+    deadlineInput
+      ? deadlineInput.value
+      : "";
 
   data.link =
-    document.getElementById(
-      "linkInput"
-    ).value;
-
+    linkInput
+      ? linkInput.value
+      : "";
 
   data.notes =
-    document.getElementById(
-      "notesInput"
-    ).value;
+    notesInput
+      ? notesInput.value
+      : "";
 
-
-  saveData();
-
+  if (!saveData()) {
+    return;
+  }
 
   closeModal();
 
-
-  if (
-    currentCategory ===
-    "dashboard"
-  ) {
-
+  if (currentCategory === "dashboard") {
     showDashboard();
-
   } else {
-
-    showCategory(
-      currentCategory
-    );
-
+    showCategory(currentCategory);
   }
 
 }
@@ -1704,57 +1543,29 @@ function clearItem() {
     return;
   }
 
-
   const data =
     getItem(
       currentItem.categoryId,
       currentItem.item
     );
 
+  data.status = "not";
+  data.vendor = "";
+  data.price = "";
+  data.deadline = "";
+  data.link = "";
+  data.notes = "";
 
-  data.status =
-    "not";
-
-
-  data.vendor =
-    "";
-
-
-  data.price =
-    "";
-
-
-  data.deadline =
-    "";
-
-
-  data.link =
-    "";
-
-
-  data.notes =
-    "";
-
-
-  saveData();
-
+  if (!saveData()) {
+    return;
+  }
 
   closeModal();
 
-
-  if (
-    currentCategory ===
-    "dashboard"
-  ) {
-
+  if (currentCategory === "dashboard") {
     showDashboard();
-
   } else {
-
-    showCategory(
-      currentCategory
-    );
-
+    showCategory(currentCategory);
   }
 
 }
@@ -1764,28 +1575,27 @@ function clearItem() {
    FORMAT DATE
 ============================================================ */
 
-function formatDate(
-  date
-) {
+function formatDate(date) {
 
   if (!date) {
     return "";
   }
 
-
   const d =
     new Date(
-      date +
-      "T00:00:00"
+      `${date}T00:00:00`
     );
 
+  if (Number.isNaN(d.getTime())) {
+    return date;
+  }
 
   return d.toLocaleDateString(
     "en-DK",
     {
-      day:"numeric",
-      month:"short",
-      year:"numeric"
+      day: "numeric",
+      month: "short",
+      year: "numeric"
     }
   );
 
@@ -1796,92 +1606,96 @@ function formatDate(
    ESCAPE HTML
 ============================================================ */
 
-function escapeHTML(
-  value
-) {
+function escapeHTML(value) {
 
   return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 }
 
 
 /* ============================================================
-   EVENTS
+   INITIALIZE EVENTS
 ============================================================ */
 
-document
-  .getElementById(
-    "itemSearch"
-  )
-  .addEventListener(
-    "input",
-    renderCategory
-  );
+function initializeEvents() {
 
+  const itemSearch =
+    document.getElementById(
+      "itemSearch"
+    );
 
-document
-  .getElementById(
-    "itemStatusFilter"
-  )
-  .addEventListener(
-    "change",
-    renderCategory
-  );
+  const itemStatusFilter =
+    document.getElementById(
+      "itemStatusFilter"
+    );
 
+  const importFile =
+    document.getElementById(
+      "importFile"
+    );
 
-/*
- * Import button/file input.
- */
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
 
-document
-  .getElementById(
-    "importFile"
-  )
-  .addEventListener(
-    "change",
-    importData
-  );
+  if (itemSearch) {
 
+    itemSearch.addEventListener(
+      "input",
+      renderCategory
+    );
 
-/*
- * Close modal when clicking outside it.
- */
+  }
 
-document
-  .getElementById(
-    "overlay"
-  )
-  .addEventListener(
-    "click",
+  if (itemStatusFilter) {
+
+    itemStatusFilter.addEventListener(
+      "change",
+      renderCategory
+    );
+
+  }
+
+  if (importFile) {
+
+    importFile.addEventListener(
+      "change",
+      importData
+    );
+
+  }
+
+  if (overlay) {
+
+    overlay.addEventListener(
+      "click",
+      function(event) {
+
+        if (
+          event.target === overlay
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+  }
+
+  document.addEventListener(
+    "keydown",
     function(event) {
 
       if (
-        event.target === this
+        event.key === "Escape"
       ) {
 
         closeModal();
@@ -1891,34 +1705,60 @@ document
     }
   );
 
-
-/*
- * Close modal with Escape.
- */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key === "Escape"
-    ) {
-
-      closeModal();
-
-    }
-
-  }
-);
+}
 
 
 /* ============================================================
    START APPLICATION
 ============================================================ */
 
-loadData();
+function initializeWeddingPlanner() {
 
-buildNavigation();
+  console.log(
+    "Wedding Planner: JavaScript loaded."
+  );
 
-showDashboard();
-```
+  try {
+
+    loadData();
+
+    initializeEvents();
+
+    buildNavigation();
+
+    showDashboard();
+
+    console.log(
+      "Wedding Planner: application started successfully."
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Wedding Planner failed to start:",
+      error
+    );
+
+  }
+
+}
+
+
+/*
+ * Wait until the complete HTML document is ready.
+ */
+
+if (
+  document.readyState === "loading"
+) {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeWeddingPlanner
+  );
+
+} else {
+
+  initializeWeddingPlanner();
+
+}
