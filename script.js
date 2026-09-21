@@ -1,12 +1,10 @@
-"use strict";
-
 /* ============================================================
    WEDDING PLANNER
-   ============================================================ */
+============================================================ */
 
 /* ============================================================
    CATEGORIES
-   ============================================================ */
+============================================================ */
 
 const categories = [
   {
@@ -294,10 +292,9 @@ const categories = [
   }
 ];
 
-
 /* ============================================================
    STORAGE
-   ============================================================ */
+============================================================ */
 
 const STORAGE_KEY = "tamilWeddingPlanner_v5";
 
@@ -306,12 +303,38 @@ let currentCategory = "dashboard";
 let currentItem = null;
 let modalStatus = "not";
 
-
 /* ============================================================
-   DEFAULT ITEM
-   ============================================================ */
+   HELPERS
+============================================================ */
 
-function createDefaultItem() {
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function formatDate(value) {
+  if (!value) {
+    return "";
+  }
+
+  const parts = String(value).split("-");
+
+  if (parts.length !== 3) {
+    return value;
+  }
+
+  const year = parts[0];
+  const month = parts[1];
+  const day = parts[2];
+
+  return `${day}/${month}/${year}`;
+}
+
+function createEmptyItem() {
   return {
     status: "not",
     vendor: "",
@@ -322,10 +345,9 @@ function createDefaultItem() {
   };
 }
 
-
 /* ============================================================
    LOAD DATA
-   ============================================================ */
+============================================================ */
 
 function loadData() {
   try {
@@ -347,16 +369,16 @@ function loadData() {
     } else {
       savedData = {};
     }
+
   } catch (error) {
     console.error("Could not load saved data:", error);
     savedData = {};
   }
 }
 
-
 /* ============================================================
    SAVE DATA
-   ============================================================ */
+============================================================ */
 
 function saveData() {
   try {
@@ -366,6 +388,7 @@ function saveData() {
     );
 
     return true;
+
   } catch (error) {
     console.error("Could not save data:", error);
 
@@ -377,112 +400,9 @@ function saveData() {
   }
 }
 
-
-/* ============================================================
-   ITEM KEY
-   ============================================================ */
-
-function itemKey(categoryId, item) {
-  return categoryId + "::" + item;
-}
-
-
-/* ============================================================
-   GET ITEM
-   ============================================================ */
-
-function getItem(categoryId, item) {
-  const key = itemKey(categoryId, item);
-
-  if (
-    !savedData[key] ||
-    typeof savedData[key] !== "object" ||
-    Array.isArray(savedData[key])
-  ) {
-    savedData[key] = createDefaultItem();
-  }
-
-  const data = savedData[key];
-
-  if (
-    data.status !== "not" &&
-    data.status !== "progress" &&
-    data.status !== "done"
-  ) {
-    data.status = "not";
-  }
-
-  data.vendor = String(data.vendor || "");
-  data.price = String(data.price || "");
-  data.deadline = String(data.deadline || "");
-  data.link = String(data.link || "");
-  data.notes = String(data.notes || "");
-
-  return data;
-}
-
-
-/* ============================================================
-   ESCAPE HTML
-   ============================================================ */
-
-function escapeHTML(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-
-/* ============================================================
-   FORMAT DATE
-   ============================================================ */
-
-function formatDate(dateString) {
-  if (!dateString) {
-    return "";
-  }
-
-  const parts = dateString.split("-");
-
-  if (parts.length !== 3) {
-    return dateString;
-  }
-
-  const year = Number(parts[0]);
-  const month = Number(parts[1]);
-  const day = Number(parts[2]);
-
-  if (
-    !year ||
-    !month ||
-    !day
-  ) {
-    return dateString;
-  }
-
-  const date = new Date(
-    year,
-    month - 1,
-    day
-  );
-
-  return date.toLocaleDateString(
-    undefined,
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    }
-  );
-}
-
-
 /* ============================================================
    EXPORT DATA
-   ============================================================ */
+============================================================ */
 
 function exportData() {
   try {
@@ -527,13 +447,7 @@ function exportData() {
     ).padStart(2, "0");
 
     link.download =
-      "wedding-planner-backup-" +
-      year +
-      "-" +
-      month +
-      "-" +
-      day +
-      ".json";
+      `wedding-planner-backup-${year}-${month}-${day}.json`;
 
     document.body.appendChild(link);
 
@@ -541,14 +455,12 @@ function exportData() {
 
     link.remove();
 
-    setTimeout(function() {
+    setTimeout(() => {
       URL.revokeObjectURL(url);
     }, 1000);
+
   } catch (error) {
-    console.error(
-      "Export failed:",
-      error
-    );
+    console.error("Export failed:", error);
 
     alert(
       "Sorry, the wedding planner data could not be exported."
@@ -556,15 +468,13 @@ function exportData() {
   }
 }
 
-
 /* ============================================================
    IMPORT DATA
-   ============================================================ */
+============================================================ */
 
 function importData(event) {
-  const file =
-    event.target.files &&
-    event.target.files[0];
+  const input = event.target;
+  const file = input.files && input.files[0];
 
   if (!file) {
     return;
@@ -579,17 +489,16 @@ function importData(event) {
       "Please select a .json wedding planner backup file."
     );
 
-    event.target.value = "";
-
+    input.value = "";
     return;
   }
 
   const reader = new FileReader();
 
-  reader.onload = function(loadEvent) {
+  reader.onload = function(e) {
     try {
       const imported = JSON.parse(
-        loadEvent.target.result
+        e.target.result
       );
 
       let importedData = null;
@@ -614,9 +523,7 @@ function importData(event) {
         typeof importedData !== "object" ||
         Array.isArray(importedData)
       ) {
-        throw new Error(
-          "Invalid backup format"
-        );
+        throw new Error("Invalid backup format");
       }
 
       const confirmed = confirm(
@@ -625,16 +532,14 @@ function importData(event) {
       );
 
       if (!confirmed) {
-        event.target.value = "";
+        input.value = "";
         return;
       }
 
       savedData = importedData;
 
-      const saved = saveData();
-
-      if (!saved) {
-        event.target.value = "";
+      if (!saveData()) {
+        input.value = "";
         return;
       }
 
@@ -645,20 +550,19 @@ function importData(event) {
       }
 
       alert(
-        "Wedding planner data imported successfully!"
+        "Wedding planner data imported successfully! ❤️"
       );
+
     } catch (error) {
-      console.error(
-        "Import failed:",
-        error
-      );
+      console.error("Import failed:", error);
 
       alert(
         "This file is not a valid wedding planner backup."
       );
-    }
 
-    event.target.value = "";
+    } finally {
+      input.value = "";
+    }
   };
 
   reader.onerror = function() {
@@ -666,22 +570,71 @@ function importData(event) {
       "Could not read the selected file."
     );
 
-    event.target.value = "";
+    input.value = "";
   };
 
   reader.readAsText(file);
 }
 
+/* ============================================================
+   ITEM KEY
+============================================================ */
+
+function itemKey(categoryId, item) {
+  return `${categoryId}::${item}`;
+}
+
+/* ============================================================
+   GET ITEM
+============================================================ */
+
+function getItem(categoryId, item) {
+  const key = itemKey(
+    categoryId,
+    item
+  );
+
+  if (
+    !savedData[key] ||
+    typeof savedData[key] !== "object" ||
+    Array.isArray(savedData[key])
+  ) {
+    savedData[key] = createEmptyItem();
+  }
+
+  const data = savedData[key];
+
+  data.status =
+    ["not", "progress", "done"].includes(data.status)
+      ? data.status
+      : "not";
+
+  data.vendor =
+    String(data.vendor || "");
+
+  data.price =
+    String(data.price || "");
+
+  data.deadline =
+    String(data.deadline || "");
+
+  data.link =
+    String(data.link || "");
+
+  data.notes =
+    String(data.notes || "");
+
+  return data;
+}
 
 /* ============================================================
    NAVIGATION
-   ============================================================ */
+============================================================ */
 
 function buildNavigation() {
-  const nav =
-    document.getElementById(
-      "navigation"
-    );
+  const nav = document.getElementById(
+    "navigation"
+  );
 
   if (!nav) {
     return;
@@ -689,14 +642,12 @@ function buildNavigation() {
 
   nav.innerHTML = "";
 
-  const dashboard =
-    document.createElement("button");
+  const dashboard = document.createElement(
+    "button"
+  );
 
   dashboard.type = "button";
-
-  dashboard.textContent =
-    "🏠 Dashboard";
-
+  dashboard.textContent = "🏠 Dashboard";
   dashboard.className =
     currentCategory === "dashboard"
       ? "active"
@@ -704,48 +655,40 @@ function buildNavigation() {
 
   dashboard.addEventListener(
     "click",
-    function() {
-      showDashboard();
-    }
+    showDashboard
   );
 
   nav.appendChild(dashboard);
 
-  categories.forEach(
-    function(category) {
-      const button =
-        document.createElement("button");
+  categories.forEach(function(category) {
+    const button = document.createElement(
+      "button"
+    );
 
-      button.type = "button";
+    button.type = "button";
 
-      button.textContent =
-        category.icon +
-        " " +
-        category.name;
+    button.textContent =
+      `${category.icon} ${category.name}`;
 
-      button.className =
-        currentCategory === category.id
-          ? "active"
-          : "";
+    button.className =
+      currentCategory === category.id
+        ? "active"
+        : "";
 
-      button.addEventListener(
-        "click",
-        function() {
-          showCategory(
-            category.id
-          );
-        }
-      );
+    button.addEventListener(
+      "click",
+      function() {
+        showCategory(category.id);
+      }
+    );
 
-      nav.appendChild(button);
-    }
-  );
+    nav.appendChild(button);
+  });
 }
-
 
 /* ============================================================
    DASHBOARD
-   ============================================================ */
+============================================================ */
 
 function showDashboard() {
   currentCategory = "dashboard";
@@ -768,85 +711,65 @@ function showDashboard() {
     categoryPage.style.display = "none";
   }
 
-  closeModal();
-
   buildNavigation();
-
   renderDashboard();
 
-  scrollToTop();
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
-
 
 /* ============================================================
    RENDER DASHBOARD
-   ============================================================ */
+============================================================ */
 
 function renderDashboard() {
   let total = 0;
   let done = 0;
   let progress = 0;
 
-  categories.forEach(
-    function(category) {
-      category.items.forEach(
-        function(item) {
-          total++;
+  categories.forEach(function(category) {
+    category.items.forEach(function(item) {
+      total++;
 
-          const data =
-            getItem(
-              category.id,
-              item
-            );
-
-          if (data.status === "done") {
-            done++;
-          }
-
-          if (data.status === "progress") {
-            progress++;
-          }
-        }
+      const data = getItem(
+        category.id,
+        item
       );
-    }
-  );
+
+      if (data.status === "done") {
+        done++;
+      }
+
+      if (data.status === "progress") {
+        progress++;
+      }
+    });
+  });
 
   const percent =
     total > 0
-      ? Math.round(
-          (done / total) * 100
-        )
+      ? Math.round((done / total) * 100)
       : 0;
 
   const totalCount =
-    document.getElementById(
-      "totalCount"
-    );
+    document.getElementById("totalCount");
 
   const doneCount =
-    document.getElementById(
-      "doneCount"
-    );
+    document.getElementById("doneCount");
 
   const progressCount =
-    document.getElementById(
-      "progressCount"
-    );
+    document.getElementById("progressCount");
 
   const categoryCount =
-    document.getElementById(
-      "categoryCount"
-    );
+    document.getElementById("categoryCount");
 
   const overallPercent =
-    document.getElementById(
-      "overallPercent"
-    );
+    document.getElementById("overallPercent");
 
   const overallFill =
-    document.getElementById(
-      "overallFill"
-    );
+    document.getElementById("overallFill");
 
   if (totalCount) {
     totalCount.textContent = total;
@@ -867,22 +790,12 @@ function renderDashboard() {
 
   if (overallPercent) {
     overallPercent.textContent =
-      percent + "%";
+      `${percent}%`;
   }
 
   if (overallFill) {
     overallFill.style.width =
-      percent + "%";
-
-    const progressBar =
-      overallFill.parentElement;
-
-    if (progressBar) {
-      progressBar.setAttribute(
-        "aria-valuenow",
-        String(percent)
-      );
-    }
+      `${percent}%`;
   }
 
   const grid =
@@ -896,98 +809,69 @@ function renderDashboard() {
 
   grid.innerHTML = "";
 
-  categories.forEach(
-    function(category) {
-      const stats =
-        getCategoryStats(category);
+  categories.forEach(function(category) {
+    const stats =
+      getCategoryStats(category);
 
-      const card =
-        document.createElement("div");
+    const card =
+      document.createElement("div");
 
-      card.className =
-        "summary-card";
+    card.className = "summary-card";
 
-      card.setAttribute(
-        "role",
-        "button"
-      );
+    card.setAttribute(
+      "role",
+      "button"
+    );
 
-      card.setAttribute(
-        "tabindex",
-        "0"
-      );
+    card.setAttribute(
+      "tabindex",
+      "0"
+    );
 
-      card.setAttribute(
-        "aria-label",
-        "Open " + category.name
-      );
+    card.innerHTML =
+      `<div class="summary-icon">${category.icon}</div>` +
+      `<h3>${escapeHTML(category.name)}</h3>` +
+      `<p>${stats.done} / ${stats.total} completed</p>` +
+      `<div class="summary-bar">` +
+        `<div style="width:${stats.percent}%"></div>` +
+      `</div>`;
 
-      card.innerHTML =
-        '<div class="summary-icon">' +
-          category.icon +
-        "</div>" +
+    const openCategory = function() {
+      showCategory(category.id);
+    };
 
-        "<h3>" +
-          escapeHTML(
-            category.name
-          ) +
-        "</h3>" +
+    card.addEventListener(
+      "click",
+      openCategory
+    );
 
-        "<p>" +
-          stats.done +
-          " / " +
-          stats.total +
-          " completed" +
-        "</p>" +
-
-        '<div class="summary-bar">' +
-          '<div style="width:' +
-            stats.percent +
-          '%"></div>' +
-        "</div>";
-
-      card.addEventListener(
-        "click",
-        function() {
-          showCategory(
-            category.id
-          );
+    card.addEventListener(
+      "keydown",
+      function(event) {
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+          event.preventDefault();
+          openCategory();
         }
-      );
+      }
+    );
 
-      card.addEventListener(
-        "keydown",
-        function(event) {
-          if (
-            event.key === "Enter" ||
-            event.key === " "
-          ) {
-            event.preventDefault();
-
-            showCategory(
-              category.id
-            );
-          }
-        }
-      );
-
-      grid.appendChild(card);
-    }
-  );
+    grid.appendChild(card);
+  });
 }
-
 
 /* ============================================================
    SHOW CATEGORY
-   ============================================================ */
+============================================================ */
 
 function showCategory(id) {
-  const category =
-    categories.find(
-      function(c) {
-        return c.id === id;
-      }
-    );
+  const category = categories.find(
+    function(c) {
+      return c.id === id;
+    }
+  );
 
   if (!category) {
     return;
@@ -1020,9 +904,7 @@ function showCategory(id) {
 
   if (categoryTitle) {
     categoryTitle.textContent =
-      category.icon +
-      " " +
-      category.name;
+      `${category.icon} ${category.name}`;
   }
 
   const search =
@@ -1043,19 +925,18 @@ function showCategory(id) {
     filter.value = "all";
   }
 
-  closeModal();
-
   buildNavigation();
-
   renderCategory();
 
-  scrollToTop();
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
-
 
 /* ============================================================
    CATEGORY STATS
-   ============================================================ */
+============================================================ */
 
 function getCategoryStats(category) {
   const total =
@@ -1063,46 +944,39 @@ function getCategoryStats(category) {
 
   let done = 0;
 
-  category.items.forEach(
-    function(item) {
-      const data =
-        getItem(
-          category.id,
-          item
-        );
+  category.items.forEach(function(item) {
+    const data = getItem(
+      category.id,
+      item
+    );
 
-      if (data.status === "done") {
-        done++;
-      }
+    if (data.status === "done") {
+      done++;
     }
-  );
+  });
 
   const percent =
     total > 0
-      ? Math.round(
-          (done / total) * 100
-        )
+      ? Math.round((done / total) * 100)
       : 0;
 
   return {
-    total: total,
-    done: done,
-    percent: percent
+    total,
+    done,
+    percent
   };
 }
 
-
 /* ============================================================
    RENDER CATEGORY
-   ============================================================ */
+============================================================ */
 
 function renderCategory() {
-  const category =
-    categories.find(
-      function(c) {
-        return c.id === currentCategory;
-      }
-    );
+  const category = categories.find(
+    function(c) {
+      return c.id === currentCategory;
+    }
+  );
 
   if (!category) {
     return;
@@ -1123,15 +997,12 @@ function renderCategory() {
 
   if (categoryPercent) {
     categoryPercent.textContent =
-      stats.percent + "%";
+      `${stats.percent}%`;
   }
 
   if (categoryProgressText) {
     categoryProgressText.textContent =
-      stats.done +
-      " / " +
-      stats.total +
-      " completed";
+      `${stats.done} / ${stats.total} completed`;
   }
 
   const searchInput =
@@ -1146,9 +1017,7 @@ function renderCategory() {
 
   const search =
     searchInput
-      ? searchInput.value
-          .toLowerCase()
-          .trim()
+      ? searchInput.value.toLowerCase().trim()
       : "";
 
   const status =
@@ -1169,181 +1038,123 @@ function renderCategory() {
 
   let visible = 0;
 
-  category.items.forEach(
-    function(item) {
-      const data =
-        getItem(
+  category.items.forEach(function(item) {
+    const data = getItem(
+      category.id,
+      item
+    );
+
+    const itemText =
+      String(item).toLowerCase();
+
+    const vendorText =
+      String(data.vendor || "")
+        .toLowerCase();
+
+    const notesText =
+      String(data.notes || "")
+        .toLowerCase();
+
+    const priceText =
+      String(data.price || "")
+        .toLowerCase();
+
+    const matchesSearch =
+      !search ||
+      itemText.includes(search) ||
+      vendorText.includes(search) ||
+      notesText.includes(search) ||
+      priceText.includes(search);
+
+    const matchesStatus =
+      status === "all" ||
+      data.status === status;
+
+    if (
+      !matchesSearch ||
+      !matchesStatus
+    ) {
+      return;
+    }
+
+    visible++;
+
+    const card =
+      document.createElement("div");
+
+    card.className = "item-card";
+
+    if (data.status === "done") {
+      card.classList.add("done");
+    }
+
+    let statusText = "Not started";
+    let statusClass = "";
+
+    if (data.status === "progress") {
+      statusText = "In progress";
+      statusClass = " progress";
+    }
+
+    if (data.status === "done") {
+      statusText = "Completed";
+      statusClass = " done";
+    }
+
+    let vendorHTML =
+      "<p>Click to add details</p>";
+
+    if (data.vendor) {
+      vendorHTML =
+        `<p>👤 ${escapeHTML(data.vendor)}</p>`;
+    }
+
+    let deadlineHTML = "";
+
+    if (data.deadline) {
+      deadlineHTML =
+        `<div class="item-meta">` +
+        `📅 ${escapeHTML(formatDate(data.deadline))}` +
+        `</div>`;
+    }
+
+    let priceHTML = "";
+
+    if (data.price) {
+      priceHTML =
+        `<div class="item-meta">` +
+        `💰 ${escapeHTML(data.price)}` +
+        `</div>`;
+    }
+
+    card.innerHTML =
+      `<div class="item-top">` +
+        `<div class="item-icon">${category.icon}</div>` +
+        `<div class="item-status${statusClass}">` +
+          `${statusText}` +
+        `</div>` +
+      `</div>` +
+
+      `<h3>${escapeHTML(item)}</h3>` +
+
+      vendorHTML +
+
+      deadlineHTML +
+
+      priceHTML;
+
+    card.addEventListener(
+      "click",
+      function() {
+        openModal(
           category.id,
           item
         );
-
-      const itemText =
-        String(item)
-          .toLowerCase();
-
-      const vendorText =
-        String(
-          data.vendor || ""
-        )
-          .toLowerCase();
-
-      const notesText =
-        String(
-          data.notes || ""
-        )
-          .toLowerCase();
-
-      const priceText =
-        String(
-          data.price || ""
-        )
-          .toLowerCase();
-
-      const matchesSearch =
-        !search ||
-        itemText.includes(search) ||
-        vendorText.includes(search) ||
-        notesText.includes(search) ||
-        priceText.includes(search);
-
-      const matchesStatus =
-        status === "all" ||
-        data.status === status;
-
-      if (
-        !matchesSearch ||
-        !matchesStatus
-      ) {
-        return;
       }
+    );
 
-      visible++;
-
-      const card =
-        document.createElement("div");
-
-      card.className =
-        "item-card";
-
-      card.setAttribute(
-        "role",
-        "button"
-      );
-
-      card.setAttribute(
-        "tabindex",
-        "0"
-      );
-
-      card.setAttribute(
-        "aria-label",
-        "Edit " + item
-      );
-
-      if (data.status === "done") {
-        card.classList.add("done");
-      }
-
-      let statusText =
-        "Not started";
-
-      let statusClass = "";
-
-      if (data.status === "progress") {
-        statusText =
-          "In progress";
-
-        statusClass =
-          " progress";
-      }
-
-      if (data.status === "done") {
-        statusText =
-          "Completed";
-
-        statusClass =
-          " done";
-      }
-
-      let vendorHTML =
-        "<p>Click to add details</p>";
-
-      if (data.vendor) {
-        vendorHTML =
-          "<p>👤 " +
-          escapeHTML(
-            data.vendor
-          ) +
-          "</p>";
-      }
-
-      let deadlineHTML = "";
-
-      if (data.deadline) {
-        deadlineHTML =
-          '<div class="item-meta">' +
-            "📅 " +
-            escapeHTML(
-              formatDate(
-                data.deadline
-              )
-            ) +
-          "</div>";
-      }
-
-      card.innerHTML =
-        '<div class="item-top">' +
-
-          '<div class="item-icon">' +
-            category.icon +
-          "</div>" +
-
-          '<div class="item-status' +
-            statusClass +
-          '">' +
-            statusText +
-          "</div>" +
-
-        "</div>" +
-
-        "<h3>" +
-          escapeHTML(item) +
-        "</h3>" +
-
-        vendorHTML +
-
-        deadlineHTML;
-
-      card.addEventListener(
-        "click",
-        function() {
-          openModal(
-            category.id,
-            item
-          );
-        }
-      );
-
-      card.addEventListener(
-        "keydown",
-        function(event) {
-          if (
-            event.key === "Enter" ||
-            event.key === " "
-          ) {
-            event.preventDefault();
-
-            openModal(
-              category.id,
-              item
-            );
-          }
-        }
-      );
-
-      grid.appendChild(card);
-    }
-  );
+    grid.appendChild(card);
+  });
 
   const emptyMessage =
     document.getElementById(
@@ -1358,15 +1169,17 @@ function renderCategory() {
   }
 }
 
-
 /* ============================================================
    OPEN MODAL
-   ============================================================ */
+============================================================ */
 
-function openModal(categoryId, item) {
+function openModal(
+  categoryId,
+  item
+) {
   currentItem = {
-    categoryId: categoryId,
-    item: item
+    categoryId,
+    item
   };
 
   const category =
@@ -1468,25 +1281,20 @@ function openModal(categoryId, item) {
 
   if (overlay) {
     overlay.classList.add("active");
-
-    document.body.style.overflow =
-      "hidden";
+    overlay.setAttribute(
+      "aria-hidden",
+      "false"
+    );
   }
 
-  setTimeout(
-    function() {
-      if (vendorInput) {
-        vendorInput.focus();
-      }
-    },
-    50
+  document.body.classList.add(
+    "modal-open"
   );
 }
 
-
 /* ============================================================
    CLOSE MODAL
-   ============================================================ */
+============================================================ */
 
 function closeModal() {
   const overlay =
@@ -1496,23 +1304,27 @@ function closeModal() {
 
   if (overlay) {
     overlay.classList.remove("active");
+
+    overlay.setAttribute(
+      "aria-hidden",
+      "true"
+    );
   }
 
-  document.body.style.overflow = "";
-
   currentItem = null;
-}
 
+  document.body.classList.remove(
+    "modal-open"
+  );
+}
 
 /* ============================================================
    CHOOSE STATUS
-   ============================================================ */
+============================================================ */
 
 function chooseStatus(status) {
   if (
-    status !== "not" &&
-    status !== "progress" &&
-    status !== "done"
+    !["not", "progress", "done"].includes(status)
   ) {
     return;
   }
@@ -1522,10 +1334,9 @@ function chooseStatus(status) {
   updateStatusButtons();
 }
 
-
 /* ============================================================
    UPDATE STATUS BUTTONS
-   ============================================================ */
+============================================================ */
 
 function updateStatusButtons() {
   const notButton =
@@ -1565,10 +1376,9 @@ function updateStatusButtons() {
   }
 }
 
-
 /* ============================================================
    SAVE ITEM
-   ============================================================ */
+============================================================ */
 
 function saveItem() {
   if (!currentItem) {
@@ -1634,9 +1444,7 @@ function saveItem() {
       ? notesInput.value.trim()
       : "";
 
-  const saved = saveData();
-
-  if (!saved) {
+  if (!saveData()) {
     return;
   }
 
@@ -1645,16 +1453,13 @@ function saveItem() {
   if (currentCategory === "dashboard") {
     showDashboard();
   } else {
-    showCategory(
-      currentCategory
-    );
+    renderCategory();
   }
 }
 
-
 /* ============================================================
    CLEAR ITEM
-   ============================================================ */
+============================================================ */
 
 function clearItem() {
   if (!currentItem) {
@@ -1669,22 +1474,15 @@ function clearItem() {
     return;
   }
 
-  const data =
-    getItem(
+  const key =
+    itemKey(
       currentItem.categoryId,
       currentItem.item
     );
 
-  data.status = "not";
-  data.vendor = "";
-  data.price = "";
-  data.deadline = "";
-  data.link = "";
-  data.notes = "";
+  delete savedData[key];
 
-  const saved = saveData();
-
-  if (!saved) {
+  if (!saveData()) {
     return;
   }
 
@@ -1693,28 +1491,13 @@ function clearItem() {
   if (currentCategory === "dashboard") {
     showDashboard();
   } else {
-    showCategory(
-      currentCategory
-    );
+    renderCategory();
   }
 }
 
-
-/* ============================================================
-   SCROLL TO TOP
-   ============================================================ */
-
-function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-
 /* ============================================================
    EVENT LISTENERS
-   ============================================================ */
+============================================================ */
 
 function setupEventListeners() {
   const exportButton =
@@ -1777,14 +1560,12 @@ function setupEventListeners() {
       "itemStatusFilter"
     );
 
-
   if (exportButton) {
     exportButton.addEventListener(
       "click",
       exportData
     );
   }
-
 
   if (importButton && importFile) {
     importButton.addEventListener(
@@ -1795,14 +1576,12 @@ function setupEventListeners() {
     );
   }
 
-
   if (importFile) {
     importFile.addEventListener(
       "change",
       importData
     );
   }
-
 
   if (closeModalButton) {
     closeModalButton.addEventListener(
@@ -1811,7 +1590,6 @@ function setupEventListeners() {
     );
   }
 
-
   if (saveButton) {
     saveButton.addEventListener(
       "click",
@@ -1819,14 +1597,12 @@ function setupEventListeners() {
     );
   }
 
-
   if (clearButton) {
     clearButton.addEventListener(
       "click",
       clearItem
     );
   }
-
 
   if (notButton) {
     notButton.addEventListener(
@@ -1837,7 +1613,6 @@ function setupEventListeners() {
     );
   }
 
-
   if (progressButton) {
     progressButton.addEventListener(
       "click",
@@ -1846,7 +1621,6 @@ function setupEventListeners() {
       }
     );
   }
-
 
   if (doneButton) {
     doneButton.addEventListener(
@@ -1857,6 +1631,16 @@ function setupEventListeners() {
     );
   }
 
+  if (overlay) {
+    overlay.addEventListener(
+      "click",
+      function(event) {
+        if (event.target === overlay) {
+          closeModal();
+        }
+      }
+    );
+  }
 
   if (searchInput) {
     searchInput.addEventListener(
@@ -1865,7 +1649,6 @@ function setupEventListeners() {
     );
   }
 
-
   if (statusFilter) {
     statusFilter.addEventListener(
       "change",
@@ -1873,72 +1656,37 @@ function setupEventListeners() {
     );
   }
 
-
-  if (overlay) {
-    overlay.addEventListener(
-      "click",
-      function(event) {
-        if (
-          event.target === overlay
-        ) {
-          closeModal();
-        }
-      }
-    );
-  }
-
-
   document.addEventListener(
     "keydown",
     function(event) {
       if (
-        event.key === "Escape"
+        event.key === "Escape" &&
+        currentItem
       ) {
-        const overlay =
-          document.getElementById(
-            "overlay"
-          );
-
-        if (
-          overlay &&
-          overlay.classList.contains(
-            "active"
-          )
-        ) {
-          closeModal();
-        }
+        closeModal();
       }
     }
   );
 }
 
-
 /* ============================================================
-   START APPLICATION
-   ============================================================ */
+   INITIALIZE
+============================================================ */
 
-function initializeApp() {
+function init() {
   loadData();
-
   setupEventListeners();
-
   buildNavigation();
-
   showDashboard();
 }
-
-
-/* ============================================================
-   START WHEN HTML IS READY
-   ============================================================ */
 
 if (
   document.readyState === "loading"
 ) {
   document.addEventListener(
     "DOMContentLoaded",
-    initializeApp
+    init
   );
 } else {
-  initializeApp();
+  init();
 }
