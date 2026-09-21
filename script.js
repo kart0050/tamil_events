@@ -316,7 +316,7 @@ function loadData() {
 
 try {
 
-```
+
 const stored = localStorage.getItem(
   STORAGE_KEY
 );
@@ -344,18 +344,18 @@ if (stored) {
   savedData = {};
 
 }
-```
+
 
 } catch (error) {
 
-```
+
 console.error(
   "Could not load saved data:",
   error
 );
 
 savedData = {};
-```
+
 
 }
 
@@ -369,18 +369,18 @@ function saveData() {
 
 try {
 
-```
+
 localStorage.setItem(
   STORAGE_KEY,
   JSON.stringify(savedData)
 );
 
 return true;
-```
+
 
 } catch (error) {
 
-```
+
 console.error(
   "Could not save data:",
   error
@@ -391,7 +391,7 @@ alert(
 );
 
 return false;
-```
+
 
 }
 
@@ -405,7 +405,7 @@ function exportData() {
 
 try {
 
-```
+
 saveData();
 
 const backup = {
@@ -481,11 +481,11 @@ setTimeout(
   },
   1000
 );
-```
+
 
 } catch (error) {
 
-```
+
 console.error(
   "Export failed:",
   error
@@ -494,7 +494,7 @@ console.error(
 alert(
   "Sorry, the wedding planner data could not be exported."
 );
-```
+
 
 }
 
@@ -519,7 +519,7 @@ if (
 .endsWith(".json")
 ) {
 
-```
+
 alert(
   "Please select a .json wedding planner backup file."
 );
@@ -527,7 +527,7 @@ alert(
 event.target.value = "";
 
 return;
-```
+
 
 }
 
@@ -537,7 +537,7 @@ new FileReader();
 reader.onload =
 function(e) {
 
-```
+
   try {
 
     const imported =
@@ -643,12 +643,12 @@ function(e) {
   event.target.value = "";
 
 };
-```
+
 
 reader.onerror =
 function() {
 
-```
+
   alert(
     "Could not read the selected file."
   );
@@ -656,7 +656,7 @@ function() {
   event.target.value = "";
 
 };
-```
+
 
 reader.readAsText(
 file
@@ -701,7 +701,7 @@ if (
 typeof savedData[key] !== "object"
 ) {
 
-```
+
 savedData[key] = {
 
   status: "not",
@@ -712,7 +712,7 @@ savedData[key] = {
   notes: ""
 
 };
-```
+
 
 }
 
@@ -774,11 +774,11 @@ dashboard.addEventListener(
 "click",
 function() {
 
-```
+
   showDashboard();
 
 }
-```
+
 
 );
 
@@ -789,7 +789,7 @@ dashboard
 categories.forEach(
 function(category) {
 
-```
+
   const button =
     document.createElement(
       "button"
@@ -823,7 +823,7 @@ function(category) {
   );
 
 }
-```
+
 
 );
 
@@ -850,19 +850,19 @@ document.getElementById(
 
 if (dashboardPage) {
 
-```
+
 dashboardPage.style.display =
   "block";
-```
+
 
 }
 
 if (categoryPage) {
 
-```
+
 categoryPage.style.display =
   "none";
-```
+
 
 }
 
@@ -892,7 +892,7 @@ let progress = 0;
 categories.forEach(
 function(category) {
 
-```
+
   category.items.forEach(
     function(item) {
 
@@ -924,7 +924,7 @@ function(category) {
   );
 
 }
-```
+
 
 );
 
@@ -967,55 +967,55 @@ document.getElementById(
 
 if (totalCount) {
 
-```
+
 totalCount.textContent =
   total;
-```
+
 
 }
 
 if (doneCount) {
 
-```
+
 doneCount.textContent =
   done;
-```
+
 
 }
 
 if (progressCount) {
 
-```
+
 progressCount.textContent =
   progress;
-```
+
 
 }
 
 if (categoryCount) {
 
-```
+
 categoryCount.textContent =
   categories.length;
-```
+
 
 }
 
 if (overallPercent) {
 
-```
+
 overallPercent.textContent =
   percent + "%";
-```
+
 
 }
 
 if (overallFill) {
 
-```
+
 overallFill.style.width =
   percent + "%";
-```
+
 
 }
 
@@ -1033,7 +1033,7 @@ grid.innerHTML = "";
 categories.forEach(
 function(category) {
 
-```
+
   const stats =
     getCategoryStats(
       category
@@ -1090,7 +1090,7 @@ function(category) {
   );
 
 }
-```
+
 
 );
 
@@ -1106,12 +1106,12 @@ const category =
 categories.find(
 function(c) {
 
-```
+
     return c.id === id;
 
   }
 );
-```
+
 
 if (!category) {
 return;
@@ -1132,19 +1132,19 @@ document.getElementById(
 
 if (dashboardPage) {
 
-```
+
 dashboardPage.style.display =
   "none";
-```
+
 
 }
 
 if (categoryPage) {
 
-```
+
 categoryPage.style.display =
   "block";
-```
+
 
 }
 
@@ -1155,12 +1155,12 @@ document.getElementById(
 
 if (categoryTitle) {
 
-```
+
 categoryTitle.textContent =
   category.icon +
   " " +
   category.name;
-```
+
 
 }
 
@@ -1176,17 +1176,17 @@ document.getElementById(
 
 if (search) {
 
-```
+
 search.value = "";
-```
+
 
 }
 
 if (filter) {
 
-```
+
 filter.value = "all";
-```
+
 
 }
 
@@ -1217,7 +1217,7 @@ let done = 0;
 category.items.forEach(
 function(item) {
 
-```
+
   const data =
     getItem(
       category.id,
@@ -1233,7 +1233,7 @@ function(item) {
   }
 
 }
-```
+
 
 );
 
@@ -1262,12 +1262,12 @@ const category =
 categories.find(
 function(c) {
 
-```
+
     return c.id === currentCategory;
 
   }
 );
-```
+
 
 if (!category) {
 return;
@@ -1290,22 +1290,22 @@ document.getElementById(
 
 if (categoryPercent) {
 
-```
+
 categoryPercent.textContent =
   stats.percent + "%";
-```
+
 
 }
 
 if (categoryProgressText) {
 
-```
+
 categoryProgressText.textContent =
   stats.done +
   " / " +
   stats.total +
   " completed";
-```
+
 
 }
 
@@ -1347,7 +1347,7 @@ let visible = 0;
 category.items.forEach(
 function(item) {
 
-```
+
   const data =
     getItem(
       category.id,
@@ -1511,7 +1511,7 @@ function(item) {
   );
 
 }
-```
+
 
 );
 
@@ -1522,12 +1522,12 @@ document.getElementById(
 
 if (emptyMessage) {
 
-```
+
 emptyMessage.style.display =
   visible > 0
     ? "none"
     : "block";
-```
+
 
 }
 
@@ -1551,12 +1551,12 @@ const category =
 categories.find(
 function(c) {
 
-```
+
     return c.id === categoryId;
 
   }
 );
-```
+
 
 if (!category) {
 return;
@@ -1605,64 +1605,64 @@ document.getElementById(
 
 if (modalCategory) {
 
-```
+
 modalCategory.textContent =
   category.name;
-```
+
 
 }
 
 if (modalTitle) {
 
-```
+
 modalTitle.textContent =
   item;
-```
+
 
 }
 
 if (vendorInput) {
 
-```
+
 vendorInput.value =
   data.vendor;
-```
+
 
 }
 
 if (priceInput) {
 
-```
+
 priceInput.value =
   data.price;
-```
+
 
 }
 
 if (deadlineInput) {
 
-```
+
 deadlineInput.value =
   data.deadline;
-```
+
 
 }
 
 if (linkInput) {
 
-```
+
 linkInput.value =
   data.link;
-```
+
 
 }
 
 if (notesInput) {
 
-```
+
 notesInput.value =
   data.notes;
-```
+
 
 }
 
@@ -1678,11 +1678,11 @@ document.getElementById(
 
 if (overlay) {
 
-```
+
 overlay.classList.add(
   "active"
 );
-```
+
 
 }
 
@@ -1701,11 +1701,11 @@ document.getElementById(
 
 if (overlay) {
 
-```
+
 overlay.classList.remove(
   "active"
 );
-```
+
 
 }
 
@@ -1752,34 +1752,34 @@ document.getElementById(
 
 if (notButton) {
 
-```
+
 notButton.classList.toggle(
   "active",
   modalStatus === "not"
 );
-```
+
 
 }
 
 if (progressButton) {
 
-```
+
 progressButton.classList.toggle(
   "active",
   modalStatus === "progress"
 );
-```
+
 
 }
 
 if (doneButton) {
 
-```
+
 doneButton.classList.toggle(
   "active",
   modalStatus === "done"
 );
-```
+
 
 }
 
@@ -1862,17 +1862,17 @@ if (
 currentCategory === "dashboard"
 ) {
 
-```
+
 showDashboard();
-```
+
 
 } else {
 
-```
+
 showCategory(
   currentCategory
 );
-```
+
 
 }
 
@@ -1920,17 +1920,17 @@ if (
 currentCategory === "dashboard"
 ) {
 
-```
+
 showDashboard();
-```
+
 
 } else {
 
-```
+
 showCategory(
   currentCategory
 );
-```
+
 
 }
 
