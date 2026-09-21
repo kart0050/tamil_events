@@ -156,6 +156,8 @@ textarea:focus-visible {
   margin: auto;
 
   padding: 62px 0 58px;
+
+  text-align: center;
 }
 
 .eyebrow {
@@ -185,7 +187,7 @@ textarea:focus-visible {
 .hero p {
   max-width: 580px;
 
-  margin: 14px 0 0;
+  margin: 14px auto 0;
 
   color: rgba(255, 255, 255, 0.8);
 
