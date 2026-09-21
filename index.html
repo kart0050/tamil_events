@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -20,6 +19,7 @@
        ========================================================= -->
 
   <header class="hero">
+
     <div class="hero-inner">
 
       <div class="eyebrow">
@@ -36,6 +36,7 @@
       </p>
 
     </div>
+
   </header>
 
 
@@ -90,16 +91,30 @@
             id="exportButton"
             type="button"
           >
-            📥 Export data
+            <span>📥</span>
+            Export
           </button>
+
 
           <button
             class="import-button"
             id="importButton"
             type="button"
           >
-            📤 Import data
+            <span>📤</span>
+            Import
           </button>
+
+
+          <button
+            class="reset-button"
+            id="resetButton"
+            type="button"
+          >
+            <span>↻</span>
+            Reset
+          </button>
+
 
           <input
             type="file"
@@ -219,6 +234,7 @@
 
         </div>
 
+
         <div class="progress-bar">
 
           <div
@@ -232,40 +248,19 @@
 
 
       <!-- =====================================================
-           MANAGE PLANNER
+           QUICK ACTIONS
            ===================================================== -->
 
-      <div class="management-card">
+      <div class="quick-actions">
 
-        <div class="management-header">
-
-          <div>
-
-            <h2>
-              Manage planner
-            </h2>
-
-            <p>
-              Add and manage your wedding categories.
-            </p>
-
-          </div>
-
-          <button
-            class="primary-button"
-            id="addCategoryButton"
-            type="button"
-          >
-            + Add category
-          </button>
-
-        </div>
-
-
-        <div
-          class="management-list"
-          id="managementList"
-        ></div>
+        <button
+          class="primary-button"
+          id="addCategoryButton"
+          type="button"
+        >
+          <span>＋</span>
+          Add category
+        </button>
 
       </div>
 
@@ -295,6 +290,7 @@
         class="category-summary-grid"
         id="summaryGrid"
       ></div>
+
 
     </section>
 
@@ -337,7 +333,7 @@
 
 
       <!-- =====================================================
-           CATEGORY TOOLBAR
+           CATEGORY ACTIONS
            ===================================================== -->
 
       <div class="category-toolbar">
@@ -356,16 +352,7 @@
           id="addItemButton"
           type="button"
         >
-          + Add item
-        </button>
-
-
-        <button
-          class="secondary-button"
-          id="manageCurrentCategoryButton"
-          type="button"
-        >
-          ⚙ Manage category
+          ＋ Add item
         </button>
 
       </div>
@@ -381,6 +368,7 @@
           id="itemSearch"
           type="search"
           placeholder="🔎 Search within this category..."
+          autocomplete="off"
         >
 
 
@@ -423,6 +411,10 @@
         style="display:none;"
       >
 
+        <div class="empty-icon">
+          🔎
+        </div>
+
         <h3>
           No items found
         </h3>
@@ -432,53 +424,6 @@
         </p>
 
       </div>
-
-    </section>
-
-
-    <!-- =======================================================
-         MANAGE PAGE
-         ======================================================= -->
-
-    <section
-      id="managePage"
-      style="display:none;"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Manage planner
-          </h2>
-
-          <p>
-            View your wedding categories and items.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div class="category-toolbar">
-
-        <button
-          class="secondary-button"
-          id="manageBackButton"
-          type="button"
-        >
-          ← Dashboard
-        </button>
-
-      </div>
-
-
-      <div
-        class="management-list"
-        id="manageCategories"
-      ></div>
 
     </section>
 
@@ -503,7 +448,12 @@
     id="overlay"
   >
 
-    <div class="modal">
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+    >
 
       <div class="modal-header">
 
@@ -532,7 +482,6 @@
 
 
       <div class="modal-body">
-
 
         <div class="form-group">
 
@@ -647,6 +596,51 @@
         </div>
 
 
+        <!-- ITEM MANAGEMENT -->
+
+        <div class="item-management">
+
+          <div>
+
+            <strong>
+              Item visibility
+            </strong>
+
+            <p id="itemManagementDescription">
+              Disable this item if you do not want it shown in the planner.
+            </p>
+
+          </div>
+
+
+          <button
+            class="disable-item-button"
+            id="disableItemButton"
+            type="button"
+          >
+            Disable item
+          </button>
+
+        </div>
+
+
+        <div
+          class="custom-item-delete"
+          id="customItemDeleteArea"
+          style="display:none;"
+        >
+
+          <button
+            class="delete-custom-item-button"
+            id="deleteCustomItemButton"
+            type="button"
+          >
+            🗑 Delete custom item
+          </button>
+
+        </div>
+
+
         <div class="modal-actions">
 
           <button
@@ -676,7 +670,7 @@
 
 
   <!-- =========================================================
-       MANAGEMENT MODAL
+       ADD / EDIT MODAL
        ========================================================= -->
 
   <div
@@ -684,14 +678,19 @@
     id="managementOverlay"
   >
 
-    <div class="modal management-modal">
+    <div
+      class="modal management-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="managementModalTitle"
+    >
 
       <div class="modal-header">
 
         <div>
 
           <div class="modal-category">
-            PLANNER MANAGEMENT
+            WEDDING PLANNER
           </div>
 
           <h2 id="managementModalTitle">
@@ -715,17 +714,16 @@
 
       <div class="modal-body">
 
-
         <div class="form-group">
 
           <label for="managementNameInput">
-            Category name
+            Name
           </label>
 
           <input
             id="managementNameInput"
             type="text"
-            placeholder="e.g. Flowers"
+            placeholder="Enter a name..."
             autocomplete="off"
           >
 
@@ -745,11 +743,19 @@
             id="managementIconInput"
             type="text"
             maxlength="4"
-            placeholder="🌸"
+            placeholder="💍"
             autocomplete="off"
           >
 
         </div>
+
+
+        <p
+          class="management-help"
+          id="managementHelp"
+        >
+          Create a new category for your wedding planner.
+        </p>
 
 
         <div class="management-modal-actions">
@@ -781,8 +787,16 @@
 
 
   <!-- =========================================================
-       SCRIPT
+       TOAST
        ========================================================= -->
+
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
 
   <script src="./script.js"></script>
 
