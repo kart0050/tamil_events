@@ -11,13 +11,13 @@ const STORAGE_KEY = "tamilWeddingPlanner_v6";
 const defaultCategories = [
   {
     id: "guests",
-    name: "Gæster",
+    name: "Guests",
     icon: "👥",
     items: ["Palaharam (Goodie bag)", "Hotels"]
   },
   {
-    id: "toej",
-    name: "Tøj",
+    id: "clothes",
+    name: "Clothes",
     icon: "👗",
     items: [
       "Manavarai saree",
@@ -235,9 +235,9 @@ const defaultCategories = [
   },
   {
     id: "games",
-    name: "Games (Yndlingsting)",
+    name: "Games",
     icon: "🎲",
-    items: ["Palaharam (Goodie bag)"]
+    items: ["Palaharam (Goodie bag)", "Yndlingsting"]
   },
   {
     id: "speech",
