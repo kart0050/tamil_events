@@ -123,8 +123,8 @@ const defaultCategories = [
     items: ["Herning Maalai"]
   },
   {
-    id: "food",
-    name: "Food",
+    id: "catering",
+    name: "Catering (Food)",
     icon: "🍛",
     items: [
       "Poovi Mama Horsens",
