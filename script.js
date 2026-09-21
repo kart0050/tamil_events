@@ -141,7 +141,7 @@ const defaultCategories = [
   },
   {
     id: "cake",
-    name: "Bryllupskage",
+    name: "Wedding Cake",
     icon: "🎂",
     items: ["Wedding Cake", "Lighter + Knife"]
   },
