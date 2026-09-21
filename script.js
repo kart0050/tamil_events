@@ -1,16 +1,18 @@
 /* ============================================================
    WEDDING PLANNER
-============================================================ */
+   ============================================================ */
 
 /* ============================================================
-   CATEGORIES
-============================================================ */
+   DEFAULT CATEGORIES
+   ============================================================ */
 
-const categories = [
+const defaultCategories = [
+
   {
     id: "guests",
     name: "Gæster",
     icon: "👥",
+    enabled: true,
     items: [
       "Palaharam (Goodie bag)",
       "Hotels"
@@ -21,6 +23,7 @@ const categories = [
     id: "toej",
     name: "Tøj",
     icon: "👗",
+    enabled: true,
     items: [
       "Manavarai saree",
       "Koorai saree (Rød)",
@@ -36,6 +39,7 @@ const categories = [
     id: "reception",
     name: "Reception Songs",
     icon: "🎵",
+    enabled: true,
     items: [
       "Entrance",
       "Pardans",
@@ -49,6 +53,7 @@ const categories = [
     id: "sign-card",
     name: "Wedding Sign + Card",
     icon: "💌",
+    enabled: true,
     items: [
       "Aviraa Creations",
       "Ponthayadesigns",
@@ -60,6 +65,7 @@ const categories = [
     id: "kovil-decoration",
     name: "Decoration Kovil",
     icon: "🛕",
+    enabled: true,
     items: [
       "Kopuramevents.fr"
     ]
@@ -69,6 +75,7 @@ const categories = [
     id: "accessories",
     name: "Accessories",
     icon: "✨",
+    enabled: true,
     items: [
       "360 Booth",
       "Bridal Corner Setup"
@@ -79,6 +86,7 @@ const categories = [
     id: "henna",
     name: "Henna Fest",
     icon: "🌿",
+    enabled: true,
     items: [
       "Uduupu ?",
       "Mehendi (rosedecoration.dk)",
@@ -92,6 +100,7 @@ const categories = [
     id: "kalyaanam",
     name: "Kalyaanam Veedu",
     icon: "🏠",
+    enabled: true,
     items: [
       "Herning Kovil",
       "Civil Weds (Ring)",
@@ -105,6 +114,7 @@ const categories = [
     id: "makeup",
     name: "Makeup + Hair",
     icon: "💄",
+    enabled: true,
     items: [
       "Janani",
       "abinii_makeupartist",
@@ -116,6 +126,7 @@ const categories = [
     id: "jewellery",
     name: "Jewellery",
     icon: "💎",
+    enabled: true,
     items: [
       "Thaali (15 Pound)",
       "Øreringe",
@@ -134,6 +145,7 @@ const categories = [
     id: "melam",
     name: "Melam",
     icon: "🥁",
+    enabled: true,
     items: [
       "Chinna Mams",
       "Mami ?"
@@ -144,6 +156,7 @@ const categories = [
     id: "maalai",
     name: "Maalai",
     icon: "🌸",
+    enabled: true,
     items: [
       "Herning Maalai"
     ]
@@ -153,6 +166,7 @@ const categories = [
     id: "food",
     name: "Food",
     icon: "🍛",
+    enabled: true,
     items: [
       "Poovi Mama Horsens",
       "Kammali Randers",
@@ -167,6 +181,7 @@ const categories = [
     id: "cake",
     name: "Bryllupskage",
     icon: "🎂",
+    enabled: true,
     items: [
       "Wedding Cake",
       "Lighter + Knife"
@@ -177,6 +192,7 @@ const categories = [
     id: "preshoot",
     name: "Preshoot",
     icon: "📸",
+    enabled: true,
     items: [
       "Views of Nivi",
       "Sana",
@@ -191,6 +207,7 @@ const categories = [
     id: "photo-video",
     name: "Photo + Video",
     icon: "📷",
+    enabled: true,
     items: [
       "Visual Eyes",
       "Vividmemoir.dk",
@@ -202,6 +219,7 @@ const categories = [
     id: "dj",
     name: "DJ",
     icon: "🎧",
+    enabled: true,
     items: [
       "Playloud",
       "Keeth Entertainment",
@@ -215,6 +233,7 @@ const categories = [
     id: "hall",
     name: "Hall",
     icon: "🏛️",
+    enabled: true,
     items: [
       "Sana Palace RA",
       "E-Plaza AA",
@@ -233,6 +252,7 @@ const categories = [
     id: "entertainment",
     name: "Entertainment",
     icon: "💃",
+    enabled: true,
     items: [
       "Pardans + Cinema Paattu",
       "Bollywood Dance",
@@ -252,6 +272,7 @@ const categories = [
     id: "operator",
     name: "Operator",
     icon: "🎛️",
+    enabled: true,
     items: [
       "Lighting",
       "Projector"
@@ -262,6 +283,7 @@ const categories = [
     id: "host",
     name: "Host",
     icon: "🎤",
+    enabled: true,
     items: [
       "Vinu",
       "Mams",
@@ -275,6 +297,7 @@ const categories = [
     id: "games",
     name: "Games (Yndlingsting)",
     icon: "🎲",
+    enabled: true,
     items: [
       "Palaharam (Goodie bag)"
     ]
@@ -284,357 +307,672 @@ const categories = [
     id: "speech",
     name: "Speech",
     icon: "🎤",
+    enabled: true,
     items: [
       "Speech planning",
       "Speakers",
       "Order of speeches"
     ]
   }
+
 ];
 
 /* ============================================================
    STORAGE
-============================================================ */
+   ============================================================ */
 
 const STORAGE_KEY = "tamilWeddingPlanner_v5";
 
+let categories = [];
 let savedData = {};
+
 let currentCategory = "dashboard";
 let currentItem = null;
 let modalStatus = "not";
 
+let managementMode = null;
+let managementCategoryId = null;
+let managementItemIndex = null;
+
 /* ============================================================
    HELPERS
-============================================================ */
+   ============================================================ */
+
+function generateId(prefix) {
+
+  return (
+    prefix +
+    "-" +
+    Date.now().toString(36) +
+    "-" +
+    Math.random().toString(36).slice(2, 8)
+  );
+
+}
 
 function escapeHTML(value) {
-  return String(value ?? "")
+
+  return String(value)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+
 }
 
 function formatDate(value) {
+
   if (!value) {
     return "";
   }
 
-  const parts = String(value).split("-");
+  const date = new Date(value + "T00:00:00");
 
-  if (parts.length !== 3) {
+  if (Number.isNaN(date.getTime())) {
     return value;
   }
 
-  const year = parts[0];
-  const month = parts[1];
-  const day = parts[2];
+  return date.toLocaleDateString(
+    undefined,
+    {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }
+  );
 
-  return `${day}/${month}/${year}`;
 }
 
-function createEmptyItem() {
-  return {
-    status: "not",
-    vendor: "",
-    price: "",
-    deadline: "",
-    link: "",
-    notes: ""
-  };
+/* ============================================================
+   NORMALIZE CATEGORIES
+   ============================================================ */
+
+function normalizeCategories(input) {
+
+  if (!Array.isArray(input)) {
+    return JSON.parse(
+      JSON.stringify(defaultCategories)
+    );
+  }
+
+  return input
+    .filter(function(category) {
+
+      return (
+        category &&
+        typeof category === "object" &&
+        typeof category.name === "string"
+      );
+
+    })
+    .map(function(category) {
+
+      return {
+
+        id:
+          typeof category.id === "string"
+            ? category.id
+            : generateId("category"),
+
+        name:
+          category.name.trim() ||
+          "Unnamed category",
+
+        icon:
+          typeof category.icon === "string" &&
+          category.icon.trim()
+            ? category.icon.trim()
+            : "📁",
+
+        enabled:
+          category.enabled !== false,
+
+        items:
+          Array.isArray(category.items)
+            ? category.items
+                .map(function(item) {
+
+                  if (
+                    typeof item === "string"
+                  ) {
+
+                    return {
+                      name: item,
+                      enabled: true
+                    };
+
+                  }
+
+                  if (
+                    item &&
+                    typeof item === "object" &&
+                    typeof item.name === "string"
+                  ) {
+
+                    return {
+                      name: item.name,
+                      enabled:
+                        item.enabled !== false
+                    };
+
+                  }
+
+                  return null;
+
+                })
+                .filter(Boolean)
+            : []
+
+      };
+
+    });
+
 }
 
 /* ============================================================
    LOAD DATA
-============================================================ */
+   ============================================================ */
 
 function loadData() {
+
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+
+    const stored =
+      localStorage.getItem(STORAGE_KEY);
 
     if (!stored) {
+
+      categories =
+        normalizeCategories(
+          defaultCategories
+        );
+
       savedData = {};
+
+      saveData();
+
       return;
+
     }
 
-    const parsed = JSON.parse(stored);
+    const parsed =
+      JSON.parse(stored);
 
     if (
       parsed &&
       typeof parsed === "object" &&
       !Array.isArray(parsed)
     ) {
-      savedData = parsed;
+
+      if (Array.isArray(parsed.categories)) {
+
+        categories =
+          normalizeCategories(
+            parsed.categories
+          );
+
+        savedData =
+          parsed.items &&
+          typeof parsed.items === "object"
+            ? parsed.items
+            : {};
+
+      } else {
+
+        /*
+          Compatibility with the previous version.
+          Old categories are restored and old saved
+          item information is kept.
+        */
+
+        categories =
+          normalizeCategories(
+            defaultCategories
+          );
+
+        savedData =
+          parsed;
+
+      }
+
     } else {
+
+      categories =
+        normalizeCategories(
+          defaultCategories
+        );
+
       savedData = {};
+
     }
 
   } catch (error) {
-    console.error("Could not load saved data:", error);
+
+    console.error(
+      "Could not load saved data:",
+      error
+    );
+
+    categories =
+      normalizeCategories(
+        defaultCategories
+      );
+
     savedData = {};
+
   }
+
 }
 
 /* ============================================================
    SAVE DATA
-============================================================ */
+   ============================================================ */
 
 function saveData() {
+
   try {
+
+    const payload = {
+
+      version: 5,
+
+      categories: categories,
+
+      items: savedData
+
+    };
+
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(savedData)
+      JSON.stringify(payload)
     );
 
     return true;
 
   } catch (error) {
-    console.error("Could not save data:", error);
+
+    console.error(
+      "Could not save data:",
+      error
+    );
 
     alert(
       "Your data could not be saved in this browser."
     );
 
     return false;
+
   }
+
 }
 
 /* ============================================================
-   EXPORT DATA
-============================================================ */
+   EXPORT
+   ============================================================ */
 
 function exportData() {
+
   try {
+
     saveData();
 
     const backup = {
+
       app: "Tamil Wedding Planner",
-      version: 2,
-      exportedAt: new Date().toISOString(),
-      data: savedData
+
+      version: 5,
+
+      exportedAt:
+        new Date().toISOString(),
+
+      categories:
+        categories,
+
+      data:
+        savedData
+
     };
 
-    const json = JSON.stringify(
-      backup,
-      null,
-      2
-    );
+    const json =
+      JSON.stringify(
+        backup,
+        null,
+        2
+      );
 
-    const blob = new Blob(
-      [json],
-      {
-        type: "application/json"
-      }
-    );
+    const blob =
+      new Blob(
+        [json],
+        {
+          type: "application/json"
+        }
+      );
 
-    const url = URL.createObjectURL(blob);
+    const url =
+      URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
+    const link =
+      document.createElement("a");
 
     link.href = url;
 
     const now = new Date();
 
-    const year = now.getFullYear();
+    const year =
+      now.getFullYear();
 
-    const month = String(
-      now.getMonth() + 1
-    ).padStart(2, "0");
+    const month =
+      String(
+        now.getMonth() + 1
+      ).padStart(2, "0");
 
-    const day = String(
-      now.getDate()
-    ).padStart(2, "0");
+    const day =
+      String(
+        now.getDate()
+      ).padStart(2, "0");
 
     link.download =
-      `wedding-planner-backup-${year}-${month}-${day}.json`;
+      "wedding-planner-backup-" +
+      year +
+      "-" +
+      month +
+      "-" +
+      day +
+      ".json";
 
     document.body.appendChild(link);
 
     link.click();
 
-    link.remove();
+    document.body.removeChild(link);
 
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
+    setTimeout(
+      function() {
+
+        URL.revokeObjectURL(url);
+
+      },
+      1000
+    );
 
   } catch (error) {
-    console.error("Export failed:", error);
+
+    console.error(
+      "Export failed:",
+      error
+    );
 
     alert(
       "Sorry, the wedding planner data could not be exported."
     );
+
   }
+
 }
 
 /* ============================================================
-   IMPORT DATA
-============================================================ */
+   IMPORT
+   ============================================================ */
 
 function importData(event) {
-  const input = event.target;
-  const file = input.files && input.files[0];
+
+  const file =
+    event.target.files[0];
 
   if (!file) {
     return;
   }
 
-  if (
-    !file.name
-      .toLowerCase()
-      .endsWith(".json")
-  ) {
-    alert(
-      "Please select a .json wedding planner backup file."
-    );
+  const reader =
+    new FileReader();
 
-    input.value = "";
-    return;
-  }
+  reader.onload =
+    function(e) {
 
-  const reader = new FileReader();
+      try {
 
-  reader.onload = function(e) {
-    try {
-      const imported = JSON.parse(
-        e.target.result
-      );
+        const imported =
+          JSON.parse(
+            e.target.result
+          );
 
-      let importedData = null;
+        let importedCategories = null;
+        let importedItems = null;
 
-      if (
-        imported &&
-        imported.data &&
-        typeof imported.data === "object" &&
-        !Array.isArray(imported.data)
-      ) {
-        importedData = imported.data;
-      } else if (
-        imported &&
-        typeof imported === "object" &&
-        !Array.isArray(imported)
-      ) {
-        importedData = imported;
-      }
+        if (
+          imported &&
+          Array.isArray(
+            imported.categories
+          )
+        ) {
 
-      if (
-        !importedData ||
-        typeof importedData !== "object" ||
-        Array.isArray(importedData)
-      ) {
-        throw new Error("Invalid backup format");
-      }
+          importedCategories =
+            imported.categories;
 
-      const confirmed = confirm(
-        "Import this wedding planner backup?\n\n" +
-        "Your current planner data will be replaced by the backup."
-      );
+          importedItems =
+            imported.data &&
+            typeof imported.data === "object"
+              ? imported.data
+              : imported.items || {};
 
-      if (!confirmed) {
-        input.value = "";
-        return;
-      }
+        } else if (
+          imported &&
+          imported.data &&
+          typeof imported.data === "object" &&
+          !Array.isArray(imported.data)
+        ) {
 
-      savedData = importedData;
+          /*
+            Compatibility with the old backup format.
+          */
 
-      if (!saveData()) {
-        input.value = "";
-        return;
-      }
+          importedCategories =
+            defaultCategories;
 
-      if (currentCategory === "dashboard") {
+          importedItems =
+            imported.data;
+
+        } else if (
+          imported &&
+          typeof imported === "object" &&
+          !Array.isArray(imported)
+        ) {
+
+          importedCategories =
+            defaultCategories;
+
+          importedItems =
+            imported;
+
+        }
+
+        if (
+          !Array.isArray(
+            importedCategories
+          ) ||
+          !importedItems ||
+          typeof importedItems !== "object"
+        ) {
+
+          throw new Error(
+            "Invalid backup format"
+          );
+
+        }
+
+        const confirmed =
+          confirm(
+            "Import this wedding planner backup?\n\n" +
+            "Your current planner data will be replaced by the backup."
+          );
+
+        if (!confirmed) {
+
+          event.target.value = "";
+
+          return;
+
+        }
+
+        categories =
+          normalizeCategories(
+            importedCategories
+          );
+
+        savedData =
+          importedItems;
+
+        const saved =
+          saveData();
+
+        if (!saved) {
+
+          event.target.value = "";
+
+          return;
+
+        }
+
+        currentCategory =
+          "dashboard";
+
         showDashboard();
-      } else {
-        showCategory(currentCategory);
+
+        alert(
+          "Wedding planner data imported successfully!"
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Import failed:",
+          error
+        );
+
+        alert(
+          "This file is not a valid wedding planner backup."
+        );
+
       }
 
+      event.target.value = "";
+
+    };
+
+  reader.onerror =
+    function() {
+
       alert(
-        "Wedding planner data imported successfully! ❤️"
+        "Could not read the selected file."
       );
 
-    } catch (error) {
-      console.error("Import failed:", error);
+      event.target.value = "";
 
-      alert(
-        "This file is not a valid wedding planner backup."
-      );
-
-    } finally {
-      input.value = "";
-    }
-  };
-
-  reader.onerror = function() {
-    alert(
-      "Could not read the selected file."
-    );
-
-    input.value = "";
-  };
+    };
 
   reader.readAsText(file);
+
 }
 
 /* ============================================================
    ITEM KEY
-============================================================ */
+   ============================================================ */
 
-function itemKey(categoryId, item) {
-  return `${categoryId}::${item}`;
-}
+function itemKey(
+  categoryId,
+  item
+) {
 
-/* ============================================================
-   GET ITEM
-============================================================ */
-
-function getItem(categoryId, item) {
-  const key = itemKey(
-    categoryId,
+  return (
+    categoryId +
+    "::" +
     item
   );
 
+}
+
+/* ============================================================
+   GET ITEM DATA
+   ============================================================ */
+
+function getItem(
+  categoryId,
+  item
+) {
+
+  const key =
+    itemKey(
+      categoryId,
+      item
+    );
+
   if (
     !savedData[key] ||
-    typeof savedData[key] !== "object" ||
-    Array.isArray(savedData[key])
+    typeof savedData[key] !== "object"
   ) {
-    savedData[key] = createEmptyItem();
+
+    savedData[key] = {
+
+      status: "not",
+      vendor: "",
+      price: "",
+      deadline: "",
+      link: "",
+      notes: ""
+
+    };
+
   }
 
-  const data = savedData[key];
+  savedData[key].status =
+    savedData[key].status || "not";
 
-  data.status =
-    ["not", "progress", "done"].includes(data.status)
-      ? data.status
-      : "not";
+  savedData[key].vendor =
+    savedData[key].vendor || "";
 
-  data.vendor =
-    String(data.vendor || "");
+  savedData[key].price =
+    savedData[key].price || "";
 
-  data.price =
-    String(data.price || "");
+  savedData[key].deadline =
+    savedData[key].deadline || "";
 
-  data.deadline =
-    String(data.deadline || "");
+  savedData[key].link =
+    savedData[key].link || "";
 
-  data.link =
-    String(data.link || "");
+  savedData[key].notes =
+    savedData[key].notes || "";
 
-  data.notes =
-    String(data.notes || "");
+  return savedData[key];
 
-  return data;
+}
+
+/* ============================================================
+   ACTIVE CATEGORIES
+   ============================================================ */
+
+function getEnabledCategories() {
+
+  return categories.filter(
+    function(category) {
+
+      return category.enabled !== false;
+
+    }
+  );
+
 }
 
 /* ============================================================
    NAVIGATION
-============================================================ */
+   ============================================================ */
 
 function buildNavigation() {
-  const nav = document.getElementById(
-    "navigation"
-  );
+
+  const nav =
+    document.getElementById(
+      "navigation"
+    );
 
   if (!nav) {
     return;
@@ -642,12 +980,14 @@ function buildNavigation() {
 
   nav.innerHTML = "";
 
-  const dashboard = document.createElement(
-    "button"
-  );
+  const dashboard =
+    document.createElement("button");
 
   dashboard.type = "button";
-  dashboard.textContent = "🏠 Dashboard";
+
+  dashboard.textContent =
+    "🏠 Dashboard";
+
   dashboard.className =
     currentCategory === "dashboard"
       ? "active"
@@ -660,38 +1000,50 @@ function buildNavigation() {
 
   nav.appendChild(dashboard);
 
-  categories.forEach(function(category) {
-    const button = document.createElement(
-      "button"
-    );
+  getEnabledCategories().forEach(
+    function(category) {
 
-    button.type = "button";
+      const button =
+        document.createElement("button");
 
-    button.textContent =
-      `${category.icon} ${category.name}`;
+      button.type = "button";
 
-    button.className =
-      currentCategory === category.id
-        ? "active"
-        : "";
+      button.textContent =
+        category.icon +
+        " " +
+        category.name;
 
-    button.addEventListener(
-      "click",
-      function() {
-        showCategory(category.id);
-      }
-    );
+      button.className =
+        currentCategory === category.id
+          ? "active"
+          : "";
 
-    nav.appendChild(button);
-  });
+      button.addEventListener(
+        "click",
+        function() {
+
+          showCategory(
+            category.id
+          );
+
+        }
+      );
+
+      nav.appendChild(button);
+
+    }
+  );
+
 }
 
 /* ============================================================
    DASHBOARD
-============================================================ */
+   ============================================================ */
 
 function showDashboard() {
-  currentCategory = "dashboard";
+
+  currentCategory =
+    "dashboard";
 
   const dashboardPage =
     document.getElementById(
@@ -704,72 +1056,110 @@ function showDashboard() {
     );
 
   if (dashboardPage) {
-    dashboardPage.style.display = "block";
+    dashboardPage.style.display =
+      "block";
   }
 
   if (categoryPage) {
-    categoryPage.style.display = "none";
+    categoryPage.style.display =
+      "none";
   }
 
   buildNavigation();
+
   renderDashboard();
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
 }
 
 /* ============================================================
    RENDER DASHBOARD
-============================================================ */
+   ============================================================ */
 
 function renderDashboard() {
+
   let total = 0;
   let done = 0;
   let progress = 0;
 
-  categories.forEach(function(category) {
-    category.items.forEach(function(item) {
-      total++;
+  getEnabledCategories().forEach(
+    function(category) {
 
-      const data = getItem(
-        category.id,
-        item
+      category.items.forEach(
+        function(item) {
+
+          if (
+            item.enabled === false
+          ) {
+            return;
+          }
+
+          total++;
+
+          const data =
+            getItem(
+              category.id,
+              item.name
+            );
+
+          if (
+            data.status === "done"
+          ) {
+            done++;
+          }
+
+          if (
+            data.status === "progress"
+          ) {
+            progress++;
+          }
+
+        }
       );
 
-      if (data.status === "done") {
-        done++;
-      }
-
-      if (data.status === "progress") {
-        progress++;
-      }
-    });
-  });
+    }
+  );
 
   const percent =
     total > 0
-      ? Math.round((done / total) * 100)
+      ? Math.round(
+          (done / total) * 100
+        )
       : 0;
 
   const totalCount =
-    document.getElementById("totalCount");
+    document.getElementById(
+      "totalCount"
+    );
 
   const doneCount =
-    document.getElementById("doneCount");
+    document.getElementById(
+      "doneCount"
+    );
 
   const progressCount =
-    document.getElementById("progressCount");
+    document.getElementById(
+      "progressCount"
+    );
 
   const categoryCount =
-    document.getElementById("categoryCount");
+    document.getElementById(
+      "categoryCount"
+    );
 
   const overallPercent =
-    document.getElementById("overallPercent");
+    document.getElementById(
+      "overallPercent"
+    );
 
   const overallFill =
-    document.getElementById("overallFill");
+    document.getElementById(
+      "overallFill"
+    );
 
   if (totalCount) {
     totalCount.textContent = total;
@@ -780,23 +1170,35 @@ function renderDashboard() {
   }
 
   if (progressCount) {
-    progressCount.textContent = progress;
+    progressCount.textContent =
+      progress;
   }
 
   if (categoryCount) {
     categoryCount.textContent =
-      categories.length;
+      getEnabledCategories().length;
   }
 
   if (overallPercent) {
     overallPercent.textContent =
-      `${percent}%`;
+      percent + "%";
   }
 
   if (overallFill) {
     overallFill.style.width =
-      `${percent}%`;
+      percent + "%";
   }
+
+  renderManagementList();
+  renderCategorySummary();
+
+}
+
+/* ============================================================
+   CATEGORY SUMMARY
+   ============================================================ */
+
+function renderCategorySummary() {
 
   const grid =
     document.getElementById(
@@ -809,72 +1211,87 @@ function renderDashboard() {
 
   grid.innerHTML = "";
 
-  categories.forEach(function(category) {
-    const stats =
-      getCategoryStats(category);
+  getEnabledCategories().forEach(
+    function(category) {
 
-    const card =
-      document.createElement("div");
+      const stats =
+        getCategoryStats(
+          category
+        );
 
-    card.className = "summary-card";
+      const card =
+        document.createElement("div");
 
-    card.setAttribute(
-      "role",
-      "button"
-    );
+      card.className =
+        "summary-card";
 
-    card.setAttribute(
-      "tabindex",
-      "0"
-    );
+      card.innerHTML =
 
-    card.innerHTML =
-      `<div class="summary-icon">${category.icon}</div>` +
-      `<h3>${escapeHTML(category.name)}</h3>` +
-      `<p>${stats.done} / ${stats.total} completed</p>` +
-      `<div class="summary-bar">` +
-        `<div style="width:${stats.percent}%"></div>` +
-      `</div>`;
+        '<div class="summary-icon">' +
+          escapeHTML(category.icon) +
+        "</div>" +
 
-    const openCategory = function() {
-      showCategory(category.id);
-    };
+        "<h3>" +
+          escapeHTML(category.name) +
+        "</h3>" +
 
-    card.addEventListener(
-      "click",
-      openCategory
-    );
+        "<p>" +
+          stats.done +
+          " / " +
+          stats.total +
+          " completed" +
+        "</p>" +
 
-    card.addEventListener(
-      "keydown",
-      function(event) {
-        if (
-          event.key === "Enter" ||
-          event.key === " "
-        ) {
-          event.preventDefault();
-          openCategory();
+        '<div class="summary-bar">' +
+
+          '<div style="width:' +
+            stats.percent +
+          '%"></div>' +
+
+        "</div>";
+
+      card.addEventListener(
+        "click",
+        function() {
+
+          showCategory(
+            category.id
+          );
+
         }
-      }
-    );
+      );
 
-    grid.appendChild(card);
-  });
+      grid.appendChild(card);
+
+    }
+  );
+
 }
 
 /* ============================================================
    SHOW CATEGORY
-============================================================ */
+   ============================================================ */
 
 function showCategory(id) {
-  const category = categories.find(
-    function(c) {
-      return c.id === id;
-    }
-  );
 
-  if (!category) {
+  const category =
+    categories.find(
+      function(c) {
+
+        return c.id === id;
+
+      }
+    );
+
+  if (
+    !category ||
+    category.enabled === false
+  ) {
+
+    showDashboard();
+
     return;
+
   }
 
   currentCategory = id;
@@ -890,11 +1307,13 @@ function showCategory(id) {
     );
 
   if (dashboardPage) {
-    dashboardPage.style.display = "none";
+    dashboardPage.style.display =
+      "none";
   }
 
   if (categoryPage) {
-    categoryPage.style.display = "block";
+    categoryPage.style.display =
+      "block";
   }
 
   const categoryTitle =
@@ -903,8 +1322,12 @@ function showCategory(id) {
     );
 
   if (categoryTitle) {
+
     categoryTitle.textContent =
-      `${category.icon} ${category.name}`;
+      category.icon +
+      " " +
+      category.name;
+
   }
 
   const search =
@@ -926,57 +1349,87 @@ function showCategory(id) {
   }
 
   buildNavigation();
+
   renderCategory();
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
 }
 
 /* ============================================================
    CATEGORY STATS
-============================================================ */
+   ============================================================ */
 
-function getCategoryStats(category) {
+function getCategoryStats(
+  category
+) {
+
+  const enabledItems =
+    category.items.filter(
+      function(item) {
+
+        return item.enabled !== false;
+
+      }
+    );
+
   const total =
-    category.items.length;
+    enabledItems.length;
 
   let done = 0;
 
-  category.items.forEach(function(item) {
-    const data = getItem(
-      category.id,
-      item
-    );
+  enabledItems.forEach(
+    function(item) {
 
-    if (data.status === "done") {
-      done++;
+      const data =
+        getItem(
+          category.id,
+          item.name
+        );
+
+      if (
+        data.status === "done"
+      ) {
+
+        done++;
+
+      }
+
     }
-  });
+  );
 
   const percent =
     total > 0
-      ? Math.round((done / total) * 100)
+      ? Math.round(
+          (done / total) * 100
+        )
       : 0;
 
   return {
-    total,
-    done,
-    percent
+    total: total,
+    done: done,
+    percent: percent
   };
+
 }
 
 /* ============================================================
    RENDER CATEGORY
-============================================================ */
+   ============================================================ */
 
 function renderCategory() {
-  const category = categories.find(
-    function(c) {
-      return c.id === currentCategory;
-    }
-  );
+
+  const category =
+    categories.find(
+      function(c) {
+
+        return c.id === currentCategory;
+
+      }
+    );
 
   if (!category) {
     return;
@@ -996,13 +1449,20 @@ function renderCategory() {
     );
 
   if (categoryPercent) {
+
     categoryPercent.textContent =
-      `${stats.percent}%`;
+      stats.percent + "%";
+
   }
 
   if (categoryProgressText) {
+
     categoryProgressText.textContent =
-      `${stats.done} / ${stats.total} completed`;
+      stats.done +
+      " / " +
+      stats.total +
+      " completed";
+
   }
 
   const searchInput =
@@ -1017,7 +1477,9 @@ function renderCategory() {
 
   const search =
     searchInput
-      ? searchInput.value.toLowerCase().trim()
+      ? searchInput.value
+          .toLowerCase()
+          .trim()
       : "";
 
   const status =
@@ -1038,123 +1500,169 @@ function renderCategory() {
 
   let visible = 0;
 
-  category.items.forEach(function(item) {
-    const data = getItem(
-      category.id,
-      item
-    );
+  category.items.forEach(
+    function(item) {
 
-    const itemText =
-      String(item).toLowerCase();
-
-    const vendorText =
-      String(data.vendor || "")
-        .toLowerCase();
-
-    const notesText =
-      String(data.notes || "")
-        .toLowerCase();
-
-    const priceText =
-      String(data.price || "")
-        .toLowerCase();
-
-    const matchesSearch =
-      !search ||
-      itemText.includes(search) ||
-      vendorText.includes(search) ||
-      notesText.includes(search) ||
-      priceText.includes(search);
-
-    const matchesStatus =
-      status === "all" ||
-      data.status === status;
-
-    if (
-      !matchesSearch ||
-      !matchesStatus
-    ) {
-      return;
-    }
-
-    visible++;
-
-    const card =
-      document.createElement("div");
-
-    card.className = "item-card";
-
-    if (data.status === "done") {
-      card.classList.add("done");
-    }
-
-    let statusText = "Not started";
-    let statusClass = "";
-
-    if (data.status === "progress") {
-      statusText = "In progress";
-      statusClass = " progress";
-    }
-
-    if (data.status === "done") {
-      statusText = "Completed";
-      statusClass = " done";
-    }
-
-    let vendorHTML =
-      "<p>Click to add details</p>";
-
-    if (data.vendor) {
-      vendorHTML =
-        `<p>👤 ${escapeHTML(data.vendor)}</p>`;
-    }
-
-    let deadlineHTML = "";
-
-    if (data.deadline) {
-      deadlineHTML =
-        `<div class="item-meta">` +
-        `📅 ${escapeHTML(formatDate(data.deadline))}` +
-        `</div>`;
-    }
-
-    let priceHTML = "";
-
-    if (data.price) {
-      priceHTML =
-        `<div class="item-meta">` +
-        `💰 ${escapeHTML(data.price)}` +
-        `</div>`;
-    }
-
-    card.innerHTML =
-      `<div class="item-top">` +
-        `<div class="item-icon">${category.icon}</div>` +
-        `<div class="item-status${statusClass}">` +
-          `${statusText}` +
-        `</div>` +
-      `</div>` +
-
-      `<h3>${escapeHTML(item)}</h3>` +
-
-      vendorHTML +
-
-      deadlineHTML +
-
-      priceHTML;
-
-    card.addEventListener(
-      "click",
-      function() {
-        openModal(
-          category.id,
-          item
-        );
+      if (
+        item.enabled === false
+      ) {
+        return;
       }
-    );
 
-    grid.appendChild(card);
-  });
+      const data =
+        getItem(
+          category.id,
+          item.name
+        );
+
+      const itemText =
+        String(item.name)
+          .toLowerCase();
+
+      const vendorText =
+        String(
+          data.vendor || ""
+        )
+          .toLowerCase();
+
+      const notesText =
+        String(
+          data.notes || ""
+        )
+          .toLowerCase();
+
+      const matchesSearch =
+        !search ||
+        itemText.includes(search) ||
+        vendorText.includes(search) ||
+        notesText.includes(search);
+
+      const matchesStatus =
+        status === "all" ||
+        data.status === status;
+
+      if (
+        !matchesSearch ||
+        !matchesStatus
+      ) {
+        return;
+      }
+
+      visible++;
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "item-card";
+
+      if (
+        data.status === "done"
+      ) {
+
+        card.classList.add("done");
+
+      }
+
+      let statusText =
+        "Not started";
+
+      let statusClass = "";
+
+      if (
+        data.status === "progress"
+      ) {
+
+        statusText =
+          "In progress";
+
+        statusClass =
+          " progress";
+
+      }
+
+      if (
+        data.status === "done"
+      ) {
+
+        statusText =
+          "Completed";
+
+        statusClass =
+          " done";
+
+      }
+
+      let vendorHTML =
+        "<p>Click to add details</p>";
+
+      if (data.vendor) {
+
+        vendorHTML =
+          "<p>👤 " +
+          escapeHTML(
+            data.vendor
+          ) +
+          "</p>";
+
+      }
+
+      let deadlineHTML = "";
+
+      if (data.deadline) {
+
+        deadlineHTML =
+          '<div class="item-meta">' +
+            "📅 " +
+            escapeHTML(
+              formatDate(
+                data.deadline
+              )
+            ) +
+          "</div>";
+
+      }
+
+      card.innerHTML =
+
+        '<div class="item-top">' +
+
+          '<div class="item-icon">' +
+            escapeHTML(category.icon) +
+          "</div>" +
+
+          '<div class="item-status' +
+            statusClass +
+          '">' +
+            statusText +
+          "</div>" +
+
+        "</div>" +
+
+        "<h3>" +
+          escapeHTML(item.name) +
+        "</h3>" +
+
+        vendorHTML +
+
+        deadlineHTML;
+
+      card.addEventListener(
+        "click",
+        function() {
+
+          openModal(
+            category.id,
+            item.name
+          );
+
+        }
+      );
+
+      grid.appendChild(card);
+
+    }
+  );
 
   const emptyMessage =
     document.getElementById(
@@ -1162,30 +1670,36 @@ function renderCategory() {
     );
 
   if (emptyMessage) {
+
     emptyMessage.style.display =
       visible > 0
         ? "none"
         : "block";
+
   }
+
 }
 
 /* ============================================================
-   OPEN MODAL
-============================================================ */
+   ITEM MODAL
+   ============================================================ */
 
 function openModal(
   categoryId,
   item
 ) {
+
   currentItem = {
-    categoryId,
-    item
+    categoryId: categoryId,
+    item: item
   };
 
   const category =
     categories.find(
       function(c) {
+
         return c.id === categoryId;
+
       }
     );
 
@@ -1280,65 +1794,52 @@ function openModal(
     );
 
   if (overlay) {
-    overlay.classList.add("active");
-    overlay.setAttribute(
-      "aria-hidden",
-      "false"
+
+    overlay.classList.add(
+      "active"
     );
+
   }
 
-  document.body.classList.add(
-    "modal-open"
-  );
 }
 
 /* ============================================================
-   CLOSE MODAL
-============================================================ */
+   CLOSE ITEM MODAL
+   ============================================================ */
 
 function closeModal() {
+
   const overlay =
     document.getElementById(
       "overlay"
     );
 
   if (overlay) {
-    overlay.classList.remove("active");
 
-    overlay.setAttribute(
-      "aria-hidden",
-      "true"
+    overlay.classList.remove(
+      "active"
     );
+
   }
 
   currentItem = null;
 
-  document.body.classList.remove(
-    "modal-open"
-  );
 }
 
 /* ============================================================
-   CHOOSE STATUS
-============================================================ */
+   STATUS
+   ============================================================ */
 
 function chooseStatus(status) {
-  if (
-    !["not", "progress", "done"].includes(status)
-  ) {
-    return;
-  }
 
   modalStatus = status;
 
   updateStatusButtons();
+
 }
 
-/* ============================================================
-   UPDATE STATUS BUTTONS
-============================================================ */
-
 function updateStatusButtons() {
+
   const notButton =
     document.getElementById(
       "notButton"
@@ -1355,32 +1856,40 @@ function updateStatusButtons() {
     );
 
   if (notButton) {
+
     notButton.classList.toggle(
       "active",
       modalStatus === "not"
     );
+
   }
 
   if (progressButton) {
+
     progressButton.classList.toggle(
       "active",
       modalStatus === "progress"
     );
+
   }
 
   if (doneButton) {
+
     doneButton.classList.toggle(
       "active",
       modalStatus === "done"
     );
+
   }
+
 }
 
 /* ============================================================
    SAVE ITEM
-============================================================ */
+   ============================================================ */
 
 function saveItem() {
+
   if (!currentItem) {
     return;
   }
@@ -1444,31 +1953,1195 @@ function saveItem() {
       ? notesInput.value.trim()
       : "";
 
-  if (!saveData()) {
-    return;
-  }
+  saveData();
 
   closeModal();
 
-  if (currentCategory === "dashboard") {
+  if (
+    currentCategory === "dashboard"
+  ) {
+
     showDashboard();
+
   } else {
-    renderCategory();
+
+    showCategory(
+      currentCategory
+    );
+
   }
+
 }
 
 /* ============================================================
    CLEAR ITEM
-============================================================ */
+   ============================================================ */
 
 function clearItem() {
+
   if (!currentItem) {
     return;
   }
 
-  const confirmed = confirm(
-    "Clear all information for this item?"
+  const confirmed =
+    confirm(
+      "Clear all information for this item?"
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  const data =
+    getItem(
+      currentItem.categoryId,
+      currentItem.item
+    );
+
+  data.status = "not";
+  data.vendor = "";
+  data.price = "";
+  data.deadline = "";
+  data.link = "";
+  data.notes = "";
+
+  saveData();
+
+  closeModal();
+
+  if (
+    currentCategory === "dashboard"
+  ) {
+
+    showDashboard();
+
+  } else {
+
+    showCategory(
+      currentCategory
+    );
+
+  }
+
+}
+
+/* ============================================================
+   MANAGEMENT LIST
+   ============================================================ */
+
+function renderManagementList() {
+
+  const container =
+    document.getElementById(
+      "managementList"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = "";
+
+  categories.forEach(
+    function(category) {
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className =
+        "management-category";
+
+      if (
+        category.enabled === false
+      ) {
+
+        wrapper.classList.add(
+          "disabled"
+        );
+
+      }
+
+      const header =
+        document.createElement("div");
+
+      header.className =
+        "management-category-header";
+
+      header.innerHTML =
+
+        '<div class="management-category-info">' +
+
+          '<div class="management-category-icon">' +
+            escapeHTML(category.icon) +
+          "</div>" +
+
+          "<div>" +
+
+            "<h3>" +
+              escapeHTML(category.name) +
+            "</h3>" +
+
+            "<span>" +
+              (
+                category.enabled === false
+                  ? "Disabled"
+                  : category.items.filter(
+                      function(item) {
+                        return item.enabled !== false;
+                      }
+                    ).length +
+                    " active items"
+              ) +
+            "</span>" +
+
+          "</div>" +
+
+        "</div>";
+
+      const categoryActions =
+        document.createElement("div");
+
+      categoryActions.className =
+        "management-actions";
+
+      const editCategory =
+        createSmallButton(
+          "✏️",
+          "Edit category",
+          function() {
+
+            openCategoryManagement(
+              category.id
+            );
+
+          }
+        );
+
+      const toggleCategory =
+        createSmallButton(
+          category.enabled === false
+            ? "✓"
+            : "⏸",
+          category.enabled === false
+            ? "Enable category"
+            : "Disable category",
+          function() {
+
+            toggleCategory(
+              category.id
+            );
+
+          }
+        );
+
+      const deleteCategory =
+        createSmallButton(
+          "🗑️",
+          "Delete category",
+          function() {
+
+            deleteCategory(
+              category.id
+            );
+
+          },
+          true
+        );
+
+      categoryActions.appendChild(
+        editCategory
+      );
+
+      categoryActions.appendChild(
+        toggleCategory
+      );
+
+      categoryActions.appendChild(
+        deleteCategory
+      );
+
+      header.appendChild(
+        categoryActions
+      );
+
+      wrapper.appendChild(header);
+
+      const items =
+        document.createElement("div");
+
+      items.className =
+        "management-items";
+
+      category.items.forEach(
+        function(item, index) {
+
+          const row =
+            document.createElement("div");
+
+          row.className =
+            "management-item-row";
+
+          if (
+            item.enabled === false
+          ) {
+
+            row.classList.add(
+              "disabled"
+            );
+
+          }
+
+          const itemName =
+            document.createElement("span");
+
+          itemName.textContent =
+            item.name;
+
+          const itemActions =
+            document.createElement("div");
+
+          itemActions.className =
+            "management-actions";
+
+          const editItem =
+            createSmallButton(
+              "✏️",
+              "Edit item",
+              function() {
+
+                openItemManagement(
+                  category.id,
+                  index
+                );
+
+              }
+            );
+
+          const toggleItem =
+            createSmallButton(
+              item.enabled === false
+                ? "✓"
+                : "⏸",
+              item.enabled === false
+                ? "Enable item"
+                : "Disable item",
+              function() {
+
+                toggleItem(
+                  category.id,
+                  index
+                );
+
+              }
+            );
+
+          const deleteItemButton =
+            createSmallButton(
+              "🗑️",
+              "Delete item",
+              function() {
+
+                deleteItem(
+                  category.id,
+                  index
+                );
+
+              },
+              true
+            );
+
+          itemActions.appendChild(
+            editItem
+          );
+
+          itemActions.appendChild(
+            toggleItem
+          );
+
+          itemActions.appendChild(
+            deleteItemButton
+          );
+
+          row.appendChild(itemName);
+
+          row.appendChild(itemActions);
+
+          items.appendChild(row);
+
+        }
+      );
+
+      const addItemButton =
+        document.createElement("button");
+
+      addItemButton.type = "button";
+
+      addItemButton.className =
+        "management-add-item";
+
+      addItemButton.textContent =
+        "+ Add item";
+
+      addItemButton.addEventListener(
+        "click",
+        function() {
+
+          openItemManagement(
+            category.id,
+            null
+          );
+
+        }
+      );
+
+      items.appendChild(
+        addItemButton
+      );
+
+      wrapper.appendChild(items);
+
+      container.appendChild(wrapper);
+
+    }
   );
+
+}
+
+function createSmallButton(
+  icon,
+  title,
+  handler,
+  danger
+) {
+
+  const button =
+    document.createElement("button");
+
+  button.type = "button";
+
+  button.className =
+    "icon-button";
+
+  if (danger) {
+
+    button.classList.add(
+      "danger"
+    );
+
+  }
+
+  button.textContent =
+    icon;
+
+  button.title =
+    title;
+
+  button.setAttribute(
+    "aria-label",
+    title
+  );
+
+  button.addEventListener(
+    "click",
+    function(event) {
+
+      event.stopPropagation();
+
+      handler();
+
+    }
+  );
+
+  return button;
+
+}
+
+/* ============================================================
+   ADD / EDIT CATEGORY
+   ============================================================ */
+
+function openCategoryManagement(
+  categoryId
+) {
+
+  managementMode =
+    categoryId
+      ? "edit-category"
+      : "add-category";
+
+  managementCategoryId =
+    categoryId || null;
+
+  managementItemIndex =
+    null;
+
+  const title =
+    document.getElementById(
+      "managementModalTitle"
+    );
+
+  const nameInput =
+    document.getElementById(
+      "managementNameInput"
+    );
+
+  const iconInput =
+    document.getElementById(
+      "managementIconInput"
+    );
+
+  const iconGroup =
+    document.getElementById(
+      "iconGroup"
+    );
+
+  if (managementMode === "edit-category") {
+
+    const category =
+      categories.find(
+        function(c) {
+
+          return c.id === categoryId;
+
+        }
+      );
+
+    if (!category) {
+      return;
+    }
+
+    if (title) {
+      title.textContent =
+        "Edit category";
+    }
+
+    if (nameInput) {
+      nameInput.value =
+        category.name;
+    }
+
+    if (iconInput) {
+      iconInput.value =
+        category.icon;
+    }
+
+    if (iconGroup) {
+      iconGroup.style.display =
+        "block";
+    }
+
+  } else {
+
+    if (title) {
+      title.textContent =
+        "Add category";
+    }
+
+    if (nameInput) {
+      nameInput.value = "";
+    }
+
+    if (iconInput) {
+      iconInput.value = "📁";
+    }
+
+    if (iconGroup) {
+      iconGroup.style.display =
+        "block";
+    }
+
+  }
+
+  openManagementOverlay();
+
+}
+
+/* ============================================================
+   ADD / EDIT ITEM
+   ============================================================ */
+
+function openItemManagement(
+  categoryId,
+  itemIndex
+) {
+
+  managementCategoryId =
+    categoryId;
+
+  managementItemIndex =
+    itemIndex;
+
+  if (
+    itemIndex === null ||
+    typeof itemIndex === "undefined"
+  ) {
+
+    managementMode =
+      "add-item";
+
+  } else {
+
+    managementMode =
+      "edit-item";
+
+  }
+
+  const category =
+    categories.find(
+      function(c) {
+
+        return c.id === categoryId;
+
+      }
+    );
+
+  if (!category) {
+    return;
+  }
+
+  const title =
+    document.getElementById(
+      "managementModalTitle"
+    );
+
+  const nameInput =
+    document.getElementById(
+      "managementNameInput"
+    );
+
+  const iconGroup =
+    document.getElementById(
+      "iconGroup"
+    );
+
+  const iconInput =
+    document.getElementById(
+      "managementIconInput"
+    );
+
+  if (iconGroup) {
+    iconGroup.style.display =
+      "none";
+  }
+
+  if (managementMode === "edit-item") {
+
+    const item =
+      category.items[itemIndex];
+
+    if (!item) {
+      return;
+    }
+
+    if (title) {
+      title.textContent =
+        "Edit item";
+    }
+
+    if (nameInput) {
+      nameInput.value =
+        item.name;
+    }
+
+  } else {
+
+    if (title) {
+      title.textContent =
+        "Add item";
+    }
+
+    if (nameInput) {
+      nameInput.value = "";
+    }
+
+  }
+
+  if (iconInput) {
+    iconInput.value = "";
+  }
+
+  openManagementOverlay();
+
+}
+
+/* ============================================================
+   MANAGEMENT OVERLAY
+   ============================================================ */
+
+function openManagementOverlay() {
+
+  const overlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+  if (overlay) {
+
+    overlay.classList.add(
+      "active"
+    );
+
+  }
+
+  setTimeout(
+    function() {
+
+      const input =
+        document.getElementById(
+          "managementNameInput"
+        );
+
+      if (input) {
+        input.focus();
+      }
+
+    },
+    50
+  );
+
+}
+
+function closeManagementOverlay() {
+
+  const overlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+  if (overlay) {
+
+    overlay.classList.remove(
+      "active"
+    );
+
+  }
+
+  managementMode = null;
+  managementCategoryId = null;
+  managementItemIndex = null;
+
+}
+
+/* ============================================================
+   SAVE MANAGEMENT
+   ============================================================ */
+
+function saveManagement() {
+
+  const nameInput =
+    document.getElementById(
+      "managementNameInput"
+    );
+
+  const iconInput =
+    document.getElementById(
+      "managementIconInput"
+    );
+
+  const name =
+    nameInput
+      ? nameInput.value.trim()
+      : "";
+
+  if (!name) {
+
+    alert(
+      "Please enter a name."
+    );
+
+    return;
+
+  }
+
+  /* ADD CATEGORY */
+
+  if (
+    managementMode ===
+    "add-category"
+  ) {
+
+    const category =
+      {
+
+        id:
+          generateId("category"),
+
+        name:
+          name,
+
+        icon:
+          iconInput &&
+          iconInput.value.trim()
+            ? iconInput.value.trim()
+            : "📁",
+
+        enabled: true,
+
+        items: []
+
+      };
+
+    categories.push(category);
+
+    saveData();
+
+    closeManagementOverlay();
+
+    renderDashboard();
+
+    buildNavigation();
+
+    return;
+
+  }
+
+  /* EDIT CATEGORY */
+
+  if (
+    managementMode ===
+    "edit-category"
+  ) {
+
+    const category =
+      categories.find(
+        function(c) {
+
+          return (
+            c.id ===
+            managementCategoryId
+          );
+
+        }
+      );
+
+    if (!category) {
+      return;
+    }
+
+    category.name =
+      name;
+
+    category.icon =
+      iconInput &&
+      iconInput.value.trim()
+        ? iconInput.value.trim()
+        : "📁";
+
+    saveData();
+
+    closeManagementOverlay();
+
+    renderDashboard();
+
+    buildNavigation();
+
+    if (
+      currentCategory ===
+      category.id
+    ) {
+
+      showCategory(
+        category.id
+      );
+
+    }
+
+    return;
+
+  }
+
+  /* ADD ITEM */
+
+  if (
+    managementMode ===
+    "add-item"
+  ) {
+
+    const category =
+      categories.find(
+        function(c) {
+
+          return (
+            c.id ===
+            managementCategoryId
+          );
+
+        }
+      );
+
+    if (!category) {
+      return;
+    }
+
+    const exists =
+      category.items.some(
+        function(item) {
+
+          return (
+            item.name
+              .toLowerCase() ===
+            name.toLowerCase()
+          );
+
+        }
+      );
+
+    if (exists) {
+
+      alert(
+        "An item with this name already exists in this category."
+      );
+
+      return;
+
+    }
+
+    category.items.push({
+
+      name: name,
+
+      enabled: true
+
+    });
+
+    saveData();
+
+    closeManagementOverlay();
+
+    renderManagementList();
+
+    if (
+      currentCategory ===
+      category.id
+    ) {
+
+      renderCategory();
+
+    }
+
+    return;
+
+  }
+
+  /* EDIT ITEM */
+
+  if (
+    managementMode ===
+    "edit-item"
+  ) {
+
+    const category =
+      categories.find(
+        function(c) {
+
+          return (
+            c.id ===
+            managementCategoryId
+          );
+
+        }
+      );
+
+    if (!category) {
+      return;
+    }
+
+    const item =
+      category.items[
+        managementItemIndex
+      ];
+
+    if (!item) {
+      return;
+    }
+
+    const oldName =
+      item.name;
+
+    if (
+      oldName !== name &&
+      category.items.some(
+        function(other, index) {
+
+          return (
+            index !==
+              managementItemIndex &&
+            other.name
+              .toLowerCase() ===
+              name.toLowerCase()
+          );
+
+        }
+      )
+    ) {
+
+      alert(
+        "An item with this name already exists in this category."
+      );
+
+      return;
+
+    }
+
+    const oldKey =
+      itemKey(
+        category.id,
+        oldName
+      );
+
+    const newKey =
+      itemKey(
+        category.id,
+        name
+      );
+
+    if (
+      oldKey !== newKey &&
+      savedData[oldKey]
+    ) {
+
+      savedData[newKey] =
+        savedData[oldKey];
+
+      delete savedData[oldKey];
+
+    }
+
+    item.name =
+      name;
+
+    saveData();
+
+    closeManagementOverlay();
+
+    renderManagementList();
+
+    if (
+      currentCategory ===
+      category.id
+    ) {
+
+      renderCategory();
+
+    }
+
+  }
+
+}
+
+/* ============================================================
+   TOGGLE CATEGORY
+   ============================================================ */
+
+function toggleCategory(
+  categoryId
+) {
+
+  const category =
+    categories.find(
+      function(c) {
+
+        return c.id === categoryId;
+
+      }
+    );
+
+  if (!category) {
+    return;
+  }
+
+  category.enabled =
+    category.enabled === false;
+
+  saveData();
+
+  if (
+    currentCategory ===
+    categoryId &&
+    category.enabled === false
+  ) {
+
+    currentCategory =
+      "dashboard";
+
+  }
+
+  renderDashboard();
+
+  buildNavigation();
+
+  if (
+    currentCategory ===
+    categoryId
+  ) {
+
+    showCategory(
+      categoryId
+    );
+
+  } else {
+
+    showDashboard();
+
+  }
+
+}
+
+/* ============================================================
+   TOGGLE ITEM
+   ============================================================ */
+
+function toggleItem(
+  categoryId,
+  itemIndex
+) {
+
+  const category =
+    categories.find(
+      function(c) {
+
+        return c.id === categoryId;
+
+      }
+    );
+
+  if (!category) {
+    return;
+  }
+
+  const item =
+    category.items[itemIndex];
+
+  if (!item) {
+    return;
+  }
+
+  item.enabled =
+    item.enabled === false;
+
+  saveData();
+
+  renderManagementList();
+
+  if (
+    currentCategory ===
+    categoryId
+  ) {
+
+    renderCategory();
+
+  } else {
+
+    renderDashboard();
+
+  }
+
+}
+
+/* ============================================================
+   DELETE CATEGORY
+   ============================================================ */
+
+function deleteCategory(
+  categoryId
+) {
+
+  const category =
+    categories.find(
+      function(c) {
+
+        return c.id === categoryId;
+
+      }
+    );
+
+  if (!category) {
+    return;
+  }
+
+  const confirmed =
+    confirm(
+      'Delete the category "' +
+      category.name +
+      '"?\n\n' +
+      "This will also remove its items from the planner."
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  categories =
+    categories.filter(
+      function(c) {
+
+        return c.id !== categoryId;
+
+      }
+    );
+
+  Object.keys(savedData).forEach(
+    function(key) {
+
+      if (
+        key.indexOf(
+          categoryId + "::"
+        ) === 0
+      ) {
+
+        delete savedData[key];
+
+      }
+
+    }
+  );
+
+  saveData();
+
+  currentCategory =
+    "dashboard";
+
+  renderDashboard();
+
+  buildNavigation();
+
+}
+
+/* ============================================================
+   DELETE ITEM
+   ============================================================ */
+
+function deleteItem(
+  categoryId,
+  itemIndex
+) {
+
+  const category =
+    categories.find(
+      function(c) {
+
+        return c.id === categoryId;
+
+      }
+    );
+
+  if (!category) {
+    return;
+  }
+
+  const item =
+    category.items[itemIndex];
+
+  if (!item) {
+    return;
+  }
+
+  const confirmed =
+    confirm(
+      'Delete the item "' +
+      item.name +
+      '"?'
+    );
 
   if (!confirmed) {
     return;
@@ -1476,34 +3149,55 @@ function clearItem() {
 
   const key =
     itemKey(
-      currentItem.categoryId,
-      currentItem.item
+      category.id,
+      item.name
     );
 
   delete savedData[key];
 
-  if (!saveData()) {
-    return;
-  }
+  category.items.splice(
+    itemIndex,
+    1
+  );
 
-  closeModal();
+  saveData();
 
-  if (currentCategory === "dashboard") {
-    showDashboard();
-  } else {
+  renderManagementList();
+
+  if (
+    currentCategory ===
+    categoryId
+  ) {
+
     renderCategory();
+
+  } else {
+
+    renderDashboard();
+
   }
+
 }
 
 /* ============================================================
    EVENT LISTENERS
-============================================================ */
+   ============================================================ */
 
 function setupEventListeners() {
+
   const exportButton =
     document.getElementById(
       "exportButton"
     );
+
+  if (exportButton) {
+
+    exportButton.addEventListener(
+      "click",
+      exportData
+    );
+
+  }
 
   const importButton =
     document.getElementById(
@@ -1515,178 +3209,368 @@ function setupEventListeners() {
       "importFile"
     );
 
+  if (
+    importButton &&
+    importFile
+  ) {
+
+    importButton.addEventListener(
+      "click",
+      function() {
+
+        importFile.click();
+
+      }
+    );
+
+    importFile.addEventListener(
+      "change",
+      importData
+    );
+
+  }
+
+  const addCategoryButton =
+    document.getElementById(
+      "addCategoryButton"
+    );
+
+  if (addCategoryButton) {
+
+    addCategoryButton.addEventListener(
+      "click",
+      function() {
+
+        openCategoryManagement();
+
+      }
+    );
+
+  }
+
+  const addItemButton =
+    document.getElementById(
+      "addItemButton"
+    );
+
+  if (addItemButton) {
+
+    addItemButton.addEventListener(
+      "click",
+      function() {
+
+        if (
+          currentCategory !==
+          "dashboard"
+        ) {
+
+          openItemManagement(
+            currentCategory,
+            null
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+  const manageCurrentCategoryButton =
+    document.getElementById(
+      "manageCurrentCategoryButton"
+    );
+
+  if (
+    manageCurrentCategoryButton
+  ) {
+
+    manageCurrentCategoryButton.addEventListener(
+      "click",
+      function() {
+
+        if (
+          currentCategory !==
+          "dashboard"
+        ) {
+
+          openCategoryManagement(
+            currentCategory
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+  const backButton =
+    document.getElementById(
+      "backToDashboardButton"
+    );
+
+  if (backButton) {
+
+    backButton.addEventListener(
+      "click",
+      showDashboard
+    );
+
+  }
+
   const closeModalButton =
     document.getElementById(
       "closeModalButton"
     );
+
+  if (closeModalButton) {
+
+    closeModalButton.addEventListener(
+      "click",
+      closeModal
+    );
+
+  }
 
   const saveButton =
     document.getElementById(
       "saveButton"
     );
 
+  if (saveButton) {
+
+    saveButton.addEventListener(
+      "click",
+      saveItem
+    );
+
+  }
+
   const clearButton =
     document.getElementById(
       "clearButton"
     );
+
+  if (clearButton) {
+
+    clearButton.addEventListener(
+      "click",
+      clearItem
+    );
+
+  }
 
   const notButton =
     document.getElementById(
       "notButton"
     );
 
+  if (notButton) {
+
+    notButton.addEventListener(
+      "click",
+      function() {
+
+        chooseStatus("not");
+
+      }
+    );
+
+  }
+
   const progressButton =
     document.getElementById(
       "progressButton"
     );
+
+  if (progressButton) {
+
+    progressButton.addEventListener(
+      "click",
+      function() {
+
+        chooseStatus("progress");
+
+      }
+    );
+
+  }
 
   const doneButton =
     document.getElementById(
       "doneButton"
     );
 
-  const overlay =
-    document.getElementById(
-      "overlay"
+  if (doneButton) {
+
+    doneButton.addEventListener(
+      "click",
+      function() {
+
+        chooseStatus("done");
+
+      }
     );
+
+  }
 
   const searchInput =
     document.getElementById(
       "itemSearch"
     );
 
+  if (searchInput) {
+
+    searchInput.addEventListener(
+      "input",
+      renderCategory
+    );
+
+  }
+
   const statusFilter =
     document.getElementById(
       "itemStatusFilter"
     );
 
-  if (exportButton) {
-    exportButton.addEventListener(
-      "click",
-      exportData
-    );
-  }
-
-  if (importButton && importFile) {
-    importButton.addEventListener(
-      "click",
-      function() {
-        importFile.click();
-      }
-    );
-  }
-
-  if (importFile) {
-    importFile.addEventListener(
-      "change",
-      importData
-    );
-  }
-
-  if (closeModalButton) {
-    closeModalButton.addEventListener(
-      "click",
-      closeModal
-    );
-  }
-
-  if (saveButton) {
-    saveButton.addEventListener(
-      "click",
-      saveItem
-    );
-  }
-
-  if (clearButton) {
-    clearButton.addEventListener(
-      "click",
-      clearItem
-    );
-  }
-
-  if (notButton) {
-    notButton.addEventListener(
-      "click",
-      function() {
-        chooseStatus("not");
-      }
-    );
-  }
-
-  if (progressButton) {
-    progressButton.addEventListener(
-      "click",
-      function() {
-        chooseStatus("progress");
-      }
-    );
-  }
-
-  if (doneButton) {
-    doneButton.addEventListener(
-      "click",
-      function() {
-        chooseStatus("done");
-      }
-    );
-  }
-
-  if (overlay) {
-    overlay.addEventListener(
-      "click",
-      function(event) {
-        if (event.target === overlay) {
-          closeModal();
-        }
-      }
-    );
-  }
-
-  if (searchInput) {
-    searchInput.addEventListener(
-      "input",
-      renderCategory
-    );
-  }
-
   if (statusFilter) {
+
     statusFilter.addEventListener(
       "change",
       renderCategory
     );
+
+  }
+
+  const closeManagementButton =
+    document.getElementById(
+      "closeManagementButton"
+    );
+
+  if (closeManagementButton) {
+
+    closeManagementButton.addEventListener(
+      "click",
+      closeManagementOverlay
+    );
+
+  }
+
+  const cancelManagementButton =
+    document.getElementById(
+      "cancelManagementButton"
+    );
+
+  if (cancelManagementButton) {
+
+    cancelManagementButton.addEventListener(
+      "click",
+      closeManagementOverlay
+    );
+
+  }
+
+  const saveManagementButton =
+    document.getElementById(
+      "saveManagementButton"
+    );
+
+  if (saveManagementButton) {
+
+    saveManagementButton.addEventListener(
+      "click",
+      saveManagement
+    );
+
+  }
+
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
+
+  if (overlay) {
+
+    overlay.addEventListener(
+      "click",
+      function(event) {
+
+        if (
+          event.target ===
+          overlay
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+  }
+
+  const managementOverlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+  if (managementOverlay) {
+
+    managementOverlay.addEventListener(
+      "click",
+      function(event) {
+
+        if (
+          event.target ===
+          managementOverlay
+        ) {
+
+          closeManagementOverlay();
+
+        }
+
+      }
+    );
+
   }
 
   document.addEventListener(
     "keydown",
     function(event) {
+
       if (
-        event.key === "Escape" &&
-        currentItem
+        event.key === "Escape"
       ) {
+
         closeModal();
+
+        closeManagementOverlay();
+
       }
+
     }
   );
+
 }
 
 /* ============================================================
-   INITIALIZE
-============================================================ */
+   START APPLICATION
+   ============================================================ */
 
 function init() {
+
   loadData();
+
   setupEventListeners();
+
   buildNavigation();
+
   showDashboard();
+
 }
 
-if (
-  document.readyState === "loading"
-) {
-  document.addEventListener(
-    "DOMContentLoaded",
-    init
-  );
-} else {
-  init();
-}
+document.addEventListener(
+  "DOMContentLoaded",
+  init
+);
