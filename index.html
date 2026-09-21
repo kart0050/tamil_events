@@ -10,7 +10,7 @@
 
 <meta
 name="theme-color"
-content="#8f3f5f"
+content="#8f3154"
 
 >
 
@@ -21,65 +21,54 @@ content="#8f3f5f"
 
 <body>
 
-  <!-- =========================================================
+  <!-- ======================================================
        TOP BAR
-       ========================================================= -->
+       ====================================================== -->
 
-  <header class="top-bar">
+  <header class="topbar">
 
 ```
 <div class="brand">
+  <div class="brand-ring">💍</div>
 
-  <div class="brand-ring" aria-hidden="true">
-    💍
-  </div>
-
-  <div class="brand-text">
-    <span class="brand-eyebrow">
+  <div>
+    <div class="brand-small">
       OUR WEDDING
-    </span>
+    </div>
 
-    <strong>
+    <div class="brand-title">
       Our Big Day
-    </strong>
+    </div>
   </div>
-
 </div>
 
-<!-- DATA ACTIONS - ALWAYS VISIBLE -->
-<div class="data-actions">
+<div class="top-actions">
 
   <button
-    class="icon-action export-action"
+    class="top-action export-action"
     id="exportButton"
     type="button"
-    title="Export planner"
-    aria-label="Export planner"
   >
-    <span class="action-icon">↑</span>
-    <span class="action-label">Export</span>
+    <span>↓</span>
+    <span>Export</span>
   </button>
 
   <button
-    class="icon-action import-action"
+    class="top-action import-action"
     id="importButton"
     type="button"
-    title="Import planner"
-    aria-label="Import planner"
   >
-    <span class="action-icon">↓</span>
-    <span class="action-label">Import</span>
+    <span>↑</span>
+    <span>Import</span>
   </button>
 
   <button
-    class="icon-action reset-action"
+    class="top-action reset-action"
     id="resetButton"
     type="button"
-    title="Reset planner"
-    aria-label="Reset planner"
   >
-    <span class="action-icon">↻</span>
-    <span class="action-label">Reset</span>
+    <span>↻</span>
+    <span>Reset</span>
   </button>
 
   <input
@@ -94,160 +83,147 @@ content="#8f3f5f"
 
   </header>
 
-  <!-- =========================================================
-       HERO
-       ========================================================= -->
+  <!-- ======================================================
+       NAVIGATION
+       ====================================================== -->
 
-  <header class="hero">
-
-```
-<div class="hero-decoration hero-decoration-left">
-  ✦
-</div>
-
-<div class="hero-decoration hero-decoration-right">
-  ✦
-</div>
-
-<div class="hero-inner">
-
-  <div class="hero-ring" aria-hidden="true">
-    💍
-  </div>
-
-  <div class="eyebrow">
-    Tamil Wedding Planner
-  </div>
-
-  <h1>
-    Our Big Day
-  </h1>
-
-  <p>
-    Everything we need for our wedding,
-    beautifully organised in one place.
-  </p>
-
-  <!-- WEDDING DATE -->
-
-  <div class="wedding-date-card">
-
-    <div class="wedding-date-icon">
-      💒
-    </div>
-
-    <div class="wedding-date-content">
-
-      <label for="weddingDate">
-        Our wedding date
-      </label>
-
-      <input
-        type="date"
-        id="weddingDate"
-      >
-
-    </div>
-
-    <div
-      class="wedding-countdown"
-      id="weddingCountdown"
-    >
-      <strong id="countdownNumber">
-        —
-      </strong>
-
-      <span id="countdownText">
-        Set your wedding date
-      </span>
-    </div>
-
-  </div>
-
-</div>
-```
-
-  </header>
-
-  <!-- =========================================================
-       CATEGORY NAVIGATION
-       ========================================================= -->
-
-  <section class="navigation-section">
+  <nav class="main-nav">
 
 ```
-<div class="navigation-inner">
-
-  <div class="navigation-heading">
-
-    <div>
-      <span class="section-kicker">
-        WEDDING PLAN
-      </span>
-
-      <h2>
-        Categories
-      </h2>
-    </div>
-
-    <button
-      class="manage-categories-button"
-      id="manageCategoriesButton"
-      type="button"
-    >
-      <span>⚙</span>
-      Manage categories
-    </button>
-
-  </div>
-
-  <nav
-    class="category-navigation"
-    id="navigation"
-    aria-label="Wedding categories"
-  ></nav>
-
-</div>
+<div
+  class="nav-inner"
+  id="navigation"
+></div>
 ```
 
-  </section>
+  </nav>
 
-  <!-- =========================================================
-       MAIN APP
-       ========================================================= -->
+  <!-- ======================================================
+       MAIN
+       ====================================================== -->
 
   <main class="app">
 
 ```
-<!-- =======================================================
+<!-- ====================================================
      DASHBOARD
-     ======================================================= -->
+     ==================================================== -->
 
-<section id="dashboardPage">
+<section
+  id="dashboardPage"
+  class="page"
+>
 
-  <!-- DASHBOARD INTRO -->
+  <div class="hero-card">
 
-  <div class="dashboard-intro">
+    <div class="hero-decoration">
+      💍
+    </div>
+
+    <div class="hero-content">
+
+      <div class="eyebrow">
+        TAMIL WEDDING PLANNER
+      </div>
+
+      <h1>
+        Our Big Day
+      </h1>
+
+      <p>
+        Everything we need for our wedding,
+        beautifully organised in one place.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- WEDDING DATE -->
+
+  <section class="wedding-date-card">
+
+    <div class="date-icon">
+      💕
+    </div>
+
+    <div class="date-content">
+
+      <div class="section-label">
+        OUR WEDDING DATE
+      </div>
+
+      <h2>
+        When is the big day?
+      </h2>
+
+      <p id="countdownText">
+        Choose your wedding date to start the countdown.
+      </p>
+
+    </div>
+
+    <div class="date-picker">
+
+      <label for="weddingDate">
+        Wedding date
+      </label>
+
+      <input
+        id="weddingDate"
+        type="date"
+      >
+
+    </div>
+
+  </section>
+
+
+  <!-- COUNTDOWN -->
+
+  <section
+    class="countdown-card"
+    id="countdownCard"
+  >
+
+    <div class="countdown-number">
+      <span id="countdownMonths">0</span>
+      <small>months</small>
+    </div>
+
+    <div class="countdown-divider">
+      +
+    </div>
+
+    <div class="countdown-number">
+      <span id="countdownDays">0</span>
+      <small>days</small>
+    </div>
+
+    <div class="countdown-label">
+      until our wedding 💍
+    </div>
+
+  </section>
+
+
+  <!-- PAGE HEADER -->
+
+  <div class="page-header">
 
     <div>
-
-      <span class="section-kicker">
-        WELCOME
-      </span>
+      <div class="eyebrow">
+        WEDDING OVERVIEW
+      </div>
 
       <h2>
         Wedding Dashboard
       </h2>
 
       <p>
-        Keep track of everything
-        for the big day.
+        Keep track of everything for the big day.
       </p>
-
-    </div>
-
-    <div class="dashboard-ring" aria-hidden="true">
-      💍
     </div>
 
   </div>
@@ -255,10 +231,9 @@ content="#8f3f5f"
 
   <!-- STATS -->
 
-  <div class="stats">
+  <div class="stats-grid">
 
     <div class="stat-card">
-
       <div class="stat-icon">
         📋
       </div>
@@ -273,12 +248,10 @@ content="#8f3f5f"
       <div class="stat-label">
         Active items
       </div>
-
     </div>
 
 
     <div class="stat-card">
-
       <div class="stat-icon">
         ✓
       </div>
@@ -293,12 +266,10 @@ content="#8f3f5f"
       <div class="stat-label">
         Completed
       </div>
-
     </div>
 
 
     <div class="stat-card">
-
       <div class="stat-icon">
         ◐
       </div>
@@ -313,12 +284,10 @@ content="#8f3f5f"
       <div class="stat-label">
         In progress
       </div>
-
     </div>
 
 
     <div class="stat-card">
-
       <div class="stat-icon">
         ♡
       </div>
@@ -333,28 +302,25 @@ content="#8f3f5f"
       <div class="stat-label">
         Categories
       </div>
-
     </div>
 
   </div>
 
 
-  <!-- OVERALL PROGRESS -->
+  <!-- PROGRESS -->
 
-  <div class="progress-card">
+  <section class="progress-card">
 
     <div class="progress-heading">
 
       <div>
-
-        <span class="section-kicker">
-          YOUR PROGRESS
-        </span>
+        <div class="section-label">
+          WEDDING PROGRESS
+        </div>
 
         <h2>
           Overall progress
         </h2>
-
       </div>
 
       <strong id="overallPercent">
@@ -364,63 +330,77 @@ content="#8f3f5f"
     </div>
 
     <div class="progress-bar">
-
       <div
         class="progress-fill"
         id="overallFill"
       ></div>
+    </div>
+
+  </section>
+
+
+  <!-- CATEGORIES -->
+
+  <section class="categories-section">
+
+    <div class="page-header category-heading">
+
+      <div>
+
+        <div class="eyebrow">
+          PLANNING
+        </div>
+
+        <h2>
+          Categories
+        </h2>
+
+        <p>
+          Select a category to start planning.
+        </p>
+
+      </div>
 
     </div>
 
-  </div>
+
+    <!-- ADD CATEGORY -->
+
+    <div class="add-category-area">
+
+      <button
+        class="modern-primary"
+        id="addCategoryButton"
+        type="button"
+      >
+        <span class="button-icon">＋</span>
+        Add category
+      </button>
+
+    </div>
 
 
-  <!-- =====================================================
-       CATEGORY SELECTION
-       ===================================================== -->
+    <!-- CATEGORY CARDS -->
 
-  <div class="category-selection-header">
+    <div
+      class="category-summary-grid"
+      id="summaryGrid"
+    ></div>
 
-    <span class="section-kicker">
-      PLAN YOUR WEDDING
-    </span>
-
-    <h2>
-      Select a category to start planning
-    </h2>
-
-    <p>
-      Choose an area of your wedding to see
-      all the items you need to organise.
-    </p>
-
-  </div>
+  </section>
 
 
-  <!-- CATEGORY CARDS -->
+  <!-- MANAGE CATEGORIES -->
 
-  <div
-    class="category-summary-grid"
-    id="summaryGrid"
-  ></div>
-
-
-  <!-- ADD CATEGORY - BELOW CATEGORY SELECTION -->
-
-  <div class="add-category-area">
+  <div class="manage-categories-area">
 
     <button
-      class="add-category-button"
-      id="addCategoryButton"
+      class="manage-categories-button"
+      id="manageCategoriesButton"
       type="button"
     >
-      <span class="add-category-plus">
-        +
-      </span>
-
-      <span>
-        Add category
-      </span>
+      <span>⚙</span>
+      Manage categories
     </button>
 
   </div>
@@ -428,66 +408,54 @@ content="#8f3f5f"
 </section>
 
 
-<!-- =======================================================
+<!-- ====================================================
      CATEGORY PAGE
-     ======================================================= -->
+     ==================================================== -->
 
 <section
   id="categoryPage"
-  class="page-hidden"
+  class="page"
+  style="display:none;"
 >
-
-  <!-- CATEGORY HEADER -->
 
   <div class="category-page-header">
 
-    <div class="category-page-title">
+    <button
+      class="back-button"
+      id="backToDashboardButton"
+      type="button"
+    >
+      ← Dashboard
+    </button>
 
-      <button
-        class="back-button"
-        id="backToDashboardButton"
-        type="button"
+    <div class="category-title-area">
+
+      <div
+        class="category-large-icon"
+        id="categoryIcon"
       >
-        ←
-        <span>
-          Dashboard
-        </span>
-      </button>
+        📋
+      </div>
 
-      <div class="category-title-row">
+      <div>
 
-        <div
-          class="category-title-icon"
-          id="categoryTitleIcon"
-        >
-          💍
+        <div class="eyebrow">
+          CATEGORY
         </div>
 
-        <div>
+        <h2 id="categoryTitle">
+          Category
+        </h2>
 
-          <span
-            class="section-kicker"
-            id="categoryTitleKicker"
-          >
-            CATEGORY
-          </span>
-
-          <h2 id="categoryTitle"></h2>
-
-          <p>
-            Select an item to see or update its details.
-          </p>
-
-        </div>
+        <p>
+          Select an item to see and edit its details.
+        </p>
 
       </div>
 
     </div>
 
-
-    <!-- CATEGORY PROGRESS -->
-
-    <div class="category-progress-card">
+    <div class="category-progress">
 
       <strong id="categoryPercent">
         0%
@@ -497,90 +465,66 @@ content="#8f3f5f"
         0 / 0 completed
       </span>
 
-      <div class="mini-progress-bar">
-
-        <div
-          id="categoryProgressFill"
-        ></div>
-
-      </div>
-
     </div>
 
   </div>
 
 
-  <!-- CATEGORY TOOLBAR -->
+  <!-- CATEGORY ACTIONS -->
 
-  <div class="category-toolbar">
+  <div class="category-actions">
 
     <button
-      class="toolbar-button add-item-toolbar-button"
+      class="modern-primary"
       id="addItemButton"
       type="button"
     >
-      <span>+</span>
+      <span class="button-icon">＋</span>
       Add item
-    </button>
-
-    <button
-      class="toolbar-button disable-category-button"
-      id="disableCurrentCategoryButton"
-      type="button"
-    >
-      <span>◉</span>
-      Disable category
     </button>
 
   </div>
 
 
-  <!-- SEARCH / FILTER -->
+  <!-- SEARCH -->
 
   <div class="search-area">
 
     <div class="search-box">
 
-      <span class="search-icon">
-        ⌕
+      <span>
+        🔎
       </span>
 
       <input
         id="itemSearch"
         type="search"
         placeholder="Search items..."
-        autocomplete="off"
       >
 
     </div>
 
-    <div class="filter-box">
+    <select
+      id="itemStatusFilter"
+    >
 
-      <label for="itemStatusFilter">
-        Status
-      </label>
+      <option value="all">
+        All items
+      </option>
 
-      <select id="itemStatusFilter">
+      <option value="not">
+        Not started
+      </option>
 
-        <option value="all">
-          All items
-        </option>
+      <option value="progress">
+        In progress
+      </option>
 
-        <option value="not">
-          Not started
-        </option>
+      <option value="done">
+        Completed
+      </option>
 
-        <option value="progress">
-          In progress
-        </option>
-
-        <option value="done">
-          Completed
-        </option>
-
-      </select>
-
-    </div>
+    </select>
 
   </div>
 
@@ -593,15 +537,14 @@ content="#8f3f5f"
   ></div>
 
 
-  <!-- EMPTY -->
-
   <div
     class="empty"
     id="emptyMessage"
+    style="display:none;"
   >
 
     <div class="empty-icon">
-      💍
+      💕
     </div>
 
     <h3>
@@ -615,67 +558,94 @@ content="#8f3f5f"
   </div>
 
 </section>
+
+
+<!-- ====================================================
+     CATEGORY MANAGEMENT PAGE
+     ==================================================== -->
+
+<section
+  id="managePage"
+  class="page"
+  style="display:none;"
+>
+
+  <div class="manage-page-header">
+
+    <button
+      class="back-button"
+      id="backFromManageButton"
+      type="button"
+    >
+      ← Dashboard
+    </button>
+
+    <div>
+
+      <div class="eyebrow">
+        PLANNER SETTINGS
+      </div>
+
+      <h2>
+        Manage categories
+      </h2>
+
+      <p>
+        Quickly enable or disable categories.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="manage-categories-list"
+    id="manageCategories"
+  ></div>
+
+</section>
 ```
 
   </main>
 
-  <!-- =========================================================
+  <!-- ======================================================
        FOOTER
-       ========================================================= -->
+       ====================================================== -->
 
   <footer>
-
-```
-<div class="footer-ring">
-  💍
-</div>
-
-<p>
-  Made with ❤️ for our wedding
-</p>
-
-<span>
-  Together, one detail at a time.
-</span>
-```
-
+    Made with ❤️ for our wedding
   </footer>
 
-  <!-- =========================================================
+  <!-- ======================================================
        ITEM MODAL
-       ========================================================= -->
+       ====================================================== -->
 
   <div
     class="overlay"
     id="overlay"
-    aria-hidden="true"
   >
 
 ```
-<div
-  class="modal item-modal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="modalTitle"
->
-
-  <!-- MODAL HEADER -->
+<div class="modal item-modal">
 
   <div class="modal-header">
 
-    <div class="modal-heading">
+    <div>
 
       <div
         class="modal-category"
         id="modalCategory"
       ></div>
 
-      <h2 id="modalTitle"></h2>
+      <h2 id="modalTitle">
+        Item
+      </h2>
 
     </div>
 
     <button
-      class="close"
+      class="modal-close"
       id="closeModalButton"
       type="button"
       aria-label="Close"
@@ -686,13 +656,11 @@ content="#8f3f5f"
   </div>
 
 
-  <!-- MODAL CONTENT -->
-
   <div class="modal-body">
 
     <!-- STATUS -->
 
-    <div class="modal-status-section">
+    <div class="form-group status-group">
 
       <label>
         Status
@@ -705,8 +673,7 @@ content="#8f3f5f"
           id="notButton"
           type="button"
         >
-          <span>○</span>
-          Not started
+          ○ Not started
         </button>
 
         <button
@@ -714,8 +681,7 @@ content="#8f3f5f"
           id="progressButton"
           type="button"
         >
-          <span>◐</span>
-          In progress
+          ◐ In progress
         </button>
 
         <button
@@ -723,8 +689,7 @@ content="#8f3f5f"
           id="doneButton"
           type="button"
         >
-          <span>✓</span>
-          Completed
+          ✓ Completed
         </button>
 
       </div>
@@ -732,10 +697,7 @@ content="#8f3f5f"
     </div>
 
 
-    <!-- DETAILS
-         Designed so these fields sit together rather than
-         being spread throughout the modal.
-    -->
+    <!-- DETAILS GRID -->
 
     <div class="item-details-grid">
 
@@ -749,7 +711,6 @@ content="#8f3f5f"
           id="vendorInput"
           type="text"
           placeholder="Who is responsible?"
-          autocomplete="off"
         >
 
       </div>
@@ -765,7 +726,6 @@ content="#8f3f5f"
           id="priceInput"
           type="text"
           placeholder="e.g. 2,500 kr"
-          inputmode="decimal"
         >
 
       </div>
@@ -795,7 +755,6 @@ content="#8f3f5f"
           id="linkInput"
           type="url"
           placeholder="https://..."
-          autocomplete="url"
         >
 
       </div>
@@ -813,43 +772,26 @@ content="#8f3f5f"
 
       <textarea
         id="notesInput"
-        placeholder="Add notes, ideas, contact details, measurements..."
-        rows="3"
+        placeholder="Add notes, ideas, contact details..."
       ></textarea>
 
     </div>
 
 
-    <!-- ITEM ACTION -->
-
-    <div class="item-modal-secondary-action">
-
-      <button
-        class="disable-item-button"
-        id="disableItemButton"
-        type="button"
-      >
-        <span>◉</span>
-        Disable item
-      </button>
-
-    </div>
-
-
-    <!-- MODAL ACTIONS -->
+    <!-- ACTIONS -->
 
     <div class="modal-actions">
 
       <button
-        class="clear"
+        class="clear-button"
         id="clearButton"
         type="button"
       >
-        Clear details
+        Clear
       </button>
 
       <button
-        class="save"
+        class="save-button"
         id="saveButton"
         type="button"
       >
@@ -865,120 +807,35 @@ content="#8f3f5f"
 
   </div>
 
-  <!-- =========================================================
-       MANAGEMENT MODAL
-       ========================================================= -->
+  <!-- ======================================================
+       CATEGORY MODAL
+       ====================================================== -->
 
   <div
     class="overlay"
-    id="categoryManagementOverlay"
-    aria-hidden="true"
+    id="categoryOverlay"
   >
 
 ```
-<div
-  class="modal category-management-modal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="categoryManagementTitle"
->
+<div class="modal small-modal">
 
   <div class="modal-header">
 
-    <div class="modal-heading">
+    <div>
 
       <div class="modal-category">
-        WEDDING PLAN
+        NEW CATEGORY
       </div>
 
-      <h2 id="categoryManagementTitle">
-        Manage categories
-      </h2>
-
-    </div>
-
-    <button
-      class="close"
-      id="closeCategoryManagementButton"
-      type="button"
-      aria-label="Close"
-    >
-      ×
-    </button>
-
-  </div>
-
-
-  <div class="modal-body">
-
-    <p class="management-description">
-      Quickly enable or disable the categories
-      you want to see in your wedding planner.
-    </p>
-
-
-    <!-- CATEGORY MANAGEMENT LIST -->
-
-    <div
-      class="category-management-list"
-      id="categoryManagementList"
-    ></div>
-
-
-    <div class="management-footer">
-
-      <button
-        class="secondary-modal-button"
-        id="closeCategoryManagementFooterButton"
-        type="button"
-      >
-        Done
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-```
-
-  </div>
-
-  <!-- =========================================================
-       ADD CATEGORY MODAL
-       ========================================================= -->
-
-  <div
-    class="overlay"
-    id="addCategoryOverlay"
-    aria-hidden="true"
-  >
-
-```
-<div
-  class="modal add-category-modal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="addCategoryTitle"
->
-
-  <div class="modal-header">
-
-    <div class="modal-heading">
-
-      <div class="modal-category">
-        WEDDING PLAN
-      </div>
-
-      <h2 id="addCategoryTitle">
+      <h2>
         Add category
       </h2>
 
     </div>
 
     <button
-      class="close"
-      id="closeAddCategoryButton"
+      class="modal-close"
+      id="closeCategoryButton"
       type="button"
       aria-label="Close"
     >
@@ -1000,7 +857,6 @@ content="#8f3f5f"
         id="newCategoryName"
         type="text"
         placeholder="e.g. Flowers"
-        autocomplete="off"
       >
 
     </div>
@@ -1017,24 +873,23 @@ content="#8f3f5f"
         type="text"
         maxlength="4"
         placeholder="🌸"
-        autocomplete="off"
       >
 
     </div>
 
 
-    <div class="add-category-modal-actions">
+    <div class="modal-actions">
 
       <button
-        class="clear"
-        id="cancelAddCategoryButton"
+        class="clear-button"
+        id="cancelCategoryButton"
         type="button"
       >
         Cancel
       </button>
 
       <button
-        class="save"
+        class="save-button"
         id="saveCategoryButton"
         type="button"
       >
@@ -1050,158 +905,9 @@ content="#8f3f5f"
 
   </div>
 
-  <!-- =========================================================
-       ADD ITEM MODAL
-       ========================================================= -->
-
-  <div
-    class="overlay"
-    id="addItemOverlay"
-    aria-hidden="true"
-  >
-
-```
-<div
-  class="modal add-item-modal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="addItemTitle"
->
-
-  <div class="modal-header">
-
-    <div class="modal-heading">
-
-      <div
-        class="modal-category"
-        id="addItemCategoryName"
-      >
-        CATEGORY
-      </div>
-
-      <h2 id="addItemTitle">
-        Add item
-      </h2>
-
-    </div>
-
-    <button
-      class="close"
-      id="closeAddItemButton"
-      type="button"
-      aria-label="Close"
-    >
-      ×
-    </button>
-
-  </div>
-
-
-  <div class="modal-body">
-
-    <div class="form-group">
-
-      <label for="newItemName">
-        Item name
-      </label>
-
-      <input
-        id="newItemName"
-        type="text"
-        placeholder="e.g. Wedding flowers"
-        autocomplete="off"
-      >
-
-    </div>
-
-
-    <div class="add-item-modal-actions">
-
-      <button
-        class="clear"
-        id="cancelAddItemButton"
-        type="button"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="save"
-        id="saveItemButton"
-        type="button"
-      >
-        Add item
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-```
-
-  </div>
-
-  <!-- =========================================================
-       RESET CONFIRMATION MODAL
-       ========================================================= -->
-
-  <div
-    class="overlay"
-    id="resetOverlay"
-    aria-hidden="true"
-  >
-
-```
-<div
-  class="modal reset-modal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="resetTitle"
->
-
-  <div class="reset-icon">
-    ↻
-  </div>
-
-  <h2 id="resetTitle">
-    Reset planner?
-  </h2>
-
-  <p>
-    This will restore the original wedding
-    categories and items. Your saved item
-    details will also be removed.
-  </p>
-
-  <div class="reset-actions">
-
-    <button
-      class="clear"
-      id="cancelResetButton"
-      type="button"
-    >
-      Cancel
-    </button>
-
-    <button
-      class="danger-button"
-      id="confirmResetButton"
-      type="button"
-    >
-      Reset planner
-    </button>
-
-  </div>
-
-</div>
-```
-
-  </div>
-
-  <!-- =========================================================
+  <!-- ======================================================
        SCRIPT
-       ========================================================= -->
+       ====================================================== -->
 
   <script src="./script.js"></script>
 
