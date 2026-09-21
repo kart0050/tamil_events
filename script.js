@@ -2,8 +2,7 @@
    WEDDING PLANNER
    ============================================================ */
 
-const STORAGE_KEY =
-  "tamilWeddingPlanner_v5";
+const STORAGE_KEY = "tamilWeddingPlanner_v5";
 
 
 /* ============================================================
@@ -11,7 +10,6 @@ const STORAGE_KEY =
    ============================================================ */
 
 const defaultCategories = [
-
   {
     id: "guests",
     name: "Gæster",
@@ -295,7 +293,6 @@ const defaultCategories = [
       "Order of speeches"
     ]
   }
-
 ];
 
 
@@ -306,22 +303,11 @@ const defaultCategories = [
 let categories = [];
 let savedData = {};
 
-let currentCategory =
-  "dashboard";
-
+let currentCategory = "dashboard";
 let currentItem = null;
+let modalStatus = "not";
 
-let modalStatus =
-  "not";
-
-
-/* ============================================================
-   MANAGEMENT MODAL STATE
-   ============================================================ */
-
-let managementMode = null;
-
-let managementCategoryId = null;
+let managementMode = "category";
 
 
 /* ============================================================
@@ -329,70 +315,37 @@ let managementCategoryId = null;
    ============================================================ */
 
 function createId(text) {
-
   return (
     String(text)
       .toLowerCase()
       .trim()
-      .replace(
-        /[^a-z0-9æøå]+/gi,
-        "-"
-      )
-      .replace(
-        /^-+|-+$/g,
-        ""
-      ) +
+      .replace(/[^a-z0-9æøå]+/gi, "-")
+      .replace(/^-+|-+$/g, "") +
     "-" +
     Date.now().toString(36)
   );
-
 }
 
 
 function escapeHTML(value) {
-
   return String(value ?? "")
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 
 function formatDate(dateString) {
-
   if (!dateString) {
     return "";
   }
 
   const date =
-    new Date(
-      dateString +
-      "T00:00:00"
-    );
+    new Date(dateString + "T00:00:00");
 
-  if (
-    Number.isNaN(
-      date.getTime()
-    )
-  ) {
+  if (Number.isNaN(date.getTime())) {
     return dateString;
   }
 
@@ -404,7 +357,6 @@ function formatDate(dateString) {
       year: "numeric"
     }
   );
-
 }
 
 
@@ -413,44 +365,30 @@ function formatDate(dateString) {
    ============================================================ */
 
 function loadData() {
-
   try {
-
     const stored =
-      localStorage.getItem(
-        STORAGE_KEY
-      );
+      localStorage.getItem(STORAGE_KEY);
 
     if (!stored) {
-
       categories =
-        structuredClone(
-          defaultCategories
-        );
+        structuredClone(defaultCategories);
 
       savedData = {};
-
-      normaliseCategories();
 
       saveData();
 
       return;
     }
 
-
     const parsed =
       JSON.parse(stored);
-
 
     if (
       parsed &&
       typeof parsed === "object" &&
       !Array.isArray(parsed) &&
-      Array.isArray(
-        parsed.categories
-      )
+      Array.isArray(parsed.categories)
     ) {
-
       categories =
         parsed.categories;
 
@@ -459,21 +397,13 @@ function loadData() {
         typeof parsed.savedData === "object"
           ? parsed.savedData
           : {};
-
     } else {
-
       categories =
-        structuredClone(
-          defaultCategories
-        );
+        structuredClone(defaultCategories);
 
       savedData = {};
 
-      normaliseCategories();
-
       saveData();
-
-      return;
     }
 
   } catch (error) {
@@ -484,21 +414,17 @@ function loadData() {
     );
 
     categories =
-      structuredClone(
-        defaultCategories
-      );
+      structuredClone(defaultCategories);
 
     savedData = {};
-
   }
 
   normaliseCategories();
-
 }
 
 
 /* ============================================================
-   NORMALISE
+   NORMALISE CATEGORIES
    ============================================================ */
 
 function normaliseCategories() {
@@ -507,7 +433,6 @@ function normaliseCategories() {
     categories = [];
   }
 
-
   categories =
     categories
       .filter(
@@ -515,45 +440,38 @@ function normaliseCategories() {
           category &&
           typeof category === "object"
       )
-      .map(
-        category => {
+      .map(category => {
 
-          return {
+        return {
 
-            id:
-              category.id ||
-              createId(
-                category.name ||
-                "category"
-              ),
+          id:
+            category.id ||
+            createId(
+              category.name ||
+              "category"
+            ),
 
-            name:
-              String(
-                category.name ||
-                "Unnamed category"
-              ),
+          name:
+            String(
+              category.name ||
+              "Unnamed category"
+            ),
 
-            icon:
-              String(
-                category.icon ||
-                "📋"
-              ),
+          icon:
+            String(
+              category.icon ||
+              "📋"
+            ),
 
-            items:
-              Array.isArray(
-                category.items
-              )
-                ? category.items.map(
-                    item =>
-                      String(item)
-                  )
-                : []
+          items:
+            Array.isArray(category.items)
+              ? category.items.map(
+                  item => String(item)
+                )
+              : []
+        };
 
-          };
-
-        }
-      );
-
+      });
 }
 
 
@@ -567,15 +485,11 @@ function saveData() {
 
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(
-        {
-          version: 5,
-          categories:
-            categories,
-          savedData:
-            savedData
-        }
-      )
+      JSON.stringify({
+        version: 5,
+        categories,
+        savedData
+      })
     );
 
     return true;
@@ -592,9 +506,7 @@ function saveData() {
     );
 
     return false;
-
   }
-
 }
 
 
@@ -602,17 +514,8 @@ function saveData() {
    ITEM KEY
    ============================================================ */
 
-function itemKey(
-  categoryId,
-  item
-) {
-
-  return (
-    categoryId +
-    "::" +
-    item
-  );
-
+function itemKey(categoryId, item) {
+  return categoryId + "::" + item;
 }
 
 
@@ -620,17 +523,13 @@ function itemKey(
    GET ITEM
    ============================================================ */
 
-function getItem(
-  categoryId,
-  item
-) {
+function getItem(categoryId, item) {
 
   const key =
     itemKey(
       categoryId,
       item
     );
-
 
   if (
     !savedData[key] ||
@@ -639,47 +538,25 @@ function getItem(
 
     savedData[key] = {
 
-      status:
-        "not",
-
-      vendor:
-        "",
-
-      price:
-        "",
-
-      deadline:
-        "",
-
-      link:
-        "",
-
-      notes:
-        "",
-
-      enabled:
-        true
+      status: "not",
+      vendor: "",
+      price: "",
+      deadline: "",
+      link: "",
+      notes: "",
+      enabled: true
 
     };
-
   }
-
 
   const data =
     savedData[key];
 
-
   data.status =
-    [
-      "not",
-      "progress",
-      "done"
-    ].includes(
-      data.status
-    )
+    ["not", "progress", "done"]
+      .includes(data.status)
       ? data.status
       : "not";
-
 
   data.vendor =
     data.vendor || "";
@@ -696,20 +573,13 @@ function getItem(
   data.notes =
     data.notes || "";
 
-
   if (
-    typeof data.enabled !==
-    "boolean"
+    typeof data.enabled !== "boolean"
   ) {
-
-    data.enabled =
-      true;
-
+    data.enabled = true;
   }
 
-
   return data;
-
 }
 
 
@@ -723,7 +593,6 @@ function exportData() {
 
     saveData();
 
-
     const backup = {
 
       app:
@@ -735,14 +604,10 @@ function exportData() {
       exportedAt:
         new Date().toISOString(),
 
-      categories:
-        categories,
-
-      savedData:
-        savedData
+      categories,
+      savedData
 
     };
-
 
     const json =
       JSON.stringify(
@@ -751,36 +616,24 @@ function exportData() {
         2
       );
 
-
     const blob =
       new Blob(
         [json],
         {
-          type:
-            "application/json"
+          type: "application/json"
         }
       );
 
-
     const url =
-      URL.createObjectURL(
-        blob
-      );
-
+      URL.createObjectURL(blob);
 
     const link =
-      document.createElement(
-        "a"
-      );
+      document.createElement("a");
 
-
-    link.href =
-      url;
-
+    link.href = url;
 
     const now =
       new Date();
-
 
     const filename =
       "wedding-planner-backup-" +
@@ -788,46 +641,26 @@ function exportData() {
       "-" +
       String(
         now.getMonth() + 1
-      ).padStart(
-        2,
-        "0"
-      ) +
+      ).padStart(2, "0") +
       "-" +
       String(
         now.getDate()
-      ).padStart(
-        2,
-        "0"
-      ) +
+      ).padStart(2, "0") +
       ".json";
-
 
     link.download =
       filename;
 
-
-    document.body.appendChild(
-      link
-    );
-
+    document.body.appendChild(link);
 
     link.click();
 
-
-    document.body.removeChild(
-      link
-    );
-
+    document.body.removeChild(link);
 
     setTimeout(
-      () => {
-        URL.revokeObjectURL(
-          url
-        );
-      },
+      () => URL.revokeObjectURL(url),
       1000
     );
-
 
   } catch (error) {
 
@@ -839,9 +672,7 @@ function exportData() {
     alert(
       "Sorry, the planner data could not be exported."
     );
-
   }
-
 }
 
 
@@ -854,15 +685,12 @@ function importData(event) {
   const file =
     event.target.files[0];
 
-
   if (!file) {
     return;
   }
 
-
   const reader =
     new FileReader();
-
 
   reader.onload =
     function (e) {
@@ -873,7 +701,6 @@ function importData(event) {
           JSON.parse(
             e.target.result
           );
-
 
         let importedCategories =
           null;
@@ -893,8 +720,7 @@ function importData(event) {
             imported.categories;
 
           importedSavedData =
-            imported.savedData ||
-            {};
+            imported.savedData || {};
 
         }
 
@@ -902,8 +728,7 @@ function importData(event) {
         else if (
           imported &&
           imported.data &&
-          typeof imported.data ===
-            "object"
+          typeof imported.data === "object"
         ) {
 
           importedCategories =
@@ -913,7 +738,6 @@ function importData(event) {
 
           importedSavedData =
             imported.data;
-
         }
 
 
@@ -922,14 +746,12 @@ function importData(event) {
             importedCategories
           ) ||
           !importedSavedData ||
-          typeof importedSavedData !==
-            "object"
+          typeof importedSavedData !== "object"
         ) {
 
           throw new Error(
             "Invalid backup"
           );
-
         }
 
 
@@ -939,14 +761,12 @@ function importData(event) {
             "Your current planner data will be replaced."
           );
 
-
         if (!confirmed) {
 
           event.target.value =
             "";
 
           return;
-
         }
 
 
@@ -955,7 +775,6 @@ function importData(event) {
 
         savedData =
           importedSavedData;
-
 
         normaliseCategories();
 
@@ -967,9 +786,7 @@ function importData(event) {
           alert(
             "Wedding planner data imported successfully! ❤️"
           );
-
         }
-
 
       } catch (error) {
 
@@ -981,13 +798,10 @@ function importData(event) {
         alert(
           "This file is not a valid wedding planner backup."
         );
-
       }
-
 
       event.target.value =
         "";
-
     };
 
 
@@ -1000,12 +814,10 @@ function importData(event) {
 
       event.target.value =
         "";
-
     };
 
 
   reader.readAsText(file);
-
 }
 
 
@@ -1020,21 +832,16 @@ function buildNavigation() {
       "navigation"
     );
 
-
   if (!nav) {
     return;
   }
-
 
   nav.innerHTML =
     "";
 
 
   const dashboard =
-    document.createElement(
-      "button"
-    );
-
+    document.createElement("button");
 
   dashboard.type =
     "button";
@@ -1043,17 +850,14 @@ function buildNavigation() {
     "🏠 Dashboard";
 
   dashboard.className =
-    currentCategory ===
-    "dashboard"
+    currentCategory === "dashboard"
       ? "active"
       : "";
-
 
   dashboard.addEventListener(
     "click",
     showDashboard
   );
-
 
   nav.appendChild(
     dashboard
@@ -1064,36 +868,27 @@ function buildNavigation() {
     category => {
 
       const button =
-        document.createElement(
-          "button"
-        );
-
+        document.createElement("button");
 
       button.type =
         "button";
-
 
       button.textContent =
         category.icon +
         " " +
         category.name;
 
-
       button.className =
-        currentCategory ===
-        category.id
+        currentCategory === category.id
           ? "active"
           : "";
 
-
       button.addEventListener(
         "click",
-        () =>
-          showCategory(
-            category.id
-          )
+        () => showCategory(
+          category.id
+        )
       );
-
 
       nav.appendChild(
         button
@@ -1101,7 +896,6 @@ function buildNavigation() {
 
     }
   );
-
 }
 
 
@@ -1136,12 +930,10 @@ function showDashboard() {
       "block";
   }
 
-
   if (categoryPage) {
     categoryPage.style.display =
       "none";
   }
-
 
   if (managePage) {
     managePage.style.display =
@@ -1153,12 +945,10 @@ function showDashboard() {
 
   renderDashboard();
 
-
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
-
 }
 
 
@@ -1185,26 +975,22 @@ function renderDashboard() {
               item
             );
 
-
           if (!data.enabled) {
             return;
           }
-
 
           total++;
 
 
           if (
-            data.status ===
-            "done"
+            data.status === "done"
           ) {
             done++;
           }
 
 
           if (
-            data.status ===
-            "progress"
+            data.status === "progress"
           ) {
             progress++;
           }
@@ -1219,8 +1005,7 @@ function renderDashboard() {
   const percent =
     total > 0
       ? Math.round(
-          (done / total) *
-          100
+          (done / total) * 100
         )
       : 0;
 
@@ -1261,30 +1046,25 @@ function renderDashboard() {
       total;
   }
 
-
   if (doneCount) {
     doneCount.textContent =
       done;
   }
-
 
   if (progressCount) {
     progressCount.textContent =
       progress;
   }
 
-
   if (categoryCount) {
     categoryCount.textContent =
       categories.length;
   }
 
-
   if (overallPercent) {
     overallPercent.textContent =
       percent + "%";
   }
-
 
   if (overallFill) {
     overallFill.style.width =
@@ -1297,11 +1077,9 @@ function renderDashboard() {
       "summaryGrid"
     );
 
-
   if (!grid) {
     return;
   }
-
 
   grid.innerHTML =
     "";
@@ -1317,51 +1095,44 @@ function renderDashboard() {
 
 
       const card =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       card.className =
         "summary-card";
 
 
       card.innerHTML =
-
         '<div class="summary-icon">' +
-        escapeHTML(
-          category.icon
-        ) +
+          escapeHTML(
+            category.icon
+          ) +
         "</div>" +
 
         "<h3>" +
-        escapeHTML(
-          category.name
-        ) +
+          escapeHTML(
+            category.name
+          ) +
         "</h3>" +
 
         "<p>" +
-        stats.done +
-        " / " +
-        stats.total +
-        " completed" +
+          stats.done +
+          " / " +
+          stats.total +
+          " completed" +
         "</p>" +
 
         '<div class="summary-bar">' +
-
           '<div style="width:' +
-          stats.percent +
-          '%"></div>' +
-
+            stats.percent +
+            '%"></div>' +
         "</div>";
 
 
       card.addEventListener(
         "click",
-        () =>
-          showCategory(
-            category.id
-          )
+        () => showCategory(
+          category.id
+        )
       );
 
 
@@ -1371,7 +1142,6 @@ function renderDashboard() {
 
     }
   );
-
 }
 
 
@@ -1385,7 +1155,6 @@ function showCategory(id) {
     categories.find(
       c => c.id === id
     );
-
 
   if (!category) {
     return;
@@ -1417,12 +1186,10 @@ function showCategory(id) {
       "none";
   }
 
-
   if (categoryPage) {
     categoryPage.style.display =
       "block";
   }
-
 
   if (managePage) {
     managePage.style.display =
@@ -1442,7 +1209,6 @@ function showCategory(id) {
       category.icon +
       " " +
       category.name;
-
   }
 
 
@@ -1462,7 +1228,6 @@ function showCategory(id) {
       "";
   }
 
-
   if (filter) {
     filter.value =
       "all";
@@ -1478,7 +1243,6 @@ function showCategory(id) {
     top: 0,
     behavior: "smooth"
   });
-
 }
 
 
@@ -1486,9 +1250,7 @@ function showCategory(id) {
    CATEGORY STATS
    ============================================================ */
 
-function getCategoryStats(
-  category
-) {
+function getCategoryStats(category) {
 
   let total = 0;
   let done = 0;
@@ -1513,8 +1275,7 @@ function getCategoryStats(
 
 
       if (
-        data.status ===
-        "done"
+        data.status === "done"
       ) {
         done++;
       }
@@ -1526,8 +1287,7 @@ function getCategoryStats(
   const percent =
     total > 0
       ? Math.round(
-          (done / total) *
-          100
+          (done / total) * 100
         )
       : 0;
 
@@ -1537,7 +1297,6 @@ function getCategoryStats(
     done,
     percent
   };
-
 }
 
 
@@ -1549,9 +1308,7 @@ function renderCategory() {
 
   const category =
     categories.find(
-      c =>
-        c.id ===
-        currentCategory
+      c => c.id === currentCategory
     );
 
 
@@ -1578,6 +1335,7 @@ function renderCategory() {
 
 
   if (categoryPercent) {
+
     categoryPercent.textContent =
       stats.percent + "%";
   }
@@ -1590,7 +1348,6 @@ function renderCategory() {
       " / " +
       stats.total +
       " completed";
-
   }
 
 
@@ -1670,21 +1427,14 @@ function renderCategory() {
 
       const matchesSearch =
         !search ||
-        itemText.includes(
-          search
-        ) ||
-        vendorText.includes(
-          search
-        ) ||
-        notesText.includes(
-          search
-        );
+        itemText.includes(search) ||
+        vendorText.includes(search) ||
+        notesText.includes(search);
 
 
       const matchesStatus =
         status === "all" ||
-        data.status ===
-          status;
+        data.status === status;
 
 
       if (
@@ -1699,18 +1449,14 @@ function renderCategory() {
 
 
       const card =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       card.className =
         "item-card";
 
 
       if (
-        data.status ===
-        "done"
+        data.status === "done"
       ) {
         card.classList.add(
           "done"
@@ -1726,8 +1472,7 @@ function renderCategory() {
 
 
       if (
-        data.status ===
-        "progress"
+        data.status === "progress"
       ) {
 
         statusText =
@@ -1735,13 +1480,11 @@ function renderCategory() {
 
         statusClass =
           " progress";
-
       }
 
 
       if (
-        data.status ===
-        "done"
+        data.status === "done"
       ) {
 
         statusText =
@@ -1749,7 +1492,6 @@ function renderCategory() {
 
         statusClass =
           " done";
-
       }
 
 
@@ -1760,11 +1502,13 @@ function renderCategory() {
               data.vendor
             ) +
             "</p>"
+
           : "<p>Click to add details</p>";
 
 
       const deadlineHTML =
         data.deadline
+
           ? '<div class="item-meta">📅 ' +
             escapeHTML(
               formatDate(
@@ -1772,6 +1516,7 @@ function renderCategory() {
               )
             ) +
             "</div>"
+
           : "";
 
 
@@ -1804,11 +1549,10 @@ function renderCategory() {
 
       card.addEventListener(
         "click",
-        () =>
-          openModal(
-            category.id,
-            item
-          )
+        () => openModal(
+          category.id,
+          item
+        )
       );
 
 
@@ -1832,9 +1576,7 @@ function renderCategory() {
       visible > 0
         ? "none"
         : "block";
-
   }
-
 }
 
 
@@ -1855,9 +1597,7 @@ function openModal(
 
   const category =
     categories.find(
-      c =>
-        c.id ===
-        categoryId
+      c => c.id === categoryId
     );
 
 
@@ -1969,7 +1709,6 @@ function openModal(
       "active"
     );
   }
-
 }
 
 
@@ -1986,17 +1725,14 @@ function closeModal() {
 
 
   if (overlay) {
-
     overlay.classList.remove(
       "active"
     );
-
   }
 
 
   currentItem =
     null;
-
 }
 
 
@@ -2004,15 +1740,12 @@ function closeModal() {
    STATUS
    ============================================================ */
 
-function chooseStatus(
-  status
-) {
+function chooseStatus(status) {
 
   modalStatus =
     status;
 
   updateStatusButtons();
-
 }
 
 
@@ -2038,10 +1771,8 @@ function updateStatusButtons() {
 
     notButton.classList.toggle(
       "active",
-      modalStatus ===
-        "not"
+      modalStatus === "not"
     );
-
   }
 
 
@@ -2049,10 +1780,8 @@ function updateStatusButtons() {
 
     progressButton.classList.toggle(
       "active",
-      modalStatus ===
-        "progress"
+      modalStatus === "progress"
     );
-
   }
 
 
@@ -2060,12 +1789,9 @@ function updateStatusButtons() {
 
     doneButton.classList.toggle(
       "active",
-      modalStatus ===
-        "done"
+      modalStatus === "done"
     );
-
   }
-
 }
 
 
@@ -2153,31 +1879,22 @@ function saveItem() {
 
   saveData();
 
+
   closeModal();
 
 
   if (
-    currentCategory ===
-    "dashboard"
+    currentCategory === "dashboard"
   ) {
 
     showDashboard();
-
-  } else if (
-    currentCategory ===
-    "manage"
-  ) {
-
-    showManagePlanner();
 
   } else {
 
     showCategory(
       currentCategory
     );
-
   }
-
 }
 
 
@@ -2224,8 +1941,7 @@ function clearItem() {
 
 
   if (
-    currentCategory ===
-    "dashboard"
+    currentCategory === "dashboard"
   ) {
 
     showDashboard();
@@ -2235,464 +1951,12 @@ function clearItem() {
     showCategory(
       currentCategory
     );
-
   }
-
 }
 
 
 /* ============================================================
-   MANAGEMENT MODAL
-   ============================================================ */
-
-function openManagementModal(
-  mode,
-  categoryId = null
-) {
-
-  const overlay =
-    document.getElementById(
-      "managementOverlay"
-    );
-
-  const title =
-    document.getElementById(
-      "managementModalTitle"
-    );
-
-  const nameInput =
-    document.getElementById(
-      "managementNameInput"
-    );
-
-  const iconInput =
-    document.getElementById(
-      "managementIconInput"
-    );
-
-  const iconGroup =
-    document.getElementById(
-      "iconGroup"
-    );
-
-
-  if (
-    !overlay ||
-    !title ||
-    !nameInput ||
-    !iconInput ||
-    !iconGroup
-  ) {
-
-    console.error(
-      "Management modal elements not found."
-    );
-
-    return;
-
-  }
-
-
-  managementMode =
-    mode;
-
-  managementCategoryId =
-    categoryId;
-
-
-  nameInput.value =
-    "";
-
-  iconInput.value =
-    "";
-
-
-  if (
-    mode ===
-    "category"
-  ) {
-
-    title.textContent =
-      "Add category";
-
-    iconGroup.style.display =
-      "block";
-
-    nameInput.placeholder =
-      "Enter category name";
-
-    iconInput.placeholder =
-      "💍";
-
-  }
-
-
-  else if (
-    mode ===
-    "item"
-  ) {
-
-    const category =
-      categories.find(
-        category =>
-          category.id ===
-          categoryId
-      );
-
-
-    if (!category) {
-      return;
-    }
-
-
-    title.textContent =
-      "Add item to " +
-      category.name;
-
-
-    iconGroup.style.display =
-      "none";
-
-
-    nameInput.placeholder =
-      "Enter item name";
-
-  }
-
-
-  overlay.classList.add(
-    "active"
-  );
-
-
-  setTimeout(
-    () => {
-      nameInput.focus();
-    },
-    100
-  );
-
-}
-
-
-/* ============================================================
-   CLOSE MANAGEMENT MODAL
-   ============================================================ */
-
-function closeManagementModal() {
-
-  const overlay =
-    document.getElementById(
-      "managementOverlay"
-    );
-
-
-  if (overlay) {
-
-    overlay.classList.remove(
-      "active"
-    );
-
-  }
-
-
-  managementMode =
-    null;
-
-  managementCategoryId =
-    null;
-
-}
-
-
-/* ============================================================
-   SAVE MANAGEMENT
-   ============================================================ */
-
-function saveManagement() {
-
-  const nameInput =
-    document.getElementById(
-      "managementNameInput"
-    );
-
-  const iconInput =
-    document.getElementById(
-      "managementIconInput"
-    );
-
-
-  if (!nameInput) {
-    return;
-  }
-
-
-  const name =
-    nameInput.value.trim();
-
-
-  const icon =
-    iconInput
-      ? iconInput.value.trim()
-      : "";
-
-
-  if (!name) {
-
-    alert(
-      "Please enter a name."
-    );
-
-    nameInput.focus();
-
-    return;
-
-  }
-
-
-  /* ==========================================================
-     CATEGORY
-     ========================================================== */
-
-  if (
-    managementMode ===
-    "category"
-  ) {
-
-    const exists =
-      categories.some(
-        category =>
-          category.name
-            .toLowerCase() ===
-          name.toLowerCase()
-      );
-
-
-    if (exists) {
-
-      alert(
-        "A category with this name already exists."
-      );
-
-      nameInput.focus();
-
-      return;
-
-    }
-
-
-    const category = {
-
-      id:
-        createId(name),
-
-      name:
-        name,
-
-      icon:
-        icon || "📋",
-
-      items:
-        []
-
-    };
-
-
-    categories.push(
-      category
-    );
-
-
-    if (!saveData()) {
-      return;
-    }
-
-
-    closeManagementModal();
-
-    buildNavigation();
-
-    renderDashboard();
-
-
-    if (
-      currentCategory ===
-      "manage"
-    ) {
-      renderManagePlanner();
-    }
-
-
-    alert(
-      '"' +
-      name +
-      '" has been added successfully.'
-    );
-
-
-    return;
-
-  }
-
-
-  /* ==========================================================
-     ITEM
-     ========================================================== */
-
-  if (
-    managementMode ===
-    "item"
-  ) {
-
-    const category =
-      categories.find(
-        category =>
-          category.id ===
-          managementCategoryId
-      );
-
-
-    if (!category) {
-
-      alert(
-        "Category could not be found."
-      );
-
-      return;
-
-    }
-
-
-    const exists =
-      category.items.some(
-        item =>
-          item.toLowerCase() ===
-          name.toLowerCase()
-      );
-
-
-    if (exists) {
-
-      alert(
-        "This item already exists in this category."
-      );
-
-      nameInput.focus();
-
-      return;
-
-    }
-
-
-    category.items.push(
-      name
-    );
-
-
-    getItem(
-      category.id,
-      name
-    );
-
-
-    if (!saveData()) {
-      return;
-    }
-
-
-    closeManagementModal();
-
-
-    if (
-      currentCategory ===
-      category.id
-    ) {
-
-      showCategory(
-        category.id
-      );
-
-    }
-
-
-    else if (
-      currentCategory ===
-      "manage"
-    ) {
-
-      renderManagePlanner();
-
-    }
-
-
-    else {
-
-      renderDashboard();
-
-    }
-
-
-    alert(
-      '"' +
-      name +
-      '" has been added successfully.'
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   ADD CATEGORY
-   ============================================================ */
-
-function addCategory() {
-
-  openManagementModal(
-    "category"
-  );
-
-}
-
-
-/* ============================================================
-   ADD ITEM
-   ============================================================ */
-
-function addItem(
-  categoryId
-) {
-
-  const category =
-    categories.find(
-      c =>
-        c.id ===
-        categoryId
-    );
-
-
-  if (!category) {
-
-    alert(
-      "Category could not be found."
-    );
-
-    return;
-
-  }
-
-
-  openManagementModal(
-    "item",
-    categoryId
-  );
-
-}
-
-
-/* ============================================================
-   MANAGE PLANNER
+   MANAGE PLANNER PAGE
    ============================================================ */
 
 function showManagePlanner() {
@@ -2722,12 +1986,10 @@ function showManagePlanner() {
       "none";
   }
 
-
   if (categoryPage) {
     categoryPage.style.display =
       "none";
   }
-
 
   if (managePage) {
     managePage.style.display =
@@ -2744,12 +2006,11 @@ function showManagePlanner() {
     top: 0,
     behavior: "smooth"
   });
-
 }
 
 
 /* ============================================================
-   RENDER MANAGEMENT
+   RENDER MANAGE PLANNER
    ============================================================ */
 
 function renderManagePlanner() {
@@ -2773,9 +2034,7 @@ function renderManagePlanner() {
     category => {
 
       const wrapper =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
 
       wrapper.className =
@@ -2786,7 +2045,7 @@ function renderManagePlanner() {
 
         '<div class="manage-category-header">' +
 
-          '<div class="manage-category-title">' +
+          '<div>' +
 
             '<span class="manage-category-icon">' +
               escapeHTML(
@@ -2802,19 +2061,8 @@ function renderManagePlanner() {
 
           "</div>" +
 
-          '<div class="manage-category-actions">' +
-
-            '<button type="button" class="manage-add-item">' +
-              "+ Add item" +
-            "</button>" +
-
-            '<button type="button" class="manage-delete-category">' +
-              "Delete category" +
-            "</button>" +
-
-          "</div>" +
-
         "</div>" +
+
 
         '<div class="manage-items"></div>';
 
@@ -2828,93 +2076,20 @@ function renderManagePlanner() {
       category.items.forEach(
         item => {
 
-          const data =
-            getItem(
-              category.id,
-              item
-            );
-
-
           const row =
-            document.createElement(
-              "div"
-            );
+            document.createElement("div");
 
 
           row.className =
             "manage-item";
 
 
-          if (!data.enabled) {
-
-            row.classList.add(
-              "disabled"
-            );
-
-          }
-
-
           row.innerHTML =
-
             "<span>" +
-              escapeHTML(item) +
-            "</span>" +
-
-            '<div class="manage-item-actions">' +
-
-              '<button type="button" class="toggle-item">' +
-                (
-                  data.enabled
-                    ? "Disable"
-                    : "Enable"
-                ) +
-              "</button>" +
-
-              '<button type="button" class="delete-item">' +
-                "Delete" +
-              "</button>" +
-
-            "</div>";
-
-
-          const toggleButton =
-            row.querySelector(
-              ".toggle-item"
-            );
-
-
-          if (toggleButton) {
-
-            toggleButton.addEventListener(
-              "click",
-              () =>
-                toggleItem(
-                  category.id,
-                  item
-                )
-            );
-
-          }
-
-
-          const deleteButton =
-            row.querySelector(
-              ".delete-item"
-            );
-
-
-          if (deleteButton) {
-
-            deleteButton.addEventListener(
-              "click",
-              () =>
-                deleteItem(
-                  category.id,
-                  item
-                )
-            );
-
-          }
+              escapeHTML(
+                item
+              ) +
+            "</span>";
 
 
           itemsContainer.appendChild(
@@ -2925,248 +2100,377 @@ function renderManagePlanner() {
       );
 
 
-      const addItemButton =
-        wrapper.querySelector(
-          ".manage-add-item"
-        );
-
-
-      if (addItemButton) {
-
-        addItemButton.addEventListener(
-          "click",
-          () =>
-            addItem(
-              category.id
-            )
-        );
-
-      }
-
-
-      const deleteCategoryButton =
-        wrapper.querySelector(
-          ".manage-delete-category"
-        );
-
-
-      if (
-        deleteCategoryButton
-      ) {
-
-        deleteCategoryButton.addEventListener(
-          "click",
-          () =>
-            deleteCategory(
-              category.id
-            )
-        );
-
-      }
-
-
       container.appendChild(
         wrapper
       );
 
     }
   );
-
 }
 
 
 /* ============================================================
-   DELETE CATEGORY
+   OPEN MANAGEMENT MODAL
    ============================================================ */
 
-function deleteCategory(
-  categoryId
+function openManagementModal(
+  mode = "category"
 ) {
 
-  const category =
-    categories.find(
-      c =>
-        c.id ===
-        categoryId
+  managementMode =
+    mode;
+
+
+  const overlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+  const title =
+    document.getElementById(
+      "managementModalTitle"
+    );
+
+  const nameInput =
+    document.getElementById(
+      "managementNameInput"
+    );
+
+  const iconInput =
+    document.getElementById(
+      "managementIconInput"
+    );
+
+  const iconGroup =
+    document.getElementById(
+      "iconGroup"
+    );
+
+  const saveButton =
+    document.getElementById(
+      "saveManagementButton"
     );
 
 
-  if (!category) {
+  if (
+    !overlay ||
+    !title ||
+    !nameInput ||
+    !saveButton
+  ) {
     return;
   }
 
 
-  const confirmed =
-    confirm(
-      'Delete the category "' +
-      category.name +
-      '"?\n\n' +
-      "All items in this category will be removed."
-    );
+  nameInput.value =
+    "";
 
-
-  if (!confirmed) {
-    return;
+  if (iconInput) {
+    iconInput.value =
+      "";
   }
 
 
-  categories =
-    categories.filter(
-      c =>
-        c.id !==
-        categoryId
-    );
+  if (
+    mode === "item"
+  ) {
+
+    const category =
+      categories.find(
+        c =>
+          c.id ===
+          currentCategory
+      );
 
 
-  Object.keys(
-    savedData
-  ).forEach(
-    key => {
-
-      if (
-        key.startsWith(
-          categoryId +
-          "::"
-        )
-      ) {
-
-        delete savedData[key];
-
-      }
-
+    if (!category) {
+      return;
     }
+
+
+    title.textContent =
+      "Add item";
+
+
+    nameInput.placeholder =
+      "e.g. Wedding flowers";
+
+
+    if (iconGroup) {
+      iconGroup.style.display =
+        "none";
+    }
+
+
+    saveButton.textContent =
+      "Add item";
+
+  } else {
+
+    title.textContent =
+      "Add category";
+
+
+    nameInput.placeholder =
+      "e.g. Flowers";
+
+
+    if (iconGroup) {
+      iconGroup.style.display =
+        "block";
+    }
+
+
+    saveButton.textContent =
+      "Add category";
+  }
+
+
+  overlay.classList.add(
+    "active"
   );
 
 
-  saveData();
+  setTimeout(
+    () => nameInput.focus(),
+    100
+  );
+}
 
 
-  currentCategory =
-    "dashboard";
+/* ============================================================
+   CLOSE MANAGEMENT MODAL
+   ============================================================ */
 
+function closeManagementModal() {
+
+  const overlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+
+  if (overlay) {
+
+    overlay.classList.remove(
+      "active"
+    );
+  }
+}
+
+
+/* ============================================================
+   SAVE MANAGEMENT
+   ============================================================ */
+
+function saveManagement() {
+
+  const nameInput =
+    document.getElementById(
+      "managementNameInput"
+    );
+
+  const iconInput =
+    document.getElementById(
+      "managementIconInput"
+    );
+
+
+  if (!nameInput) {
+    return;
+  }
+
+
+  const name =
+    nameInput.value.trim();
+
+
+  if (!name) {
+
+    alert(
+      managementMode === "item"
+        ? "Please enter an item name."
+        : "Please enter a category name."
+    );
+
+    nameInput.focus();
+
+    return;
+  }
+
+
+  /* ==========================================================
+     ADD ITEM
+     ========================================================== */
+
+  if (
+    managementMode === "item"
+  ) {
+
+    const category =
+      categories.find(
+        c =>
+          c.id ===
+          currentCategory
+      );
+
+
+    if (!category) {
+      return;
+    }
+
+
+    const exists =
+      category.items.some(
+        existing =>
+          existing.toLowerCase() ===
+          name.toLowerCase()
+      );
+
+
+    if (exists) {
+
+      alert(
+        "This item already exists."
+      );
+
+      nameInput.focus();
+
+      return;
+    }
+
+
+    category.items.push(
+      name
+    );
+
+
+    getItem(
+      category.id,
+      name
+    );
+
+
+    if (!saveData()) {
+      return;
+    }
+
+
+    closeManagementModal();
+
+
+    renderCategory();
+
+    renderDashboard();
+
+    buildNavigation();
+
+
+    return;
+  }
+
+
+  /* ==========================================================
+     ADD CATEGORY
+     ========================================================== */
+
+  const exists =
+    categories.some(
+      category =>
+        category.name
+          .toLowerCase() ===
+        name.toLowerCase()
+    );
+
+
+  if (exists) {
+
+    alert(
+      "A category with this name already exists."
+    );
+
+    nameInput.focus();
+
+    return;
+  }
+
+
+  const icon =
+    iconInput
+      ? iconInput.value.trim()
+      : "";
+
+
+  const category = {
+
+    id:
+      createId(name),
+
+    name:
+      name,
+
+    icon:
+      icon || "📋",
+
+    items:
+      []
+
+  };
+
+
+  categories.push(
+    category
+  );
+
+
+  if (!saveData()) {
+    return;
+  }
+
+
+  closeManagementModal();
+
+
+  renderManagePlanner();
+
+  renderDashboard();
 
   buildNavigation();
 
-  showDashboard();
 
+  alert(
+    '"' +
+    name +
+    '" has been added successfully.'
+  );
 }
 
 
 /* ============================================================
-   TOGGLE ITEM
+   ADD ITEM BUTTON
    ============================================================ */
 
-function toggleItem(
-  categoryId,
-  item
-) {
-
-  const data =
-    getItem(
-      categoryId,
-      item
-    );
-
-
-  data.enabled =
-    !data.enabled;
-
-
-  saveData();
-
-
-  renderManagePlanner();
-
+function addItemToCurrentCategory() {
 
   if (
-    currentCategory ===
-    categoryId
-  ) {
-
-    renderCategory();
-
-  }
-
-
-  renderDashboard();
-
-}
-
-
-/* ============================================================
-   DELETE ITEM
-   ============================================================ */
-
-function deleteItem(
-  categoryId,
-  item
-) {
-
-  const category =
-    categories.find(
+    !categories.some(
       c =>
         c.id ===
-        categoryId
-    );
-
-
-  if (!category) {
-    return;
-  }
-
-
-  const confirmed =
-    confirm(
-      'Delete "' +
-      item +
-      '"?'
-    );
-
-
-  if (!confirmed) {
-    return;
-  }
-
-
-  category.items =
-    category.items.filter(
-      existing =>
-        existing !==
-        item
-    );
-
-
-  delete savedData[
-    itemKey(
-      categoryId,
-      item
+        currentCategory
     )
-  ];
-
-
-  saveData();
-
-
-  renderManagePlanner();
-
-
-  if (
-    currentCategory ===
-    categoryId
   ) {
-
-    renderCategory();
-
+    return;
   }
 
 
-  renderDashboard();
-
+  openManagementModal(
+    "item"
+  );
 }
 
 
 /* ============================================================
-   EVENT SETUP
+   SETUP EVENTS
    ============================================================ */
 
 function setupEvents() {
@@ -3231,8 +2535,60 @@ function setupEvents() {
       "itemStatusFilter"
     );
 
+  const addCategoryButton =
+    document.getElementById(
+      "addCategoryButton"
+    );
 
-  /* EXPORT */
+  const addItemButton =
+    document.getElementById(
+      "addItemButton"
+    );
+
+  const backToDashboardButton =
+    document.getElementById(
+      "backToDashboardButton"
+    );
+
+  const manageCurrentCategoryButton =
+    document.getElementById(
+      "manageCurrentCategoryButton"
+    );
+
+  const manageBackButton =
+    document.getElementById(
+      "manageBackButton"
+    );
+
+  const managementOverlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+  const closeManagementButton =
+    document.getElementById(
+      "closeManagementButton"
+    );
+
+  const cancelManagementButton =
+    document.getElementById(
+      "cancelManagementButton"
+    );
+
+  const saveManagementButton =
+    document.getElementById(
+      "saveManagementButton"
+    );
+
+  const managementNameInput =
+    document.getElementById(
+      "managementNameInput"
+    );
+
+
+  /* ==========================================================
+     EXPORT
+     ========================================================== */
 
   if (exportButton) {
 
@@ -3240,11 +2596,12 @@ function setupEvents() {
       "click",
       exportData
     );
-
   }
 
 
-  /* IMPORT */
+  /* ==========================================================
+     IMPORT
+     ========================================================== */
 
   if (
     importButton &&
@@ -3253,10 +2610,8 @@ function setupEvents() {
 
     importButton.addEventListener(
       "click",
-      () =>
-        importFile.click()
+      () => importFile.click()
     );
-
   }
 
 
@@ -3266,11 +2621,12 @@ function setupEvents() {
       "change",
       importData
     );
-
   }
 
 
-  /* ITEM MODAL */
+  /* ==========================================================
+     ITEM MODAL
+     ========================================================== */
 
   if (closeModalButton) {
 
@@ -3278,7 +2634,6 @@ function setupEvents() {
       "click",
       closeModal
     );
-
   }
 
 
@@ -3288,7 +2643,6 @@ function setupEvents() {
       "click",
       saveItem
     );
-
   }
 
 
@@ -3298,7 +2652,6 @@ function setupEvents() {
       "click",
       clearItem
     );
-
   }
 
 
@@ -3307,11 +2660,8 @@ function setupEvents() {
     notButton.addEventListener(
       "click",
       () =>
-        chooseStatus(
-          "not"
-        )
+        chooseStatus("not")
     );
-
   }
 
 
@@ -3320,11 +2670,8 @@ function setupEvents() {
     progressButton.addEventListener(
       "click",
       () =>
-        chooseStatus(
-          "progress"
-        )
+        chooseStatus("progress")
     );
-
   }
 
 
@@ -3333,11 +2680,8 @@ function setupEvents() {
     doneButton.addEventListener(
       "click",
       () =>
-        chooseStatus(
-          "done"
-        )
+        chooseStatus("done")
     );
-
   }
 
 
@@ -3348,21 +2692,20 @@ function setupEvents() {
       event => {
 
         if (
-          event.target ===
-          overlay
+          event.target === overlay
         ) {
 
           closeModal();
-
         }
 
       }
     );
-
   }
 
 
-  /* SEARCH */
+  /* ==========================================================
+     SEARCH
+     ========================================================== */
 
   if (search) {
 
@@ -3370,7 +2713,6 @@ function setupEvents() {
       "input",
       renderCategory
     );
-
   }
 
 
@@ -3380,108 +2722,49 @@ function setupEvents() {
       "change",
       renderCategory
     );
-
   }
 
 
-  /* DASHBOARD MANAGEMENT */
-
-  const addCategoryButton =
-    document.getElementById(
-      "addCategoryButton"
-    );
-
+  /* ==========================================================
+     ADD CATEGORY
+     ========================================================== */
 
   if (addCategoryButton) {
 
     addCategoryButton.addEventListener(
       "click",
-      addCategory
+      () =>
+        openManagementModal(
+          "category"
+        )
     );
-
   }
 
 
-  /* CATEGORY ADD ITEM */
-
-  const addItemButton =
-    document.getElementById(
-      "addItemButton"
-    );
-
+  /* ==========================================================
+     ADD ITEM
+     ========================================================== */
 
   if (addItemButton) {
 
     addItemButton.addEventListener(
       "click",
-      () => {
-
-        if (
-          currentCategory &&
-          currentCategory !==
-            "dashboard" &&
-          currentCategory !==
-            "manage"
-        ) {
-
-          addItem(
-            currentCategory
-          );
-
-        }
-
-      }
+      addItemToCurrentCategory
     );
-
   }
 
 
-  /* MANAGE CATEGORY */
+  /* ==========================================================
+     BACK TO DASHBOARD
+     ========================================================== */
 
-  const manageCurrentCategoryButton =
-    document.getElementById(
-      "manageCurrentCategoryButton"
-    );
-
-
-  if (
-    manageCurrentCategoryButton
-  ) {
-
-    manageCurrentCategoryButton.addEventListener(
-      "click",
-      showManagePlanner
-    );
-
-  }
-
-
-  /* BACK TO DASHBOARD */
-
-  const backToDashboardButton =
-    document.getElementById(
-      "backToDashboardButton"
-    );
-
-
-  if (
-    backToDashboardButton
-  ) {
+  if (backToDashboardButton) {
 
     backToDashboardButton.addEventListener(
       "click",
       showDashboard
     );
-
   }
-
-
-  /* MANAGE PAGE BACK */
-
-  const manageBackButton =
-    document.getElementById(
-      "manageBackButton"
-    );
 
 
   if (manageBackButton) {
@@ -3490,92 +2773,54 @@ function setupEvents() {
       "click",
       showDashboard
     );
-
   }
 
 
-  /* MANAGE PAGE ADD CATEGORY */
+  /* ==========================================================
+     MANAGE CURRENT CATEGORY
+     ========================================================== */
 
-  const manageAddCategoryButton =
-    document.getElementById(
-      "manageAddCategoryButton"
-    );
+  if (manageCurrentCategoryButton) {
 
-
-  if (
-    manageAddCategoryButton
-  ) {
-
-    manageAddCategoryButton.addEventListener(
+    manageCurrentCategoryButton.addEventListener(
       "click",
-      addCategory
+      showManagePlanner
     );
-
   }
 
 
-  /* MANAGEMENT MODAL */
+  /* ==========================================================
+     MANAGEMENT MODAL
+     ========================================================== */
 
-  const saveManagementButton =
-    document.getElementById(
-      "saveManagementButton"
-    );
-
-  const cancelManagementButton =
-    document.getElementById(
-      "cancelManagementButton"
-    );
-
-  const closeManagementButton =
-    document.getElementById(
-      "closeManagementButton"
-    );
-
-  const managementOverlay =
-    document.getElementById(
-      "managementOverlay"
-    );
-
-
-  if (
-    saveManagementButton
-  ) {
-
-    saveManagementButton.addEventListener(
-      "click",
-      saveManagement
-    );
-
-  }
-
-
-  if (
-    cancelManagementButton
-  ) {
-
-    cancelManagementButton.addEventListener(
-      "click",
-      closeManagementModal
-    );
-
-  }
-
-
-  if (
-    closeManagementButton
-  ) {
+  if (closeManagementButton) {
 
     closeManagementButton.addEventListener(
       "click",
       closeManagementModal
     );
-
   }
 
 
-  if (
-    managementOverlay
-  ) {
+  if (cancelManagementButton) {
+
+    cancelManagementButton.addEventListener(
+      "click",
+      closeManagementModal
+    );
+  }
+
+
+  if (saveManagementButton) {
+
+    saveManagementButton.addEventListener(
+      "click",
+      saveManagement
+    );
+  }
+
+
+  if (managementOverlay) {
 
     managementOverlay.addEventListener(
       "click",
@@ -3587,68 +2832,56 @@ function setupEvents() {
         ) {
 
           closeManagementModal();
-
         }
 
       }
     );
-
   }
 
 
-  /* MANAGEMENT INPUT ENTER */
+  /* ==========================================================
+     ENTER KEY IN MANAGEMENT MODAL
+     ========================================================== */
 
-  const managementNameInput =
-    document.getElementById(
-      "managementNameInput"
-    );
-
-
-  if (
-    managementNameInput
-  ) {
+  if (managementNameInput) {
 
     managementNameInput.addEventListener(
       "keydown",
       event => {
 
         if (
-          event.key ===
-          "Enter"
+          event.key === "Enter"
         ) {
 
           event.preventDefault();
 
           saveManagement();
-
         }
 
       }
     );
-
   }
 
 
-  /* ESCAPE */
+  /* ==========================================================
+     ESCAPE
+     ========================================================== */
 
   document.addEventListener(
     "keydown",
     event => {
 
       if (
-        event.key ===
-        "Escape"
+        event.key === "Escape"
       ) {
 
         closeModal();
 
         closeManagementModal();
-
       }
 
     }
   );
-
 }
 
 
