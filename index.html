@@ -1,28 +1,27 @@
-```html
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
   <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+>
 
   <title>Our Wedding Planner 💍</title>
 
   <link
     rel="stylesheet"
-    href="style.css"
+    href="./style.css"
   >
 
 </head>
 
-
 <body>
-
 
   <!-- =========================
        HERO
@@ -30,25 +29,26 @@
 
   <header class="hero">
 
-    <div class="hero-inner">
+```
+<div class="hero-inner">
 
-      <div class="eyebrow">
-        Tamil Wedding Planner
-      </div>
+  <div class="eyebrow">
+    Tamil Wedding Planner
+  </div>
 
-      <h1>
-        💍 Our Big Day
-      </h1>
+  <h1>
+    💍 Our Big Day
+  </h1>
 
-      <p>
-        Everything we need for our wedding,
-        beautifully organised.
-      </p>
+  <p>
+    Everything we need for our wedding,
+    beautifully organised.
+  </p>
 
-    </div>
+</div>
+```
 
   </header>
-
 
   <!-- =========================
        NAVIGATION
@@ -56,13 +56,14 @@
 
   <div class="nav-wrapper">
 
-    <nav
-      class="nav"
-      id="navigation"
-    ></nav>
+```
+<nav
+  class="nav"
+  id="navigation"
+></nav>
+```
 
   </div>
-
 
   <!-- =========================
        MAIN APP
@@ -70,318 +71,318 @@
 
   <main class="app">
 
+```
+<!-- =========================
+     DASHBOARD
+========================== -->
 
-    <!-- =========================
-         DASHBOARD
-    ========================== -->
+<section id="dashboardPage">
 
-    <section id="dashboardPage">
+  <div class="page-header">
 
-      <div class="page-header">
+    <div>
 
-        <div>
+      <h2>
+        Wedding Dashboard
+      </h2>
 
-          <h2>
-            Wedding Dashboard
-          </h2>
+      <p>
+        Keep track of everything
+        for the big day.
+      </p>
 
-          <p>
-            Keep track of everything
-            for the big day.
-          </p>
-
-        </div>
-
-
-        <!-- =========================
-             IMPORT / EXPORT
-        ========================== -->
-
-        <div class="data-actions">
-
-          <button
-            class="export-button"
-            id="exportButton"
-            onclick="exportData()"
-            type="button"
-          >
-            📥 Export data
-          </button>
-
-
-          <button
-            class="import-button"
-            id="importButton"
-            onclick="document.getElementById('importFile').click()"
-            type="button"
-          >
-            📤 Import data
-          </button>
-
-
-          <input
-            type="file"
-            id="importFile"
-            accept=".json,application/json"
-            hidden
-          >
-
-        </div>
-
-      </div>
-
-
-      <!-- =========================
-           STATS
-      ========================== -->
-
-      <div class="stats">
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            📋
-          </div>
-
-          <div
-            class="stat-number"
-            id="totalCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            Total items
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            ✅
-          </div>
-
-          <div
-            class="stat-number"
-            id="doneCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            Completed
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            ⏳
-          </div>
-
-          <div
-            class="stat-number"
-            id="progressCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            In progress
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            🗂️
-          </div>
-
-          <div
-            class="stat-number"
-            id="categoryCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            Categories
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- =========================
-           OVERALL PROGRESS
-      ========================== -->
-
-      <div class="progress-card">
-
-        <div class="progress-heading">
-
-          <h2>
-            Overall progress
-          </h2>
-
-          <span id="overallPercent">
-            0%
-          </span>
-
-        </div>
-
-
-        <div class="progress-bar">
-
-          <div
-            class="progress-fill"
-            id="overallFill"
-          ></div>
-
-        </div>
-
-      </div>
-
-
-      <!-- =========================
-           CATEGORY LIST
-      ========================== -->
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Categories
-          </h2>
-
-          <p>
-            Select a category to start planning.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="category-summary-grid"
-        id="summaryGrid"
-      ></div>
-
-    </section>
+    </div>
 
 
     <!-- =========================
-         CATEGORY PAGE
+         IMPORT / EXPORT
     ========================== -->
 
-    <section
-      id="categoryPage"
-      style="display:none;"
-    >
+    <div class="data-actions">
 
-      <div class="page-header">
-
-        <div>
-
-          <h2 id="categoryTitle"></h2>
-
-          <p>
-            Select an item to see more details.
-          </p>
-
-        </div>
+      <button
+        class="export-button"
+        id="exportButton"
+        onclick="exportData()"
+        type="button"
+      >
+        📥 Export data
+      </button>
 
 
-        <div class="category-progress">
-
-          <strong id="categoryPercent">
-            0%
-          </strong>
-
-          <span id="categoryProgressText">
-            0 / 0 completed
-          </span>
-
-        </div>
-
-      </div>
+      <button
+        class="import-button"
+        id="importButton"
+        onclick="document.getElementById('importFile').click()"
+        type="button"
+      >
+        📤 Import data
+      </button>
 
 
-      <!-- =========================
-           SEARCH
-      ========================== -->
-
-      <div class="search-area">
-
-        <input
-          id="itemSearch"
-          type="search"
-          placeholder="🔎 Search within this category..."
-        >
-
-
-        <select id="itemStatusFilter">
-
-          <option value="all">
-            All items
-          </option>
-
-          <option value="not">
-            Not started
-          </option>
-
-          <option value="progress">
-            In progress
-          </option>
-
-          <option value="done">
-            Completed
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <!-- =========================
-           ITEMS
-      ========================== -->
-
-      <div
-        class="items-grid"
-        id="itemsGrid"
-      ></div>
-
-
-      <div
-        class="empty"
-        id="emptyMessage"
-        style="display:none;"
+      <input
+        type="file"
+        id="importFile"
+        accept=".json,application/json"
+        hidden
       >
 
-        <h3>
-          No items found
-        </h3>
+    </div>
 
-        <p>
-          Try another search or status filter.
-        </p>
+  </div>
 
+
+  <!-- =========================
+       STATS
+  ========================== -->
+
+  <div class="stats">
+
+    <div class="stat">
+
+      <div class="stat-icon">
+        📋
       </div>
 
-    </section>
+      <div
+        class="stat-number"
+        id="totalCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Total items
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-icon">
+        ✅
+      </div>
+
+      <div
+        class="stat-number"
+        id="doneCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Completed
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-icon">
+        ⏳
+      </div>
+
+      <div
+        class="stat-number"
+        id="progressCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        In progress
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-icon">
+        🗂️
+      </div>
+
+      <div
+        class="stat-number"
+        id="categoryCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Categories
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       OVERALL PROGRESS
+  ========================== -->
+
+  <div class="progress-card">
+
+    <div class="progress-heading">
+
+      <h2>
+        Overall progress
+      </h2>
+
+      <span id="overallPercent">
+        0%
+      </span>
+
+    </div>
+
+
+    <div class="progress-bar">
+
+      <div
+        class="progress-fill"
+        id="overallFill"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       CATEGORY LIST
+  ========================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <h2>
+        Categories
+      </h2>
+
+      <p>
+        Select a category to start planning.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="category-summary-grid"
+    id="summaryGrid"
+  ></div>
+
+</section>
+
+
+<!-- =========================
+     CATEGORY PAGE
+========================== -->
+
+<section
+  id="categoryPage"
+  style="display:none;"
+>
+
+  <div class="page-header">
+
+    <div>
+
+      <h2 id="categoryTitle"></h2>
+
+      <p>
+        Select an item to see more details.
+      </p>
+
+    </div>
+
+
+    <div class="category-progress">
+
+      <strong id="categoryPercent">
+        0%
+      </strong>
+
+      <span id="categoryProgressText">
+        0 / 0 completed
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       SEARCH
+  ========================== -->
+
+  <div class="search-area">
+
+    <input
+      id="itemSearch"
+      type="search"
+      placeholder="🔎 Search within this category..."
+    >
+
+
+    <select id="itemStatusFilter">
+
+      <option value="all">
+        All items
+      </option>
+
+      <option value="not">
+        Not started
+      </option>
+
+      <option value="progress">
+        In progress
+      </option>
+
+      <option value="done">
+        Completed
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <!-- =========================
+       ITEMS
+  ========================== -->
+
+  <div
+    class="items-grid"
+    id="itemsGrid"
+  ></div>
+
+
+  <div
+    class="empty"
+    id="emptyMessage"
+    style="display:none;"
+  >
+
+    <h3>
+      No items found
+    </h3>
+
+    <p>
+      Try another search or status filter.
+    </p>
+
+  </div>
+
+</section>
+```
 
   </main>
-
 
   <!-- =========================
        FOOTER
@@ -390,7 +391,6 @@
   <footer>
     Made with ❤️ for our wedding
   </footer>
-
 
   <!-- =========================
        MODAL
@@ -401,237 +401,224 @@
     id="overlay"
   >
 
-    <div class="modal">
+```
+<div class="modal">
 
+  <!-- =========================
+       MODAL HEADER
+  ========================== -->
 
-      <!-- =========================
-           MODAL HEADER
-      ========================== -->
+  <div class="modal-header">
 
-      <div class="modal-header">
+    <div>
 
-        <div>
+      <div
+        class="modal-category"
+        id="modalCategory"
+      ></div>
 
-          <div
-            class="modal-category"
-            id="modalCategory"
-          ></div>
-
-          <h2 id="modalTitle"></h2>
-
-        </div>
-
-
-        <button
-          class="close"
-          onclick="closeModal()"
-          type="button"
-          aria-label="Close"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <!-- =========================
-           MODAL BODY
-      ========================== -->
-
-      <div class="modal-body">
-
-
-        <!-- =========================
-             STATUS
-        ========================== -->
-
-        <div class="form-group">
-
-          <label>
-            Status
-          </label>
-
-
-          <div class="status-buttons">
-
-            <button
-              class="status-button not"
-              id="notButton"
-              onclick="chooseStatus('not')"
-              type="button"
-            >
-              ○ Not started
-            </button>
-
-
-            <button
-              class="status-button progress"
-              id="progressButton"
-              onclick="chooseStatus('progress')"
-              type="button"
-            >
-              ◐ In progress
-            </button>
-
-
-            <button
-              class="status-button done"
-              id="doneButton"
-              onclick="chooseStatus('done')"
-              type="button"
-            >
-              ✓ Completed
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <!-- =========================
-             VENDOR
-        ========================== -->
-
-        <div class="form-group">
-
-          <label for="vendorInput">
-            Vendor / Person
-          </label>
-
-          <input
-            id="vendorInput"
-            placeholder="Who is responsible?"
-          >
-
-        </div>
-
-
-        <!-- =========================
-             PRICE
-        ========================== -->
-
-        <div class="form-group">
-
-          <label for="priceInput">
-            Price
-          </label>
-
-          <input
-            id="priceInput"
-            placeholder="e.g. 2,500 kr"
-          >
-
-        </div>
-
-
-        <!-- =========================
-             DEADLINE
-        ========================== -->
-
-        <div class="form-group">
-
-          <label for="deadlineInput">
-            Deadline
-          </label>
-
-          <input
-            id="deadlineInput"
-            type="date"
-          >
-
-        </div>
-
-
-        <!-- =========================
-             LINK
-        ========================== -->
-
-        <div class="form-group">
-
-          <label for="linkInput">
-            Website / Instagram / Link
-          </label>
-
-          <input
-            id="linkInput"
-            type="url"
-            placeholder="https://..."
-          >
-
-        </div>
-
-
-        <!-- =========================
-             NOTES
-        ========================== -->
-
-        <div class="form-group">
-
-          <label for="notesInput">
-            Notes
-          </label>
-
-          <textarea
-            id="notesInput"
-            placeholder="Add notes, ideas, contact details, measurements..."
-          ></textarea>
-
-        </div>
-
-
-        <!-- =========================
-             BUTTONS
-        ========================== -->
-
-        <div class="modal-actions">
-
-          <button
-            class="clear"
-            onclick="clearItem()"
-            type="button"
-          >
-            Clear
-          </button>
-
-
-          <button
-            class="save"
-            onclick="saveItem()"
-            type="button"
-          >
-            Save changes
-          </button>
-
-        </div>
-
-      </div>
+      <h2 id="modalTitle"></h2>
 
     </div>
+
+
+    <button
+      class="close"
+      onclick="closeModal()"
+      type="button"
+      aria-label="Close"
+    >
+      ×
+    </button>
 
   </div>
 
 
   <!-- =========================
+       MODAL BODY
+  ========================== -->
+
+  <div class="modal-body">
+
+    <!-- =========================
+         STATUS
+    ========================== -->
+
+    <div class="form-group">
+
+      <label>
+        Status
+      </label>
+
+
+      <div class="status-buttons">
+
+        <button
+          class="status-button not"
+          id="notButton"
+          onclick="chooseStatus('not')"
+          type="button"
+        >
+          ○ Not started
+        </button>
+
+
+        <button
+          class="status-button progress"
+          id="progressButton"
+          onclick="chooseStatus('progress')"
+          type="button"
+        >
+          ◐ In progress
+        </button>
+
+
+        <button
+          class="status-button done"
+          id="doneButton"
+          onclick="chooseStatus('done')"
+          type="button"
+        >
+          ✓ Completed
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         VENDOR
+    ========================== -->
+
+    <div class="form-group">
+
+      <label for="vendorInput">
+        Vendor / Person
+      </label>
+
+      <input
+        id="vendorInput"
+        placeholder="Who is responsible?"
+      >
+
+    </div>
+
+
+    <!-- =========================
+         PRICE
+    ========================== -->
+
+    <div class="form-group">
+
+      <label for="priceInput">
+        Price
+      </label>
+
+      <input
+        id="priceInput"
+        placeholder="e.g. 2,500 kr"
+      >
+
+    </div>
+
+
+    <!-- =========================
+         DEADLINE
+    ========================== -->
+
+    <div class="form-group">
+
+      <label for="deadlineInput">
+        Deadline
+      </label>
+
+      <input
+        id="deadlineInput"
+        type="date"
+      >
+
+    </div>
+
+
+    <!-- =========================
+         LINK
+    ========================== -->
+
+    <div class="form-group">
+
+      <label for="linkInput">
+        Website / Instagram / Link
+      </label>
+
+      <input
+        id="linkInput"
+        type="url"
+        placeholder="https://..."
+      >
+
+    </div>
+
+
+    <!-- =========================
+         NOTES
+    ========================== -->
+
+    <div class="form-group">
+
+      <label for="notesInput">
+        Notes
+      </label>
+
+      <textarea
+        id="notesInput"
+        placeholder="Add notes, ideas, contact details, measurements..."
+      ></textarea>
+
+    </div>
+
+
+    <!-- =========================
+         BUTTONS
+    ========================== -->
+
+    <div class="modal-actions">
+
+      <button
+        class="clear"
+        onclick="clearItem()"
+        type="button"
+      >
+        Clear
+      </button>
+
+
+      <button
+        class="save"
+        onclick="saveItem()"
+        type="button"
+      >
+        Save changes
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- =========================
        JAVASCRIPT
   ========================== -->
 
-  <script src="script.js"></script>
+  <script src="./script.js"></script>
 
 </body>
 
 </html>
 ```
 
-### One important point
-
-You **don't need to change the HTML again** for the export functionality.
-
-Your three files should now be:
-
-1. **`index.html`** → use the version above.
-2. **`style.css`** → keep yours and add the `.data-actions` CSS I gave you.
-3. **`script.js`** → keep your current file and add the Export/Import section I gave you immediately after `saveData()`.
-
-Then the flow will be:
-
-**Edit wedding item → Save → localStorage → Export → `wedding-planner-data.json` → Import on another browser/device → data restored.**
+This keeps your existing functionality and only changes the stylesheet/script references to explicit relative paths.
