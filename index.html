@@ -18,7 +18,7 @@
     <div class="hero-inner">
       <div class="eyebrow">Tamil Wedding Planner</div>
 
-
+```
   <h1>💍 Our Big Day</h1>
 
   <p>
@@ -26,7 +26,7 @@
     beautifully organised.
   </p>
 </div>
-
+```
 
   </header>
 
@@ -40,7 +40,7 @@
 
   <main class="app">
 
-
+```
 <!-- DASHBOARD -->
 <section id="dashboardPage">
 
@@ -82,7 +82,6 @@
     </div>
   </div>
 
-
   <!-- STATS -->
   <div class="stats">
 
@@ -101,7 +100,6 @@
       </div>
     </div>
 
-
     <div class="stat">
       <div class="stat-icon">✅</div>
 
@@ -117,7 +115,6 @@
       </div>
     </div>
 
-
     <div class="stat">
       <div class="stat-icon">⏳</div>
 
@@ -132,7 +129,6 @@
         In progress
       </div>
     </div>
-
 
     <div class="stat">
       <div class="stat-icon">🗂️</div>
@@ -150,7 +146,6 @@
     </div>
 
   </div>
-
 
   <!-- OVERALL PROGRESS -->
   <div class="progress-card">
@@ -174,7 +169,6 @@
 
   </div>
 
-
   <!-- CATEGORIES -->
   <div class="page-header">
 
@@ -188,14 +182,12 @@
 
   </div>
 
-
   <div
     class="category-summary-grid"
     id="summaryGrid"
   ></div>
 
 </section>
-
 
 <!-- CATEGORY PAGE -->
 <section
@@ -215,7 +207,6 @@
 
     </div>
 
-
     <div class="category-progress">
 
       <strong id="categoryPercent">
@@ -230,7 +221,6 @@
 
   </div>
 
-
   <!-- SEARCH -->
   <div class="search-area">
 
@@ -238,6 +228,7 @@
       id="itemSearch"
       type="search"
       placeholder="🔎 Search within this category..."
+      autocomplete="off"
     >
 
     <select id="itemStatusFilter">
@@ -262,13 +253,11 @@
 
   </div>
 
-
   <!-- ITEMS -->
   <div
     class="items-grid"
     id="itemsGrid"
   ></div>
-
 
   <div
     class="empty"
@@ -285,7 +274,7 @@
   </div>
 
 </section>
-
+```
 
   </main>
 
@@ -300,10 +289,16 @@
   <div
     class="overlay"
     id="overlay"
+    aria-hidden="true"
   >
 
-
-<div class="modal">
+```
+<div
+  class="modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalTitle"
+>
 
   <div class="modal-header">
 
@@ -318,7 +313,6 @@
 
     </div>
 
-
     <button
       class="close"
       id="closeModalButton"
@@ -329,7 +323,6 @@
     </button>
 
   </div>
-
 
   <div class="modal-body">
 
@@ -368,7 +361,6 @@
 
     </div>
 
-
     <!-- VENDOR -->
     <div class="form-group">
 
@@ -380,10 +372,10 @@
         id="vendorInput"
         type="text"
         placeholder="Who is responsible?"
+        autocomplete="off"
       >
 
     </div>
-
 
     <!-- PRICE -->
     <div class="form-group">
@@ -400,7 +392,6 @@
 
     </div>
 
-
     <!-- DEADLINE -->
     <div class="form-group">
 
@@ -415,7 +406,6 @@
 
     </div>
 
-
     <!-- LINK -->
     <div class="form-group">
 
@@ -427,10 +417,10 @@
         id="linkInput"
         type="url"
         placeholder="https://..."
+        autocomplete="url"
       >
 
     </div>
-
 
     <!-- NOTES -->
     <div class="form-group">
@@ -445,7 +435,6 @@
       ></textarea>
 
     </div>
-
 
     <!-- ACTIONS -->
     <div class="modal-actions">
@@ -471,7 +460,7 @@
   </div>
 
 </div>
-
+```
 
   </div>
 
