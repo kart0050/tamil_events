@@ -1,15 +1,14 @@
 /* ============================================================
-   TAMIL WEDDING PLANNER
-   Complete JavaScript
-============================================================ */
+   WEDDING PLANNER
+   ============================================================ */
 
-"use strict";
+const STORAGE_KEY = "tamilWeddingPlanner_v5";
 
 /* ============================================================
-   CATEGORIES
-============================================================ */
+   DEFAULT CATEGORIES
+   ============================================================ */
 
-const categories = [
+const defaultCategories = [
   {
     id: "guests",
     name: "Gæster",
@@ -253,19 +252,31 @@ const categories = [
 ];
 
 /* ============================================================
-   STORAGE
-============================================================ */
+   DATA
+   ============================================================ */
 
-const STORAGE_KEY = "tamilWeddingPlanner_v5";
-
+let categories = [];
 let savedData = {};
+
 let currentCategory = "dashboard";
 let currentItem = null;
 let modalStatus = "not";
 
 /* ============================================================
-   UTILITY
-============================================================ */
+   HELPERS
+   ============================================================ */
+
+function createId(text) {
+  return (
+    String(text)
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9æøå]+/gi, "-")
+      .replace(/^-+|-+$/g, "") +
+    "-" +
+    Date.now().toString(36)
+  );
+}
 
 function escapeHTML(value) {
   return String(value ?? "")
@@ -277,7 +288,9 @@ function escapeHTML(value) {
 }
 
 function formatDate(dateString) {
-  if (!dateString) return "";
+  if (!dateString) {
+    return "";
+  }
 
   const date = new Date(dateString + "T00:00:00");
 
@@ -294,14 +307,16 @@ function formatDate(dateString) {
 
 /* ============================================================
    LOAD DATA
-============================================================ */
+   ============================================================ */
 
 function loadData() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
 
     if (!stored) {
+      categories = structuredClone(defaultCategories);
       savedData = {};
+      saveData();
       return;
     }
 
@@ -310,35 +325,82 @@ function loadData() {
     if (
       parsed &&
       typeof parsed === "object" &&
-      !Array.isArray(parsed)
+      !Array.isArray(parsed) &&
+      Array.isArray(parsed.categories)
     ) {
-      savedData = parsed;
+      categories = parsed.categories;
+      savedData =
+        parsed.savedData &&
+        typeof parsed.savedData === "object"
+          ? parsed.savedData
+          : {};
     } else {
+      categories = structuredClone(defaultCategories);
       savedData = {};
+      saveData();
     }
   } catch (error) {
-    console.error("Could not load saved data:", error);
+    console.error("Could not load planner data:", error);
+
+    categories = structuredClone(defaultCategories);
     savedData = {};
   }
+
+  normaliseCategories();
+}
+
+/* ============================================================
+   NORMALISE CATEGORIES
+   ============================================================ */
+
+function normaliseCategories() {
+  if (!Array.isArray(categories)) {
+    categories = [];
+  }
+
+  categories = categories
+    .filter(category => category && typeof category === "object")
+    .map(category => {
+      return {
+        id:
+          category.id ||
+          createId(category.name || "category"),
+
+        name:
+          String(category.name || "Unnamed category"),
+
+        icon:
+          String(category.icon || "📋"),
+
+        items:
+          Array.isArray(category.items)
+            ? category.items.map(item => String(item))
+            : []
+      };
+    });
 }
 
 /* ============================================================
    SAVE DATA
-============================================================ */
+   ============================================================ */
 
 function saveData() {
   try {
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(savedData)
+      JSON.stringify({
+        version: 5,
+        categories: categories,
+        savedData: savedData
+      })
     );
 
     return true;
   } catch (error) {
-    console.error("Could not save data:", error);
+    console.error("Could not save planner data:", error);
 
     alert(
-      "Your data could not be saved in this browser."
+      "Your planner data could not be saved in this browser."
     );
 
     return false;
@@ -347,18 +409,18 @@ function saveData() {
 
 /* ============================================================
    ITEM KEY
-============================================================ */
+   ============================================================ */
 
-function itemKey(categoryId, itemId) {
-  return categoryId + "::" + itemId;
+function itemKey(categoryId, item) {
+  return categoryId + "::" + item;
 }
 
 /* ============================================================
    GET ITEM
-============================================================ */
+   ============================================================ */
 
-function getItem(categoryId, itemId) {
-  const key = itemKey(categoryId, itemId);
+function getItem(categoryId, item) {
+  const key = itemKey(categoryId, item);
 
   if (
     !savedData[key] ||
@@ -371,73 +433,228 @@ function getItem(categoryId, itemId) {
       deadline: "",
       link: "",
       notes: "",
-      disabled: false,
-      custom: false
+      enabled: true
     };
   }
 
   const data = savedData[key];
 
-  data.status = data.status || "not";
+  data.status =
+    ["not", "progress", "done"].includes(data.status)
+      ? data.status
+      : "not";
+
   data.vendor = data.vendor || "";
   data.price = data.price || "";
   data.deadline = data.deadline || "";
   data.link = data.link || "";
   data.notes = data.notes || "";
-  data.disabled = Boolean(data.disabled);
-  data.custom = Boolean(data.custom);
+
+  if (typeof data.enabled !== "boolean") {
+    data.enabled = true;
+  }
 
   return data;
 }
 
 /* ============================================================
-   GET CATEGORY
-============================================================ */
+   EXPORT
+   ============================================================ */
 
-function getCategory(categoryId) {
-  return categories.find(
-    category => category.id === categoryId
-  );
+function exportData() {
+  try {
+    saveData();
+
+    const backup = {
+      app: "Tamil Wedding Planner",
+      version: 5,
+      exportedAt: new Date().toISOString(),
+      categories: categories,
+      savedData: savedData
+    };
+
+    const json = JSON.stringify(
+      backup,
+      null,
+      2
+    );
+
+    const blob = new Blob(
+      [json],
+      {
+        type: "application/json"
+      }
+    );
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const link =
+      document.createElement("a");
+
+    link.href = url;
+
+    const now = new Date();
+
+    const filename =
+      "wedding-planner-backup-" +
+      now.getFullYear() +
+      "-" +
+      String(now.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(now.getDate()).padStart(2, "0") +
+      ".json";
+
+    link.download = filename;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  } catch (error) {
+    console.error("Export failed:", error);
+
+    alert(
+      "Sorry, the planner data could not be exported."
+    );
+  }
 }
 
 /* ============================================================
-   GET ACTIVE ITEMS
-============================================================ */
+   IMPORT
+   ============================================================ */
 
-function getActiveItems(category) {
-  return category.items.filter(item => {
-    const data = getItem(category.id, item);
-    return !data.disabled;
-  });
+function importData(event) {
+  const file = event.target.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    try {
+      const imported =
+        JSON.parse(e.target.result);
+
+      let importedCategories = null;
+      let importedSavedData = null;
+
+      if (
+        imported &&
+        Array.isArray(imported.categories)
+      ) {
+        importedCategories =
+          imported.categories;
+
+        importedSavedData =
+          imported.savedData || {};
+      }
+
+      /*
+       * Support older backup format.
+       */
+      else if (
+        imported &&
+        imported.data &&
+        typeof imported.data === "object"
+      ) {
+        importedCategories =
+          structuredClone(defaultCategories);
+
+        importedSavedData =
+          imported.data;
+      }
+
+      if (
+        !Array.isArray(importedCategories) ||
+        !importedSavedData ||
+        typeof importedSavedData !== "object"
+      ) {
+        throw new Error("Invalid backup");
+      }
+
+      const confirmed = confirm(
+        "Import this wedding planner backup?\n\n" +
+        "Your current planner data will be replaced."
+      );
+
+      if (!confirmed) {
+        event.target.value = "";
+        return;
+      }
+
+      categories =
+        importedCategories;
+
+      savedData =
+        importedSavedData;
+
+      normaliseCategories();
+
+      if (saveData()) {
+        showDashboard();
+
+        alert(
+          "Wedding planner data imported successfully! ❤️"
+        );
+      }
+    } catch (error) {
+      console.error("Import failed:", error);
+
+      alert(
+        "This file is not a valid wedding planner backup."
+      );
+    }
+
+    event.target.value = "";
+  };
+
+  reader.onerror = function () {
+    alert("Could not read the selected file.");
+    event.target.value = "";
+  };
+
+  reader.readAsText(file);
 }
 
 /* ============================================================
    NAVIGATION
-============================================================ */
+   ============================================================ */
 
 function buildNavigation() {
-  const nav = document.getElementById("navigation");
+  const nav =
+    document.getElementById("navigation");
 
-  if (!nav) return;
+  if (!nav) {
+    return;
+  }
 
   nav.innerHTML = "";
 
-  const dashboardButton =
+  const dashboard =
     document.createElement("button");
 
-  dashboardButton.type = "button";
-  dashboardButton.textContent = "🏠 Dashboard";
+  dashboard.type = "button";
+  dashboard.textContent = "🏠 Dashboard";
 
-  if (currentCategory === "dashboard") {
-    dashboardButton.classList.add("active");
-  }
+  dashboard.className =
+    currentCategory === "dashboard"
+      ? "active"
+      : "";
 
-  dashboardButton.addEventListener(
+  dashboard.addEventListener(
     "click",
     showDashboard
   );
 
-  nav.appendChild(dashboardButton);
+  nav.appendChild(dashboard);
 
   categories.forEach(category => {
     const button =
@@ -446,15 +663,19 @@ function buildNavigation() {
     button.type = "button";
 
     button.textContent =
-      category.icon + " " + category.name;
+      category.icon +
+      " " +
+      category.name;
 
-    if (currentCategory === category.id) {
-      button.classList.add("active");
-    }
+    button.className =
+      currentCategory === category.id
+        ? "active"
+        : "";
 
-    button.addEventListener("click", () => {
-      showCategory(category.id);
-    });
+    button.addEventListener(
+      "click",
+      () => showCategory(category.id)
+    );
 
     nav.appendChild(button);
   });
@@ -462,7 +683,7 @@ function buildNavigation() {
 
 /* ============================================================
    DASHBOARD
-============================================================ */
+   ============================================================ */
 
 function showDashboard() {
   currentCategory = "dashboard";
@@ -473,12 +694,19 @@ function showDashboard() {
   const categoryPage =
     document.getElementById("categoryPage");
 
+  const managePage =
+    document.getElementById("managePage");
+
   if (dashboardPage) {
     dashboardPage.style.display = "block";
   }
 
   if (categoryPage) {
     categoryPage.style.display = "none";
+  }
+
+  if (managePage) {
+    managePage.style.display = "none";
   }
 
   buildNavigation();
@@ -492,7 +720,7 @@ function showDashboard() {
 
 /* ============================================================
    DASHBOARD RENDER
-============================================================ */
+   ============================================================ */
 
 function renderDashboard() {
   let total = 0;
@@ -500,13 +728,15 @@ function renderDashboard() {
   let progress = 0;
 
   categories.forEach(category => {
-    getActiveItems(category).forEach(item => {
-      total++;
+    category.items.forEach(item => {
+      const data =
+        getItem(category.id, item);
 
-      const data = getItem(
-        category.id,
-        item
-      );
+      if (!data.enabled) {
+        return;
+      }
+
+      total++;
 
       if (data.status === "done") {
         done++;
@@ -568,18 +798,12 @@ function renderDashboard() {
       percent + "%";
   }
 
-  renderCategorySummary();
-}
-
-/* ============================================================
-   CATEGORY SUMMARY
-============================================================ */
-
-function renderCategorySummary() {
   const grid =
     document.getElementById("summaryGrid");
 
-  if (!grid) return;
+  if (!grid) {
+    return;
+  }
 
   grid.innerHTML = "";
 
@@ -590,79 +814,48 @@ function renderCategorySummary() {
     const card =
       document.createElement("div");
 
-    card.className = "summary-card";
+    card.className =
+      "summary-card";
 
     card.innerHTML =
       '<div class="summary-icon">' +
-      category.icon +
+      escapeHTML(category.icon) +
       "</div>" +
-
       "<h3>" +
       escapeHTML(category.name) +
       "</h3>" +
-
       "<p>" +
       stats.done +
       " / " +
       stats.total +
       " completed" +
       "</p>" +
-
       '<div class="summary-bar">' +
       '<div style="width:' +
       stats.percent +
       '%"></div>' +
       "</div>";
 
-    card.addEventListener("click", () => {
-      showCategory(category.id);
-    });
+    card.addEventListener(
+      "click",
+      () => showCategory(category.id)
+    );
 
     grid.appendChild(card);
   });
 }
 
 /* ============================================================
-   CATEGORY STATS
-============================================================ */
-
-function getCategoryStats(category) {
-  const activeItems =
-    getActiveItems(category);
-
-  const total = activeItems.length;
-
-  let done = 0;
-
-  activeItems.forEach(item => {
-    const data =
-      getItem(category.id, item);
-
-    if (data.status === "done") {
-      done++;
-    }
-  });
-
-  const percent =
-    total > 0
-      ? Math.round((done / total) * 100)
-      : 0;
-
-  return {
-    total,
-    done,
-    percent
-  };
-}
-
-/* ============================================================
-   SHOW CATEGORY
-============================================================ */
+   CATEGORY
+   ============================================================ */
 
 function showCategory(id) {
-  const category = getCategory(id);
+  const category =
+    categories.find(c => c.id === id);
 
-  if (!category) return;
+  if (!category) {
+    return;
+  }
 
   currentCategory = id;
 
@@ -672,6 +865,9 @@ function showCategory(id) {
   const categoryPage =
     document.getElementById("categoryPage");
 
+  const managePage =
+    document.getElementById("managePage");
+
   if (dashboardPage) {
     dashboardPage.style.display = "none";
   }
@@ -680,12 +876,18 @@ function showCategory(id) {
     categoryPage.style.display = "block";
   }
 
+  if (managePage) {
+    managePage.style.display = "none";
+  }
+
   const categoryTitle =
     document.getElementById("categoryTitle");
 
   if (categoryTitle) {
     categoryTitle.textContent =
-      category.icon + " " + category.name;
+      category.icon +
+      " " +
+      category.name;
   }
 
   const search =
@@ -714,14 +916,53 @@ function showCategory(id) {
 }
 
 /* ============================================================
-   RENDER CATEGORY
-============================================================ */
+   CATEGORY STATS
+   ============================================================ */
+
+function getCategoryStats(category) {
+  let total = 0;
+  let done = 0;
+
+  category.items.forEach(item => {
+    const data =
+      getItem(category.id, item);
+
+    if (!data.enabled) {
+      return;
+    }
+
+    total++;
+
+    if (data.status === "done") {
+      done++;
+    }
+  });
+
+  const percent =
+    total > 0
+      ? Math.round((done / total) * 100)
+      : 0;
+
+  return {
+    total,
+    done,
+    percent
+  };
+}
+
+/* ============================================================
+   CATEGORY RENDER
+   ============================================================ */
 
 function renderCategory() {
   const category =
-    getCategory(currentCategory);
+    categories.find(
+      c => c.id === currentCategory
+    );
 
-  if (!category) return;
+  if (!category) {
+    return;
+  }
 
   const stats =
     getCategoryStats(category);
@@ -759,9 +1000,7 @@ function renderCategory() {
 
   const search =
     searchInput
-      ? searchInput.value
-          .toLowerCase()
-          .trim()
+      ? searchInput.value.toLowerCase().trim()
       : "";
 
   const status =
@@ -772,7 +1011,9 @@ function renderCategory() {
   const grid =
     document.getElementById("itemsGrid");
 
-  if (!grid) return;
+  if (!grid) {
+    return;
+  }
 
   grid.innerHTML = "";
 
@@ -782,7 +1023,7 @@ function renderCategory() {
     const data =
       getItem(category.id, item);
 
-    if (data.disabled) {
+    if (!data.enabled) {
       return;
     }
 
@@ -816,12 +1057,68 @@ function renderCategory() {
 
     visible++;
 
-    createItemCard(
-      category,
-      item,
-      data,
-      grid
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "item-card";
+
+    if (data.status === "done") {
+      card.classList.add("done");
+    }
+
+    let statusText = "Not started";
+    let statusClass = "";
+
+    if (data.status === "progress") {
+      statusText = "In progress";
+      statusClass = " progress";
+    }
+
+    if (data.status === "done") {
+      statusText = "Completed";
+      statusClass = " done";
+    }
+
+    const vendorHTML =
+      data.vendor
+        ? "<p>👤 " +
+          escapeHTML(data.vendor) +
+          "</p>"
+        : "<p>Click to add details</p>";
+
+    const deadlineHTML =
+      data.deadline
+        ? '<div class="item-meta">📅 ' +
+          escapeHTML(
+            formatDate(data.deadline)
+          ) +
+          "</div>"
+        : "";
+
+    card.innerHTML =
+      '<div class="item-top">' +
+      '<div class="item-icon">' +
+      escapeHTML(category.icon) +
+      "</div>" +
+      '<div class="item-status' +
+      statusClass +
+      '">' +
+      statusText +
+      "</div>" +
+      "</div>" +
+      "<h3>" +
+      escapeHTML(item) +
+      "</h3>" +
+      vendorHTML +
+      deadlineHTML;
+
+    card.addEventListener(
+      "click",
+      () => openModal(category.id, item)
     );
+
+    grid.appendChild(card);
   });
 
   const emptyMessage =
@@ -838,112 +1135,23 @@ function renderCategory() {
 }
 
 /* ============================================================
-   CREATE ITEM CARD
-============================================================ */
+   MODAL
+   ============================================================ */
 
-function createItemCard(
-  category,
-  item,
-  data,
-  grid
-) {
-  const card =
-    document.createElement("div");
-
-  card.className = "item-card";
-
-  if (data.status === "done") {
-    card.classList.add("done");
-  }
-
-  let statusText = "Not started";
-  let statusClass = "";
-
-  if (data.status === "progress") {
-    statusText = "In progress";
-    statusClass = " progress";
-  }
-
-  if (data.status === "done") {
-    statusText = "Completed";
-    statusClass = " done";
-  }
-
-  let vendorHTML =
-    "<p>Click to add details</p>";
-
-  if (data.vendor) {
-    vendorHTML =
-      "<p>👤 " +
-      escapeHTML(data.vendor) +
-      "</p>";
-  }
-
-  let deadlineHTML = "";
-
-  if (data.deadline) {
-    deadlineHTML =
-      '<div class="item-meta">' +
-      "📅 " +
-      escapeHTML(
-        formatDate(data.deadline)
-      ) +
-      "</div>";
-  }
-
-  card.innerHTML =
-    '<div class="item-top">' +
-
-    '<div class="item-icon">' +
-    category.icon +
-    "</div>" +
-
-    '<div class="item-status' +
-    statusClass +
-    '">' +
-    statusText +
-    "</div>" +
-
-    "</div>" +
-
-    "<h3>" +
-    escapeHTML(item) +
-    "</h3>" +
-
-    vendorHTML +
-
-    deadlineHTML;
-
-  card.addEventListener(
-    "click",
-    () => {
-      openModal(
-        category.id,
-        item
-      );
-    }
-  );
-
-  grid.appendChild(card);
-}
-
-/* ============================================================
-   OPEN MODAL
-============================================================ */
-
-function openModal(
-  categoryId,
-  item
-) {
+function openModal(categoryId, item) {
   currentItem = {
     categoryId,
     item
   };
 
   const category =
-    getCategory(categoryId);
+    categories.find(
+      c => c.id === categoryId
+    );
 
-  if (!category) return;
+  if (!category) {
+    return;
+  }
 
   const data =
     getItem(categoryId, item);
@@ -989,8 +1197,7 @@ function openModal(
   }
 
   if (modalTitle) {
-    modalTitle.textContent =
-      item;
+    modalTitle.textContent = item;
   }
 
   if (vendorInput) {
@@ -1031,10 +1238,6 @@ function openModal(
   }
 }
 
-/* ============================================================
-   CLOSE MODAL
-============================================================ */
-
 function closeModal() {
   const overlay =
     document.getElementById("overlay");
@@ -1046,26 +1249,10 @@ function closeModal() {
   currentItem = null;
 }
 
-/* ============================================================
-   CHOOSE STATUS
-============================================================ */
-
 function chooseStatus(status) {
-  if (
-    !["not", "progress", "done"]
-      .includes(status)
-  ) {
-    return;
-  }
-
   modalStatus = status;
-
   updateStatusButtons();
 }
-
-/* ============================================================
-   UPDATE STATUS BUTTONS
-============================================================ */
 
 function updateStatusButtons() {
   const notButton =
@@ -1077,7 +1264,9 @@ function updateStatusButtons() {
     );
 
   const doneButton =
-    document.getElementById("doneButton");
+    document.getElementById(
+      "doneButton"
+    );
 
   if (notButton) {
     notButton.classList.toggle(
@@ -1103,10 +1292,12 @@ function updateStatusButtons() {
 
 /* ============================================================
    SAVE ITEM
-============================================================ */
+   ============================================================ */
 
 function saveItem() {
-  if (!currentItem) return;
+  if (!currentItem) {
+    return;
+  }
 
   const data =
     getItem(
@@ -1115,14 +1306,10 @@ function saveItem() {
     );
 
   const vendorInput =
-    document.getElementById(
-      "vendorInput"
-    );
+    document.getElementById("vendorInput");
 
   const priceInput =
-    document.getElementById(
-      "priceInput"
-    );
+    document.getElementById("priceInput");
 
   const deadlineInput =
     document.getElementById(
@@ -1130,14 +1317,10 @@ function saveItem() {
     );
 
   const linkInput =
-    document.getElementById(
-      "linkInput"
-    );
+    document.getElementById("linkInput");
 
   const notesInput =
-    document.getElementById(
-      "notesInput"
-    );
+    document.getElementById("notesInput");
 
   data.status = modalStatus;
 
@@ -1166,7 +1349,7 @@ function saveItem() {
       ? notesInput.value.trim()
       : "";
 
-  data.disabled = false;
+  data.enabled = true;
 
   saveData();
 
@@ -1181,17 +1364,12 @@ function saveItem() {
 
 /* ============================================================
    CLEAR ITEM
-============================================================ */
+   ============================================================ */
 
 function clearItem() {
-  if (!currentItem) return;
-
-  const confirmed =
-    confirm(
-      "Clear all information for this item?"
-    );
-
-  if (!confirmed) return;
+  if (!currentItem) {
+    return;
+  }
 
   const data =
     getItem(
@@ -1218,405 +1396,419 @@ function clearItem() {
 }
 
 /* ============================================================
-   ADD ITEM
-============================================================ */
+   MANAGE PLANNER
+   ============================================================ */
 
-function addItem(categoryId) {
-  const category =
-    getCategory(categoryId);
+function showManagePlanner() {
+  currentCategory = "manage";
 
-  if (!category) return;
-
-  const name =
-    prompt(
-      "Enter the name of the new item:"
+  const dashboardPage =
+    document.getElementById(
+      "dashboardPage"
     );
 
-  if (name === null) return;
+  const categoryPage =
+    document.getElementById(
+      "categoryPage"
+    );
 
-  const cleanName =
-    name.trim();
+  const managePage =
+    document.getElementById(
+      "managePage"
+    );
 
-  if (!cleanName) {
-    alert("Please enter an item name.");
+  if (dashboardPage) {
+    dashboardPage.style.display = "none";
+  }
+
+  if (categoryPage) {
+    categoryPage.style.display = "none";
+  }
+
+  if (managePage) {
+    managePage.style.display = "block";
+  }
+
+  buildNavigation();
+
+  renderManagePlanner();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+/* ============================================================
+   RENDER MANAGE PLANNER
+   ============================================================ */
+
+function renderManagePlanner() {
+  const container =
+    document.getElementById(
+      "manageCategories"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = "";
+
+  categories.forEach(category => {
+    const wrapper =
+      document.createElement("div");
+
+    wrapper.className =
+      "manage-category";
+
+    wrapper.innerHTML =
+      '<div class="manage-category-header">' +
+      '<div>' +
+      '<span class="manage-category-icon">' +
+      escapeHTML(category.icon) +
+      "</span>" +
+      "<strong>" +
+      escapeHTML(category.name) +
+      "</strong>" +
+      "</div>" +
+      '<div class="manage-category-actions">' +
+      '<button type="button" class="manage-add-item">+ Add item</button>' +
+      '<button type="button" class="manage-delete-category">Delete category</button>' +
+      "</div>" +
+      "</div>" +
+      '<div class="manage-items"></div>';
+
+    const itemsContainer =
+      wrapper.querySelector(
+        ".manage-items"
+      );
+
+    category.items.forEach(item => {
+      const data =
+        getItem(category.id, item);
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "manage-item";
+
+      if (!data.enabled) {
+        row.classList.add("disabled");
+      }
+
+      row.innerHTML =
+        "<span>" +
+        escapeHTML(item) +
+        "</span>" +
+        '<div class="manage-item-actions">' +
+        '<button type="button" class="toggle-item">' +
+        (data.enabled
+          ? "Disable"
+          : "Enable") +
+        "</button>" +
+        '<button type="button" class="delete-item">Delete</button>' +
+        "</div>";
+
+      row
+        .querySelector(".toggle-item")
+        .addEventListener(
+          "click",
+          () => toggleItem(
+            category.id,
+            item
+          )
+        );
+
+      row
+        .querySelector(".delete-item")
+        .addEventListener(
+          "click",
+          () => deleteItem(
+            category.id,
+            item
+          )
+        );
+
+      itemsContainer.appendChild(row);
+    });
+
+    wrapper
+      .querySelector(".manage-add-item")
+      .addEventListener(
+        "click",
+        () => addItem(category.id)
+      );
+
+    wrapper
+      .querySelector(".manage-delete-category")
+      .addEventListener(
+        "click",
+        () => deleteCategory(category.id)
+      );
+
+    container.appendChild(wrapper);
+  });
+}
+
+/* ============================================================
+   ADD CATEGORY
+   ============================================================ */
+
+function addCategory() {
+  const nameInput =
+    document.getElementById(
+      "newCategoryName"
+    );
+
+  const iconInput =
+    document.getElementById(
+      "newCategoryIcon"
+    );
+
+  const name =
+    nameInput
+      ? nameInput.value.trim()
+      : "";
+
+  const icon =
+    iconInput
+      ? iconInput.value.trim()
+      : "";
+
+  if (!name) {
+    alert("Please enter a category name.");
     return;
   }
 
   const exists =
-    category.items.some(
-      item =>
-        item.toLowerCase() ===
-        cleanName.toLowerCase()
+    categories.some(
+      category =>
+        category.name.toLowerCase() ===
+        name.toLowerCase()
     );
 
   if (exists) {
     alert(
-      "This item already exists in this category."
+      "A category with this name already exists."
     );
     return;
   }
 
-  category.items.push(cleanName);
+  const category = {
+    id: createId(name),
+    name: name,
+    icon: icon || "📋",
+    items: []
+  };
 
-  const data =
-    getItem(
-      category.id,
-      cleanName
-    );
+  categories.push(category);
 
-  data.custom = true;
-  data.disabled = false;
+  if (!saveData()) {
+    return;
+  }
 
-  saveData();
+  if (nameInput) {
+    nameInput.value = "";
+  }
 
-  renderCategory();
+  if (iconInput) {
+    iconInput.value = "";
+  }
+
+  renderManagePlanner();
+  buildNavigation();
+
+  alert(
+    '"' +
+      name +
+      '" has been added successfully.'
+  );
 }
 
 /* ============================================================
-   DISABLE ITEM
-============================================================ */
+   DELETE CATEGORY
+   ============================================================ */
 
-function disableCurrentItem() {
-  if (!currentItem) return;
-
+function deleteCategory(categoryId) {
   const category =
-    getCategory(
-      currentItem.categoryId
+    categories.find(
+      c => c.id === categoryId
     );
 
-  if (!category) return;
-
-  const data =
-    getItem(
-      currentItem.categoryId,
-      currentItem.item
-    );
+  if (!category) {
+    return;
+  }
 
   const confirmed =
     confirm(
-      'Disable "' +
-      currentItem.item +
-      '"?\n\n' +
-      "It will disappear from the category, but its data will be kept."
+      'Delete the category "' +
+      category.name +
+      '"?\n\nAll items in this category will be removed from the planner.'
     );
 
-  if (!confirmed) return;
+  if (!confirmed) {
+    return;
+  }
 
-  data.disabled = true;
+  categories =
+    categories.filter(
+      c => c.id !== categoryId
+    );
 
-  saveData();
-
-  closeModal();
-
-  renderCategory();
-}
-
-/* ============================================================
-   RESTORE DISABLED ITEMS
-============================================================ */
-
-function restoreDisabledItems(categoryId) {
-  const category =
-    getCategory(categoryId);
-
-  if (!category) return;
-
-  let restored = 0;
-
-  category.items.forEach(item => {
-    const data =
-      getItem(
-        category.id,
-        item
-      );
-
-    if (data.disabled) {
-      data.disabled = false;
-      restored++;
+  Object.keys(savedData).forEach(key => {
+    if (
+      key.startsWith(
+        categoryId + "::"
+      )
+    ) {
+      delete savedData[key];
     }
   });
 
   saveData();
 
-  renderCategory();
+  currentCategory = "dashboard";
 
-  if (restored === 0) {
-    alert(
-      "There are no disabled items in this category."
+  renderManagePlanner();
+  buildNavigation();
+}
+
+/* ============================================================
+   ADD ITEM
+   ============================================================ */
+
+function addItem(categoryId) {
+  const category =
+    categories.find(
+      c => c.id === categoryId
     );
-  } else {
-    alert(
-      restored +
-      " item(s) restored."
+
+  if (!category) {
+    return;
+  }
+
+  const item =
+    prompt(
+      'Add a new item to "' +
+      category.name +
+      '":'
     );
+
+  if (item === null) {
+    return;
+  }
+
+  const cleanItem =
+    item.trim();
+
+  if (!cleanItem) {
+    return;
+  }
+
+  const exists =
+    category.items.some(
+      existing =>
+        existing.toLowerCase() ===
+        cleanItem.toLowerCase()
+    );
+
+  if (exists) {
+    alert(
+      "This item already exists."
+    );
+    return;
+  }
+
+  category.items.push(cleanItem);
+
+  getItem(
+    category.id,
+    cleanItem
+  );
+
+  saveData();
+
+  renderManagePlanner();
+}
+
+/* ============================================================
+   TOGGLE ITEM
+   ============================================================ */
+
+function toggleItem(categoryId, item) {
+  const data =
+    getItem(
+      categoryId,
+      item
+    );
+
+  data.enabled =
+    !data.enabled;
+
+  saveData();
+
+  renderManagePlanner();
+
+  if (
+    currentCategory === categoryId
+  ) {
+    renderCategory();
   }
 }
 
 /* ============================================================
-   DELETE CUSTOM ITEM
-============================================================ */
+   DELETE ITEM
+   ============================================================ */
 
-function deleteCustomItem() {
-  if (!currentItem) return;
-
+function deleteItem(categoryId, item) {
   const category =
-    getCategory(
-      currentItem.categoryId
+    categories.find(
+      c => c.id === categoryId
     );
 
-  if (!category) return;
-
-  const data =
-    getItem(
-      currentItem.categoryId,
-      currentItem.item
-    );
-
-  if (!data.custom) {
-    alert(
-      "Built-in items cannot be deleted. You can disable them instead."
-    );
+  if (!category) {
     return;
   }
 
   const confirmed =
     confirm(
-      'Permanently delete "' +
-      currentItem.item +
+      'Delete "' +
+      item +
       '"?'
     );
 
-  if (!confirmed) return;
-
-  const index =
-    category.items.indexOf(
-      currentItem.item
-    );
-
-  if (index !== -1) {
-    category.items.splice(index, 1);
+  if (!confirmed) {
+    return;
   }
 
+  category.items =
+    category.items.filter(
+      existing =>
+        existing !== item
+    );
+
   delete savedData[
-    itemKey(
-      currentItem.categoryId,
-      currentItem.item
-    )
+    itemKey(categoryId, item)
   ];
 
   saveData();
 
-  closeModal();
+  renderManagePlanner();
 
-  renderCategory();
-}
-
-/* ============================================================
-   IMPORT DATA
-============================================================ */
-
-function importData(event) {
-  const file =
-    event.target.files[0];
-
-  if (!file) return;
-
-  const reader =
-    new FileReader();
-
-  reader.onload = function(e) {
-    try {
-      const imported =
-        JSON.parse(e.target.result);
-
-      let importedData = null;
-
-      if (
-        imported &&
-        imported.data &&
-        typeof imported.data === "object" &&
-        !Array.isArray(imported.data)
-      ) {
-        importedData =
-          imported.data;
-      } else if (
-        imported &&
-        typeof imported === "object" &&
-        !Array.isArray(imported)
-      ) {
-        importedData = imported;
-      }
-
-      if (
-        !importedData ||
-        typeof importedData !== "object" ||
-        Array.isArray(importedData)
-      ) {
-        throw new Error(
-          "Invalid backup format"
-        );
-      }
-
-      const confirmed =
-        confirm(
-          "Import this wedding planner backup?\n\n" +
-          "Your current planner data will be replaced."
-        );
-
-      if (!confirmed) {
-        event.target.value = "";
-        return;
-      }
-
-      savedData = importedData;
-
-      saveData();
-
-      if (
-        currentCategory ===
-        "dashboard"
-      ) {
-        showDashboard();
-      } else {
-        showCategory(
-          currentCategory
-        );
-      }
-
-      alert(
-        "Wedding planner data imported successfully."
-      );
-    } catch (error) {
-      console.error(
-        "Import failed:",
-        error
-      );
-
-      alert(
-        "This file is not a valid wedding planner backup."
-      );
-    }
-
-    event.target.value = "";
-  };
-
-  reader.onerror = function() {
-    alert(
-      "Could not read the selected file."
-    );
-
-    event.target.value = "";
-  };
-
-  reader.readAsText(file);
-}
-
-/* ============================================================
-   EXPORT DATA
-============================================================ */
-
-function exportData() {
-  try {
-    saveData();
-
-    const backup = {
-      app: "Tamil Wedding Planner",
-      version: 5,
-      exportedAt:
-        new Date().toISOString(),
-      data: savedData
-    };
-
-    const json =
-      JSON.stringify(
-        backup,
-        null,
-        2
-      );
-
-    const blob =
-      new Blob(
-        [json],
-        {
-          type: "application/json"
-        }
-      );
-
-    const url =
-      URL.createObjectURL(blob);
-
-    const link =
-      document.createElement("a");
-
-    link.href = url;
-
-    const now = new Date();
-
-    const year =
-      now.getFullYear();
-
-    const month =
-      String(
-        now.getMonth() + 1
-      ).padStart(2, "0");
-
-    const day =
-      String(
-        now.getDate()
-      ).padStart(2, "0");
-
-    link.download =
-      "wedding-planner-backup-" +
-      year +
-      "-" +
-      month +
-      "-" +
-      day +
-      ".json";
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
-  } catch (error) {
-    console.error(
-      "Export failed:",
-      error
-    );
-
-    alert(
-      "Could not export your wedding planner data."
-    );
+  if (
+    currentCategory === categoryId
+  ) {
+    renderCategory();
   }
 }
 
 /* ============================================================
-   KEYBOARD SUPPORT
-============================================================ */
+   EVENTS
+   ============================================================ */
 
-function setupKeyboardSupport() {
-  document.addEventListener(
-    "keydown",
-    event => {
-      if (
-        event.key === "Escape"
-      ) {
-        closeModal();
-      }
-    }
-  );
-}
-
-/* ============================================================
-   EVENT LISTENERS
-============================================================ */
-
-function setupEventListeners() {
+function setupEvents() {
   const exportButton =
     document.getElementById(
       "exportButton"
@@ -1662,14 +1854,24 @@ function setupEventListeners() {
       "doneButton"
     );
 
-  const itemSearch =
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
+
+  const search =
     document.getElementById(
       "itemSearch"
     );
 
-  const itemStatusFilter =
+  const filter =
     document.getElementById(
       "itemStatusFilter"
+    );
+
+  const addCategoryButton =
+    document.getElementById(
+      "addCategoryButton"
     );
 
   if (exportButton) {
@@ -1682,9 +1884,7 @@ function setupEventListeners() {
   if (importButton && importFile) {
     importButton.addEventListener(
       "click",
-      () => {
-        importFile.click();
-      }
+      () => importFile.click()
     );
   }
 
@@ -1719,46 +1919,23 @@ function setupEventListeners() {
   if (notButton) {
     notButton.addEventListener(
       "click",
-      () => {
-        chooseStatus("not");
-      }
+      () => chooseStatus("not")
     );
   }
 
   if (progressButton) {
     progressButton.addEventListener(
       "click",
-      () => {
-        chooseStatus("progress");
-      }
+      () => chooseStatus("progress")
     );
   }
 
   if (doneButton) {
     doneButton.addEventListener(
       "click",
-      () => {
-        chooseStatus("done");
-      }
+      () => chooseStatus("done")
     );
   }
-
-  if (itemSearch) {
-    itemSearch.addEventListener(
-      "input",
-      renderCategory
-    );
-  }
-
-  if (itemStatusFilter) {
-    itemStatusFilter.addEventListener(
-      "change",
-      renderCategory
-    );
-  }
-
-  const overlay =
-    document.getElementById("overlay");
 
   if (overlay) {
     overlay.addEventListener(
@@ -1770,255 +1947,62 @@ function setupEventListeners() {
       }
     );
   }
-}
 
-/* ============================================================
-   ADD CATEGORY CONTROLS
-============================================================ */
-
-function addCategoryControls() {
-  const categoryPage =
-    document.getElementById(
-      "categoryPage"
-    );
-
-  if (!categoryPage) return;
-
-  let controls =
-    document.getElementById(
-      "categoryControls"
-    );
-
-  if (!controls) {
-    controls =
-      document.createElement("div");
-
-    controls.id =
-      "categoryControls";
-
-    controls.style.display =
-      "flex";
-
-    controls.style.flexWrap =
-      "wrap";
-
-    controls.style.gap =
-      "8px";
-
-    controls.style.marginBottom =
-      "20px";
-
-    const searchArea =
-      document.querySelector(
-        ".search-area"
-      );
-
-    if (searchArea) {
-      searchArea.parentNode.insertBefore(
-        controls,
-        searchArea
-      );
-    }
-  }
-
-  controls.innerHTML = "";
-
-  const addButton =
-    document.createElement("button");
-
-  addButton.type = "button";
-
-  addButton.textContent =
-    "＋ Add item";
-
-  addButton.style.border =
-    "1px solid #741d3d";
-
-  addButton.style.borderRadius =
-    "11px";
-
-  addButton.style.padding =
-    "10px 15px";
-
-  addButton.style.background =
-    "#741d3d";
-
-  addButton.style.color =
-    "white";
-
-  addButton.style.fontWeight =
-    "700";
-
-  addButton.addEventListener(
-    "click",
-    () => {
-      addItem(currentCategory);
-    }
-  );
-
-  const restoreButton =
-    document.createElement("button");
-
-  restoreButton.type = "button";
-
-  restoreButton.textContent =
-    "↻ Restore disabled";
-
-  restoreButton.style.border =
-    "1px solid #eadde1";
-
-  restoreButton.style.borderRadius =
-    "11px";
-
-  restoreButton.style.padding =
-    "10px 15px";
-
-  restoreButton.style.background =
-    "white";
-
-  restoreButton.style.color =
-    "#741d3d";
-
-  restoreButton.style.fontWeight =
-    "700";
-
-  restoreButton.addEventListener(
-    "click",
-    () => {
-      restoreDisabledItems(
-        currentCategory
-      );
-    }
-  );
-
-  controls.appendChild(addButton);
-  controls.appendChild(restoreButton);
-}
-
-/* ============================================================
-   ADD DISABLE BUTTON TO MODAL
-============================================================ */
-
-function addDisableButtonToModal() {
-  const modalActions =
-    document.querySelector(
-      ".modal-actions"
-    );
-
-  if (!modalActions) return;
-
-  let disableButton =
-    document.getElementById(
-      "disableButton"
-    );
-
-  if (!disableButton) {
-    disableButton =
-      document.createElement("button");
-
-    disableButton.id =
-      "disableButton";
-
-    disableButton.type =
-      "button";
-
-    disableButton.className =
-      "clear";
-
-    disableButton.textContent =
-      "Disable item";
-
-    modalActions.insertBefore(
-      disableButton,
-      modalActions.firstChild
-    );
-  }
-
-  disableButton.onclick =
-    disableCurrentItem;
-}
-
-/* ============================================================
-   ADD DELETE BUTTON TO MODAL
-============================================================ */
-
-function addDeleteButtonToModal() {
-  const modalActions =
-    document.querySelector(
-      ".modal-actions"
-    );
-
-  if (!modalActions) return;
-
-  let deleteButton =
-    document.getElementById(
-      "deleteCustomButton"
-    );
-
-  if (!deleteButton) {
-    deleteButton =
-      document.createElement("button");
-
-    deleteButton.id =
-      "deleteCustomButton";
-
-    deleteButton.type =
-      "button";
-
-    deleteButton.className =
-      "clear";
-
-    deleteButton.textContent =
-      "Delete custom";
-
-    modalActions.insertBefore(
-      deleteButton,
-      modalActions.firstChild
-    );
-  }
-
-  deleteButton.onclick =
-    deleteCustomItem;
-}
-
-/* ============================================================
-   INITIALIZE
-============================================================ */
-
-function initializeApp() {
-  loadData();
-
-  setupEventListeners();
-
-  setupKeyboardSupport();
-
-  addCategoryControls();
-
-  addDisableButtonToModal();
-
-  addDeleteButtonToModal();
-
-  buildNavigation();
-
-  showDashboard();
-
-  console.log(
-    "Tamil Wedding Planner loaded successfully."
-  );
-}
-
-/* ============================================================
-   START APP
-============================================================ */
-
-if (
-  document.readyState ===
-  "loading"
-) {
   document.addEventListener(
-    "DOMContentLoaded",
-    initializeApp
+    "keydown",
+    event => {
+      if (
+        event.key === "Escape"
+      ) {
+        closeModal();
+      }
+    }
   );
-} else {
-  initializeApp();
+
+  if (search) {
+    search.addEventListener(
+      "input",
+      renderCategory
+    );
+  }
+
+  if (filter) {
+    filter.addEventListener(
+      "change",
+      renderCategory
+    );
+  }
+
+  if (addCategoryButton) {
+    addCategoryButton.addEventListener(
+      "click",
+      addCategory
+    );
+  }
+
+  const manageButton =
+    document.getElementById(
+      "managePlannerButton"
+    );
+
+  if (manageButton) {
+    manageButton.addEventListener(
+      "click",
+      showManagePlanner
+    );
+  }
 }
+
+/* ============================================================
+   START APPLICATION
+   ============================================================ */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+    loadData();
+    setupEvents();
+    buildNavigation();
+    showDashboard();
+  }
+);
