@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,6 +7,12 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
+
+<meta
+name="theme-color"
+content="#8f3f5f"
+
+>
 
   <title>Our Wedding Planner</title>
 
@@ -15,45 +22,195 @@
 <body>
 
   <!-- =========================================================
+       TOP BAR
+       ========================================================= -->
+
+  <header class="top-bar">
+
+```
+<div class="brand">
+
+  <div class="brand-ring" aria-hidden="true">
+    💍
+  </div>
+
+  <div class="brand-text">
+    <span class="brand-eyebrow">
+      OUR WEDDING
+    </span>
+
+    <strong>
+      Our Big Day
+    </strong>
+  </div>
+
+</div>
+
+<!-- DATA ACTIONS - ALWAYS VISIBLE -->
+<div class="data-actions">
+
+  <button
+    class="icon-action export-action"
+    id="exportButton"
+    type="button"
+    title="Export planner"
+    aria-label="Export planner"
+  >
+    <span class="action-icon">↑</span>
+    <span class="action-label">Export</span>
+  </button>
+
+  <button
+    class="icon-action import-action"
+    id="importButton"
+    type="button"
+    title="Import planner"
+    aria-label="Import planner"
+  >
+    <span class="action-icon">↓</span>
+    <span class="action-label">Import</span>
+  </button>
+
+  <button
+    class="icon-action reset-action"
+    id="resetButton"
+    type="button"
+    title="Reset planner"
+    aria-label="Reset planner"
+  >
+    <span class="action-icon">↻</span>
+    <span class="action-label">Reset</span>
+  </button>
+
+  <input
+    type="file"
+    id="importFile"
+    accept=".json,application/json"
+    hidden
+  >
+
+</div>
+```
+
+  </header>
+
+  <!-- =========================================================
        HERO
        ========================================================= -->
 
   <header class="hero">
 
-    <div class="hero-inner">
+```
+<div class="hero-decoration hero-decoration-left">
+  ✦
+</div>
 
-      <div class="eyebrow">
-        Tamil Wedding Planner
-      </div>
+<div class="hero-decoration hero-decoration-right">
+  ✦
+</div>
 
-      <h1>
-        💍 Our Big Day
-      </h1>
+<div class="hero-inner">
 
-      <p>
-        Everything we need for our wedding,
-        beautifully organised.
-      </p>
+  <div class="hero-ring" aria-hidden="true">
+    💍
+  </div>
+
+  <div class="eyebrow">
+    Tamil Wedding Planner
+  </div>
+
+  <h1>
+    Our Big Day
+  </h1>
+
+  <p>
+    Everything we need for our wedding,
+    beautifully organised in one place.
+  </p>
+
+  <!-- WEDDING DATE -->
+
+  <div class="wedding-date-card">
+
+    <div class="wedding-date-icon">
+      💒
+    </div>
+
+    <div class="wedding-date-content">
+
+      <label for="weddingDate">
+        Our wedding date
+      </label>
+
+      <input
+        type="date"
+        id="weddingDate"
+      >
 
     </div>
 
-  </header>
+    <div
+      class="wedding-countdown"
+      id="weddingCountdown"
+    >
+      <strong id="countdownNumber">
+        —
+      </strong>
 
-
-  <!-- =========================================================
-       NAVIGATION
-       ========================================================= -->
-
-  <div class="nav-wrapper">
-
-    <nav
-      class="nav"
-      id="navigation"
-      aria-label="Wedding categories"
-    ></nav>
+      <span id="countdownText">
+        Set your wedding date
+      </span>
+    </div>
 
   </div>
 
+</div>
+```
+
+  </header>
+
+  <!-- =========================================================
+       CATEGORY NAVIGATION
+       ========================================================= -->
+
+  <section class="navigation-section">
+
+```
+<div class="navigation-inner">
+
+  <div class="navigation-heading">
+
+    <div>
+      <span class="section-kicker">
+        WEDDING PLAN
+      </span>
+
+      <h2>
+        Categories
+      </h2>
+    </div>
+
+    <button
+      class="manage-categories-button"
+      id="manageCategoriesButton"
+      type="button"
+    >
+      <span>⚙</span>
+      Manage categories
+    </button>
+
+  </div>
+
+  <nav
+    class="category-navigation"
+    id="navigation"
+    aria-label="Wedding categories"
+  ></nav>
+
+</div>
+```
+
+  </section>
 
   <!-- =========================================================
        MAIN APP
@@ -61,383 +218,428 @@
 
   <main class="app">
 
+```
+<!-- =======================================================
+     DASHBOARD
+     ======================================================= -->
 
-    <!-- =======================================================
-         DASHBOARD
-         ======================================================= -->
+<section id="dashboardPage">
 
-    <section id="dashboardPage">
+  <!-- DASHBOARD INTRO -->
 
-      <div class="page-header">
+  <div class="dashboard-intro">
 
-        <div>
+    <div>
 
-          <h2>
-            Wedding Dashboard
-          </h2>
+      <span class="section-kicker">
+        WELCOME
+      </span>
 
-          <p>
-            Keep track of everything
-            for the big day.
-          </p>
+      <h2>
+        Wedding Dashboard
+      </h2>
 
-        </div>
+      <p>
+        Keep track of everything
+        for the big day.
+      </p>
 
+    </div>
 
-        <div class="data-actions">
+    <div class="dashboard-ring" aria-hidden="true">
+      💍
+    </div>
 
-          <button
-            class="export-button"
-            id="exportButton"
-            type="button"
-          >
-            <span>📥</span>
-            Export
-          </button>
-
-
-          <button
-            class="import-button"
-            id="importButton"
-            type="button"
-          >
-            <span>📤</span>
-            Import
-          </button>
+  </div>
 
 
-          <button
-            class="reset-button"
-            id="resetButton"
-            type="button"
-          >
-            <span>↻</span>
-            Reset
-          </button>
+  <!-- STATS -->
 
+  <div class="stats">
 
-          <input
-            type="file"
-            id="importFile"
-            accept=".json,application/json"
-            hidden
-          >
+    <div class="stat-card">
 
-        </div>
-
+      <div class="stat-icon">
+        📋
       </div>
-
-
-      <!-- =====================================================
-           STATS
-           ===================================================== -->
-
-      <div class="stats">
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            📋
-          </div>
-
-          <div
-            class="stat-number"
-            id="totalCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            Total items
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            ✅
-          </div>
-
-          <div
-            class="stat-number"
-            id="doneCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            Completed
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            ⏳
-          </div>
-
-          <div
-            class="stat-number"
-            id="progressCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            In progress
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            🗂️
-          </div>
-
-          <div
-            class="stat-number"
-            id="categoryCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            Categories
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================================
-           OVERALL PROGRESS
-           ===================================================== -->
-
-      <div class="progress-card">
-
-        <div class="progress-heading">
-
-          <h2>
-            Overall progress
-          </h2>
-
-          <span id="overallPercent">
-            0%
-          </span>
-
-        </div>
-
-
-        <div class="progress-bar">
-
-          <div
-            class="progress-fill"
-            id="overallFill"
-          ></div>
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================================
-           QUICK ACTIONS
-           ===================================================== -->
-
-      <div class="quick-actions">
-
-        <button
-          class="primary-button"
-          id="addCategoryButton"
-          type="button"
-        >
-          <span>＋</span>
-          Add category
-        </button>
-
-      </div>
-
-
-      <!-- =====================================================
-           CATEGORIES
-           ===================================================== -->
-
-      <div class="page-header category-heading">
-
-        <div>
-
-          <h2>
-            Categories
-          </h2>
-
-          <p>
-            Select a category to start planning.
-          </p>
-
-        </div>
-
-      </div>
-
 
       <div
-        class="category-summary-grid"
-        id="summaryGrid"
+        class="stat-number"
+        id="totalCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Active items
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        ✓
+      </div>
+
+      <div
+        class="stat-number"
+        id="doneCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Completed
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        ◐
+      </div>
+
+      <div
+        class="stat-number"
+        id="progressCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        In progress
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        ♡
+      </div>
+
+      <div
+        class="stat-number"
+        id="categoryCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Categories
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- OVERALL PROGRESS -->
+
+  <div class="progress-card">
+
+    <div class="progress-heading">
+
+      <div>
+
+        <span class="section-kicker">
+          YOUR PROGRESS
+        </span>
+
+        <h2>
+          Overall progress
+        </h2>
+
+      </div>
+
+      <strong id="overallPercent">
+        0%
+      </strong>
+
+    </div>
+
+    <div class="progress-bar">
+
+      <div
+        class="progress-fill"
+        id="overallFill"
       ></div>
 
+    </div>
 
-    </section>
+  </div>
 
 
-    <!-- =======================================================
-         CATEGORY PAGE
-         ======================================================= -->
+  <!-- =====================================================
+       CATEGORY SELECTION
+       ===================================================== -->
 
-    <section
-      id="categoryPage"
-      style="display:none;"
+  <div class="category-selection-header">
+
+    <span class="section-kicker">
+      PLAN YOUR WEDDING
+    </span>
+
+    <h2>
+      Select a category to start planning
+    </h2>
+
+    <p>
+      Choose an area of your wedding to see
+      all the items you need to organise.
+    </p>
+
+  </div>
+
+
+  <!-- CATEGORY CARDS -->
+
+  <div
+    class="category-summary-grid"
+    id="summaryGrid"
+  ></div>
+
+
+  <!-- ADD CATEGORY - BELOW CATEGORY SELECTION -->
+
+  <div class="add-category-area">
+
+    <button
+      class="add-category-button"
+      id="addCategoryButton"
+      type="button"
     >
+      <span class="add-category-plus">
+        +
+      </span>
 
-      <div class="page-header">
+      <span>
+        Add category
+      </span>
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     CATEGORY PAGE
+     ======================================================= -->
+
+<section
+  id="categoryPage"
+  class="page-hidden"
+>
+
+  <!-- CATEGORY HEADER -->
+
+  <div class="category-page-header">
+
+    <div class="category-page-title">
+
+      <button
+        class="back-button"
+        id="backToDashboardButton"
+        type="button"
+      >
+        ←
+        <span>
+          Dashboard
+        </span>
+      </button>
+
+      <div class="category-title-row">
+
+        <div
+          class="category-title-icon"
+          id="categoryTitleIcon"
+        >
+          💍
+        </div>
 
         <div>
+
+          <span
+            class="section-kicker"
+            id="categoryTitleKicker"
+          >
+            CATEGORY
+          </span>
 
           <h2 id="categoryTitle"></h2>
 
           <p>
-            Select an item to see more details.
+            Select an item to see or update its details.
           </p>
 
         </div>
 
+      </div>
 
-        <div class="category-progress">
+    </div>
 
-          <strong id="categoryPercent">
-            0%
-          </strong>
 
-          <span id="categoryProgressText">
-            0 / 0 completed
-          </span>
+    <!-- CATEGORY PROGRESS -->
 
-        </div>
+    <div class="category-progress-card">
+
+      <strong id="categoryPercent">
+        0%
+      </strong>
+
+      <span id="categoryProgressText">
+        0 / 0 completed
+      </span>
+
+      <div class="mini-progress-bar">
+
+        <div
+          id="categoryProgressFill"
+        ></div>
 
       </div>
 
+    </div>
 
-      <!-- =====================================================
-           CATEGORY ACTIONS
-           ===================================================== -->
-
-      <div class="category-toolbar">
-
-        <button
-          class="secondary-button"
-          id="backToDashboardButton"
-          type="button"
-        >
-          ← Dashboard
-        </button>
+  </div>
 
 
-        <button
-          class="primary-button"
-          id="addItemButton"
-          type="button"
-        >
-          ＋ Add item
-        </button>
+  <!-- CATEGORY TOOLBAR -->
 
-      </div>
+  <div class="category-toolbar">
 
+    <button
+      class="toolbar-button add-item-toolbar-button"
+      id="addItemButton"
+      type="button"
+    >
+      <span>+</span>
+      Add item
+    </button>
 
-      <!-- =====================================================
-           SEARCH
-           ===================================================== -->
+    <button
+      class="toolbar-button disable-category-button"
+      id="disableCurrentCategoryButton"
+      type="button"
+    >
+      <span>◉</span>
+      Disable category
+    </button>
 
-      <div class="search-area">
-
-        <input
-          id="itemSearch"
-          type="search"
-          placeholder="🔎 Search within this category..."
-          autocomplete="off"
-        >
-
-
-        <select id="itemStatusFilter">
-
-          <option value="all">
-            All items
-          </option>
-
-          <option value="not">
-            Not started
-          </option>
-
-          <option value="progress">
-            In progress
-          </option>
-
-          <option value="done">
-            Completed
-          </option>
-
-        </select>
-
-      </div>
+  </div>
 
 
-      <!-- =====================================================
-           ITEMS
-           ===================================================== -->
+  <!-- SEARCH / FILTER -->
 
-      <div
-        class="items-grid"
-        id="itemsGrid"
-      ></div>
+  <div class="search-area">
 
+    <div class="search-box">
 
-      <div
-        class="empty"
-        id="emptyMessage"
-        style="display:none;"
+      <span class="search-icon">
+        ⌕
+      </span>
+
+      <input
+        id="itemSearch"
+        type="search"
+        placeholder="Search items..."
+        autocomplete="off"
       >
 
-        <div class="empty-icon">
-          🔎
-        </div>
+    </div>
 
-        <h3>
-          No items found
-        </h3>
+    <div class="filter-box">
 
-        <p>
-          Try another search or status filter.
-        </p>
+      <label for="itemStatusFilter">
+        Status
+      </label>
 
-      </div>
+      <select id="itemStatusFilter">
 
-    </section>
+        <option value="all">
+          All items
+        </option>
+
+        <option value="not">
+          Not started
+        </option>
+
+        <option value="progress">
+          In progress
+        </option>
+
+        <option value="done">
+          Completed
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- ITEMS -->
+
+  <div
+    class="items-grid"
+    id="itemsGrid"
+  ></div>
+
+
+  <!-- EMPTY -->
+
+  <div
+    class="empty"
+    id="emptyMessage"
+  >
+
+    <div class="empty-icon">
+      💍
+    </div>
+
+    <h3>
+      No items found
+    </h3>
+
+    <p>
+      Try another search or status filter.
+    </p>
+
+  </div>
+
+</section>
+```
 
   </main>
-
 
   <!-- =========================================================
        FOOTER
        ========================================================= -->
 
   <footer>
-    Made with ❤️ for our wedding
-  </footer>
 
+```
+<div class="footer-ring">
+  💍
+</div>
+
+<p>
+  Made with ❤️ for our wedding
+</p>
+
+<span>
+  Together, one detail at a time.
+</span>
+```
+
+  </footer>
 
   <!-- =========================================================
        ITEM MODAL
@@ -446,357 +648,560 @@
   <div
     class="overlay"
     id="overlay"
+    aria-hidden="true"
   >
 
-    <div
-      class="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modalTitle"
+```
+<div
+  class="modal item-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalTitle"
+>
+
+  <!-- MODAL HEADER -->
+
+  <div class="modal-header">
+
+    <div class="modal-heading">
+
+      <div
+        class="modal-category"
+        id="modalCategory"
+      ></div>
+
+      <h2 id="modalTitle"></h2>
+
+    </div>
+
+    <button
+      class="close"
+      id="closeModalButton"
+      type="button"
+      aria-label="Close"
     >
+      ×
+    </button>
 
-      <div class="modal-header">
+  </div>
 
-        <div>
 
-          <div
-            class="modal-category"
-            id="modalCategory"
-          ></div>
+  <!-- MODAL CONTENT -->
 
-          <h2 id="modalTitle"></h2>
+  <div class="modal-body">
 
-        </div>
+    <!-- STATUS -->
 
+    <div class="modal-status-section">
+
+      <label>
+        Status
+      </label>
+
+      <div class="status-buttons">
 
         <button
-          class="close"
-          id="closeModalButton"
+          class="status-button not"
+          id="notButton"
           type="button"
-          aria-label="Close"
         >
-          ×
+          <span>○</span>
+          Not started
         </button>
 
-      </div>
-
-
-      <div class="modal-body">
-
-        <div class="form-group">
-
-          <label>
-            Status
-          </label>
-
-
-          <div class="status-buttons">
-
-            <button
-              class="status-button not"
-              id="notButton"
-              type="button"
-            >
-              ○ Not started
-            </button>
-
-
-            <button
-              class="status-button progress"
-              id="progressButton"
-              type="button"
-            >
-              ◐ In progress
-            </button>
-
-
-            <button
-              class="status-button done"
-              id="doneButton"
-              type="button"
-            >
-              ✓ Completed
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="vendorInput">
-            Vendor / Person
-          </label>
-
-          <input
-            id="vendorInput"
-            type="text"
-            placeholder="Who is responsible?"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="priceInput">
-            Price
-          </label>
-
-          <input
-            id="priceInput"
-            type="text"
-            placeholder="e.g. 2,500 kr"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="deadlineInput">
-            Deadline
-          </label>
-
-          <input
-            id="deadlineInput"
-            type="date"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="linkInput">
-            Website / Instagram / Link
-          </label>
-
-          <input
-            id="linkInput"
-            type="url"
-            placeholder="https://..."
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="notesInput">
-            Notes
-          </label>
-
-          <textarea
-            id="notesInput"
-            placeholder="Add notes, ideas, contact details, measurements..."
-          ></textarea>
-
-        </div>
-
-
-        <!-- ITEM MANAGEMENT -->
-
-        <div class="item-management">
-
-          <div>
-
-            <strong>
-              Item visibility
-            </strong>
-
-            <p id="itemManagementDescription">
-              Disable this item if you do not want it shown in the planner.
-            </p>
-
-          </div>
-
-
-          <button
-            class="disable-item-button"
-            id="disableItemButton"
-            type="button"
-          >
-            Disable item
-          </button>
-
-        </div>
-
-
-        <div
-          class="custom-item-delete"
-          id="customItemDeleteArea"
-          style="display:none;"
+        <button
+          class="status-button progress"
+          id="progressButton"
+          type="button"
         >
+          <span>◐</span>
+          In progress
+        </button>
 
-          <button
-            class="delete-custom-item-button"
-            id="deleteCustomItemButton"
-            type="button"
-          >
-            🗑 Delete custom item
-          </button>
-
-        </div>
-
-
-        <div class="modal-actions">
-
-          <button
-            class="clear"
-            id="clearButton"
-            type="button"
-          >
-            Clear
-          </button>
-
-
-          <button
-            class="save"
-            id="saveButton"
-            type="button"
-          >
-            Save changes
-          </button>
-
-        </div>
+        <button
+          class="status-button done"
+          id="doneButton"
+          type="button"
+        >
+          <span>✓</span>
+          Completed
+        </button>
 
       </div>
 
     </div>
 
+
+    <!-- DETAILS
+         Designed so these fields sit together rather than
+         being spread throughout the modal.
+    -->
+
+    <div class="item-details-grid">
+
+      <div class="form-group">
+
+        <label for="vendorInput">
+          Vendor / Person
+        </label>
+
+        <input
+          id="vendorInput"
+          type="text"
+          placeholder="Who is responsible?"
+          autocomplete="off"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="priceInput">
+          Price
+        </label>
+
+        <input
+          id="priceInput"
+          type="text"
+          placeholder="e.g. 2,500 kr"
+          inputmode="decimal"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="deadlineInput">
+          Deadline
+        </label>
+
+        <input
+          id="deadlineInput"
+          type="date"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="linkInput">
+          Website / Instagram / Link
+        </label>
+
+        <input
+          id="linkInput"
+          type="url"
+          placeholder="https://..."
+          autocomplete="url"
+        >
+
+      </div>
+
+    </div>
+
+
+    <!-- NOTES -->
+
+    <div class="form-group notes-group">
+
+      <label for="notesInput">
+        Notes
+      </label>
+
+      <textarea
+        id="notesInput"
+        placeholder="Add notes, ideas, contact details, measurements..."
+        rows="3"
+      ></textarea>
+
+    </div>
+
+
+    <!-- ITEM ACTION -->
+
+    <div class="item-modal-secondary-action">
+
+      <button
+        class="disable-item-button"
+        id="disableItemButton"
+        type="button"
+      >
+        <span>◉</span>
+        Disable item
+      </button>
+
+    </div>
+
+
+    <!-- MODAL ACTIONS -->
+
+    <div class="modal-actions">
+
+      <button
+        class="clear"
+        id="clearButton"
+        type="button"
+      >
+        Clear details
+      </button>
+
+      <button
+        class="save"
+        id="saveButton"
+        type="button"
+      >
+        Save changes
+      </button>
+
+    </div>
+
   </div>
 
+</div>
+```
+
+  </div>
 
   <!-- =========================================================
-       ADD / EDIT MODAL
+       MANAGEMENT MODAL
        ========================================================= -->
 
   <div
     class="overlay"
-    id="managementOverlay"
+    id="categoryManagementOverlay"
+    aria-hidden="true"
   >
 
-    <div
-      class="modal management-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="managementModalTitle"
+```
+<div
+  class="modal category-management-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="categoryManagementTitle"
+>
+
+  <div class="modal-header">
+
+    <div class="modal-heading">
+
+      <div class="modal-category">
+        WEDDING PLAN
+      </div>
+
+      <h2 id="categoryManagementTitle">
+        Manage categories
+      </h2>
+
+    </div>
+
+    <button
+      class="close"
+      id="closeCategoryManagementButton"
+      type="button"
+      aria-label="Close"
     >
+      ×
+    </button>
 
-      <div class="modal-header">
-
-        <div>
-
-          <div class="modal-category">
-            WEDDING PLANNER
-          </div>
-
-          <h2 id="managementModalTitle">
-            Add category
-          </h2>
-
-        </div>
+  </div>
 
 
-        <button
-          class="close"
-          id="closeManagementButton"
-          type="button"
-          aria-label="Close"
-        >
-          ×
-        </button>
+  <div class="modal-body">
 
-      </div>
+    <p class="management-description">
+      Quickly enable or disable the categories
+      you want to see in your wedding planner.
+    </p>
 
 
-      <div class="modal-body">
+    <!-- CATEGORY MANAGEMENT LIST -->
 
-        <div class="form-group">
-
-          <label for="managementNameInput">
-            Name
-          </label>
-
-          <input
-            id="managementNameInput"
-            type="text"
-            placeholder="Enter a name..."
-            autocomplete="off"
-          >
-
-        </div>
+    <div
+      class="category-management-list"
+      id="categoryManagementList"
+    ></div>
 
 
-        <div
-          class="form-group"
-          id="iconGroup"
-        >
+    <div class="management-footer">
 
-          <label for="managementIconInput">
-            Icon
-          </label>
-
-          <input
-            id="managementIconInput"
-            type="text"
-            maxlength="4"
-            placeholder="💍"
-            autocomplete="off"
-          >
-
-        </div>
-
-
-        <p
-          class="management-help"
-          id="managementHelp"
-        >
-          Create a new category for your wedding planner.
-        </p>
-
-
-        <div class="management-modal-actions">
-
-          <button
-            class="clear"
-            id="cancelManagementButton"
-            type="button"
-          >
-            Cancel
-          </button>
-
-
-          <button
-            class="save"
-            id="saveManagementButton"
-            type="button"
-          >
-            Add category
-          </button>
-
-        </div>
-
-      </div>
+      <button
+        class="secondary-modal-button"
+        id="closeCategoryManagementFooterButton"
+        type="button"
+      >
+        Done
+      </button>
 
     </div>
 
   </div>
 
+</div>
+```
+
+  </div>
 
   <!-- =========================================================
-       TOAST
+       ADD CATEGORY MODAL
        ========================================================= -->
 
   <div
-    class="toast"
-    id="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
+    class="overlay"
+    id="addCategoryOverlay"
+    aria-hidden="true"
+  >
 
+```
+<div
+  class="modal add-category-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="addCategoryTitle"
+>
+
+  <div class="modal-header">
+
+    <div class="modal-heading">
+
+      <div class="modal-category">
+        WEDDING PLAN
+      </div>
+
+      <h2 id="addCategoryTitle">
+        Add category
+      </h2>
+
+    </div>
+
+    <button
+      class="close"
+      id="closeAddCategoryButton"
+      type="button"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+  </div>
+
+
+  <div class="modal-body">
+
+    <div class="form-group">
+
+      <label for="newCategoryName">
+        Category name
+      </label>
+
+      <input
+        id="newCategoryName"
+        type="text"
+        placeholder="e.g. Flowers"
+        autocomplete="off"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="newCategoryIcon">
+        Icon
+      </label>
+
+      <input
+        id="newCategoryIcon"
+        type="text"
+        maxlength="4"
+        placeholder="🌸"
+        autocomplete="off"
+      >
+
+    </div>
+
+
+    <div class="add-category-modal-actions">
+
+      <button
+        class="clear"
+        id="cancelAddCategoryButton"
+        type="button"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="save"
+        id="saveCategoryButton"
+        type="button"
+      >
+        Add category
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- =========================================================
+       ADD ITEM MODAL
+       ========================================================= -->
+
+  <div
+    class="overlay"
+    id="addItemOverlay"
+    aria-hidden="true"
+  >
+
+```
+<div
+  class="modal add-item-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="addItemTitle"
+>
+
+  <div class="modal-header">
+
+    <div class="modal-heading">
+
+      <div
+        class="modal-category"
+        id="addItemCategoryName"
+      >
+        CATEGORY
+      </div>
+
+      <h2 id="addItemTitle">
+        Add item
+      </h2>
+
+    </div>
+
+    <button
+      class="close"
+      id="closeAddItemButton"
+      type="button"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+  </div>
+
+
+  <div class="modal-body">
+
+    <div class="form-group">
+
+      <label for="newItemName">
+        Item name
+      </label>
+
+      <input
+        id="newItemName"
+        type="text"
+        placeholder="e.g. Wedding flowers"
+        autocomplete="off"
+      >
+
+    </div>
+
+
+    <div class="add-item-modal-actions">
+
+      <button
+        class="clear"
+        id="cancelAddItemButton"
+        type="button"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="save"
+        id="saveItemButton"
+        type="button"
+      >
+        Add item
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- =========================================================
+       RESET CONFIRMATION MODAL
+       ========================================================= -->
+
+  <div
+    class="overlay"
+    id="resetOverlay"
+    aria-hidden="true"
+  >
+
+```
+<div
+  class="modal reset-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="resetTitle"
+>
+
+  <div class="reset-icon">
+    ↻
+  </div>
+
+  <h2 id="resetTitle">
+    Reset planner?
+  </h2>
+
+  <p>
+    This will restore the original wedding
+    categories and items. Your saved item
+    details will also be removed.
+  </p>
+
+  <div class="reset-actions">
+
+    <button
+      class="clear"
+      id="cancelResetButton"
+      type="button"
+    >
+      Cancel
+    </button>
+
+    <button
+      class="danger-button"
+      id="confirmResetButton"
+      type="button"
+    >
+      Reset planner
+    </button>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- =========================================================
+       SCRIPT
+       ========================================================= -->
 
   <script src="./script.js"></script>
 
