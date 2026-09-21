@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -13,458 +12,447 @@
 <body>
 
   <!-- HERO -->
-
   <header class="hero">
     <div class="hero-inner">
       <div class="eyebrow">Tamil Wedding Planner</div>
 
+      <h1>💍 Our Big Day</h1>
 
-  <h1>💍 Our Big Day</h1>
-
-  <p>
-    Everything we need for our wedding,
-    beautifully organised.
-  </p>
-</div>
-
-
+      <p>
+        Everything we need for our wedding,
+        beautifully organised.
+      </p>
+    </div>
   </header>
 
   <!-- NAVIGATION -->
-
   <div class="nav-wrapper">
-    <nav class="nav" id="navigation"></nav>
+    <nav class="nav" id="navigation" aria-label="Wedding planner navigation"></nav>
   </div>
 
   <!-- MAIN APP -->
-
   <main class="app">
 
+    <!-- DASHBOARD -->
+    <section id="dashboardPage">
 
-<!-- DASHBOARD -->
-<section id="dashboardPage">
+      <div class="page-header">
+        <div>
+          <h2>Wedding Dashboard</h2>
 
-  <div class="page-header">
-    <div>
-      <h2>Wedding Dashboard</h2>
+          <p>
+            Keep track of everything
+            for the big day.
+          </p>
+        </div>
 
-      <p>
-        Keep track of everything
-        for the big day.
-      </p>
-    </div>
+        <div class="data-actions">
 
-    <div class="data-actions">
+          <button
+            class="export-button"
+            id="exportButton"
+            type="button"
+          >
+            📥 Export data
+          </button>
 
-      <button
-        class="export-button"
-        id="exportButton"
-        type="button"
-      >
-        📥 Export data
-      </button>
+          <button
+            class="import-button"
+            id="importButton"
+            type="button"
+          >
+            📤 Import data
+          </button>
 
-      <button
-        class="import-button"
-        id="importButton"
-        type="button"
-      >
-        📤 Import data
-      </button>
+          <input
+            type="file"
+            id="importFile"
+            accept=".json,application/json"
+            hidden
+          >
 
-      <input
-        type="file"
-        id="importFile"
-        accept=".json,application/json"
-        hidden
-      >
+        </div>
+      </div>
 
-    </div>
-  </div>
+      <!-- STATS -->
+      <div class="stats">
 
-  <!-- STATS -->
-  <div class="stats">
+        <div class="stat">
+          <div class="stat-icon">📋</div>
 
-    <div class="stat">
-      <div class="stat-icon">📋</div>
+          <div
+            class="stat-number"
+            id="totalCount"
+          >
+            0
+          </div>
+
+          <div class="stat-label">
+            Total items
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">✅</div>
+
+          <div
+            class="stat-number"
+            id="doneCount"
+          >
+            0
+          </div>
+
+          <div class="stat-label">
+            Completed
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">⏳</div>
+
+          <div
+            class="stat-number"
+            id="progressCount"
+          >
+            0
+          </div>
+
+          <div class="stat-label">
+            In progress
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">🗂️</div>
+
+          <div
+            class="stat-number"
+            id="categoryCount"
+          >
+            0
+          </div>
+
+          <div class="stat-label">
+            Categories
+          </div>
+        </div>
+
+      </div>
+
+      <!-- OVERALL PROGRESS -->
+      <div class="progress-card">
+
+        <div class="progress-heading">
+
+          <h2>Overall progress</h2>
+
+          <span id="overallPercent">
+            0%
+          </span>
+
+        </div>
+
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-label="Overall wedding planning progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <div
+            class="progress-fill"
+            id="overallFill"
+          ></div>
+        </div>
+
+      </div>
+
+      <!-- CATEGORIES -->
+      <div class="page-header">
+
+        <div>
+          <h2>Categories</h2>
+
+          <p>
+            Select a category to start planning.
+          </p>
+        </div>
+
+      </div>
 
       <div
-        class="stat-number"
-        id="totalCount"
-      >
-        0
-      </div>
-
-      <div class="stat-label">
-        Total items
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">✅</div>
-
-      <div
-        class="stat-number"
-        id="doneCount"
-      >
-        0
-      </div>
-
-      <div class="stat-label">
-        Completed
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">⏳</div>
-
-      <div
-        class="stat-number"
-        id="progressCount"
-      >
-        0
-      </div>
-
-      <div class="stat-label">
-        In progress
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">🗂️</div>
-
-      <div
-        class="stat-number"
-        id="categoryCount"
-      >
-        0
-      </div>
-
-      <div class="stat-label">
-        Categories
-      </div>
-    </div>
-
-  </div>
-
-  <!-- OVERALL PROGRESS -->
-  <div class="progress-card">
-
-    <div class="progress-heading">
-
-      <h2>Overall progress</h2>
-
-      <span id="overallPercent">
-        0%
-      </span>
-
-    </div>
-
-    <div class="progress-bar">
-      <div
-        class="progress-fill"
-        id="overallFill"
+        class="category-summary-grid"
+        id="summaryGrid"
       ></div>
-    </div>
 
-  </div>
+    </section>
 
-  <!-- CATEGORIES -->
-  <div class="page-header">
-
-    <div>
-      <h2>Categories</h2>
-
-      <p>
-        Select a category to start planning.
-      </p>
-    </div>
-
-  </div>
-
-  <div
-    class="category-summary-grid"
-    id="summaryGrid"
-  ></div>
-
-</section>
-
-<!-- CATEGORY PAGE -->
-<section
-  id="categoryPage"
-  style="display:none;"
->
-
-  <div class="page-header">
-
-    <div>
-
-      <h2 id="categoryTitle"></h2>
-
-      <p>
-        Select an item to see more details.
-      </p>
-
-    </div>
-
-    <div class="category-progress">
-
-      <strong id="categoryPercent">
-        0%
-      </strong>
-
-      <span id="categoryProgressText">
-        0 / 0 completed
-      </span>
-
-    </div>
-
-  </div>
-
-  <!-- SEARCH -->
-  <div class="search-area">
-
-    <input
-      id="itemSearch"
-      type="search"
-      placeholder="🔎 Search within this category..."
-      autocomplete="off"
+    <!-- CATEGORY PAGE -->
+    <section
+      id="categoryPage"
+      style="display: none;"
     >
 
-    <select id="itemStatusFilter">
+      <div class="page-header">
 
-      <option value="all">
-        All items
-      </option>
+        <div>
 
-      <option value="not">
-        Not started
-      </option>
+          <h2 id="categoryTitle"></h2>
 
-      <option value="progress">
-        In progress
-      </option>
+          <p>
+            Select an item to see more details.
+          </p>
 
-      <option value="done">
-        Completed
-      </option>
+        </div>
 
-    </select>
+        <div class="category-progress">
 
-  </div>
+          <strong id="categoryPercent">
+            0%
+          </strong>
 
-  <!-- ITEMS -->
-  <div
-    class="items-grid"
-    id="itemsGrid"
-  ></div>
+          <span id="categoryProgressText">
+            0 / 0 completed
+          </span>
 
-  <div
-    class="empty"
-    id="emptyMessage"
-    style="display:none;"
-  >
+        </div>
 
-    <h3>No items found</h3>
+      </div>
 
-    <p>
-      Try another search or status filter.
-    </p>
+      <!-- SEARCH -->
+      <div class="search-area">
 
-  </div>
+        <input
+          id="itemSearch"
+          type="search"
+          placeholder="🔎 Search within this category..."
+          autocomplete="off"
+        >
 
-</section>
+        <select id="itemStatusFilter">
 
+          <option value="all">
+            All items
+          </option>
+
+          <option value="not">
+            Not started
+          </option>
+
+          <option value="progress">
+            In progress
+          </option>
+
+          <option value="done">
+            Completed
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- ITEMS -->
+      <div
+        class="items-grid"
+        id="itemsGrid"
+      ></div>
+
+      <div
+        class="empty"
+        id="emptyMessage"
+        style="display: none;"
+      >
+
+        <h3>No items found</h3>
+
+        <p>
+          Try another search or status filter.
+        </p>
+
+      </div>
+
+    </section>
 
   </main>
 
   <!-- FOOTER -->
-
   <footer>
     Made with ❤️ for our wedding
   </footer>
 
   <!-- MODAL -->
-
   <div
     class="overlay"
     id="overlay"
-    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
   >
 
+    <div class="modal">
 
-<div
-  class="modal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="modalTitle"
->
+      <div class="modal-header">
 
-  <div class="modal-header">
+        <div>
 
-    <div>
+          <div
+            class="modal-category"
+            id="modalCategory"
+          ></div>
 
-      <div
-        class="modal-category"
-        id="modalCategory"
-      ></div>
+          <h2 id="modalTitle"></h2>
 
-      <h2 id="modalTitle"></h2>
-
-    </div>
-
-    <button
-      class="close"
-      id="closeModalButton"
-      type="button"
-      aria-label="Close"
-    >
-      ×
-    </button>
-
-  </div>
-
-  <div class="modal-body">
-
-    <!-- STATUS -->
-    <div class="form-group">
-
-      <label>Status</label>
-
-      <div class="status-buttons">
+        </div>
 
         <button
-          class="status-button not"
-          id="notButton"
+          class="close"
+          id="closeModalButton"
           type="button"
+          aria-label="Close"
         >
-          ○ Not started
+          ×
         </button>
 
-        <button
-          class="status-button progress"
-          id="progressButton"
-          type="button"
-        >
-          ◐ In progress
-        </button>
+      </div>
 
-        <button
-          class="status-button done"
-          id="doneButton"
-          type="button"
-        >
-          ✓ Completed
-        </button>
+      <div class="modal-body">
+
+        <!-- STATUS -->
+        <div class="form-group">
+
+          <label>Status</label>
+
+          <div class="status-buttons">
+
+            <button
+              class="status-button not"
+              id="notButton"
+              type="button"
+            >
+              ○ Not started
+            </button>
+
+            <button
+              class="status-button progress"
+              id="progressButton"
+              type="button"
+            >
+              ◐ In progress
+            </button>
+
+            <button
+              class="status-button done"
+              id="doneButton"
+              type="button"
+            >
+              ✓ Completed
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- VENDOR -->
+        <div class="form-group">
+
+          <label for="vendorInput">
+            Vendor / Person
+          </label>
+
+          <input
+            id="vendorInput"
+            type="text"
+            placeholder="Who is responsible?"
+            autocomplete="off"
+          >
+
+        </div>
+
+        <!-- PRICE -->
+        <div class="form-group">
+
+          <label for="priceInput">
+            Price
+          </label>
+
+          <input
+            id="priceInput"
+            type="text"
+            placeholder="e.g. 2,500 kr"
+          >
+
+        </div>
+
+        <!-- DEADLINE -->
+        <div class="form-group">
+
+          <label for="deadlineInput">
+            Deadline
+          </label>
+
+          <input
+            id="deadlineInput"
+            type="date"
+          >
+
+        </div>
+
+        <!-- LINK -->
+        <div class="form-group">
+
+          <label for="linkInput">
+            Website / Instagram / Link
+          </label>
+
+          <input
+            id="linkInput"
+            type="url"
+            placeholder="https://..."
+          >
+
+        </div>
+
+        <!-- NOTES -->
+        <div class="form-group">
+
+          <label for="notesInput">
+            Notes
+          </label>
+
+          <textarea
+            id="notesInput"
+            placeholder="Add notes, ideas, contact details, measurements..."
+          ></textarea>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="modal-actions">
+
+          <button
+            class="clear"
+            id="clearButton"
+            type="button"
+          >
+            Clear
+          </button>
+
+          <button
+            class="save"
+            id="saveButton"
+            type="button"
+          >
+            Save changes
+          </button>
+
+        </div>
 
       </div>
 
     </div>
 
-    <!-- VENDOR -->
-    <div class="form-group">
-
-      <label for="vendorInput">
-        Vendor / Person
-      </label>
-
-      <input
-        id="vendorInput"
-        type="text"
-        placeholder="Who is responsible?"
-        autocomplete="off"
-      >
-
-    </div>
-
-    <!-- PRICE -->
-    <div class="form-group">
-
-      <label for="priceInput">
-        Price
-      </label>
-
-      <input
-        id="priceInput"
-        type="text"
-        placeholder="e.g. 2,500 kr"
-      >
-
-    </div>
-
-    <!-- DEADLINE -->
-    <div class="form-group">
-
-      <label for="deadlineInput">
-        Deadline
-      </label>
-
-      <input
-        id="deadlineInput"
-        type="date"
-      >
-
-    </div>
-
-    <!-- LINK -->
-    <div class="form-group">
-
-      <label for="linkInput">
-        Website / Instagram / Link
-      </label>
-
-      <input
-        id="linkInput"
-        type="url"
-        placeholder="https://..."
-        autocomplete="url"
-      >
-
-    </div>
-
-    <!-- NOTES -->
-    <div class="form-group">
-
-      <label for="notesInput">
-        Notes
-      </label>
-
-      <textarea
-        id="notesInput"
-        placeholder="Add notes, ideas, contact details, measurements..."
-      ></textarea>
-
-    </div>
-
-    <!-- ACTIONS -->
-    <div class="modal-actions">
-
-      <button
-        class="clear"
-        id="clearButton"
-        type="button"
-      >
-        Clear
-      </button>
-
-      <button
-        class="save"
-        id="saveButton"
-        type="button"
-      >
-        Save changes
-      </button>
-
-    </div>
-
   </div>
-
-</div>
-
-
-  </div>
-
-  <!-- JAVASCRIPT -->
 
   <script src="./script.js"></script>
 
