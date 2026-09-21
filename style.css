@@ -196,6 +196,8 @@ textarea:focus-visible {
 
 /* ==========================================================
    NAVIGATION
+   All categories visible
+   No horizontal scrolling
    ========================================================== */
 
 .nav-wrapper {
@@ -204,7 +206,7 @@ textarea:focus-visible {
   z-index: 100;
 
   background:
-    rgba(255, 255, 255, 0.94);
+    rgba(255, 255, 255, 0.96);
 
   border-bottom: 1px solid var(--border);
 
@@ -215,33 +217,37 @@ textarea:focus-visible {
   width: min(1400px, calc(100% - 40px));
   margin: auto;
 
-  display: flex;
+  display: grid;
+
+  /*
+    Automatically creates multiple rows.
+    Categories never become one long horizontal row.
+  */
+  grid-template-columns:
+    repeat(auto-fit, minmax(125px, 1fr));
+
   gap: 7px;
 
   padding: 10px 0;
 
-  overflow-x: auto;
-
-  scrollbar-width: none;
-}
-
-.nav::-webkit-scrollbar {
-  display: none;
+  overflow: visible;
 }
 
 .nav button {
-  flex: 0 0 auto;
+  width: 100%;
 
-  display: inline-flex;
+  min-height: 40px;
+
+  display: flex;
   align-items: center;
+  justify-content: center;
+
   gap: 6px;
 
-  min-height: 38px;
-
-  padding: 8px 13px;
+  padding: 8px 10px;
 
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: 12px;
 
   background: white;
 
@@ -251,6 +257,8 @@ textarea:focus-visible {
 
   font-size: 12px;
   font-weight: 750;
+
+  text-align: center;
 
   transition:
     transform 0.16s ease,
@@ -1467,6 +1475,18 @@ footer {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
   }
+
+  /*
+    Navigation remains a grid.
+    It never becomes horizontally scrollable.
+  */
+
+  .nav {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
+    width: min(100% - 24px, 1000px);
+  }
 }
 
 /* ==========================================================
@@ -1492,19 +1512,32 @@ footer {
     font-size: 14px;
   }
 
+  /*
+    Categories are displayed in two columns.
+    No horizontal scrolling.
+  */
+
   .nav {
     width: 100%;
 
-    padding:
-      8px 12px;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
+
+    padding: 8px 12px;
+
+    overflow: visible;
   }
 
   .nav button {
     min-height: 36px;
 
-    padding: 7px 10px;
+    padding: 7px 6px;
 
-    font-size: 11px;
+    font-size: 10px;
+
+    border-radius: 10px;
   }
 
   .app {
@@ -1690,6 +1723,28 @@ footer {
 
   .summary-card p {
     font-size: 11px;
+  }
+
+  /*
+    Keep navigation in two columns even on very small phones.
+    The page scrolls vertically instead of horizontally.
+  */
+
+  .nav {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 5px;
+
+    padding: 7px 10px;
+  }
+
+  .nav button {
+    min-height: 34px;
+
+    padding: 6px 4px;
+
+    font-size: 9px;
   }
 
   /*
