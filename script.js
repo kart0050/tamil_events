@@ -1,5 +1,6 @@
 /* ============================================================
 WEDDING PLANNER
+Complete fixed version
 ============================================================ */
 
 /* ============================================================
@@ -301,8 +302,11 @@ STORAGE
 const STORAGE_KEY = "tamilWeddingPlanner_v4";
 
 let savedData = {};
+
 let currentCategory = "dashboard";
+
 let currentItem = null;
+
 let modalStatus = "not";
 
 /* ============================================================
@@ -317,9 +321,27 @@ try {
 const stored = localStorage.getItem(STORAGE_KEY);
 
 if (stored) {
-  savedData = JSON.parse(stored);
+
+  const parsed = JSON.parse(stored);
+
+  if (
+    parsed &&
+    typeof parsed === "object" &&
+    !Array.isArray(parsed)
+  ) {
+
+    savedData = parsed;
+
+  } else {
+
+    savedData = {};
+
+  }
+
 } else {
+
   savedData = {};
+
 }
 ```
 
@@ -403,7 +425,7 @@ const url = URL.createObjectURL(blob);
 
 const link = document.createElement("a");
 
-link.setAttribute("href", url);
+link.href = url;
 
 const now = new Date();
 
@@ -417,14 +439,7 @@ const day = String(
   now.getDate()
 ).padStart(2, "0");
 
-/*
- * IMPORTANT:
- * Do not use a template literal here.
- * This avoids the syntax error that was
- * breaking the entire script.
- */
-
-const filename =
+link.download =
   "wedding-planner-backup-" +
   year +
   "-" +
@@ -433,22 +448,18 @@ const filename =
   day +
   ".json";
 
-link.setAttribute(
-  "download",
-  filename
-);
-
-link.style.display = "none";
-
 document.body.appendChild(link);
 
 link.click();
 
 document.body.removeChild(link);
 
-setTimeout(function() {
-  URL.revokeObjectURL(url);
-}, 1000);
+setTimeout(
+  function() {
+    URL.revokeObjectURL(url);
+  },
+  1000
+);
 
 console.log(
   "Wedding planner data exported successfully."
@@ -478,7 +489,12 @@ IMPORT DATA
 
 function importData(event) {
 
-const file = event.target.files[0];
+const input = event.target;
+
+const file =
+input.files && input.files.length
+? input.files[0]
+: null;
 
 if (!file) {
 return;
@@ -495,7 +511,7 @@ alert(
   "Please select a .json wedding planner backup file."
 );
 
-event.target.value = "";
+input.value = "";
 
 return;
 ```
@@ -509,11 +525,10 @@ reader.onload = function(e) {
 ```
 try {
 
-  const imported = JSON.parse(
-    e.target.result
-  );
+  const imported =
+    JSON.parse(e.target.result);
 
-  let importedData;
+  let importedData = null;
 
   if (
     imported &&
@@ -524,7 +539,11 @@ try {
 
     importedData = imported.data;
 
-  } else {
+  } else if (
+    imported &&
+    typeof imported === "object" &&
+    !Array.isArray(imported)
+  ) {
 
     importedData = imported;
 
@@ -549,7 +568,7 @@ try {
 
   if (!confirmed) {
 
-    event.target.value = "";
+    input.value = "";
 
     return;
 
@@ -561,7 +580,7 @@ try {
 
   if (!saved) {
 
-    event.target.value = "";
+    input.value = "";
 
     return;
 
@@ -594,7 +613,7 @@ try {
 
 }
 
-event.target.value = "";
+input.value = "";
 ```
 
 };
@@ -606,7 +625,7 @@ alert(
   "Could not read the selected file."
 );
 
-event.target.value = "";
+input.value = "";
 ```
 
 };
@@ -636,7 +655,10 @@ categoryId,
 item
 );
 
-if (!savedData[key]) {
+if (
+!savedData[key] ||
+typeof savedData[key] !== "object"
+) {
 
 ```
 savedData[key] = {
@@ -679,9 +701,8 @@ NAVIGATION
 
 function buildNavigation() {
 
-const nav = document.getElementById(
-"navigation"
-);
+const nav =
+document.getElementById("navigation");
 
 if (!nav) {
 return;
@@ -692,48 +713,57 @@ nav.innerHTML = "";
 const dashboard =
 document.createElement("button");
 
-dashboard.textContent =
-"🏠 Dashboard";
-
 dashboard.type = "button";
 
-dashboard.onclick = function() {
-showDashboard();
-};
+dashboard.textContent =
+"🏠 Dashboard";
 
 dashboard.className =
 currentCategory === "dashboard"
 ? "active"
 : "";
 
+dashboard.addEventListener(
+"click",
+function() {
+showDashboard();
+}
+);
+
 nav.appendChild(dashboard);
 
-categories.forEach(function(category) {
+categories.forEach(
+function(category) {
 
 ```
-const button =
-  document.createElement("button");
+  const button =
+    document.createElement("button");
 
-button.textContent =
-  category.icon +
-  " " +
-  category.name;
+  button.type = "button";
 
-button.type = "button";
+  button.textContent =
+    category.icon +
+    " " +
+    category.name;
 
-button.onclick = function() {
-  showCategory(category.id);
-};
+  button.className =
+    currentCategory === category.id
+      ? "active"
+      : "";
 
-button.className =
-  currentCategory === category.id
-    ? "active"
-    : "";
+  button.addEventListener(
+    "click",
+    function() {
+      showCategory(category.id);
+    }
+  );
 
-nav.appendChild(button);
+  nav.appendChild(button);
+
+}
 ```
 
-});
+);
 
 }
 
@@ -755,12 +785,13 @@ document.getElementById(
 "categoryPage"
 );
 
-if (!dashboardPage || !categoryPage) {
-return;
+if (dashboardPage) {
+dashboardPage.style.display = "block";
 }
 
-dashboardPage.style.display = "block";
+if (categoryPage) {
 categoryPage.style.display = "none";
+}
 
 buildNavigation();
 
@@ -773,58 +804,85 @@ behavior: "smooth"
 
 }
 
+/* ============================================================
+RENDER DASHBOARD
+============================================================ */
+
 function renderDashboard() {
 
 let total = 0;
+
 let done = 0;
+
 let progress = 0;
 
-categories.forEach(function(category) {
+categories.forEach(
+function(category) {
 
 ```
-category.items.forEach(function(item) {
+  category.items.forEach(
+    function(item) {
 
-  total++;
+      total++;
 
-  const data = getItem(
-    category.id,
-    item
+      const data =
+        getItem(
+          category.id,
+          item
+        );
+
+      if (data.status === "done") {
+        done++;
+      }
+
+      if (data.status === "progress") {
+        progress++;
+      }
+
+    }
   );
 
-  if (data.status === "done") {
-    done++;
-  }
-
-  if (data.status === "progress") {
-    progress++;
-  }
-
-});
+}
 ```
 
-});
+);
 
-const percent = total
-? Math.round((done / total) * 100)
+const percent =
+total > 0
+? Math.round(
+(done / total) * 100
+)
 : 0;
 
 const totalCount =
-document.getElementById("totalCount");
+document.getElementById(
+"totalCount"
+);
 
 const doneCount =
-document.getElementById("doneCount");
+document.getElementById(
+"doneCount"
+);
 
 const progressCount =
-document.getElementById("progressCount");
+document.getElementById(
+"progressCount"
+);
 
 const categoryCount =
-document.getElementById("categoryCount");
+document.getElementById(
+"categoryCount"
+);
 
 const overallPercent =
-document.getElementById("overallPercent");
+document.getElementById(
+"overallPercent"
+);
 
 const overallFill =
-document.getElementById("overallFill");
+document.getElementById(
+"overallFill"
+);
 
 if (totalCount) {
 totalCount.textContent = total;
@@ -864,80 +922,69 @@ return;
 
 grid.innerHTML = "";
 
-categories.forEach(function(category) {
+categories.forEach(
+function(category) {
 
 ```
-const stats =
-  getCategoryStats(category);
+  const stats =
+    getCategoryStats(category);
 
-const card =
-  document.createElement("div");
+  const card =
+    document.createElement("div");
 
-card.className =
-  "summary-card";
+  card.className =
+    "summary-card";
 
-const icon =
-  document.createElement("div");
+  card.innerHTML =
+    '<div class="summary-icon">' +
+      category.icon +
+    "</div>" +
 
-icon.style.fontSize = "25px";
-icon.style.marginBottom = "10px";
-icon.textContent = category.icon;
+    "<h3>" +
+      escapeHTML(category.name) +
+    "</h3>" +
 
-const title =
-  document.createElement("h3");
+    "<p>" +
+      stats.done +
+      " / " +
+      stats.total +
+      " completed" +
+    "</p>" +
 
-title.textContent =
-  category.name;
+    '<div class="summary-bar">' +
+      '<div style="width:' +
+        stats.percent +
+      '%"></div>' +
+    "</div>";
 
-const description =
-  document.createElement("p");
+  card.addEventListener(
+    "click",
+    function() {
+      showCategory(category.id);
+    }
+  );
 
-description.textContent =
-  stats.done +
-  " / " +
-  stats.total +
-  " completed";
+  grid.appendChild(card);
 
-const bar =
-  document.createElement("div");
-
-bar.className =
-  "summary-bar";
-
-const fill =
-  document.createElement("div");
-
-fill.style.width =
-  stats.percent + "%";
-
-bar.appendChild(fill);
-
-card.appendChild(icon);
-card.appendChild(title);
-card.appendChild(description);
-card.appendChild(bar);
-
-card.onclick = function() {
-  showCategory(category.id);
-};
-
-grid.appendChild(card);
+}
 ```
 
-});
+);
 
 }
 
 /* ============================================================
-CATEGORY
+SHOW CATEGORY
 ============================================================ */
 
 function showCategory(id) {
 
 const category =
-categories.find(function(c) {
+categories.find(
+function(c) {
 return c.id === id;
-});
+}
+);
 
 if (!category) {
 return;
@@ -955,23 +1002,28 @@ document.getElementById(
 "categoryPage"
 );
 
-if (!dashboardPage || !categoryPage) {
-return;
+if (dashboardPage) {
+dashboardPage.style.display = "none";
 }
 
-dashboardPage.style.display = "none";
+if (categoryPage) {
 categoryPage.style.display = "block";
+}
 
-const title =
+const categoryTitle =
 document.getElementById(
 "categoryTitle"
 );
 
-if (title) {
-title.textContent =
-category.icon +
-" " +
-category.name;
+if (categoryTitle) {
+
+```
+categoryTitle.textContent =
+  category.icon +
+  " " +
+  category.name;
+```
+
 }
 
 const search =
@@ -979,14 +1031,14 @@ document.getElementById(
 "itemSearch"
 );
 
-if (search) {
-search.value = "";
-}
-
 const filter =
 document.getElementById(
 "itemStatusFilter"
 );
+
+if (search) {
+search.value = "";
+}
 
 if (filter) {
 filter.value = "all";
@@ -1012,21 +1064,32 @@ function getCategoryStats(category) {
 const total =
 category.items.length;
 
-const done =
-category.items.filter(function(item) {
+let done = 0;
+
+category.items.forEach(
+function(item) {
 
 ```
-  return getItem(
-    category.id,
-    item
-  ).status === "done";
+  const data =
+    getItem(
+      category.id,
+      item
+    );
 
-}).length;
+  if (data.status === "done") {
+    done++;
+  }
+
+}
 ```
+
+);
 
 const percent =
-total
-? Math.round((done / total) * 100)
+total > 0
+? Math.round(
+(done / total) * 100
+)
 : 0;
 
 return {
@@ -1044,9 +1107,11 @@ RENDER CATEGORY
 function renderCategory() {
 
 const category =
-categories.find(function(c) {
+categories.find(
+function(c) {
 return c.id === currentCategory;
-});
+}
+);
 
 if (!category) {
 return;
@@ -1066,38 +1131,44 @@ document.getElementById(
 );
 
 if (categoryPercent) {
+
+```
 categoryPercent.textContent =
-stats.percent + "%";
+  stats.percent + "%";
+```
+
 }
 
 if (categoryProgressText) {
+
+```
 categoryProgressText.textContent =
-stats.done +
-" / " +
-stats.total +
-" completed";
+  stats.done +
+  " / " +
+  stats.total +
+  " completed";
+```
+
 }
 
-const searchElement =
+const searchInput =
 document.getElementById(
 "itemSearch"
 );
 
-const filterElement =
+const filterInput =
 document.getElementById(
 "itemStatusFilter"
 );
 
 const search =
-searchElement
-? searchElement.value
-.toLowerCase()
-.trim()
+searchInput
+? searchInput.value.toLowerCase().trim()
 : "";
 
 const status =
-filterElement
-? filterElement.value
+filterInput
+? filterInput.value
 : "all";
 
 const grid =
@@ -1113,154 +1184,167 @@ grid.innerHTML = "";
 
 let visible = 0;
 
-category.items.forEach(function(item) {
+category.items.forEach(
+function(item) {
 
 ```
-const data =
-  getItem(
-    category.id,
-    item
-  );
+  const data =
+    getItem(
+      category.id,
+      item
+    );
 
-const vendor =
-  String(data.vendor || "");
+  const itemName =
+    String(item).toLowerCase();
 
-const notes =
-  String(data.notes || "");
+  const vendor =
+    String(
+      data.vendor || ""
+    ).toLowerCase();
 
-const matchesSearch =
-  !search ||
-  item.toLowerCase().includes(search) ||
-  vendor.toLowerCase().includes(search) ||
-  notes.toLowerCase().includes(search);
+  const notes =
+    String(
+      data.notes || ""
+    ).toLowerCase();
 
-const matchesStatus =
-  status === "all" ||
-  data.status === status;
+  const matchesSearch =
+    !search ||
+    itemName.includes(search) ||
+    vendor.includes(search) ||
+    notes.includes(search);
 
-if (!matchesSearch || !matchesStatus) {
-  return;
-}
+  const matchesStatus =
+    status === "all" ||
+    data.status === status;
 
-visible++;
+  if (
+    !matchesSearch ||
+    !matchesStatus
+  ) {
+    return;
+  }
 
-const card =
-  document.createElement("div");
+  visible++;
 
-card.className =
-  "item-card";
-
-if (data.status === "done") {
-  card.classList.add("done");
-}
-
-const top =
-  document.createElement("div");
-
-top.className =
-  "item-top";
-
-const icon =
-  document.createElement("div");
-
-icon.className =
-  "item-icon";
-
-icon.textContent =
-  category.icon;
-
-const statusBadge =
-  document.createElement("div");
-
-statusBadge.className =
-  "item-status";
-
-if (data.status === "progress") {
-  statusBadge.classList.add("progress");
-}
-
-if (data.status === "done") {
-  statusBadge.classList.add("done");
-}
-
-if (data.status === "progress") {
-  statusBadge.textContent =
-    "In progress";
-} else if (data.status === "done") {
-  statusBadge.textContent =
-    "Completed";
-} else {
-  statusBadge.textContent =
-    "Not started";
-}
-
-top.appendChild(icon);
-top.appendChild(statusBadge);
-
-const title =
-  document.createElement("h3");
-
-title.textContent = item;
-
-const vendorText =
-  document.createElement("p");
-
-if (data.vendor) {
-
-  vendorText.textContent =
-    "👤 " + data.vendor;
-
-} else {
-
-  vendorText.textContent =
-    "Click to add details";
-
-}
-
-card.appendChild(top);
-card.appendChild(title);
-card.appendChild(vendorText);
-
-if (data.deadline) {
-
-  const deadline =
+  const card =
     document.createElement("div");
 
-  deadline.className =
-    "item-meta";
+  card.className =
+    "item-card" +
+    (
+      data.status === "done"
+        ? " done"
+        : ""
+    );
 
-  deadline.textContent =
-    "📅 " +
-    formatDate(data.deadline);
+  let statusText =
+    "Not started";
 
-  card.appendChild(deadline);
+  let statusClass = "";
 
-}
+  if (
+    data.status === "progress"
+  ) {
 
-card.onclick = function() {
+    statusText =
+      "In progress";
 
-  openModal(
-    category.id,
-    item
+    statusClass =
+      " progress";
+
+  }
+
+  if (
+    data.status === "done"
+  ) {
+
+    statusText =
+      "Completed";
+
+    statusClass =
+      " done";
+
+  }
+
+  let vendorHTML =
+    "<p>Click to add details</p>";
+
+  if (data.vendor) {
+
+    vendorHTML =
+      "<p>👤 " +
+      escapeHTML(data.vendor) +
+      "</p>";
+
+  }
+
+  let deadlineHTML = "";
+
+  if (data.deadline) {
+
+    deadlineHTML =
+      '<div class="item-meta">' +
+      "📅 " +
+      escapeHTML(
+        formatDate(data.deadline)
+      ) +
+      "</div>";
+
+  }
+
+  card.innerHTML =
+
+    '<div class="item-top">' +
+
+      '<div class="item-icon">' +
+        category.icon +
+      "</div>" +
+
+      '<div class="item-status' +
+        statusClass +
+      '">' +
+        statusText +
+      "</div>" +
+
+    "</div>" +
+
+    "<h3>" +
+      escapeHTML(item) +
+    "</h3>" +
+
+    vendorHTML +
+
+    deadlineHTML;
+
+  card.addEventListener(
+    "click",
+    function() {
+
+      openModal(
+        category.id,
+        item
+      );
+
+    }
   );
 
-};
+  grid.appendChild(card);
 
-grid.appendChild(card);
+}
 ```
 
-});
+);
 
-const empty =
+const emptyMessage =
 document.getElementById(
 "emptyMessage"
 );
 
-if (empty) {
+if (emptyMessage) {
 
 ```
-empty.style.display =
-  visible
+emptyMessage.style.display =
+  visible > 0
     ? "none"
     : "block";
 ```
@@ -1273,7 +1357,10 @@ empty.style.display =
 MODAL
 ============================================================ */
 
-function openModal(categoryId, item) {
+function openModal(
+categoryId,
+item
+) {
 
 currentItem = {
 categoryId: categoryId,
@@ -1281,9 +1368,11 @@ item: item
 };
 
 const category =
-categories.find(function(c) {
+categories.find(
+function(c) {
 return c.id === categoryId;
-});
+}
+);
 
 if (!category) {
 return;
@@ -1304,16 +1393,6 @@ const modalTitle =
 document.getElementById(
 "modalTitle"
 );
-
-if (modalCategory) {
-modalCategory.textContent =
-category.name;
-}
-
-if (modalTitle) {
-modalTitle.textContent =
-item;
-}
 
 const vendorInput =
 document.getElementById(
@@ -1339,6 +1418,16 @@ const notesInput =
 document.getElementById(
 "notesInput"
 );
+
+if (modalCategory) {
+modalCategory.textContent =
+category.name;
+}
+
+if (modalTitle) {
+modalTitle.textContent =
+item;
+}
 
 if (vendorInput) {
 vendorInput.value =
@@ -1376,10 +1465,20 @@ document.getElementById(
 );
 
 if (overlay) {
-overlay.classList.add("active");
+
+```
+overlay.classList.add(
+  "active"
+);
+```
+
 }
 
 }
+
+/* ============================================================
+CLOSE MODAL
+============================================================ */
 
 function closeModal() {
 
@@ -1389,12 +1488,22 @@ document.getElementById(
 );
 
 if (overlay) {
-overlay.classList.remove("active");
+
+```
+overlay.classList.remove(
+  "active"
+);
+```
+
 }
 
 currentItem = null;
 
 }
+
+/* ============================================================
+CHOOSE STATUS
+============================================================ */
 
 function chooseStatus(status) {
 
@@ -1403,6 +1512,10 @@ modalStatus = status;
 updateStatusButtons();
 
 }
+
+/* ============================================================
+UPDATE STATUS BUTTONS
+============================================================ */
 
 function updateStatusButtons() {
 
@@ -1529,10 +1642,22 @@ saveData();
 
 closeModal();
 
-if (currentCategory === "dashboard") {
+if (
+currentCategory === "dashboard"
+) {
+
+```
 showDashboard();
+```
+
 } else {
-showCategory(currentCategory);
+
+```
+showCategory(
+  currentCategory
+);
+```
+
 }
 
 }
@@ -1554,20 +1679,37 @@ currentItem.item
 );
 
 data.status = "not";
+
 data.vendor = "";
+
 data.price = "";
+
 data.deadline = "";
+
 data.link = "";
+
 data.notes = "";
 
 saveData();
 
 closeModal();
 
-if (currentCategory === "dashboard") {
+if (
+currentCategory === "dashboard"
+) {
+
+```
 showDashboard();
+```
+
 } else {
-showCategory(currentCategory);
+
+```
+showCategory(
+  currentCategory
+);
+```
+
 }
 
 }
@@ -1587,6 +1729,14 @@ new Date(
 date + "T00:00:00"
 );
 
+if (
+Number.isNaN(
+d.getTime()
+)
+) {
+return date;
+}
+
 return d.toLocaleDateString(
 "en-DK",
 {
@@ -1595,6 +1745,43 @@ month: "short",
 year: "numeric"
 }
 );
+
+}
+
+/* ============================================================
+ESCAPE HTML
+============================================================ */
+
+function escapeHTML(value) {
+
+return String(value)
+
+```
+.replace(
+  /&/g,
+  "&amp;"
+)
+
+.replace(
+  /</g,
+  "&lt;"
+)
+
+.replace(
+  />/g,
+  "&gt;"
+)
+
+.replace(
+  /"/g,
+  "&quot;"
+)
+
+.replace(
+  /'/g,
+  "&#039;"
+);
+```
 
 }
 
@@ -1612,33 +1799,42 @@ const search =
     "itemSearch"
   );
 
-if (search) {
-
-  search.addEventListener(
-    "input",
-    renderCategory
-  );
-
-}
-
-const statusFilter =
+const filter =
   document.getElementById(
     "itemStatusFilter"
   );
-
-if (statusFilter) {
-
-  statusFilter.addEventListener(
-    "change",
-    renderCategory
-  );
-
-}
 
 const importFile =
   document.getElementById(
     "importFile"
   );
+
+const overlay =
+  document.getElementById(
+    "overlay"
+  );
+
+if (search) {
+
+  search.addEventListener(
+    "input",
+    function() {
+      renderCategory();
+    }
+  );
+
+}
+
+if (filter) {
+
+  filter.addEventListener(
+    "change",
+    function() {
+      renderCategory();
+    }
+  );
+
+}
 
 if (importFile) {
 
@@ -1649,19 +1845,18 @@ if (importFile) {
 
 }
 
-const overlay =
-  document.getElementById(
-    "overlay"
-  );
-
 if (overlay) {
 
   overlay.addEventListener(
     "click",
     function(event) {
 
-      if (event.target === overlay) {
+      if (
+        event.target === overlay
+      ) {
+
         closeModal();
+
       }
 
     }
@@ -1673,8 +1868,12 @@ document.addEventListener(
   "keydown",
   function(event) {
 
-    if (event.key === "Escape") {
+    if (
+      event.key === "Escape"
+    ) {
+
       closeModal();
+
     }
 
   }
