@@ -1,29 +1,29 @@
+"use strict";
+
 /* ============================================================
    WEDDING PLANNER
-============================================================ */
-
+   ============================================================ */
 
 /* ============================================================
    CATEGORIES
-============================================================ */
+   ============================================================ */
 
 const categories = [
-
   {
-    id:"guests",
-    name:"Gæster",
-    icon:"👥",
-    items:[
+    id: "guests",
+    name: "Gæster",
+    icon: "👥",
+    items: [
       "Palaharam (Goodie bag)",
       "Hotels"
     ]
   },
 
   {
-    id:"toej",
-    name:"Tøj",
-    icon:"👗",
-    items:[
+    id: "toej",
+    name: "Tøj",
+    icon: "👗",
+    items: [
       "Manavarai saree",
       "Koorai saree (Rød)",
       "Vetti sattai",
@@ -35,10 +35,10 @@ const categories = [
   },
 
   {
-    id:"reception",
-    name:"Reception Songs",
-    icon:"🎵",
-    items:[
+    id: "reception",
+    name: "Reception Songs",
+    icon: "🎵",
+    items: [
       "Entrance",
       "Pardans",
       "Preshoot",
@@ -48,10 +48,10 @@ const categories = [
   },
 
   {
-    id:"sign-card",
-    name:"Wedding Sign + Card",
-    icon:"💌",
-    items:[
+    id: "sign-card",
+    name: "Wedding Sign + Card",
+    icon: "💌",
+    items: [
       "Aviraa Creations",
       "Ponthayadesigns",
       "Kopuramevents.fr"
@@ -59,29 +59,29 @@ const categories = [
   },
 
   {
-    id:"kovil-decoration",
-    name:"Decoration Kovil",
-    icon:"🛕",
-    items:[
+    id: "kovil-decoration",
+    name: "Decoration Kovil",
+    icon: "🛕",
+    items: [
       "Kopuramevents.fr"
     ]
   },
 
   {
-    id:"accessories",
-    name:"Accessories",
-    icon:"✨",
-    items:[
+    id: "accessories",
+    name: "Accessories",
+    icon: "✨",
+    items: [
       "360 Booth",
       "Bridal Corner Setup"
     ]
   },
 
   {
-    id:"henna",
-    name:"Henna Fest",
-    icon:"🌿",
-    items:[
+    id: "henna",
+    name: "Henna Fest",
+    icon: "🌿",
+    items: [
       "Uduupu ?",
       "Mehendi (rosedecoration.dk)",
       "Tamilhennecreation",
@@ -91,10 +91,10 @@ const categories = [
   },
 
   {
-    id:"kalyaanam",
-    name:"Kalyaanam Veedu",
-    icon:"🏠",
-    items:[
+    id: "kalyaanam",
+    name: "Kalyaanam Veedu",
+    icon: "🏠",
+    items: [
       "Herning Kovil",
       "Civil Weds (Ring)",
       "Udlandet",
@@ -104,10 +104,10 @@ const categories = [
   },
 
   {
-    id:"makeup",
-    name:"Makeup + Hair",
-    icon:"💄",
-    items:[
+    id: "makeup",
+    name: "Makeup + Hair",
+    icon: "💄",
+    items: [
       "Janani",
       "abinii_makeupartist",
       "thiva_mua"
@@ -115,10 +115,10 @@ const categories = [
   },
 
   {
-    id:"jewellery",
-    name:"Jewellery",
-    icon:"💎",
-    items:[
+    id: "jewellery",
+    name: "Jewellery",
+    icon: "💎",
+    items: [
       "Thaali (15 Pound)",
       "Øreringe",
       "Necklace",
@@ -133,29 +133,29 @@ const categories = [
   },
 
   {
-    id:"melam",
-    name:"Melam",
-    icon:"🥁",
-    items:[
+    id: "melam",
+    name: "Melam",
+    icon: "🥁",
+    items: [
       "Chinna Mams",
       "Mami ?"
     ]
   },
 
   {
-    id:"maalai",
-    name:"Maalai",
-    icon:"🌸",
-    items:[
+    id: "maalai",
+    name: "Maalai",
+    icon: "🌸",
+    items: [
       "Herning Maalai"
     ]
   },
 
   {
-    id:"food",
-    name:"Food",
-    icon:"🍛",
-    items:[
+    id: "food",
+    name: "Food",
+    icon: "🍛",
+    items: [
       "Poovi Mama Horsens",
       "Kammali Randers",
       "Tamil Ondrai Aarhus",
@@ -166,20 +166,20 @@ const categories = [
   },
 
   {
-    id:"cake",
-    name:"Bryllupskage",
-    icon:"🎂",
-    items:[
+    id: "cake",
+    name: "Bryllupskage",
+    icon: "🎂",
+    items: [
       "Wedding Cake",
       "Lighter + Knife"
     ]
   },
 
   {
-    id:"preshoot",
-    name:"Preshoot",
-    icon:"📸",
-    items:[
+    id: "preshoot",
+    name: "Preshoot",
+    icon: "📸",
+    items: [
       "Views of Nivi",
       "Sana",
       "Visual Eyes",
@@ -190,10 +190,10 @@ const categories = [
   },
 
   {
-    id:"photo-video",
-    name:"Photo + Video",
-    icon:"📷",
-    items:[
+    id: "photo-video",
+    name: "Photo + Video",
+    icon: "📷",
+    items: [
       "Visual Eyes",
       "Vividmemoir.dk",
       "infocus"
@@ -201,10 +201,10 @@ const categories = [
   },
 
   {
-    id:"dj",
-    name:"DJ",
-    icon:"🎧",
-    items:[
+    id: "dj",
+    name: "DJ",
+    icon: "🎧",
+    items: [
       "Playloud",
       "Keeth Entertainment",
       "Microphone",
@@ -214,10 +214,10 @@ const categories = [
   },
 
   {
-    id:"hall",
-    name:"Hall",
-    icon:"🏛️",
-    items:[
+    id: "hall",
+    name: "Hall",
+    icon: "🏛️",
+    items: [
       "Sana Palace RA",
       "E-Plaza AA",
       "Babylon AA",
@@ -232,10 +232,10 @@ const categories = [
   },
 
   {
-    id:"entertainment",
-    name:"Entertainment",
-    icon:"💃",
-    items:[
+    id: "entertainment",
+    name: "Entertainment",
+    icon: "💃",
+    items: [
       "Pardans + Cinema Paattu",
       "Bollywood Dance",
       "Gruppedans",
@@ -251,20 +251,20 @@ const categories = [
   },
 
   {
-    id:"operator",
-    name:"Operator",
-    icon:"🎛️",
-    items:[
+    id: "operator",
+    name: "Operator",
+    icon: "🎛️",
+    items: [
       "Lighting",
       "Projector"
     ]
   },
 
   {
-    id:"host",
-    name:"Host",
-    icon:"🎤",
-    items:[
+    id: "host",
+    name: "Host",
+    icon: "🎤",
+    items: [
       "Vinu",
       "Mams",
       "Saddi",
@@ -274,703 +274,1111 @@ const categories = [
   },
 
   {
-    id:"games",
-    name:"Games (Yndlingsting)",
-    icon:"🎲",
-    items:[
+    id: "games",
+    name: "Games (Yndlingsting)",
+    icon: "🎲",
+    items: [
       "Palaharam (Goodie bag)"
     ]
   },
 
   {
-    id:"speech",
-    name:"Speech",
-    icon:"🎤",
-    items:[
+    id: "speech",
+    name: "Speech",
+    icon: "🎤",
+    items: [
       "Speech planning",
       "Speakers",
       "Order of speeches"
     ]
   }
-
 ];
 
 
 /* ============================================================
    STORAGE
-============================================================ */
+   ============================================================ */
 
-const STORAGE_KEY =
-  "tamilWeddingPlanner_v4";
+const STORAGE_KEY = "tamilWeddingPlanner_v5";
 
 let savedData = {};
+let currentCategory = "dashboard";
+let currentItem = null;
+let modalStatus = "not";
 
-let currentCategory =
-  "dashboard";
 
-let currentItem =
-  null;
+/* ============================================================
+   DEFAULT ITEM
+   ============================================================ */
 
-let modalStatus =
-  "not";
+function createDefaultItem() {
+  return {
+    status: "not",
+    vendor: "",
+    price: "",
+    deadline: "",
+    link: "",
+    notes: ""
+  };
+}
 
+
+/* ============================================================
+   LOAD DATA
+   ============================================================ */
 
 function loadData() {
-
   try {
+    const stored = localStorage.getItem(STORAGE_KEY);
 
-    savedData =
-      JSON.parse(
-        localStorage.getItem(STORAGE_KEY)
-      ) || {};
+    if (!stored) {
+      savedData = {};
+      return;
+    }
 
-  } catch {
+    const parsed = JSON.parse(stored);
 
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      !Array.isArray(parsed)
+    ) {
+      savedData = parsed;
+    } else {
+      savedData = {};
+    }
+  } catch (error) {
+    console.error("Could not load saved data:", error);
     savedData = {};
-
   }
-
 }
 
+
+/* ============================================================
+   SAVE DATA
+   ============================================================ */
 
 function saveData() {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(savedData)
+    );
 
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(savedData)
-  );
+    return true;
+  } catch (error) {
+    console.error("Could not save data:", error);
 
+    alert(
+      "Your data could not be saved in this browser."
+    );
+
+    return false;
+  }
 }
 
 
-function itemKey(categoryId,item) {
+/* ============================================================
+   ITEM KEY
+   ============================================================ */
 
+function itemKey(categoryId, item) {
   return categoryId + "::" + item;
-
 }
 
 
-function getItem(categoryId,item) {
+/* ============================================================
+   GET ITEM
+   ============================================================ */
 
-  const key =
-    itemKey(categoryId,item);
+function getItem(categoryId, item) {
+  const key = itemKey(categoryId, item);
 
-  if (!savedData[key]) {
-
-    savedData[key] = {
-
-      status:"not",
-
-      vendor:"",
-
-      price:"",
-
-      deadline:"",
-
-      link:"",
-
-      notes:""
-
-    };
-
+  if (
+    !savedData[key] ||
+    typeof savedData[key] !== "object" ||
+    Array.isArray(savedData[key])
+  ) {
+    savedData[key] = createDefaultItem();
   }
 
-  return savedData[key];
+  const data = savedData[key];
 
+  if (
+    data.status !== "not" &&
+    data.status !== "progress" &&
+    data.status !== "done"
+  ) {
+    data.status = "not";
+  }
+
+  data.vendor = String(data.vendor || "");
+  data.price = String(data.price || "");
+  data.deadline = String(data.deadline || "");
+  data.link = String(data.link || "");
+  data.notes = String(data.notes || "");
+
+  return data;
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+   ============================================================ */
+
+function escapeHTML(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+/* ============================================================
+   FORMAT DATE
+   ============================================================ */
+
+function formatDate(dateString) {
+  if (!dateString) {
+    return "";
+  }
+
+  const parts = dateString.split("-");
+
+  if (parts.length !== 3) {
+    return dateString;
+  }
+
+  const year = Number(parts[0]);
+  const month = Number(parts[1]);
+  const day = Number(parts[2]);
+
+  if (
+    !year ||
+    !month ||
+    !day
+  ) {
+    return dateString;
+  }
+
+  const date = new Date(
+    year,
+    month - 1,
+    day
+  );
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    }
+  );
+}
+
+
+/* ============================================================
+   EXPORT DATA
+   ============================================================ */
+
+function exportData() {
+  try {
+    saveData();
+
+    const backup = {
+      app: "Tamil Wedding Planner",
+      version: 2,
+      exportedAt: new Date().toISOString(),
+      data: savedData
+    };
+
+    const json = JSON.stringify(
+      backup,
+      null,
+      2
+    );
+
+    const blob = new Blob(
+      [json],
+      {
+        type: "application/json"
+      }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+
+    const month = String(
+      now.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+      now.getDate()
+    ).padStart(2, "0");
+
+    link.download =
+      "wedding-planner-backup-" +
+      year +
+      "-" +
+      month +
+      "-" +
+      day +
+      ".json";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(function() {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  } catch (error) {
+    console.error(
+      "Export failed:",
+      error
+    );
+
+    alert(
+      "Sorry, the wedding planner data could not be exported."
+    );
+  }
+}
+
+
+/* ============================================================
+   IMPORT DATA
+   ============================================================ */
+
+function importData(event) {
+  const file =
+    event.target.files &&
+    event.target.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  if (
+    !file.name
+      .toLowerCase()
+      .endsWith(".json")
+  ) {
+    alert(
+      "Please select a .json wedding planner backup file."
+    );
+
+    event.target.value = "";
+
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(loadEvent) {
+    try {
+      const imported = JSON.parse(
+        loadEvent.target.result
+      );
+
+      let importedData = null;
+
+      if (
+        imported &&
+        imported.data &&
+        typeof imported.data === "object" &&
+        !Array.isArray(imported.data)
+      ) {
+        importedData = imported.data;
+      } else if (
+        imported &&
+        typeof imported === "object" &&
+        !Array.isArray(imported)
+      ) {
+        importedData = imported;
+      }
+
+      if (
+        !importedData ||
+        typeof importedData !== "object" ||
+        Array.isArray(importedData)
+      ) {
+        throw new Error(
+          "Invalid backup format"
+        );
+      }
+
+      const confirmed = confirm(
+        "Import this wedding planner backup?\n\n" +
+        "Your current planner data will be replaced by the backup."
+      );
+
+      if (!confirmed) {
+        event.target.value = "";
+        return;
+      }
+
+      savedData = importedData;
+
+      const saved = saveData();
+
+      if (!saved) {
+        event.target.value = "";
+        return;
+      }
+
+      if (currentCategory === "dashboard") {
+        showDashboard();
+      } else {
+        showCategory(currentCategory);
+      }
+
+      alert(
+        "Wedding planner data imported successfully!"
+      );
+    } catch (error) {
+      console.error(
+        "Import failed:",
+        error
+      );
+
+      alert(
+        "This file is not a valid wedding planner backup."
+      );
+    }
+
+    event.target.value = "";
+  };
+
+  reader.onerror = function() {
+    alert(
+      "Could not read the selected file."
+    );
+
+    event.target.value = "";
+  };
+
+  reader.readAsText(file);
 }
 
 
 /* ============================================================
    NAVIGATION
-============================================================ */
+   ============================================================ */
 
 function buildNavigation() {
-
   const nav =
     document.getElementById(
       "navigation"
     );
 
-  nav.innerHTML = "";
+  if (!nav) {
+    return;
+  }
 
+  nav.innerHTML = "";
 
   const dashboard =
     document.createElement("button");
 
+  dashboard.type = "button";
+
   dashboard.textContent =
     "🏠 Dashboard";
-
-  dashboard.onclick =
-    () => showDashboard();
 
   dashboard.className =
     currentCategory === "dashboard"
       ? "active"
       : "";
 
+  dashboard.addEventListener(
+    "click",
+    function() {
+      showDashboard();
+    }
+  );
+
   nav.appendChild(dashboard);
 
+  categories.forEach(
+    function(category) {
+      const button =
+        document.createElement("button");
 
-  categories.forEach(category => {
+      button.type = "button";
 
-    const button =
-      document.createElement("button");
+      button.textContent =
+        category.icon +
+        " " +
+        category.name;
 
-    button.textContent =
-      `${category.icon} ${category.name}`;
+      button.className =
+        currentCategory === category.id
+          ? "active"
+          : "";
 
-    button.onclick =
-      () => showCategory(category.id);
+      button.addEventListener(
+        "click",
+        function() {
+          showCategory(
+            category.id
+          );
+        }
+      );
 
-    button.className =
-      currentCategory === category.id
-        ? "active"
-        : "";
-
-    nav.appendChild(button);
-
-  });
-
+      nav.appendChild(button);
+    }
+  );
 }
 
 
 /* ============================================================
    DASHBOARD
-============================================================ */
+   ============================================================ */
 
 function showDashboard() {
+  currentCategory = "dashboard";
 
-  currentCategory =
-    "dashboard";
+  const dashboardPage =
+    document.getElementById(
+      "dashboardPage"
+    );
 
+  const categoryPage =
+    document.getElementById(
+      "categoryPage"
+    );
 
-  document.getElementById(
-    "dashboardPage"
-  ).style.display =
-    "block";
+  if (dashboardPage) {
+    dashboardPage.style.display = "block";
+  }
 
+  if (categoryPage) {
+    categoryPage.style.display = "none";
+  }
 
-  document.getElementById(
-    "categoryPage"
-  ).style.display =
-    "none";
-
+  closeModal();
 
   buildNavigation();
 
   renderDashboard();
 
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
+  scrollToTop();
 }
 
 
+/* ============================================================
+   RENDER DASHBOARD
+   ============================================================ */
+
 function renderDashboard() {
-
   let total = 0;
-
   let done = 0;
-
   let progress = 0;
 
+  categories.forEach(
+    function(category) {
+      category.items.forEach(
+        function(item) {
+          total++;
 
-  categories.forEach(category => {
+          const data =
+            getItem(
+              category.id,
+              item
+            );
 
-    category.items.forEach(item => {
+          if (data.status === "done") {
+            done++;
+          }
 
-      total++;
-
-
-      const data =
-        getItem(
-          category.id,
-          item
-        );
-
-
-      if (
-        data.status === "done"
-      ) {
-        done++;
-      }
-
-
-      if (
-        data.status === "progress"
-      ) {
-        progress++;
-      }
-
-    });
-
-  });
-
+          if (data.status === "progress") {
+            progress++;
+          }
+        }
+      );
+    }
+  );
 
   const percent =
-    total
+    total > 0
       ? Math.round(
           (done / total) * 100
         )
       : 0;
 
+  const totalCount =
+    document.getElementById(
+      "totalCount"
+    );
 
-  document.getElementById(
-    "totalCount"
-  ).textContent =
-    total;
+  const doneCount =
+    document.getElementById(
+      "doneCount"
+    );
 
+  const progressCount =
+    document.getElementById(
+      "progressCount"
+    );
 
-  document.getElementById(
-    "doneCount"
-  ).textContent =
-    done;
+  const categoryCount =
+    document.getElementById(
+      "categoryCount"
+    );
 
+  const overallPercent =
+    document.getElementById(
+      "overallPercent"
+    );
 
-  document.getElementById(
-    "progressCount"
-  ).textContent =
-    progress;
+  const overallFill =
+    document.getElementById(
+      "overallFill"
+    );
 
+  if (totalCount) {
+    totalCount.textContent = total;
+  }
 
-  document.getElementById(
-    "categoryCount"
-  ).textContent =
-    categories.length;
+  if (doneCount) {
+    doneCount.textContent = done;
+  }
 
+  if (progressCount) {
+    progressCount.textContent = progress;
+  }
 
-  document.getElementById(
-    "overallPercent"
-  ).textContent =
-    percent + "%";
+  if (categoryCount) {
+    categoryCount.textContent =
+      categories.length;
+  }
 
+  if (overallPercent) {
+    overallPercent.textContent =
+      percent + "%";
+  }
 
-  document.getElementById(
-    "overallFill"
-  ).style.width =
-    percent + "%";
+  if (overallFill) {
+    overallFill.style.width =
+      percent + "%";
 
+    const progressBar =
+      overallFill.parentElement;
+
+    if (progressBar) {
+      progressBar.setAttribute(
+        "aria-valuenow",
+        String(percent)
+      );
+    }
+  }
 
   const grid =
     document.getElementById(
       "summaryGrid"
     );
 
+  if (!grid) {
+    return;
+  }
+
   grid.innerHTML = "";
 
+  categories.forEach(
+    function(category) {
+      const stats =
+        getCategoryStats(category);
 
-  categories.forEach(category => {
+      const card =
+        document.createElement("div");
 
-    const stats =
-      getCategoryStats(
-        category
+      card.className =
+        "summary-card";
+
+      card.setAttribute(
+        "role",
+        "button"
       );
 
-
-    const card =
-      document.createElement(
-        "div"
+      card.setAttribute(
+        "tabindex",
+        "0"
       );
 
-    card.className =
-      "summary-card";
-
-
-    card.innerHTML = `
-
-      <div
-        style="
-          font-size:25px;
-          margin-bottom:10px;
-        "
-      >
-        ${category.icon}
-      </div>
-
-      <h3>
-        ${escapeHTML(
-          category.name
-        )}
-      </h3>
-
-      <p>
-        ${stats.done}
-        /
-        ${stats.total}
-        completed
-      </p>
-
-      <div class="summary-bar">
-
-        <div
-          style="
-            width:${stats.percent}%;
-          "
-        ></div>
-
-      </div>
-
-    `;
-
-
-    card.onclick =
-      () => showCategory(
-        category.id
+      card.setAttribute(
+        "aria-label",
+        "Open " + category.name
       );
 
+      card.innerHTML =
+        '<div class="summary-icon">' +
+          category.icon +
+        "</div>" +
 
-    grid.appendChild(card);
+        "<h3>" +
+          escapeHTML(
+            category.name
+          ) +
+        "</h3>" +
 
-  });
+        "<p>" +
+          stats.done +
+          " / " +
+          stats.total +
+          " completed" +
+        "</p>" +
 
+        '<div class="summary-bar">' +
+          '<div style="width:' +
+            stats.percent +
+          '%"></div>' +
+        "</div>";
+
+      card.addEventListener(
+        "click",
+        function() {
+          showCategory(
+            category.id
+          );
+        }
+      );
+
+      card.addEventListener(
+        "keydown",
+        function(event) {
+          if (
+            event.key === "Enter" ||
+            event.key === " "
+          ) {
+            event.preventDefault();
+
+            showCategory(
+              category.id
+            );
+          }
+        }
+      );
+
+      grid.appendChild(card);
+    }
+  );
 }
 
 
 /* ============================================================
-   CATEGORY
-============================================================ */
+   SHOW CATEGORY
+   ============================================================ */
 
 function showCategory(id) {
-
   const category =
     categories.find(
-      c => c.id === id
+      function(c) {
+        return c.id === id;
+      }
     );
 
+  if (!category) {
+    return;
+  }
 
-  if (!category) return;
+  currentCategory = id;
 
+  const dashboardPage =
+    document.getElementById(
+      "dashboardPage"
+    );
 
-  currentCategory =
-    id;
+  const categoryPage =
+    document.getElementById(
+      "categoryPage"
+    );
 
+  if (dashboardPage) {
+    dashboardPage.style.display = "none";
+  }
 
-  document.getElementById(
-    "dashboardPage"
-  ).style.display =
-    "none";
+  if (categoryPage) {
+    categoryPage.style.display = "block";
+  }
 
+  const categoryTitle =
+    document.getElementById(
+      "categoryTitle"
+    );
 
-  document.getElementById(
-    "categoryPage"
-  ).style.display =
-    "block";
+  if (categoryTitle) {
+    categoryTitle.textContent =
+      category.icon +
+      " " +
+      category.name;
+  }
 
+  const search =
+    document.getElementById(
+      "itemSearch"
+    );
 
-  document.getElementById(
-    "categoryTitle"
-  ).textContent =
-    `${category.icon} ${category.name}`;
+  const filter =
+    document.getElementById(
+      "itemStatusFilter"
+    );
 
+  if (search) {
+    search.value = "";
+  }
 
-  document.getElementById(
-    "itemSearch"
-  ).value =
-    "";
+  if (filter) {
+    filter.value = "all";
+  }
 
-
-  document.getElementById(
-    "itemStatusFilter"
-  ).value =
-    "all";
-
+  closeModal();
 
   buildNavigation();
 
   renderCategory();
 
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
+  scrollToTop();
 }
 
 
-function getCategoryStats(category) {
+/* ============================================================
+   CATEGORY STATS
+   ============================================================ */
 
+function getCategoryStats(category) {
   const total =
     category.items.length;
 
+  let done = 0;
 
-  const done =
-    category.items.filter(
-      item =>
+  category.items.forEach(
+    function(item) {
+      const data =
         getItem(
           category.id,
           item
-        ).status === "done"
-    ).length;
+        );
 
+      if (data.status === "done") {
+        done++;
+      }
+    }
+  );
 
   const percent =
-    total
+    total > 0
       ? Math.round(
           (done / total) * 100
         )
       : 0;
 
-
   return {
-    total,
-    done,
-    percent
+    total: total,
+    done: done,
+    percent: percent
   };
-
 }
 
 
-function renderCategory() {
+/* ============================================================
+   RENDER CATEGORY
+   ============================================================ */
 
+function renderCategory() {
   const category =
     categories.find(
-      c => c.id === currentCategory
+      function(c) {
+        return c.id === currentCategory;
+      }
     );
 
-
-  if (!category) return;
-
+  if (!category) {
+    return;
+  }
 
   const stats =
-    getCategoryStats(
-      category
+    getCategoryStats(category);
+
+  const categoryPercent =
+    document.getElementById(
+      "categoryPercent"
     );
 
+  const categoryProgressText =
+    document.getElementById(
+      "categoryProgressText"
+    );
 
-  document.getElementById(
-    "categoryPercent"
-  ).textContent =
-    stats.percent + "%";
+  if (categoryPercent) {
+    categoryPercent.textContent =
+      stats.percent + "%";
+  }
 
+  if (categoryProgressText) {
+    categoryProgressText.textContent =
+      stats.done +
+      " / " +
+      stats.total +
+      " completed";
+  }
 
-  document.getElementById(
-    "categoryProgressText"
-  ).textContent =
-    `${stats.done} / ${stats.total} completed`;
-
-
-  const search =
+  const searchInput =
     document.getElementById(
       "itemSearch"
-    ).value
-      .toLowerCase()
-      .trim();
+    );
 
-
-  const status =
+  const statusInput =
     document.getElementById(
       "itemStatusFilter"
-    ).value;
+    );
 
+  const search =
+    searchInput
+      ? searchInput.value
+          .toLowerCase()
+          .trim()
+      : "";
+
+  const status =
+    statusInput
+      ? statusInput.value
+      : "all";
 
   const grid =
     document.getElementById(
       "itemsGrid"
     );
 
+  if (!grid) {
+    return;
+  }
 
   grid.innerHTML = "";
 
-
   let visible = 0;
 
-
-  category.items.forEach(item => {
-
-    const data =
-      getItem(
-        category.id,
-        item
-      );
-
-
-    const matchesSearch =
-      !search ||
-
-      item
-        .toLowerCase()
-        .includes(search) ||
-
-      data.vendor
-        .toLowerCase()
-        .includes(search) ||
-
-      data.notes
-        .toLowerCase()
-        .includes(search);
-
-
-    const matchesStatus =
-      status === "all" ||
-      data.status === status;
-
-
-    if (
-      !matchesSearch ||
-      !matchesStatus
-    ) {
-      return;
-    }
-
-
-    visible++;
-
-
-    const card =
-      document.createElement(
-        "div"
-      );
-
-
-    card.className =
-      `item-card ${
-        data.status === "done"
-          ? "done"
-          : ""
-      }`;
-
-
-    let statusText =
-      "Not started";
-
-
-    if (
-      data.status === "progress"
-    ) {
-      statusText =
-        "In progress";
-    }
-
-
-    if (
-      data.status === "done"
-    ) {
-      statusText =
-        "Completed";
-    }
-
-
-    card.innerHTML = `
-
-      <div class="item-top">
-
-        <div class="item-icon">
-          ${category.icon}
-        </div>
-
-        <div
-          class="
-            item-status
-
-            ${
-              data.status === "progress"
-                ? "progress"
-                : ""
-            }
-
-            ${
-              data.status === "done"
-                ? "done"
-                : ""
-            }
-          "
-        >
-          ${statusText}
-        </div>
-
-      </div>
-
-
-      <h3>
-        ${escapeHTML(item)}
-      </h3>
-
-
-      ${
-        data.vendor
-
-        ? `
-          <p>
-            👤
-            ${escapeHTML(
-              data.vendor
-            )}
-          </p>
-        `
-
-        : `
-          <p>
-            Click to add details
-          </p>
-        `
-      }
-
-
-      ${
-        data.deadline
-
-        ? `
-          <div class="item-meta">
-            📅
-            ${formatDate(
-              data.deadline
-            )}
-          </div>
-        `
-
-        : ""
-      }
-
-    `;
-
-
-    card.onclick =
-      () =>
-        openModal(
+  category.items.forEach(
+    function(item) {
+      const data =
+        getItem(
           category.id,
           item
         );
 
+      const itemText =
+        String(item)
+          .toLowerCase();
 
-    grid.appendChild(card);
+      const vendorText =
+        String(
+          data.vendor || ""
+        )
+          .toLowerCase();
 
-  });
+      const notesText =
+        String(
+          data.notes || ""
+        )
+          .toLowerCase();
 
+      const priceText =
+        String(
+          data.price || ""
+        )
+          .toLowerCase();
 
-  document.getElementById(
-    "emptyMessage"
-  ).style.display =
-    visible
-      ? "none"
-      : "block";
+      const matchesSearch =
+        !search ||
+        itemText.includes(search) ||
+        vendorText.includes(search) ||
+        notesText.includes(search) ||
+        priceText.includes(search);
 
+      const matchesStatus =
+        status === "all" ||
+        data.status === status;
+
+      if (
+        !matchesSearch ||
+        !matchesStatus
+      ) {
+        return;
+      }
+
+      visible++;
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "item-card";
+
+      card.setAttribute(
+        "role",
+        "button"
+      );
+
+      card.setAttribute(
+        "tabindex",
+        "0"
+      );
+
+      card.setAttribute(
+        "aria-label",
+        "Edit " + item
+      );
+
+      if (data.status === "done") {
+        card.classList.add("done");
+      }
+
+      let statusText =
+        "Not started";
+
+      let statusClass = "";
+
+      if (data.status === "progress") {
+        statusText =
+          "In progress";
+
+        statusClass =
+          " progress";
+      }
+
+      if (data.status === "done") {
+        statusText =
+          "Completed";
+
+        statusClass =
+          " done";
+      }
+
+      let vendorHTML =
+        "<p>Click to add details</p>";
+
+      if (data.vendor) {
+        vendorHTML =
+          "<p>👤 " +
+          escapeHTML(
+            data.vendor
+          ) +
+          "</p>";
+      }
+
+      let deadlineHTML = "";
+
+      if (data.deadline) {
+        deadlineHTML =
+          '<div class="item-meta">' +
+            "📅 " +
+            escapeHTML(
+              formatDate(
+                data.deadline
+              )
+            ) +
+          "</div>";
+      }
+
+      card.innerHTML =
+        '<div class="item-top">' +
+
+          '<div class="item-icon">' +
+            category.icon +
+          "</div>" +
+
+          '<div class="item-status' +
+            statusClass +
+          '">' +
+            statusText +
+          "</div>" +
+
+        "</div>" +
+
+        "<h3>" +
+          escapeHTML(item) +
+        "</h3>" +
+
+        vendorHTML +
+
+        deadlineHTML;
+
+      card.addEventListener(
+        "click",
+        function() {
+          openModal(
+            category.id,
+            item
+          );
+        }
+      );
+
+      card.addEventListener(
+        "keydown",
+        function(event) {
+          if (
+            event.key === "Enter" ||
+            event.key === " "
+          ) {
+            event.preventDefault();
+
+            openModal(
+              category.id,
+              item
+            );
+          }
+        }
+      );
+
+      grid.appendChild(card);
+    }
+  );
+
+  const emptyMessage =
+    document.getElementById(
+      "emptyMessage"
+    );
+
+  if (emptyMessage) {
+    emptyMessage.style.display =
+      visible > 0
+        ? "none"
+        : "block";
+  }
 }
 
 
 /* ============================================================
-   MODAL
-============================================================ */
+   OPEN MODAL
+   ============================================================ */
 
-function openModal(
-  categoryId,
-  item
-) {
-
+function openModal(categoryId, item) {
   currentItem = {
-    categoryId,
-    item
+    categoryId: categoryId,
+    item: item
   };
-
 
   const category =
     categories.find(
-      c => c.id === categoryId
+      function(c) {
+        return c.id === categoryId;
+      }
     );
 
+  if (!category) {
+    return;
+  }
 
   const data =
     getItem(
@@ -978,122 +1386,194 @@ function openModal(
       item
     );
 
+  const modalCategory =
+    document.getElementById(
+      "modalCategory"
+    );
 
-  document.getElementById(
-    "modalCategory"
-  ).textContent =
-    category.name;
+  const modalTitle =
+    document.getElementById(
+      "modalTitle"
+    );
 
+  const vendorInput =
+    document.getElementById(
+      "vendorInput"
+    );
 
-  document.getElementById(
-    "modalTitle"
-  ).textContent =
-    item;
+  const priceInput =
+    document.getElementById(
+      "priceInput"
+    );
 
+  const deadlineInput =
+    document.getElementById(
+      "deadlineInput"
+    );
 
-  document.getElementById(
-    "vendorInput"
-  ).value =
-    data.vendor;
+  const linkInput =
+    document.getElementById(
+      "linkInput"
+    );
 
+  const notesInput =
+    document.getElementById(
+      "notesInput"
+    );
 
-  document.getElementById(
-    "priceInput"
-  ).value =
-    data.price;
+  if (modalCategory) {
+    modalCategory.textContent =
+      category.name;
+  }
 
+  if (modalTitle) {
+    modalTitle.textContent =
+      item;
+  }
 
-  document.getElementById(
-    "deadlineInput"
-  ).value =
-    data.deadline;
+  if (vendorInput) {
+    vendorInput.value =
+      data.vendor;
+  }
 
+  if (priceInput) {
+    priceInput.value =
+      data.price;
+  }
 
-  document.getElementById(
-    "linkInput"
-  ).value =
-    data.link;
+  if (deadlineInput) {
+    deadlineInput.value =
+      data.deadline;
+  }
 
+  if (linkInput) {
+    linkInput.value =
+      data.link;
+  }
 
-  document.getElementById(
-    "notesInput"
-  ).value =
-    data.notes;
-
+  if (notesInput) {
+    notesInput.value =
+      data.notes;
+  }
 
   modalStatus =
     data.status;
 
-
   updateStatusButtons();
 
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
 
-  document.getElementById(
-    "overlay"
-  ).classList.add(
-    "active"
+  if (overlay) {
+    overlay.classList.add("active");
+
+    document.body.style.overflow =
+      "hidden";
+  }
+
+  setTimeout(
+    function() {
+      if (vendorInput) {
+        vendorInput.focus();
+      }
+    },
+    50
   );
-
 }
 
+
+/* ============================================================
+   CLOSE MODAL
+   ============================================================ */
 
 function closeModal() {
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
 
-  document.getElementById(
-    "overlay"
-  ).classList.remove(
-    "active"
-  );
+  if (overlay) {
+    overlay.classList.remove("active");
+  }
 
-  currentItem =
-    null;
+  document.body.style.overflow = "";
 
+  currentItem = null;
 }
 
+
+/* ============================================================
+   CHOOSE STATUS
+   ============================================================ */
 
 function chooseStatus(status) {
+  if (
+    status !== "not" &&
+    status !== "progress" &&
+    status !== "done"
+  ) {
+    return;
+  }
 
-  modalStatus =
-    status;
+  modalStatus = status;
 
   updateStatusButtons();
-
 }
 
+
+/* ============================================================
+   UPDATE STATUS BUTTONS
+   ============================================================ */
 
 function updateStatusButtons() {
+  const notButton =
+    document.getElementById(
+      "notButton"
+    );
 
-  document.getElementById(
-    "notButton"
-  ).classList.toggle(
-    "active",
-    modalStatus === "not"
-  );
+  const progressButton =
+    document.getElementById(
+      "progressButton"
+    );
 
+  const doneButton =
+    document.getElementById(
+      "doneButton"
+    );
 
-  document.getElementById(
-    "progressButton"
-  ).classList.toggle(
-    "active",
-    modalStatus === "progress"
-  );
+  if (notButton) {
+    notButton.classList.toggle(
+      "active",
+      modalStatus === "not"
+    );
+  }
 
+  if (progressButton) {
+    progressButton.classList.toggle(
+      "active",
+      modalStatus === "progress"
+    );
+  }
 
-  document.getElementById(
-    "doneButton"
-  ).classList.toggle(
-    "active",
-    modalStatus === "done"
-  );
-
+  if (doneButton) {
+    doneButton.classList.toggle(
+      "active",
+      modalStatus === "done"
+    );
+  }
 }
 
 
+/* ============================================================
+   SAVE ITEM
+   ============================================================ */
+
 function saveItem() {
-
-  if (!currentItem)
+  if (!currentItem) {
     return;
-
+  }
 
   const data =
     getItem(
@@ -1101,69 +1581,93 @@ function saveItem() {
       currentItem.item
     );
 
+  const vendorInput =
+    document.getElementById(
+      "vendorInput"
+    );
+
+  const priceInput =
+    document.getElementById(
+      "priceInput"
+    );
+
+  const deadlineInput =
+    document.getElementById(
+      "deadlineInput"
+    );
+
+  const linkInput =
+    document.getElementById(
+      "linkInput"
+    );
+
+  const notesInput =
+    document.getElementById(
+      "notesInput"
+    );
 
   data.status =
     modalStatus;
 
-
   data.vendor =
-    document.getElementById(
-      "vendorInput"
-    ).value;
-
+    vendorInput
+      ? vendorInput.value.trim()
+      : "";
 
   data.price =
-    document.getElementById(
-      "priceInput"
-    ).value;
-
+    priceInput
+      ? priceInput.value.trim()
+      : "";
 
   data.deadline =
-    document.getElementById(
-      "deadlineInput"
-    ).value;
-
+    deadlineInput
+      ? deadlineInput.value
+      : "";
 
   data.link =
-    document.getElementById(
-      "linkInput"
-    ).value;
-
+    linkInput
+      ? linkInput.value.trim()
+      : "";
 
   data.notes =
-    document.getElementById(
-      "notesInput"
-    ).value;
+    notesInput
+      ? notesInput.value.trim()
+      : "";
 
+  const saved = saveData();
 
-  saveData();
+  if (!saved) {
+    return;
+  }
 
   closeModal();
 
-
-  if (
-    currentCategory ===
-    "dashboard"
-  ) {
-
+  if (currentCategory === "dashboard") {
     showDashboard();
-
   } else {
-
     showCategory(
       currentCategory
     );
-
   }
-
 }
 
 
+/* ============================================================
+   CLEAR ITEM
+   ============================================================ */
+
 function clearItem() {
-
-  if (!currentItem)
+  if (!currentItem) {
     return;
+  }
 
+  const confirmed = confirm(
+    "Clear all information for this item?"
+  );
+
+  if (!confirmed) {
+    return;
+  }
 
   const data =
     getItem(
@@ -1171,172 +1675,270 @@ function clearItem() {
       currentItem.item
     );
 
+  data.status = "not";
+  data.vendor = "";
+  data.price = "";
+  data.deadline = "";
+  data.link = "";
+  data.notes = "";
 
-  data.status =
-    "not";
+  const saved = saveData();
 
-  data.vendor =
-    "";
-
-  data.price =
-    "";
-
-  data.deadline =
-    "";
-
-  data.link =
-    "";
-
-  data.notes =
-    "";
-
-
-  saveData();
+  if (!saved) {
+    return;
+  }
 
   closeModal();
 
-
-  if (
-    currentCategory ===
-    "dashboard"
-  ) {
-
+  if (currentCategory === "dashboard") {
     showDashboard();
-
   } else {
-
     showCategory(
       currentCategory
     );
+  }
+}
 
+
+/* ============================================================
+   SCROLL TO TOP
+   ============================================================ */
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+/* ============================================================
+   EVENT LISTENERS
+   ============================================================ */
+
+function setupEventListeners() {
+  const exportButton =
+    document.getElementById(
+      "exportButton"
+    );
+
+  const importButton =
+    document.getElementById(
+      "importButton"
+    );
+
+  const importFile =
+    document.getElementById(
+      "importFile"
+    );
+
+  const closeModalButton =
+    document.getElementById(
+      "closeModalButton"
+    );
+
+  const saveButton =
+    document.getElementById(
+      "saveButton"
+    );
+
+  const clearButton =
+    document.getElementById(
+      "clearButton"
+    );
+
+  const notButton =
+    document.getElementById(
+      "notButton"
+    );
+
+  const progressButton =
+    document.getElementById(
+      "progressButton"
+    );
+
+  const doneButton =
+    document.getElementById(
+      "doneButton"
+    );
+
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
+
+  const searchInput =
+    document.getElementById(
+      "itemSearch"
+    );
+
+  const statusFilter =
+    document.getElementById(
+      "itemStatusFilter"
+    );
+
+
+  if (exportButton) {
+    exportButton.addEventListener(
+      "click",
+      exportData
+    );
   }
 
-}
 
-
-/* ============================================================
-   HELPERS
-============================================================ */
-
-function formatDate(date) {
-
-  if (!date)
-    return "";
-
-
-  const d =
-    new Date(
-      date + "T00:00:00"
-    );
-
-
-  return d.toLocaleDateString(
-    "en-DK",
-    {
-      day:"numeric",
-      month:"short",
-      year:"numeric"
-    }
-  );
-
-}
-
-
-function escapeHTML(value) {
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* ============================================================
-   EVENTS
-============================================================ */
-
-document
-  .getElementById(
-    "itemSearch"
-  )
-  .addEventListener(
-    "input",
-    renderCategory
-  );
-
-
-document
-  .getElementById(
-    "itemStatusFilter"
-  )
-  .addEventListener(
-    "change",
-    renderCategory
-  );
-
-
-document
-  .getElementById(
-    "overlay"
-  )
-  .addEventListener(
-    "click",
-    function(event) {
-
-      if (
-        event.target === this
-      ) {
-        closeModal();
+  if (importButton && importFile) {
+    importButton.addEventListener(
+      "click",
+      function() {
+        importFile.click();
       }
+    );
+  }
 
+
+  if (importFile) {
+    importFile.addEventListener(
+      "change",
+      importData
+    );
+  }
+
+
+  if (closeModalButton) {
+    closeModalButton.addEventListener(
+      "click",
+      closeModal
+    );
+  }
+
+
+  if (saveButton) {
+    saveButton.addEventListener(
+      "click",
+      saveItem
+    );
+  }
+
+
+  if (clearButton) {
+    clearButton.addEventListener(
+      "click",
+      clearItem
+    );
+  }
+
+
+  if (notButton) {
+    notButton.addEventListener(
+      "click",
+      function() {
+        chooseStatus("not");
+      }
+    );
+  }
+
+
+  if (progressButton) {
+    progressButton.addEventListener(
+      "click",
+      function() {
+        chooseStatus("progress");
+      }
+    );
+  }
+
+
+  if (doneButton) {
+    doneButton.addEventListener(
+      "click",
+      function() {
+        chooseStatus("done");
+      }
+    );
+  }
+
+
+  if (searchInput) {
+    searchInput.addEventListener(
+      "input",
+      renderCategory
+    );
+  }
+
+
+  if (statusFilter) {
+    statusFilter.addEventListener(
+      "change",
+      renderCategory
+    );
+  }
+
+
+  if (overlay) {
+    overlay.addEventListener(
+      "click",
+      function(event) {
+        if (
+          event.target === overlay
+        ) {
+          closeModal();
+        }
+      }
+    );
+  }
+
+
+  document.addEventListener(
+    "keydown",
+    function(event) {
+      if (
+        event.key === "Escape"
+      ) {
+        const overlay =
+          document.getElementById(
+            "overlay"
+          );
+
+        if (
+          overlay &&
+          overlay.classList.contains(
+            "active"
+          )
+        ) {
+          closeModal();
+        }
+      }
     }
   );
-
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key ===
-      "Escape"
-    ) {
-      closeModal();
-    }
-
-  }
-);
+}
 
 
 /* ============================================================
-   START
-============================================================ */
+   START APPLICATION
+   ============================================================ */
 
-loadData();
+function initializeApp() {
+  loadData();
 
-buildNavigation();
+  setupEventListeners();
 
-showDashboard();
+  buildNavigation();
+
+  showDashboard();
+}
+
+
+/* ============================================================
+   START WHEN HTML IS READY
+   ============================================================ */
+
+if (
+  document.readyState === "loading"
+) {
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeApp
+  );
+} else {
+  initializeApp();
+}
