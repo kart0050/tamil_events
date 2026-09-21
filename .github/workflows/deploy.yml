@@ -1,11 +1,10 @@
 ```yaml
-name: Deploy tamil_events
+name: Deploy Wedding Planner
 
 on:
   push:
     branches:
       - main
-
   workflow_dispatch:
 
 permissions:
@@ -22,61 +21,18 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Verify website files
-        run: |
-          echo "Checking website files..."
-
-          echo ""
-          echo "Repository files:"
-          find . -maxdepth 2 -type f | sort
-
-          echo ""
-
-          test -f index.html || {
-            echo "ERROR: index.html was not found"
-            exit 1
-          }
-
-          test -f style.css || {
-            echo "ERROR: style.css was not found"
-            exit 1
-          }
-
-          test -f script.js || {
-            echo "ERROR: script.js was not found"
-            exit 1
-          }
-
-          echo "✓ index.html found"
-          echo "✓ style.css found"
-          echo "✓ script.js found"
-          echo ""
-          echo "All required files are present."
-
-      - name: Prepare GitHub Pages
-        run: |
-          mkdir -p _site
-
-          cp index.html _site/
-          cp style.css _site/
-          cp script.js _site/
-
-          echo "Files prepared for deployment:"
-          ls -lah _site/
-
-      - name: Configure GitHub Pages
+      - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: .
 
-      - name: Deploy website
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
 ```
