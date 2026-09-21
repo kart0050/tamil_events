@@ -146,26 +146,20 @@ const defaultCategories = [
     items: ["Wedding Cake", "Lighter + Knife"]
   },
   {
-    id: "preshoot",
-    name: "Preshoot",
-    icon: "📸",
+    id: "photo-video-preshoot",
+    name: "Photo + Video + Preshoot",
+    icon: "📷",
     items: [
+      "Digital Pro",
+      "Visual Eyes",
+      "Vividmemoir.dk",
+      "infocus"
       "Views of Nivi",
       "Sana",
       "Visual Eyes",
       "Nomad",
       "Through the ringer",
       "Swiss (Interlaken)"
-    ]
-  },
-  {
-    id: "photo-video",
-    name: "Photo + Video",
-    icon: "📷",
-    items: [
-      "Visual Eyes",
-      "Vividmemoir.dk",
-      "infocus"
     ]
   },
   {
