@@ -225,7 +225,7 @@ const defaultCategories = [
       "Mams",
       "Saddi",
       "Speech",
-      "Games"
+      "Games",
       "Speech planning",
       "Speakers",
       "Order of speeches"
