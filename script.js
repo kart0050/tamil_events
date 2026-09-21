@@ -260,7 +260,9 @@ let savedData = {};
 
 let currentCategory = "dashboard";
 let currentItem = null;
-let modalStatus = "not";
+
+let managementMode = null;
+let managementCategoryId = null;
 
 /* ============================================================
    HELPERS
@@ -329,6 +331,7 @@ function loadData() {
       Array.isArray(parsed.categories)
     ) {
       categories = parsed.categories;
+
       savedData =
         parsed.savedData &&
         typeof parsed.savedData === "object"
@@ -359,7 +362,11 @@ function normaliseCategories() {
   }
 
   categories = categories
-    .filter(category => category && typeof category === "object")
+    .filter(
+      category =>
+        category &&
+        typeof category === "object"
+    )
     .map(category => {
       return {
         id:
@@ -367,14 +374,22 @@ function normaliseCategories() {
           createId(category.name || "category"),
 
         name:
-          String(category.name || "Unnamed category"),
+          String(
+            category.name ||
+            "Unnamed category"
+          ),
 
         icon:
-          String(category.icon || "📋"),
+          String(
+            category.icon ||
+            "📋"
+          ),
 
         items:
           Array.isArray(category.items)
-            ? category.items.map(item => String(item))
+            ? category.items.map(item =>
+                String(item)
+              )
             : []
       };
     });
@@ -390,14 +405,17 @@ function saveData() {
       STORAGE_KEY,
       JSON.stringify({
         version: 5,
-        categories: categories,
-        savedData: savedData
+        categories,
+        savedData
       })
     );
 
     return true;
   } catch (error) {
-    console.error("Could not save planner data:", error);
+    console.error(
+      "Could not save planner data:",
+      error
+    );
 
     alert(
       "Your planner data could not be saved in this browser."
@@ -440,7 +458,9 @@ function getItem(categoryId, item) {
   const data = savedData[key];
 
   data.status =
-    ["not", "progress", "done"].includes(data.status)
+    ["not", "progress", "done"].includes(
+      data.status
+    )
       ? data.status
       : "not";
 
@@ -469,8 +489,8 @@ function exportData() {
       app: "Tamil Wedding Planner",
       version: 5,
       exportedAt: new Date().toISOString(),
-      categories: categories,
-      savedData: savedData
+      categories,
+      savedData
     };
 
     const json = JSON.stringify(
@@ -496,16 +516,18 @@ function exportData() {
 
     const now = new Date();
 
-    const filename =
+    link.download =
       "wedding-planner-backup-" +
       now.getFullYear() +
       "-" +
-      String(now.getMonth() + 1).padStart(2, "0") +
+      String(
+        now.getMonth() + 1
+      ).padStart(2, "0") +
       "-" +
-      String(now.getDate()).padStart(2, "0") +
+      String(
+        now.getDate()
+      ).padStart(2, "0") +
       ".json";
-
-    link.download = filename;
 
     document.body.appendChild(link);
 
@@ -517,7 +539,10 @@ function exportData() {
       URL.revokeObjectURL(url);
     }, 1000);
   } catch (error) {
-    console.error("Export failed:", error);
+    console.error(
+      "Export failed:",
+      error
+    );
 
     alert(
       "Sorry, the planner data could not be exported."
@@ -530,96 +555,112 @@ function exportData() {
    ============================================================ */
 
 function importData(event) {
-  const file = event.target.files[0];
+  const file =
+    event.target.files[0];
 
   if (!file) {
     return;
   }
 
-  const reader = new FileReader();
+  const reader =
+    new FileReader();
 
-  reader.onload = function (e) {
-    try {
-      const imported =
-        JSON.parse(e.target.result);
+  reader.onload =
+    function (e) {
+      try {
+        const imported =
+          JSON.parse(
+            e.target.result
+          );
 
-      let importedCategories = null;
-      let importedSavedData = null;
+        let importedCategories = null;
+        let importedSavedData = null;
 
-      if (
-        imported &&
-        Array.isArray(imported.categories)
-      ) {
-        importedCategories =
-          imported.categories;
+        if (
+          imported &&
+          Array.isArray(
+            imported.categories
+          )
+        ) {
+          importedCategories =
+            imported.categories;
 
-        importedSavedData =
-          imported.savedData || {};
-      }
+          importedSavedData =
+            imported.savedData || {};
+        } else if (
+          imported &&
+          imported.data &&
+          typeof imported.data === "object"
+        ) {
+          importedCategories =
+            structuredClone(
+              defaultCategories
+            );
 
-      /*
-       * Support older backup format.
-       */
-      else if (
-        imported &&
-        imported.data &&
-        typeof imported.data === "object"
-      ) {
-        importedCategories =
-          structuredClone(defaultCategories);
+          importedSavedData =
+            imported.data;
+        }
 
-        importedSavedData =
-          imported.data;
-      }
+        if (
+          !Array.isArray(
+            importedCategories
+          ) ||
+          !importedSavedData ||
+          typeof importedSavedData !== "object"
+        ) {
+          throw new Error(
+            "Invalid backup"
+          );
+        }
 
-      if (
-        !Array.isArray(importedCategories) ||
-        !importedSavedData ||
-        typeof importedSavedData !== "object"
-      ) {
-        throw new Error("Invalid backup");
-      }
+        const confirmed =
+          confirm(
+            "Import this wedding planner backup?\n\n" +
+            "Your current planner data will be replaced."
+          );
 
-      const confirmed = confirm(
-        "Import this wedding planner backup?\n\n" +
-        "Your current planner data will be replaced."
-      );
+        if (!confirmed) {
+          event.target.value = "";
+          return;
+        }
 
-      if (!confirmed) {
-        event.target.value = "";
-        return;
-      }
+        categories =
+          importedCategories;
 
-      categories =
-        importedCategories;
+        savedData =
+          importedSavedData;
 
-      savedData =
-        importedSavedData;
+        normaliseCategories();
 
-      normaliseCategories();
+        if (saveData()) {
+          showDashboard();
 
-      if (saveData()) {
-        showDashboard();
+          alert(
+            "Wedding planner data imported successfully! ❤️"
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Import failed:",
+          error
+        );
 
         alert(
-          "Wedding planner data imported successfully! ❤️"
+          "This file is not a valid wedding planner backup."
         );
       }
-    } catch (error) {
-      console.error("Import failed:", error);
 
+      event.target.value = "";
+    };
+
+  reader.onerror =
+    function () {
       alert(
-        "This file is not a valid wedding planner backup."
+        "Could not read the selected file."
       );
-    }
 
-    event.target.value = "";
-  };
-
-  reader.onerror = function () {
-    alert("Could not read the selected file.");
-    event.target.value = "";
-  };
+      event.target.value = "";
+    };
 
   reader.readAsText(file);
 }
@@ -630,7 +671,9 @@ function importData(event) {
 
 function buildNavigation() {
   const nav =
-    document.getElementById("navigation");
+    document.getElementById(
+      "navigation"
+    );
 
   if (!nav) {
     return;
@@ -642,7 +685,9 @@ function buildNavigation() {
     document.createElement("button");
 
   dashboard.type = "button";
-  dashboard.textContent = "🏠 Dashboard";
+
+  dashboard.textContent =
+    "🏠 Dashboard";
 
   dashboard.className =
     currentCategory === "dashboard"
@@ -656,29 +701,36 @@ function buildNavigation() {
 
   nav.appendChild(dashboard);
 
-  categories.forEach(category => {
-    const button =
-      document.createElement("button");
+  categories.forEach(
+    category => {
+      const button =
+        document.createElement(
+          "button"
+        );
 
-    button.type = "button";
+      button.type = "button";
 
-    button.textContent =
-      category.icon +
-      " " +
-      category.name;
+      button.textContent =
+        category.icon +
+        " " +
+        category.name;
 
-    button.className =
-      currentCategory === category.id
-        ? "active"
-        : "";
+      button.className =
+        currentCategory === category.id
+          ? "active"
+          : "";
 
-    button.addEventListener(
-      "click",
-      () => showCategory(category.id)
-    );
+      button.addEventListener(
+        "click",
+        () =>
+          showCategory(
+            category.id
+          )
+      );
 
-    nav.appendChild(button);
-  });
+      nav.appendChild(button);
+    }
+  );
 }
 
 /* ============================================================
@@ -686,28 +738,30 @@ function buildNavigation() {
    ============================================================ */
 
 function showDashboard() {
-  currentCategory = "dashboard";
+  currentCategory =
+    "dashboard";
 
   const dashboardPage =
-    document.getElementById("dashboardPage");
+    document.getElementById(
+      "dashboardPage"
+    );
 
   const categoryPage =
-    document.getElementById("categoryPage");
-
-  const managePage =
-    document.getElementById("managePage");
+    document.getElementById(
+      "categoryPage"
+    );
 
   if (dashboardPage) {
-    dashboardPage.style.display = "block";
+    dashboardPage.style.display =
+      "block";
   }
 
   if (categoryPage) {
-    categoryPage.style.display = "none";
+    categoryPage.style.display =
+      "none";
   }
 
-  if (managePage) {
-    managePage.style.display = "none";
-  }
+  closeManagementModal();
 
   buildNavigation();
   renderDashboard();
@@ -727,60 +781,88 @@ function renderDashboard() {
   let done = 0;
   let progress = 0;
 
-  categories.forEach(category => {
-    category.items.forEach(item => {
-      const data =
-        getItem(category.id, item);
+  categories.forEach(
+    category => {
+      category.items.forEach(
+        item => {
+          const data =
+            getItem(
+              category.id,
+              item
+            );
 
-      if (!data.enabled) {
-        return;
-      }
+          if (!data.enabled) {
+            return;
+          }
 
-      total++;
+          total++;
 
-      if (data.status === "done") {
-        done++;
-      }
+          if (
+            data.status === "done"
+          ) {
+            done++;
+          }
 
-      if (data.status === "progress") {
-        progress++;
-      }
-    });
-  });
+          if (
+            data.status === "progress"
+          ) {
+            progress++;
+          }
+        }
+      );
+    }
+  );
 
   const percent =
     total > 0
-      ? Math.round((done / total) * 100)
+      ? Math.round(
+          (done / total) * 100
+        )
       : 0;
 
   const totalCount =
-    document.getElementById("totalCount");
+    document.getElementById(
+      "totalCount"
+    );
 
   const doneCount =
-    document.getElementById("doneCount");
+    document.getElementById(
+      "doneCount"
+    );
 
   const progressCount =
-    document.getElementById("progressCount");
+    document.getElementById(
+      "progressCount"
+    );
 
   const categoryCount =
-    document.getElementById("categoryCount");
+    document.getElementById(
+      "categoryCount"
+    );
 
   const overallPercent =
-    document.getElementById("overallPercent");
+    document.getElementById(
+      "overallPercent"
+    );
 
   const overallFill =
-    document.getElementById("overallFill");
+    document.getElementById(
+      "overallFill"
+    );
 
   if (totalCount) {
-    totalCount.textContent = total;
+    totalCount.textContent =
+      total;
   }
 
   if (doneCount) {
-    doneCount.textContent = done;
+    doneCount.textContent =
+      done;
   }
 
   if (progressCount) {
-    progressCount.textContent = progress;
+    progressCount.textContent =
+      progress;
   }
 
   if (categoryCount) {
@@ -799,7 +881,9 @@ function renderDashboard() {
   }
 
   const grid =
-    document.getElementById("summaryGrid");
+    document.getElementById(
+      "summaryGrid"
+    );
 
   if (!grid) {
     return;
@@ -807,42 +891,55 @@ function renderDashboard() {
 
   grid.innerHTML = "";
 
-  categories.forEach(category => {
-    const stats =
-      getCategoryStats(category);
+  categories.forEach(
+    category => {
+      const stats =
+        getCategoryStats(
+          category
+        );
 
-    const card =
-      document.createElement("div");
+      const card =
+        document.createElement(
+          "div"
+        );
 
-    card.className =
-      "summary-card";
+      card.className =
+        "summary-card";
 
-    card.innerHTML =
-      '<div class="summary-icon">' +
-      escapeHTML(category.icon) +
-      "</div>" +
-      "<h3>" +
-      escapeHTML(category.name) +
-      "</h3>" +
-      "<p>" +
-      stats.done +
-      " / " +
-      stats.total +
-      " completed" +
-      "</p>" +
-      '<div class="summary-bar">' +
-      '<div style="width:' +
-      stats.percent +
-      '%"></div>' +
-      "</div>";
+      card.innerHTML =
+        '<div class="summary-icon">' +
+        escapeHTML(
+          category.icon
+        ) +
+        "</div>" +
+        "<h3>" +
+        escapeHTML(
+          category.name
+        ) +
+        "</h3>" +
+        "<p>" +
+        stats.done +
+        " / " +
+        stats.total +
+        " completed" +
+        "</p>" +
+        '<div class="summary-bar">' +
+        '<div style="width:' +
+        stats.percent +
+        '%"></div>' +
+        "</div>";
 
-    card.addEventListener(
-      "click",
-      () => showCategory(category.id)
-    );
+      card.addEventListener(
+        "click",
+        () =>
+          showCategory(
+            category.id
+          )
+      );
 
-    grid.appendChild(card);
-  });
+      grid.appendChild(card);
+    }
+  );
 }
 
 /* ============================================================
@@ -851,7 +948,9 @@ function renderDashboard() {
 
 function showCategory(id) {
   const category =
-    categories.find(c => c.id === id);
+    categories.find(
+      c => c.id === id
+    );
 
   if (!category) {
     return;
@@ -860,28 +959,29 @@ function showCategory(id) {
   currentCategory = id;
 
   const dashboardPage =
-    document.getElementById("dashboardPage");
+    document.getElementById(
+      "dashboardPage"
+    );
 
   const categoryPage =
-    document.getElementById("categoryPage");
-
-  const managePage =
-    document.getElementById("managePage");
+    document.getElementById(
+      "categoryPage"
+    );
 
   if (dashboardPage) {
-    dashboardPage.style.display = "none";
+    dashboardPage.style.display =
+      "none";
   }
 
   if (categoryPage) {
-    categoryPage.style.display = "block";
-  }
-
-  if (managePage) {
-    managePage.style.display = "none";
+    categoryPage.style.display =
+      "block";
   }
 
   const categoryTitle =
-    document.getElementById("categoryTitle");
+    document.getElementById(
+      "categoryTitle"
+    );
 
   if (categoryTitle) {
     categoryTitle.textContent =
@@ -891,7 +991,9 @@ function showCategory(id) {
   }
 
   const search =
-    document.getElementById("itemSearch");
+    document.getElementById(
+      "itemSearch"
+    );
 
   const filter =
     document.getElementById(
@@ -906,6 +1008,8 @@ function showCategory(id) {
     filter.value = "all";
   }
 
+  closeManagementModal();
+
   buildNavigation();
   renderCategory();
 
@@ -919,28 +1023,39 @@ function showCategory(id) {
    CATEGORY STATS
    ============================================================ */
 
-function getCategoryStats(category) {
+function getCategoryStats(
+  category
+) {
   let total = 0;
   let done = 0;
 
-  category.items.forEach(item => {
-    const data =
-      getItem(category.id, item);
+  category.items.forEach(
+    item => {
+      const data =
+        getItem(
+          category.id,
+          item
+        );
 
-    if (!data.enabled) {
-      return;
+      if (!data.enabled) {
+        return;
+      }
+
+      total++;
+
+      if (
+        data.status === "done"
+      ) {
+        done++;
+      }
     }
-
-    total++;
-
-    if (data.status === "done") {
-      done++;
-    }
-  });
+  );
 
   const percent =
     total > 0
-      ? Math.round((done / total) * 100)
+      ? Math.round(
+          (done / total) * 100
+        )
       : 0;
 
   return {
@@ -965,7 +1080,9 @@ function renderCategory() {
   }
 
   const stats =
-    getCategoryStats(category);
+    getCategoryStats(
+      category
+    );
 
   const categoryPercent =
     document.getElementById(
@@ -991,7 +1108,9 @@ function renderCategory() {
   }
 
   const searchInput =
-    document.getElementById("itemSearch");
+    document.getElementById(
+      "itemSearch"
+    );
 
   const statusInput =
     document.getElementById(
@@ -1000,7 +1119,9 @@ function renderCategory() {
 
   const search =
     searchInput
-      ? searchInput.value.toLowerCase().trim()
+      ? searchInput.value
+          .toLowerCase()
+          .trim()
       : "";
 
   const status =
@@ -1009,7 +1130,9 @@ function renderCategory() {
       : "all";
 
   const grid =
-    document.getElementById("itemsGrid");
+    document.getElementById(
+      "itemsGrid"
+    );
 
   if (!grid) {
     return;
@@ -1019,107 +1142,149 @@ function renderCategory() {
 
   let visible = 0;
 
-  category.items.forEach(item => {
-    const data =
-      getItem(category.id, item);
+  category.items.forEach(
+    item => {
+      const data =
+        getItem(
+          category.id,
+          item
+        );
 
-    if (!data.enabled) {
-      return;
+      if (!data.enabled) {
+        return;
+      }
+
+      const itemText =
+        item.toLowerCase();
+
+      const vendorText =
+        String(
+          data.vendor || ""
+        ).toLowerCase();
+
+      const notesText =
+        String(
+          data.notes || ""
+        ).toLowerCase();
+
+      const matchesSearch =
+        !search ||
+        itemText.includes(
+          search
+        ) ||
+        vendorText.includes(
+          search
+        ) ||
+        notesText.includes(
+          search
+        );
+
+      const matchesStatus =
+        status === "all" ||
+        data.status === status;
+
+      if (
+        !matchesSearch ||
+        !matchesStatus
+      ) {
+        return;
+      }
+
+      visible++;
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+      card.className =
+        "item-card";
+
+      if (
+        data.status === "done"
+      ) {
+        card.classList.add(
+          "done"
+        );
+      }
+
+      let statusText =
+        "Not started";
+
+      let statusClass = "";
+
+      if (
+        data.status ===
+        "progress"
+      ) {
+        statusText =
+          "In progress";
+
+        statusClass =
+          " progress";
+      }
+
+      if (
+        data.status === "done"
+      ) {
+        statusText =
+          "Completed";
+
+        statusClass =
+          " done";
+      }
+
+      const vendorHTML =
+        data.vendor
+          ? "<p>👤 " +
+            escapeHTML(
+              data.vendor
+            ) +
+            "</p>"
+          : "<p>Click to add details</p>";
+
+      const deadlineHTML =
+        data.deadline
+          ? '<div class="item-meta">📅 ' +
+            escapeHTML(
+              formatDate(
+                data.deadline
+              )
+            ) +
+            "</div>"
+          : "";
+
+      card.innerHTML =
+        '<div class="item-top">' +
+        '<div class="item-icon">' +
+        escapeHTML(
+          category.icon
+        ) +
+        "</div>" +
+        '<div class="item-status' +
+        statusClass +
+        '">' +
+        statusText +
+        "</div>" +
+        "</div>" +
+        "<h3>" +
+        escapeHTML(item) +
+        "</h3>" +
+        vendorHTML +
+        deadlineHTML;
+
+      card.addEventListener(
+        "click",
+        () =>
+          openModal(
+            category.id,
+            item
+          )
+      );
+
+      grid.appendChild(card);
     }
-
-    const itemText =
-      item.toLowerCase();
-
-    const vendorText =
-      String(data.vendor || "")
-        .toLowerCase();
-
-    const notesText =
-      String(data.notes || "")
-        .toLowerCase();
-
-    const matchesSearch =
-      !search ||
-      itemText.includes(search) ||
-      vendorText.includes(search) ||
-      notesText.includes(search);
-
-    const matchesStatus =
-      status === "all" ||
-      data.status === status;
-
-    if (
-      !matchesSearch ||
-      !matchesStatus
-    ) {
-      return;
-    }
-
-    visible++;
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "item-card";
-
-    if (data.status === "done") {
-      card.classList.add("done");
-    }
-
-    let statusText = "Not started";
-    let statusClass = "";
-
-    if (data.status === "progress") {
-      statusText = "In progress";
-      statusClass = " progress";
-    }
-
-    if (data.status === "done") {
-      statusText = "Completed";
-      statusClass = " done";
-    }
-
-    const vendorHTML =
-      data.vendor
-        ? "<p>👤 " +
-          escapeHTML(data.vendor) +
-          "</p>"
-        : "<p>Click to add details</p>";
-
-    const deadlineHTML =
-      data.deadline
-        ? '<div class="item-meta">📅 ' +
-          escapeHTML(
-            formatDate(data.deadline)
-          ) +
-          "</div>"
-        : "";
-
-    card.innerHTML =
-      '<div class="item-top">' +
-      '<div class="item-icon">' +
-      escapeHTML(category.icon) +
-      "</div>" +
-      '<div class="item-status' +
-      statusClass +
-      '">' +
-      statusText +
-      "</div>" +
-      "</div>" +
-      "<h3>" +
-      escapeHTML(item) +
-      "</h3>" +
-      vendorHTML +
-      deadlineHTML;
-
-    card.addEventListener(
-      "click",
-      () => openModal(category.id, item)
-    );
-
-    grid.appendChild(card);
-  });
+  );
 
   const emptyMessage =
     document.getElementById(
@@ -1135,10 +1300,13 @@ function renderCategory() {
 }
 
 /* ============================================================
-   MODAL
+   ITEM MODAL
    ============================================================ */
 
-function openModal(categoryId, item) {
+function openModal(
+  categoryId,
+  item
+) {
   currentItem = {
     categoryId,
     item
@@ -1154,7 +1322,10 @@ function openModal(categoryId, item) {
   }
 
   const data =
-    getItem(categoryId, item);
+    getItem(
+      categoryId,
+      item
+    );
 
   const modalCategory =
     document.getElementById(
@@ -1197,7 +1368,8 @@ function openModal(categoryId, item) {
   }
 
   if (modalTitle) {
-    modalTitle.textContent = item;
+    modalTitle.textContent =
+      item;
   }
 
   if (vendorInput) {
@@ -1225,38 +1397,55 @@ function openModal(categoryId, item) {
       data.notes;
   }
 
-  modalStatus =
-    data.status;
-
-  updateStatusButtons();
+  updateStatusButtons(
+    data.status
+  );
 
   const overlay =
-    document.getElementById("overlay");
+    document.getElementById(
+      "overlay"
+    );
 
   if (overlay) {
-    overlay.classList.add("active");
+    overlay.classList.add(
+      "active"
+    );
   }
 }
 
 function closeModal() {
   const overlay =
-    document.getElementById("overlay");
+    document.getElementById(
+      "overlay"
+    );
 
   if (overlay) {
-    overlay.classList.remove("active");
+    overlay.classList.remove(
+      "active"
+    );
   }
 
   currentItem = null;
 }
 
+let modalStatus = "not";
+
 function chooseStatus(status) {
   modalStatus = status;
-  updateStatusButtons();
+  updateStatusButtons(
+    modalStatus
+  );
 }
 
-function updateStatusButtons() {
+function updateStatusButtons(
+  status = modalStatus
+) {
+  modalStatus = status;
+
   const notButton =
-    document.getElementById("notButton");
+    document.getElementById(
+      "notButton"
+    );
 
   const progressButton =
     document.getElementById(
@@ -1306,10 +1495,14 @@ function saveItem() {
     );
 
   const vendorInput =
-    document.getElementById("vendorInput");
+    document.getElementById(
+      "vendorInput"
+    );
 
   const priceInput =
-    document.getElementById("priceInput");
+    document.getElementById(
+      "priceInput"
+    );
 
   const deadlineInput =
     document.getElementById(
@@ -1317,12 +1510,17 @@ function saveItem() {
     );
 
   const linkInput =
-    document.getElementById("linkInput");
+    document.getElementById(
+      "linkInput"
+    );
 
   const notesInput =
-    document.getElementById("notesInput");
+    document.getElementById(
+      "notesInput"
+    );
 
-  data.status = modalStatus;
+  data.status =
+    modalStatus;
 
   data.vendor =
     vendorInput
@@ -1355,10 +1553,15 @@ function saveItem() {
 
   closeModal();
 
-  if (currentCategory === "dashboard") {
+  if (
+    currentCategory ===
+    "dashboard"
+  ) {
     showDashboard();
   } else {
-    showCategory(currentCategory);
+    showCategory(
+      currentCategory
+    );
   }
 }
 
@@ -1388,224 +1591,61 @@ function clearItem() {
 
   closeModal();
 
-  if (currentCategory === "dashboard") {
+  if (
+    currentCategory ===
+    "dashboard"
+  ) {
     showDashboard();
   } else {
-    showCategory(currentCategory);
+    showCategory(
+      currentCategory
+    );
   }
 }
 
 /* ============================================================
-   MANAGE PLANNER
+   MANAGEMENT MODAL
    ============================================================ */
 
-function showManagePlanner() {
-  currentCategory = "manage";
+function openManagementModal(
+  mode,
+  categoryId = null
+) {
+  managementMode = mode;
+  managementCategoryId =
+    categoryId;
 
-  const dashboardPage =
+  const overlay =
     document.getElementById(
-      "dashboardPage"
+      "managementOverlay"
     );
 
-  const categoryPage =
+  const title =
     document.getElementById(
-      "categoryPage"
+      "managementModalTitle"
     );
 
-  const managePage =
-    document.getElementById(
-      "managePage"
-    );
-
-  if (dashboardPage) {
-    dashboardPage.style.display = "none";
-  }
-
-  if (categoryPage) {
-    categoryPage.style.display = "none";
-  }
-
-  if (managePage) {
-    managePage.style.display = "block";
-  }
-
-  buildNavigation();
-
-  renderManagePlanner();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-/* ============================================================
-   RENDER MANAGE PLANNER
-   ============================================================ */
-
-function renderManagePlanner() {
-  const container =
-    document.getElementById(
-      "manageCategories"
-    );
-
-  if (!container) {
-    return;
-  }
-
-  container.innerHTML = "";
-
-  categories.forEach(category => {
-    const wrapper =
-      document.createElement("div");
-
-    wrapper.className =
-      "manage-category";
-
-    wrapper.innerHTML =
-      '<div class="manage-category-header">' +
-      '<div>' +
-      '<span class="manage-category-icon">' +
-      escapeHTML(category.icon) +
-      "</span>" +
-      "<strong>" +
-      escapeHTML(category.name) +
-      "</strong>" +
-      "</div>" +
-      '<div class="manage-category-actions">' +
-      '<button type="button" class="manage-add-item">+ Add item</button>' +
-      '<button type="button" class="manage-delete-category">Delete category</button>' +
-      "</div>" +
-      "</div>" +
-      '<div class="manage-items"></div>';
-
-    const itemsContainer =
-      wrapper.querySelector(
-        ".manage-items"
-      );
-
-    category.items.forEach(item => {
-      const data =
-        getItem(category.id, item);
-
-      const row =
-        document.createElement("div");
-
-      row.className =
-        "manage-item";
-
-      if (!data.enabled) {
-        row.classList.add("disabled");
-      }
-
-      row.innerHTML =
-        "<span>" +
-        escapeHTML(item) +
-        "</span>" +
-        '<div class="manage-item-actions">' +
-        '<button type="button" class="toggle-item">' +
-        (data.enabled
-          ? "Disable"
-          : "Enable") +
-        "</button>" +
-        '<button type="button" class="delete-item">Delete</button>' +
-        "</div>";
-
-      row
-        .querySelector(".toggle-item")
-        .addEventListener(
-          "click",
-          () => toggleItem(
-            category.id,
-            item
-          )
-        );
-
-      row
-        .querySelector(".delete-item")
-        .addEventListener(
-          "click",
-          () => deleteItem(
-            category.id,
-            item
-          )
-        );
-
-      itemsContainer.appendChild(row);
-    });
-
-    wrapper
-      .querySelector(".manage-add-item")
-      .addEventListener(
-        "click",
-        () => addItem(category.id)
-      );
-
-    wrapper
-      .querySelector(".manage-delete-category")
-      .addEventListener(
-        "click",
-        () => deleteCategory(category.id)
-      );
-
-    container.appendChild(wrapper);
-  });
-}
-
-/* ============================================================
-   ADD CATEGORY
-   ============================================================ */
-
-function addCategory() {
   const nameInput =
     document.getElementById(
-      "newCategoryName"
+      "managementNameInput"
     );
 
   const iconInput =
     document.getElementById(
-      "newCategoryIcon"
+      "managementIconInput"
     );
 
-  const name =
-    nameInput
-      ? nameInput.value.trim()
-      : "";
-
-  const icon =
-    iconInput
-      ? iconInput.value.trim()
-      : "";
-
-  if (!name) {
-    alert("Please enter a category name.");
-    return;
-  }
-
-  const exists =
-    categories.some(
-      category =>
-        category.name.toLowerCase() ===
-        name.toLowerCase()
+  const iconGroup =
+    document.getElementById(
+      "iconGroup"
     );
 
-  if (exists) {
-    alert(
-      "A category with this name already exists."
+  const saveButton =
+    document.getElementById(
+      "saveManagementButton"
     );
-    return;
-  }
 
-  const category = {
-    id: createId(name),
-    name: name,
-    icon: icon || "📋",
-    items: []
-  };
-
-  categories.push(category);
-
-  if (!saveData()) {
+  if (!overlay) {
     return;
   }
 
@@ -1617,24 +1657,267 @@ function addCategory() {
     iconInput.value = "";
   }
 
-  renderManagePlanner();
-  buildNavigation();
+  if (mode === "category") {
+    if (title) {
+      title.textContent =
+        "Add category";
+    }
 
-  alert(
-    '"' +
-      name +
-      '" has been added successfully.'
+    if (iconGroup) {
+      iconGroup.style.display =
+        "block";
+    }
+
+    if (nameInput) {
+      nameInput.placeholder =
+        "Category name";
+    }
+
+    if (iconInput) {
+      iconInput.placeholder =
+        "💍";
+    }
+
+    if (saveButton) {
+      saveButton.textContent =
+        "Add category";
+    }
+  }
+
+  if (mode === "item") {
+    const category =
+      categories.find(
+        c =>
+          c.id === categoryId
+      );
+
+    if (!category) {
+      return;
+    }
+
+    if (title) {
+      title.textContent =
+        "Add item";
+    }
+
+    if (iconGroup) {
+      iconGroup.style.display =
+        "none";
+    }
+
+    if (nameInput) {
+      nameInput.placeholder =
+        "Item name";
+    }
+
+    if (saveButton) {
+      saveButton.textContent =
+        "Add item";
+    }
+  }
+
+  overlay.classList.add(
+    "active"
   );
+
+  setTimeout(() => {
+    if (nameInput) {
+      nameInput.focus();
+    }
+  }, 100);
+}
+
+function closeManagementModal() {
+  const overlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+  if (overlay) {
+    overlay.classList.remove(
+      "active"
+    );
+  }
+
+  managementMode = null;
+  managementCategoryId = null;
+}
+
+/* ============================================================
+   SAVE MANAGEMENT MODAL
+   ============================================================ */
+
+function saveManagement() {
+  const nameInput =
+    document.getElementById(
+      "managementNameInput"
+    );
+
+  const iconInput =
+    document.getElementById(
+      "managementIconInput"
+    );
+
+  const name =
+    nameInput
+      ? nameInput.value.trim()
+      : "";
+
+  if (!name) {
+    alert(
+      "Please enter a name."
+    );
+
+    if (nameInput) {
+      nameInput.focus();
+    }
+
+    return;
+  }
+
+  /* ----------------------------------------------------------
+     ADD CATEGORY
+     ---------------------------------------------------------- */
+
+  if (
+    managementMode ===
+    "category"
+  ) {
+    const exists =
+      categories.some(
+        category =>
+          category.name
+            .toLowerCase() ===
+          name.toLowerCase()
+      );
+
+    if (exists) {
+      alert(
+        "A category with this name already exists."
+      );
+
+      if (nameInput) {
+        nameInput.focus();
+      }
+
+      return;
+    }
+
+    const icon =
+      iconInput &&
+      iconInput.value.trim()
+        ? iconInput.value.trim()
+        : "📋";
+
+    const category = {
+      id: createId(name),
+      name,
+      icon,
+      items: []
+    };
+
+    categories.push(
+      category
+    );
+
+    if (!saveData()) {
+      return;
+    }
+
+    closeManagementModal();
+
+    buildNavigation();
+    renderDashboard();
+
+    alert(
+      '"' +
+        name +
+        '" has been added successfully. ❤️'
+    );
+
+    return;
+  }
+
+  /* ----------------------------------------------------------
+     ADD ITEM
+     ---------------------------------------------------------- */
+
+  if (
+    managementMode ===
+    "item"
+  ) {
+    const category =
+      categories.find(
+        c =>
+          c.id ===
+          managementCategoryId
+      );
+
+    if (!category) {
+      closeManagementModal();
+      return;
+    }
+
+    const exists =
+      category.items.some(
+        item =>
+          item.toLowerCase() ===
+          name.toLowerCase()
+      );
+
+    if (exists) {
+      alert(
+        "This item already exists."
+      );
+
+      if (nameInput) {
+        nameInput.focus();
+      }
+
+      return;
+    }
+
+    category.items.push(
+      name
+    );
+
+    getItem(
+      category.id,
+      name
+    );
+
+    if (!saveData()) {
+      return;
+    }
+
+    closeManagementModal();
+
+    if (
+      currentCategory ===
+      category.id
+    ) {
+      showCategory(
+        category.id
+      );
+    } else {
+      renderDashboard();
+    }
+
+    return;
+  }
 }
 
 /* ============================================================
    DELETE CATEGORY
    ============================================================ */
 
-function deleteCategory(categoryId) {
+function deleteCategory(
+  categoryId
+) {
   const category =
     categories.find(
-      c => c.id === categoryId
+      c =>
+        c.id === categoryId
     );
 
   if (!category) {
@@ -1644,8 +1927,8 @@ function deleteCategory(categoryId) {
   const confirmed =
     confirm(
       'Delete the category "' +
-      category.name +
-      '"?\n\nAll items in this category will be removed from the planner.'
+        category.name +
+        '"?\n\nAll items in this category will be removed.'
     );
 
   if (!confirmed) {
@@ -1654,10 +1937,13 @@ function deleteCategory(categoryId) {
 
   categories =
     categories.filter(
-      c => c.id !== categoryId
+      c =>
+        c.id !== categoryId
     );
 
-  Object.keys(savedData).forEach(key => {
+  Object.keys(
+    savedData
+  ).forEach(key => {
     if (
       key.startsWith(
         categoryId + "::"
@@ -1669,75 +1955,37 @@ function deleteCategory(categoryId) {
 
   saveData();
 
-  currentCategory = "dashboard";
+  if (
+    currentCategory ===
+    categoryId
+  ) {
+    currentCategory =
+      "dashboard";
+  }
 
-  renderManagePlanner();
   buildNavigation();
+  renderDashboard();
 }
 
 /* ============================================================
-   ADD ITEM
+   ADD ITEM FROM MANAGEMENT
    ============================================================ */
 
 function addItem(categoryId) {
-  const category =
-    categories.find(
-      c => c.id === categoryId
-    );
-
-  if (!category) {
-    return;
-  }
-
-  const item =
-    prompt(
-      'Add a new item to "' +
-      category.name +
-      '":'
-    );
-
-  if (item === null) {
-    return;
-  }
-
-  const cleanItem =
-    item.trim();
-
-  if (!cleanItem) {
-    return;
-  }
-
-  const exists =
-    category.items.some(
-      existing =>
-        existing.toLowerCase() ===
-        cleanItem.toLowerCase()
-    );
-
-  if (exists) {
-    alert(
-      "This item already exists."
-    );
-    return;
-  }
-
-  category.items.push(cleanItem);
-
-  getItem(
-    category.id,
-    cleanItem
+  openManagementModal(
+    "item",
+    categoryId
   );
-
-  saveData();
-
-  renderManagePlanner();
 }
 
 /* ============================================================
    TOGGLE ITEM
    ============================================================ */
 
-function toggleItem(categoryId, item) {
+function toggleItem(
+  categoryId,
+  item
+) {
   const data =
     getItem(
       categoryId,
@@ -1752,9 +2000,12 @@ function toggleItem(categoryId, item) {
   renderManagePlanner();
 
   if (
-    currentCategory === categoryId
+    currentCategory ===
+    categoryId
   ) {
     renderCategory();
+  } else {
+    renderDashboard();
   }
 }
 
@@ -1762,10 +2013,14 @@ function toggleItem(categoryId, item) {
    DELETE ITEM
    ============================================================ */
 
-function deleteItem(categoryId, item) {
+function deleteItem(
+  categoryId,
+  item
+) {
   const category =
     categories.find(
-      c => c.id === categoryId
+      c =>
+        c.id === categoryId
     );
 
   if (!category) {
@@ -1775,8 +2030,8 @@ function deleteItem(categoryId, item) {
   const confirmed =
     confirm(
       'Delete "' +
-      item +
-      '"?'
+        item +
+        '"?'
     );
 
   if (!confirmed) {
@@ -1790,7 +2045,10 @@ function deleteItem(categoryId, item) {
     );
 
   delete savedData[
-    itemKey(categoryId, item)
+    itemKey(
+      categoryId,
+      item
+    )
   ];
 
   saveData();
@@ -1798,10 +2056,286 @@ function deleteItem(categoryId, item) {
   renderManagePlanner();
 
   if (
-    currentCategory === categoryId
+    currentCategory ===
+    categoryId
   ) {
     renderCategory();
+  } else {
+    renderDashboard();
   }
+}
+
+/* ============================================================
+   MANAGEMENT LIST
+   ============================================================ */
+
+function renderManagePlanner() {
+  /*
+   * Your current HTML doesn't contain a separate
+   * management page. Management happens through the
+   * dashboard management card.
+   *
+   * We therefore use #managementList.
+   */
+
+  const container =
+    document.getElementById(
+      "managementList"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = "";
+
+  categories.forEach(
+    category => {
+      const wrapper =
+        document.createElement(
+          "div"
+        );
+
+      wrapper.className =
+        "manage-category";
+
+      const header =
+        document.createElement(
+          "div"
+        );
+
+      header.className =
+        "manage-category-header";
+
+      const title =
+        document.createElement(
+          "div"
+        );
+
+      title.className =
+        "manage-category-title";
+
+      title.innerHTML =
+        '<span class="manage-category-icon">' +
+        escapeHTML(
+          category.icon
+        ) +
+        "</span>" +
+        "<strong>" +
+        escapeHTML(
+          category.name
+        ) +
+        "</strong>";
+
+      const actions =
+        document.createElement(
+          "div"
+        );
+
+      actions.className =
+        "manage-category-actions";
+
+      const addButton =
+        document.createElement(
+          "button"
+        );
+
+      addButton.type =
+        "button";
+
+      addButton.className =
+        "manage-add-item";
+
+      addButton.textContent =
+        "+ Add item";
+
+      addButton.addEventListener(
+        "click",
+        event => {
+          event.stopPropagation();
+
+          addItem(
+            category.id
+          );
+        }
+      );
+
+      const deleteButton =
+        document.createElement(
+          "button"
+        );
+
+      deleteButton.type =
+        "button";
+
+      deleteButton.className =
+        "manage-delete-category";
+
+      deleteButton.textContent =
+        "Delete category";
+
+      deleteButton.addEventListener(
+        "click",
+        event => {
+          event.stopPropagation();
+
+          deleteCategory(
+            category.id
+          );
+        }
+      );
+
+      actions.appendChild(
+        addButton
+      );
+
+      actions.appendChild(
+        deleteButton
+      );
+
+      header.appendChild(
+        title
+      );
+
+      header.appendChild(
+        actions
+      );
+
+      wrapper.appendChild(
+        header
+      );
+
+      const itemsContainer =
+        document.createElement(
+          "div"
+        );
+
+      itemsContainer.className =
+        "manage-items";
+
+      category.items.forEach(
+        item => {
+          const data =
+            getItem(
+              category.id,
+              item
+            );
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+          row.className =
+            "manage-item";
+
+          if (!data.enabled) {
+            row.classList.add(
+              "disabled"
+            );
+          }
+
+          const itemName =
+            document.createElement(
+              "span"
+            );
+
+          itemName.textContent =
+            item;
+
+          const itemActions =
+            document.createElement(
+              "div"
+            );
+
+          itemActions.className =
+            "manage-item-actions";
+
+          const toggleButton =
+            document.createElement(
+              "button"
+            );
+
+          toggleButton.type =
+            "button";
+
+          toggleButton.className =
+            "toggle-item";
+
+          toggleButton.textContent =
+            data.enabled
+              ? "Disable"
+              : "Enable";
+
+          toggleButton.addEventListener(
+            "click",
+            event => {
+              event.stopPropagation();
+
+              toggleItem(
+                category.id,
+                item
+              );
+            }
+          );
+
+          const deleteItemButton =
+            document.createElement(
+              "button"
+            );
+
+          deleteItemButton.type =
+            "button";
+
+          deleteItemButton.className =
+            "delete-item";
+
+          deleteItemButton.textContent =
+            "Delete";
+
+          deleteItemButton.addEventListener(
+            "click",
+            event => {
+              event.stopPropagation();
+
+              deleteItem(
+                category.id,
+                item
+              );
+            }
+          );
+
+          itemActions.appendChild(
+            toggleButton
+          );
+
+          itemActions.appendChild(
+            deleteItemButton
+          );
+
+          row.appendChild(
+            itemName
+          );
+
+          row.appendChild(
+            itemActions
+          );
+
+          itemsContainer.appendChild(
+            row
+          );
+        }
+      );
+
+      wrapper.appendChild(
+        itemsContainer
+      );
+
+      container.appendChild(
+        wrapper
+      );
+    }
+  );
 }
 
 /* ============================================================
@@ -1809,6 +2343,10 @@ function deleteItem(categoryId, item) {
    ============================================================ */
 
 function setupEvents() {
+  /* ----------------------------------------------------------
+     EXPORT / IMPORT
+     ---------------------------------------------------------- */
+
   const exportButton =
     document.getElementById(
       "exportButton"
@@ -1823,6 +2361,34 @@ function setupEvents() {
     document.getElementById(
       "importFile"
     );
+
+  if (exportButton) {
+    exportButton.addEventListener(
+      "click",
+      exportData
+    );
+  }
+
+  if (
+    importButton &&
+    importFile
+  ) {
+    importButton.addEventListener(
+      "click",
+      () => importFile.click()
+    );
+  }
+
+  if (importFile) {
+    importFile.addEventListener(
+      "change",
+      importData
+    );
+  }
+
+  /* ----------------------------------------------------------
+     ITEM MODAL
+     ---------------------------------------------------------- */
 
   const closeModalButton =
     document.getElementById(
@@ -1859,42 +2425,6 @@ function setupEvents() {
       "overlay"
     );
 
-  const search =
-    document.getElementById(
-      "itemSearch"
-    );
-
-  const filter =
-    document.getElementById(
-      "itemStatusFilter"
-    );
-
-  const addCategoryButton =
-    document.getElementById(
-      "addCategoryButton"
-    );
-
-  if (exportButton) {
-    exportButton.addEventListener(
-      "click",
-      exportData
-    );
-  }
-
-  if (importButton && importFile) {
-    importButton.addEventListener(
-      "click",
-      () => importFile.click()
-    );
-  }
-
-  if (importFile) {
-    importFile.addEventListener(
-      "change",
-      importData
-    );
-  }
-
   if (closeModalButton) {
     closeModalButton.addEventListener(
       "click",
@@ -1919,21 +2449,30 @@ function setupEvents() {
   if (notButton) {
     notButton.addEventListener(
       "click",
-      () => chooseStatus("not")
+      () =>
+        chooseStatus(
+          "not"
+        )
     );
   }
 
   if (progressButton) {
     progressButton.addEventListener(
       "click",
-      () => chooseStatus("progress")
+      () =>
+        chooseStatus(
+          "progress"
+        )
     );
   }
 
   if (doneButton) {
     doneButton.addEventListener(
       "click",
-      () => chooseStatus("done")
+      () =>
+        chooseStatus(
+          "done"
+        )
     );
   }
 
@@ -1941,23 +2480,162 @@ function setupEvents() {
     overlay.addEventListener(
       "click",
       event => {
-        if (event.target === overlay) {
+        if (
+          event.target ===
+          overlay
+        ) {
           closeModal();
         }
       }
     );
   }
 
-  document.addEventListener(
-    "keydown",
-    event => {
-      if (
-        event.key === "Escape"
-      ) {
-        closeModal();
+  /* ----------------------------------------------------------
+     MANAGEMENT MODAL
+     ---------------------------------------------------------- */
+
+  const addCategoryButton =
+    document.getElementById(
+      "addCategoryButton"
+    );
+
+  const addItemButton =
+    document.getElementById(
+      "addItemButton"
+    );
+
+  const manageCurrentCategoryButton =
+    document.getElementById(
+      "manageCurrentCategoryButton"
+    );
+
+  const backToDashboardButton =
+    document.getElementById(
+      "backToDashboardButton"
+    );
+
+  const closeManagementButton =
+    document.getElementById(
+      "closeManagementButton"
+    );
+
+  const cancelManagementButton =
+    document.getElementById(
+      "cancelManagementButton"
+    );
+
+  const saveManagementButton =
+    document.getElementById(
+      "saveManagementButton"
+    );
+
+  const managementOverlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+  if (addCategoryButton) {
+    addCategoryButton.addEventListener(
+      "click",
+      () =>
+        openManagementModal(
+          "category"
+        )
+    );
+  }
+
+  if (addItemButton) {
+    addItemButton.addEventListener(
+      "click",
+      () => {
+        if (
+          currentCategory &&
+          currentCategory !==
+            "dashboard"
+        ) {
+          addItem(
+            currentCategory
+          );
+        }
       }
-    }
-  );
+    );
+  }
+
+  if (
+    manageCurrentCategoryButton
+  ) {
+    manageCurrentCategoryButton.addEventListener(
+      "click",
+      () => {
+        if (
+          currentCategory &&
+          currentCategory !==
+            "dashboard"
+        ) {
+          openManagementModal(
+            "item",
+            currentCategory
+          );
+        }
+      }
+    );
+  }
+
+  if (backToDashboardButton) {
+    backToDashboardButton.addEventListener(
+      "click",
+      showDashboard
+    );
+  }
+
+  if (closeManagementButton) {
+    closeManagementButton.addEventListener(
+      "click",
+      closeManagementModal
+    );
+  }
+
+  if (cancelManagementButton) {
+    cancelManagementButton.addEventListener(
+      "click",
+      closeManagementModal
+    );
+  }
+
+  if (saveManagementButton) {
+    saveManagementButton.addEventListener(
+      "click",
+      saveManagement
+    );
+  }
+
+  if (managementOverlay) {
+    managementOverlay.addEventListener(
+      "click",
+      event => {
+        if (
+          event.target ===
+          managementOverlay
+        ) {
+          closeManagementModal();
+        }
+      }
+    );
+  }
+
+  /* ----------------------------------------------------------
+     SEARCH
+     ---------------------------------------------------------- */
+
+  const search =
+    document.getElementById(
+      "itemSearch"
+    );
+
+  const filter =
+    document.getElementById(
+      "itemStatusFilter"
+    );
 
   if (search) {
     search.addEventListener(
@@ -1973,24 +2651,74 @@ function setupEvents() {
     );
   }
 
-  if (addCategoryButton) {
-    addCategoryButton.addEventListener(
-      "click",
-      addCategory
-    );
-  }
+  /* ----------------------------------------------------------
+     ENTER KEY IN MANAGEMENT MODAL
+     ---------------------------------------------------------- */
 
-  const manageButton =
+  const managementNameInput =
     document.getElementById(
-      "managePlannerButton"
+      "managementNameInput"
     );
 
-  if (manageButton) {
-    manageButton.addEventListener(
-      "click",
-      showManagePlanner
+  if (managementNameInput) {
+    managementNameInput.addEventListener(
+      "keydown",
+      event => {
+        if (
+          event.key ===
+          "Enter"
+        ) {
+          event.preventDefault();
+          saveManagement();
+        }
+      }
     );
   }
+
+  /* ----------------------------------------------------------
+     ESCAPE KEY
+     ---------------------------------------------------------- */
+
+  document.addEventListener(
+    "keydown",
+    event => {
+      if (
+        event.key !==
+        "Escape"
+      ) {
+        return;
+      }
+
+      const managementOverlay =
+        document.getElementById(
+          "managementOverlay"
+        );
+
+      const itemOverlay =
+        document.getElementById(
+          "overlay"
+        );
+
+      if (
+        managementOverlay &&
+        managementOverlay.classList.contains(
+          "active"
+        )
+      ) {
+        closeManagementModal();
+        return;
+      }
+
+      if (
+        itemOverlay &&
+        itemOverlay.classList.contains(
+          "active"
+        )
+      ) {
+        closeModal();
+      }
+    }
+  );
 }
 
 /* ============================================================
@@ -1999,10 +2727,15 @@ function setupEvents() {
 
 document.addEventListener(
   "DOMContentLoaded",
-  function () {
+  () => {
     loadData();
+
     setupEvents();
+
     buildNavigation();
+
+    renderManagePlanner();
+
     showDashboard();
   }
 );
