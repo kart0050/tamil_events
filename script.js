@@ -1,6 +1,5 @@
 /* ============================================================
 WEDDING PLANNER
-Complete fixed version
 ============================================================ */
 
 /* ============================================================
@@ -317,8 +316,10 @@ function loadData() {
 
 try {
 
-
-const stored = localStorage.getItem(STORAGE_KEY);
+```
+const stored = localStorage.getItem(
+  STORAGE_KEY
+);
 
 if (stored) {
 
@@ -343,12 +344,18 @@ if (stored) {
   savedData = {};
 
 }
+```
 
 } catch (error) {
 
-console.error("Could not load saved data:", error);
+```
+console.error(
+  "Could not load saved data:",
+  error
+);
 
 savedData = {};
+```
 
 }
 
@@ -362,26 +369,29 @@ function saveData() {
 
 try {
 
-
+```
 localStorage.setItem(
   STORAGE_KEY,
   JSON.stringify(savedData)
 );
 
 return true;
-
+```
 
 } catch (error) {
 
-
-console.error("Could not save data:", error);
+```
+console.error(
+  "Could not save data:",
+  error
+);
 
 alert(
   "Your data could not be saved in this browser."
 );
 
 return false;
-
+```
 
 }
 
@@ -395,7 +405,7 @@ function exportData() {
 
 try {
 
-
+```
 saveData();
 
 const backup = {
@@ -418,23 +428,29 @@ const blob = new Blob(
   }
 );
 
-const url = URL.createObjectURL(blob);
+const url = URL.createObjectURL(
+  blob
+);
 
-const link = document.createElement("a");
+const link =
+  document.createElement("a");
 
 link.href = url;
 
 const now = new Date();
 
-const year = now.getFullYear();
+const year =
+  now.getFullYear();
 
-const month = String(
-  now.getMonth() + 1
-).padStart(2, "0");
+const month =
+  String(
+    now.getMonth() + 1
+  ).padStart(2, "0");
 
-const day = String(
-  now.getDate()
-).padStart(2, "0");
+const day =
+  String(
+    now.getDate()
+  ).padStart(2, "0");
 
 link.download =
   "wedding-planner-backup-" +
@@ -445,27 +461,31 @@ link.download =
   day +
   ".json";
 
-document.body.appendChild(link);
+document.body.appendChild(
+  link
+);
 
 link.click();
 
-document.body.removeChild(link);
+document.body.removeChild(
+  link
+);
 
 setTimeout(
   function() {
-    URL.revokeObjectURL(url);
+
+    URL.revokeObjectURL(
+      url
+    );
+
   },
   1000
 );
-
-console.log(
-  "Wedding planner data exported successfully."
-);
-
+```
 
 } catch (error) {
 
-
+```
 console.error(
   "Export failed:",
   error
@@ -474,7 +494,7 @@ console.error(
 alert(
   "Sorry, the wedding planner data could not be exported."
 );
-
+```
 
 }
 
@@ -486,12 +506,8 @@ IMPORT DATA
 
 function importData(event) {
 
-const input = event.target;
-
 const file =
-input.files && input.files.length
-? input.files[0]
-: null;
+event.target.files[0];
 
 if (!file) {
 return;
@@ -503,131 +519,148 @@ if (
 .endsWith(".json")
 ) {
 
-
+```
 alert(
   "Please select a .json wedding planner backup file."
 );
 
-input.value = "";
+event.target.value = "";
 
 return;
-
+```
 
 }
 
-const reader = new FileReader();
+const reader =
+new FileReader();
 
-reader.onload = function(e) {
+reader.onload =
+function(e) {
 
+```
+  try {
 
-try {
+    const imported =
+      JSON.parse(
+        e.target.result
+      );
 
-  const imported =
-    JSON.parse(e.target.result);
+    let importedData = null;
 
-  let importedData = null;
+    if (
+      imported &&
+      imported.data &&
+      typeof imported.data === "object" &&
+      !Array.isArray(imported.data)
+    ) {
 
-  if (
-    imported &&
-    imported.data &&
-    typeof imported.data === "object" &&
-    !Array.isArray(imported.data)
-  ) {
+      importedData =
+        imported.data;
 
-    importedData = imported.data;
+    } else if (
+      imported &&
+      typeof imported === "object" &&
+      !Array.isArray(imported)
+    ) {
 
-  } else if (
-    imported &&
-    typeof imported === "object" &&
-    !Array.isArray(imported)
-  ) {
+      importedData =
+        imported;
 
-    importedData = imported;
+    }
 
-  }
+    if (
+      !importedData ||
+      typeof importedData !== "object" ||
+      Array.isArray(importedData)
+    ) {
 
-  if (
-    !importedData ||
-    typeof importedData !== "object" ||
-    Array.isArray(importedData)
-  ) {
+      throw new Error(
+        "Invalid backup format"
+      );
 
-    throw new Error(
-      "Invalid backup format"
+    }
+
+    const confirmed =
+      confirm(
+        "Import this wedding planner backup?\n\n" +
+        "Your current planner data will be replaced by the backup."
+      );
+
+    if (!confirmed) {
+
+      event.target.value = "";
+
+      return;
+
+    }
+
+    savedData =
+      importedData;
+
+    const saved =
+      saveData();
+
+    if (!saved) {
+
+      event.target.value = "";
+
+      return;
+
+    }
+
+    if (
+      currentCategory ===
+      "dashboard"
+    ) {
+
+      showDashboard();
+
+    } else {
+
+      showCategory(
+        currentCategory
+      );
+
+    }
+
+    alert(
+      "Wedding planner data imported successfully! ❤️"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Import failed:",
+      error
+    );
+
+    alert(
+      "This file is not a valid wedding planner backup."
     );
 
   }
 
-  const confirmed = confirm(
-    "Import this wedding planner backup?\n\n" +
-    "Your current planner data will be replaced by the backup."
-  );
-
-  if (!confirmed) {
-
-    input.value = "";
-
-    return;
-
-  }
-
-  savedData = importedData;
-
-  const saved = saveData();
-
-  if (!saved) {
-
-    input.value = "";
-
-    return;
-
-  }
-
-  if (currentCategory === "dashboard") {
-
-    showDashboard();
-
-  } else {
-
-    showCategory(currentCategory);
-
-  }
-
-  alert(
-    "Wedding planner data imported successfully! ❤️"
-  );
-
-} catch (error) {
-
-  console.error(
-    "Import failed:",
-    error
-  );
-
-  alert(
-    "This file is not a valid wedding planner backup."
-  );
-
-}
-
-input.value = "";
-
+  event.target.value = "";
 
 };
+```
 
-reader.onerror = function() {
+reader.onerror =
+function() {
 
+```
+  alert(
+    "Could not read the selected file."
+  );
 
-alert(
-  "Could not read the selected file."
+  event.target.value = "";
+
+};
+```
+
+reader.readAsText(
+file
 );
-
-input.value = "";
-
-
-};
-
-reader.readAsText(file);
 
 }
 
@@ -635,9 +668,16 @@ reader.readAsText(file);
 ITEM KEY
 ============================================================ */
 
-function itemKey(categoryId, item) {
+function itemKey(
+categoryId,
+item
+) {
 
-return categoryId + "::" + item;
+return (
+categoryId +
+"::" +
+item
+);
 
 }
 
@@ -645,9 +685,13 @@ return categoryId + "::" + item;
 GET ITEM
 ============================================================ */
 
-function getItem(categoryId, item) {
+function getItem(
+categoryId,
+item
+) {
 
-const key = itemKey(
+const key =
+itemKey(
 categoryId,
 item
 );
@@ -657,16 +701,18 @@ if (
 typeof savedData[key] !== "object"
 ) {
 
-
+```
 savedData[key] = {
+
   status: "not",
   vendor: "",
   price: "",
   deadline: "",
   link: "",
   notes: ""
-};
 
+};
+```
 
 }
 
@@ -699,7 +745,9 @@ NAVIGATION
 function buildNavigation() {
 
 const nav =
-document.getElementById("navigation");
+document.getElementById(
+"navigation"
+);
 
 if (!nav) {
 return;
@@ -708,7 +756,9 @@ return;
 nav.innerHTML = "";
 
 const dashboard =
-document.createElement("button");
+document.createElement(
+"button"
+);
 
 dashboard.type = "button";
 
@@ -723,18 +773,27 @@ currentCategory === "dashboard"
 dashboard.addEventListener(
 "click",
 function() {
-showDashboard();
+
+```
+  showDashboard();
+
 }
+```
+
 );
 
-nav.appendChild(dashboard);
+nav.appendChild(
+dashboard
+);
 
 categories.forEach(
 function(category) {
 
-
+```
   const button =
-    document.createElement("button");
+    document.createElement(
+      "button"
+    );
 
   button.type = "button";
 
@@ -751,14 +810,20 @@ function(category) {
   button.addEventListener(
     "click",
     function() {
-      showCategory(category.id);
+
+      showCategory(
+        category.id
+      );
+
     }
   );
 
-  nav.appendChild(button);
+  nav.appendChild(
+    button
+  );
 
 }
-
+```
 
 );
 
@@ -770,7 +835,8 @@ DASHBOARD
 
 function showDashboard() {
 
-currentCategory = "dashboard";
+currentCategory =
+"dashboard";
 
 const dashboardPage =
 document.getElementById(
@@ -783,11 +849,21 @@ document.getElementById(
 );
 
 if (dashboardPage) {
-dashboardPage.style.display = "block";
+
+```
+dashboardPage.style.display =
+  "block";
+```
+
 }
 
 if (categoryPage) {
-categoryPage.style.display = "none";
+
+```
+categoryPage.style.display =
+  "none";
+```
+
 }
 
 buildNavigation();
@@ -816,7 +892,7 @@ let progress = 0;
 categories.forEach(
 function(category) {
 
-
+```
   category.items.forEach(
     function(item) {
 
@@ -828,19 +904,27 @@ function(category) {
           item
         );
 
-      if (data.status === "done") {
+      if (
+        data.status === "done"
+      ) {
+
         done++;
+
       }
 
-      if (data.status === "progress") {
+      if (
+        data.status === "progress"
+      ) {
+
         progress++;
+
       }
 
     }
   );
 
 }
-
+```
 
 );
 
@@ -882,30 +966,57 @@ document.getElementById(
 );
 
 if (totalCount) {
-totalCount.textContent = total;
+
+```
+totalCount.textContent =
+  total;
+```
+
 }
 
 if (doneCount) {
-doneCount.textContent = done;
+
+```
+doneCount.textContent =
+  done;
+```
+
 }
 
 if (progressCount) {
-progressCount.textContent = progress;
+
+```
+progressCount.textContent =
+  progress;
+```
+
 }
 
 if (categoryCount) {
+
+```
 categoryCount.textContent =
-categories.length;
+  categories.length;
+```
+
 }
 
 if (overallPercent) {
+
+```
 overallPercent.textContent =
-percent + "%";
+  percent + "%";
+```
+
 }
 
 if (overallFill) {
+
+```
 overallFill.style.width =
-percent + "%";
+  percent + "%";
+```
+
 }
 
 const grid =
@@ -922,23 +1033,30 @@ grid.innerHTML = "";
 categories.forEach(
 function(category) {
 
-
+```
   const stats =
-    getCategoryStats(category);
+    getCategoryStats(
+      category
+    );
 
   const card =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   card.className =
     "summary-card";
 
   card.innerHTML =
+
     '<div class="summary-icon">' +
       category.icon +
     "</div>" +
 
     "<h3>" +
-      escapeHTML(category.name) +
+      escapeHTML(
+        category.name
+      ) +
     "</h3>" +
 
     "<p>" +
@@ -949,22 +1067,30 @@ function(category) {
     "</p>" +
 
     '<div class="summary-bar">' +
+
       '<div style="width:' +
         stats.percent +
       '%"></div>' +
+
     "</div>";
 
   card.addEventListener(
     "click",
     function() {
-      showCategory(category.id);
+
+      showCategory(
+        category.id
+      );
+
     }
   );
 
-  grid.appendChild(card);
+  grid.appendChild(
+    card
+  );
 
 }
-
+```
 
 );
 
@@ -979,15 +1105,20 @@ function showCategory(id) {
 const category =
 categories.find(
 function(c) {
-return c.id === id;
-}
+
+```
+    return c.id === id;
+
+  }
 );
+```
 
 if (!category) {
 return;
 }
 
-currentCategory = id;
+currentCategory =
+id;
 
 const dashboardPage =
 document.getElementById(
@@ -1000,11 +1131,21 @@ document.getElementById(
 );
 
 if (dashboardPage) {
-dashboardPage.style.display = "none";
+
+```
+dashboardPage.style.display =
+  "none";
+```
+
 }
 
 if (categoryPage) {
-categoryPage.style.display = "block";
+
+```
+categoryPage.style.display =
+  "block";
+```
+
 }
 
 const categoryTitle =
@@ -1014,12 +1155,12 @@ document.getElementById(
 
 if (categoryTitle) {
 
-
+```
 categoryTitle.textContent =
   category.icon +
   " " +
   category.name;
-
+```
 
 }
 
@@ -1034,11 +1175,19 @@ document.getElementById(
 );
 
 if (search) {
+
+```
 search.value = "";
+```
+
 }
 
 if (filter) {
+
+```
 filter.value = "all";
+```
+
 }
 
 buildNavigation();
@@ -1056,7 +1205,9 @@ behavior: "smooth"
 CATEGORY STATS
 ============================================================ */
 
-function getCategoryStats(category) {
+function getCategoryStats(
+category
+) {
 
 const total =
 category.items.length;
@@ -1066,19 +1217,23 @@ let done = 0;
 category.items.forEach(
 function(item) {
 
-
+```
   const data =
     getItem(
       category.id,
       item
     );
 
-  if (data.status === "done") {
+  if (
+    data.status === "done"
+  ) {
+
     done++;
+
   }
 
 }
-
+```
 
 );
 
@@ -1095,6 +1250,8 @@ done: done,
 percent: percent
 };
 
+}
+
 /* ============================================================
 RENDER CATEGORY
 ============================================================ */
@@ -1104,16 +1261,22 @@ function renderCategory() {
 const category =
 categories.find(
 function(c) {
-return c.id === currentCategory;
-}
+
+```
+    return c.id === currentCategory;
+
+  }
 );
+```
 
 if (!category) {
 return;
 }
 
 const stats =
-getCategoryStats(category);
+getCategoryStats(
+category
+);
 
 const categoryPercent =
 document.getElementById(
@@ -1127,22 +1290,22 @@ document.getElementById(
 
 if (categoryPercent) {
 
-
+```
 categoryPercent.textContent =
   stats.percent + "%";
-
+```
 
 }
 
 if (categoryProgressText) {
 
-
+```
 categoryProgressText.textContent =
   stats.done +
   " / " +
   stats.total +
   " completed";
-
+```
 
 }
 
@@ -1151,19 +1314,21 @@ document.getElementById(
 "itemSearch"
 );
 
-const filterInput =
+const statusInput =
 document.getElementById(
 "itemStatusFilter"
 );
 
 const search =
 searchInput
-? searchInput.value.toLowerCase().trim()
+? searchInput.value
+.toLowerCase()
+.trim()
 : "";
 
 const status =
-filterInput
-? filterInput.value
+statusInput
+? statusInput.value
 : "all";
 
 const grid =
@@ -1182,31 +1347,34 @@ let visible = 0;
 category.items.forEach(
 function(item) {
 
-
+```
   const data =
     getItem(
       category.id,
       item
     );
 
-  const itemName =
-    String(item).toLowerCase();
+  const itemText =
+    String(item)
+      .toLowerCase();
 
-  const vendor =
+  const vendorText =
     String(
       data.vendor || ""
-    ).toLowerCase();
+    )
+      .toLowerCase();
 
-  const notes =
+  const notesText =
     String(
       data.notes || ""
-    ).toLowerCase();
+    )
+      .toLowerCase();
 
   const matchesSearch =
     !search ||
-    itemName.includes(search) ||
-    vendor.includes(search) ||
-    notes.includes(search);
+    itemText.includes(search) ||
+    vendorText.includes(search) ||
+    notesText.includes(search);
 
   const matchesStatus =
     status === "all" ||
@@ -1216,26 +1384,36 @@ function(item) {
     !matchesSearch ||
     !matchesStatus
   ) {
+
     return;
+
   }
 
   visible++;
 
   const card =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   card.className =
-    "item-card" +
-    (
-      data.status === "done"
-        ? " done"
-        : ""
+    "item-card";
+
+  if (
+    data.status === "done"
+  ) {
+
+    card.classList.add(
+      "done"
     );
+
+  }
 
   let statusText =
     "Not started";
 
-  let statusClass = "";
+  let statusClass =
+    "";
 
   if (
     data.status === "progress"
@@ -1268,21 +1446,26 @@ function(item) {
 
     vendorHTML =
       "<p>👤 " +
-      escapeHTML(data.vendor) +
+      escapeHTML(
+        data.vendor
+      ) +
       "</p>";
 
   }
 
-  let deadlineHTML = "";
+  let deadlineHTML =
+    "";
 
   if (data.deadline) {
 
     deadlineHTML =
       '<div class="item-meta">' +
-      "📅 " +
-      escapeHTML(
-        formatDate(data.deadline)
-      ) +
+        "📅 " +
+        escapeHTML(
+          formatDate(
+            data.deadline
+          )
+        ) +
       "</div>";
 
   }
@@ -1323,10 +1506,12 @@ function(item) {
     }
   );
 
-  grid.appendChild(card);
+  grid.appendChild(
+    card
+  );
 
 }
-
+```
 
 );
 
@@ -1337,19 +1522,19 @@ document.getElementById(
 
 if (emptyMessage) {
 
-
+```
 emptyMessage.style.display =
   visible > 0
     ? "none"
     : "block";
-
+```
 
 }
 
 }
 
 /* ============================================================
-MODAL
+OPEN MODAL
 ============================================================ */
 
 function openModal(
@@ -1365,9 +1550,13 @@ item: item
 const category =
 categories.find(
 function(c) {
-return c.id === categoryId;
-}
+
+```
+    return c.id === categoryId;
+
+  }
 );
+```
 
 if (!category) {
 return;
@@ -1415,38 +1604,66 @@ document.getElementById(
 );
 
 if (modalCategory) {
+
+```
 modalCategory.textContent =
-category.name;
+  category.name;
+```
+
 }
 
 if (modalTitle) {
+
+```
 modalTitle.textContent =
-item;
+  item;
+```
+
 }
 
 if (vendorInput) {
+
+```
 vendorInput.value =
-data.vendor;
+  data.vendor;
+```
+
 }
 
 if (priceInput) {
+
+```
 priceInput.value =
-data.price;
+  data.price;
+```
+
 }
 
 if (deadlineInput) {
+
+```
 deadlineInput.value =
-data.deadline;
+  data.deadline;
+```
+
 }
 
 if (linkInput) {
+
+```
 linkInput.value =
-data.link;
+  data.link;
+```
+
 }
 
 if (notesInput) {
+
+```
 notesInput.value =
-data.notes;
+  data.notes;
+```
+
 }
 
 modalStatus =
@@ -1461,11 +1678,11 @@ document.getElementById(
 
 if (overlay) {
 
-
+```
 overlay.classList.add(
   "active"
 );
-
+```
 
 }
 
@@ -1484,15 +1701,16 @@ document.getElementById(
 
 if (overlay) {
 
-
+```
 overlay.classList.remove(
   "active"
 );
-
+```
 
 }
 
-currentItem = null;
+currentItem =
+null;
 
 }
 
@@ -1500,9 +1718,12 @@ currentItem = null;
 CHOOSE STATUS
 ============================================================ */
 
-function chooseStatus(status) {
+function chooseStatus(
+status
+) {
 
-modalStatus = status;
+modalStatus =
+status;
 
 updateStatusButtons();
 
@@ -1531,34 +1752,34 @@ document.getElementById(
 
 if (notButton) {
 
-
+```
 notButton.classList.toggle(
   "active",
   modalStatus === "not"
 );
-
+```
 
 }
 
 if (progressButton) {
 
-
+```
 progressButton.classList.toggle(
   "active",
   modalStatus === "progress"
 );
-
+```
 
 }
 
 if (doneButton) {
 
-
+```
 doneButton.classList.toggle(
   "active",
   modalStatus === "done"
 );
-
+```
 
 }
 
@@ -1641,17 +1862,17 @@ if (
 currentCategory === "dashboard"
 ) {
 
-
+```
 showDashboard();
-
+```
 
 } else {
 
-
+```
 showCategory(
   currentCategory
 );
-
+```
 
 }
 
@@ -1673,17 +1894,23 @@ currentItem.categoryId,
 currentItem.item
 );
 
-data.status = "not";
+data.status =
+"not";
 
-data.vendor = "";
+data.vendor =
+"";
 
-data.price = "";
+data.price =
+"";
 
-data.deadline = "";
+data.deadline =
+"";
 
-data.link = "";
+data.link =
+"";
 
-data.notes = "";
+data.notes =
+"";
 
 saveData();
 
@@ -1693,193 +1920,20 @@ if (
 currentCategory === "dashboard"
 ) {
 
-
+```
 showDashboard();
-
+```
 
 } else {
 
-
+```
 showCategory(
   currentCategory
 );
-
-
-}
+```
 
 }
 
-/* ============================================================
-FORMAT DATE
-============================================================ */
-
-function formatDate(date) {
-
-if (!date) {
-return "";
 }
 
-const d =
-new Date(
-date + "T00:00:00"
-);
-
-if (
-Number.isNaN(
-d.getTime()
-)
-) {
-return date;
-}
-
-return d.toLocaleDateString(
-"en-DK",
-{
-day: "numeric",
-month: "short",
-year: "numeric"
-}
-);
-
-}
-
-/* ============================================================
-ESCAPE HTML
-============================================================ */
-
-function escapeHTML(value) {
-
-return String(value)
-
-
-.replace(
-  /&/g,
-  "&amp;"
-)
-
-.replace(
-  /</g,
-  "&lt;"
-)
-
-.replace(
-  />/g,
-  "&gt;"
-)
-
-.replace(
-  /"/g,
-  "&quot;"
-)
-
-.replace(
-  /'/g,
-  "&#039;"
-);
-
-
-}
-
-/* ============================================================
-EVENTS
-============================================================ */
-
-document.addEventListener(
-"DOMContentLoaded",
-function() {
-
-
-const search =
-  document.getElementById(
-    "itemSearch"
-  );
-
-const filter =
-  document.getElementById(
-    "itemStatusFilter"
-  );
-
-const importFile =
-  document.getElementById(
-    "importFile"
-  );
-
-const overlay =
-  document.getElementById(
-    "overlay"
-  );
-
-if (search) {
-
-  search.addEventListener(
-    "input",
-    function() {
-      renderCategory();
-    }
-  );
-
-}
-
-if (filter) {
-
-  filter.addEventListener(
-    "change",
-    function() {
-      renderCategory();
-    }
-  );
-
-}
-
-if (importFile) {
-
-  importFile.addEventListener(
-    "change",
-    importData
-  );
-
-}
-
-if (overlay) {
-
-  overlay.addEventListener(
-    "click",
-    function(event) {
-
-      if (
-        event.target === overlay
-      ) {
-
-        closeModal();
-
-      }
-
-    }
-  );
-
-}
-
-document.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (
-      event.key === "Escape"
-    ) {
-
-      closeModal();
-
-    }
-
-  }
-);
-
-loadData();
-
-buildNavigation();
-
-showDashboard();
-
-
-}
-);
+/* ===================*
