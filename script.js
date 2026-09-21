@@ -1,9 +1,8 @@
 /* ============================================================
-   WEDDING PLANNER
+   TAMIL WEDDING PLANNER
    ============================================================ */
 
-const STORAGE_KEY = "tamilWeddingPlanner_v5";
-
+const STORAGE_KEY = "tamilWeddingPlanner_v6";
 
 /* ============================================================
    DEFAULT CATEGORIES
@@ -14,12 +13,8 @@ const defaultCategories = [
     id: "guests",
     name: "Gæster",
     icon: "👥",
-    items: [
-      "Palaharam (Goodie bag)",
-      "Hotels"
-    ]
+    items: ["Palaharam (Goodie bag)", "Hotels"]
   },
-
   {
     id: "toej",
     name: "Tøj",
@@ -34,7 +29,6 @@ const defaultCategories = [
       "Tøj til preshoot"
     ]
   },
-
   {
     id: "reception",
     name: "Reception Songs",
@@ -47,7 +41,6 @@ const defaultCategories = [
       "After Party"
     ]
   },
-
   {
     id: "sign-card",
     name: "Wedding Sign + Card",
@@ -58,26 +51,18 @@ const defaultCategories = [
       "Kopuramevents.fr"
     ]
   },
-
   {
     id: "kovil-decoration",
     name: "Decoration Kovil",
     icon: "🛕",
-    items: [
-      "Kopuramevents.fr"
-    ]
+    items: ["Kopuramevents.fr"]
   },
-
   {
     id: "accessories",
     name: "Accessories",
     icon: "✨",
-    items: [
-      "360 Booth",
-      "Bridal Corner Setup"
-    ]
+    items: ["360 Booth", "Bridal Corner Setup"]
   },
-
   {
     id: "henna",
     name: "Henna Fest",
@@ -90,7 +75,6 @@ const defaultCategories = [
       "Visual Eyes"
     ]
   },
-
   {
     id: "kalyaanam",
     name: "Kalyaanam Veedu",
@@ -103,7 +87,6 @@ const defaultCategories = [
       "Ranyasarees"
     ]
   },
-
   {
     id: "makeup",
     name: "Makeup + Hair",
@@ -114,7 +97,6 @@ const defaultCategories = [
       "thiva_mua"
     ]
   },
-
   {
     id: "jewellery",
     name: "Jewellery",
@@ -132,26 +114,18 @@ const defaultCategories = [
       "Nails"
     ]
   },
-
   {
     id: "melam",
     name: "Melam",
     icon: "🥁",
-    items: [
-      "Chinna Mams",
-      "Mami ?"
-    ]
+    items: ["Chinna Mams", "Mami ?"]
   },
-
   {
     id: "maalai",
     name: "Maalai",
     icon: "🌸",
-    items: [
-      "Herning Maalai"
-    ]
+    items: ["Herning Maalai"]
   },
-
   {
     id: "food",
     name: "Food",
@@ -165,17 +139,12 @@ const defaultCategories = [
       "Vaathali og Pako"
     ]
   },
-
   {
     id: "cake",
     name: "Bryllupskage",
     icon: "🎂",
-    items: [
-      "Wedding Cake",
-      "Lighter + Knife"
-    ]
+    items: ["Wedding Cake", "Lighter + Knife"]
   },
-
   {
     id: "preshoot",
     name: "Preshoot",
@@ -189,7 +158,6 @@ const defaultCategories = [
       "Swiss (Interlaken)"
     ]
   },
-
   {
     id: "photo-video",
     name: "Photo + Video",
@@ -200,7 +168,6 @@ const defaultCategories = [
       "infocus"
     ]
   },
-
   {
     id: "dj",
     name: "DJ",
@@ -213,7 +180,6 @@ const defaultCategories = [
       "Resound"
     ]
   },
-
   {
     id: "hall",
     name: "Hall",
@@ -231,7 +197,6 @@ const defaultCategories = [
       "Decoration"
     ]
   },
-
   {
     id: "entertainment",
     name: "Entertainment",
@@ -250,17 +215,12 @@ const defaultCategories = [
       "Aalborg Kootam"
     ]
   },
-
   {
     id: "operator",
     name: "Operator",
     icon: "🎛️",
-    items: [
-      "Lighting",
-      "Projector"
-    ]
+    items: ["Lighting", "Projector"]
   },
-
   {
     id: "host",
     name: "Host",
@@ -273,16 +233,12 @@ const defaultCategories = [
       "Games"
     ]
   },
-
   {
     id: "games",
     name: "Games (Yndlingsting)",
     icon: "🎲",
-    items: [
-      "Palaharam (Goodie bag)"
-    ]
+    items: ["Palaharam (Goodie bag)"]
   },
-
   {
     id: "speech",
     name: "Speech",
@@ -295,9 +251,8 @@ const defaultCategories = [
   }
 ];
 
-
 /* ============================================================
-   DATA
+   STATE
    ============================================================ */
 
 let categories = [];
@@ -309,10 +264,13 @@ let modalStatus = "not";
 
 let managementMode = "category";
 
-
 /* ============================================================
    HELPERS
    ============================================================ */
+
+function cloneDefaults() {
+  return structuredClone(defaultCategories);
+}
 
 function createId(text) {
   return (
@@ -326,7 +284,6 @@ function createId(text) {
   );
 }
 
-
 function escapeHTML(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -336,208 +293,133 @@ function escapeHTML(value) {
     .replace(/'/g, "&#039;");
 }
 
-
 function formatDate(dateString) {
-  if (!dateString) {
-    return "";
-  }
+  if (!dateString) return "";
 
-  const date =
-    new Date(dateString + "T00:00:00");
+  const date = new Date(dateString + "T00:00:00");
 
   if (Number.isNaN(date.getTime())) {
     return dateString;
   }
 
-  return date.toLocaleDateString(
-    "da-DK",
-    {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    }
-  );
+  return date.toLocaleDateString("da-DK", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
 }
 
+function showToast(message, type = "success") {
+  const toast = document.getElementById("toast");
+
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.className = "toast active " + type;
+
+  clearTimeout(showToast.timer);
+
+  showToast.timer = setTimeout(() => {
+    toast.classList.remove("active");
+  }, 2800);
+}
 
 /* ============================================================
-   LOAD DATA
+   LOAD / SAVE
    ============================================================ */
 
 function loadData() {
   try {
-    const stored =
-      localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(STORAGE_KEY);
 
     if (!stored) {
-      categories =
-        structuredClone(defaultCategories);
-
+      categories = cloneDefaults();
       savedData = {};
-
       saveData();
-
       return;
     }
 
-    const parsed =
-      JSON.parse(stored);
+    const parsed = JSON.parse(stored);
 
     if (
       parsed &&
       typeof parsed === "object" &&
-      !Array.isArray(parsed) &&
       Array.isArray(parsed.categories)
     ) {
-      categories =
-        parsed.categories;
-
+      categories = parsed.categories;
       savedData =
         parsed.savedData &&
         typeof parsed.savedData === "object"
           ? parsed.savedData
           : {};
     } else {
-      categories =
-        structuredClone(defaultCategories);
-
+      categories = cloneDefaults();
       savedData = {};
-
-      saveData();
     }
-
   } catch (error) {
+    console.error("Could not load planner:", error);
 
-    console.error(
-      "Could not load planner data:",
-      error
-    );
-
-    categories =
-      structuredClone(defaultCategories);
-
+    categories = cloneDefaults();
     savedData = {};
   }
 
   normaliseCategories();
 }
 
-
-/* ============================================================
-   NORMALISE CATEGORIES
-   ============================================================ */
-
 function normaliseCategories() {
-
   if (!Array.isArray(categories)) {
     categories = [];
   }
 
-  categories =
-    categories
-      .filter(
-        category =>
-          category &&
-          typeof category === "object"
-      )
-      .map(category => {
-
-        return {
-
-          id:
-            category.id ||
-            createId(
-              category.name ||
-              "category"
-            ),
-
-          name:
-            String(
-              category.name ||
-              "Unnamed category"
-            ),
-
-          icon:
-            String(
-              category.icon ||
-              "📋"
-            ),
-
-          items:
-            Array.isArray(category.items)
-              ? category.items.map(
-                  item => String(item)
-                )
-              : []
-        };
-
-      });
+  categories = categories
+    .filter(category => category && typeof category === "object")
+    .map(category => ({
+      id: category.id || createId(category.name || "category"),
+      name: String(category.name || "Unnamed category"),
+      icon: String(category.icon || "📋"),
+      items: Array.isArray(category.items)
+        ? category.items.map(item => String(item))
+        : []
+    }));
 }
 
-
-/* ============================================================
-   SAVE DATA
-   ============================================================ */
-
 function saveData() {
-
   try {
-
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
-        version: 5,
+        version: 6,
         categories,
         savedData
       })
     );
 
     return true;
-
   } catch (error) {
+    console.error("Could not save planner:", error);
 
-    console.error(
-      "Could not save planner data:",
-      error
-    );
-
-    alert(
-      "Your planner data could not be saved in this browser."
+    showToast(
+      "Your planner could not be saved in this browser.",
+      "error"
     );
 
     return false;
   }
 }
 
-
 /* ============================================================
-   ITEM KEY
+   ITEM DATA
    ============================================================ */
 
 function itemKey(categoryId, item) {
   return categoryId + "::" + item;
 }
 
-
-/* ============================================================
-   GET ITEM
-   ============================================================ */
-
 function getItem(categoryId, item) {
+  const key = itemKey(categoryId, item);
 
-  const key =
-    itemKey(
-      categoryId,
-      item
-    );
-
-  if (
-    !savedData[key] ||
-    typeof savedData[key] !== "object"
-  ) {
-
+  if (!savedData[key] || typeof savedData[key] !== "object") {
     savedData[key] = {
-
       status: "not",
       vendor: "",
       price: "",
@@ -545,404 +427,85 @@ function getItem(categoryId, item) {
       link: "",
       notes: "",
       enabled: true
-
     };
   }
 
-  const data =
-    savedData[key];
+  const data = savedData[key];
 
-  data.status =
-    ["not", "progress", "done"]
-      .includes(data.status)
-      ? data.status
-      : "not";
+  if (!["not", "progress", "done"].includes(data.status)) {
+    data.status = "not";
+  }
 
-  data.vendor =
-    data.vendor || "";
+  data.vendor = data.vendor || "";
+  data.price = data.price || "";
+  data.deadline = data.deadline || "";
+  data.link = data.link || "";
+  data.notes = data.notes || "";
 
-  data.price =
-    data.price || "";
-
-  data.deadline =
-    data.deadline || "";
-
-  data.link =
-    data.link || "";
-
-  data.notes =
-    data.notes || "";
-
-  if (
-    typeof data.enabled !== "boolean"
-  ) {
+  if (typeof data.enabled !== "boolean") {
     data.enabled = true;
   }
 
   return data;
 }
 
-
-/* ============================================================
-   EXPORT
-   ============================================================ */
-
-function exportData() {
-
-  try {
-
-    saveData();
-
-    const backup = {
-
-      app:
-        "Tamil Wedding Planner",
-
-      version:
-        5,
-
-      exportedAt:
-        new Date().toISOString(),
-
-      categories,
-      savedData
-
-    };
-
-    const json =
-      JSON.stringify(
-        backup,
-        null,
-        2
-      );
-
-    const blob =
-      new Blob(
-        [json],
-        {
-          type: "application/json"
-        }
-      );
-
-    const url =
-      URL.createObjectURL(blob);
-
-    const link =
-      document.createElement("a");
-
-    link.href = url;
-
-    const now =
-      new Date();
-
-    const filename =
-      "wedding-planner-backup-" +
-      now.getFullYear() +
-      "-" +
-      String(
-        now.getMonth() + 1
-      ).padStart(2, "0") +
-      "-" +
-      String(
-        now.getDate()
-      ).padStart(2, "0") +
-      ".json";
-
-    link.download =
-      filename;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-    setTimeout(
-      () => URL.revokeObjectURL(url),
-      1000
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Export failed:",
-      error
-    );
-
-    alert(
-      "Sorry, the planner data could not be exported."
-    );
-  }
-}
-
-
-/* ============================================================
-   IMPORT
-   ============================================================ */
-
-function importData(event) {
-
-  const file =
-    event.target.files[0];
-
-  if (!file) {
-    return;
-  }
-
-  const reader =
-    new FileReader();
-
-  reader.onload =
-    function (e) {
-
-      try {
-
-        const imported =
-          JSON.parse(
-            e.target.result
-          );
-
-        let importedCategories =
-          null;
-
-        let importedSavedData =
-          null;
-
-
-        if (
-          imported &&
-          Array.isArray(
-            imported.categories
-          )
-        ) {
-
-          importedCategories =
-            imported.categories;
-
-          importedSavedData =
-            imported.savedData || {};
-
-        }
-
-
-        else if (
-          imported &&
-          imported.data &&
-          typeof imported.data === "object"
-        ) {
-
-          importedCategories =
-            structuredClone(
-              defaultCategories
-            );
-
-          importedSavedData =
-            imported.data;
-        }
-
-
-        if (
-          !Array.isArray(
-            importedCategories
-          ) ||
-          !importedSavedData ||
-          typeof importedSavedData !== "object"
-        ) {
-
-          throw new Error(
-            "Invalid backup"
-          );
-        }
-
-
-        const confirmed =
-          confirm(
-            "Import this wedding planner backup?\n\n" +
-            "Your current planner data will be replaced."
-          );
-
-        if (!confirmed) {
-
-          event.target.value =
-            "";
-
-          return;
-        }
-
-
-        categories =
-          importedCategories;
-
-        savedData =
-          importedSavedData;
-
-        normaliseCategories();
-
-
-        if (saveData()) {
-
-          showDashboard();
-
-          alert(
-            "Wedding planner data imported successfully! ❤️"
-          );
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Import failed:",
-          error
-        );
-
-        alert(
-          "This file is not a valid wedding planner backup."
-        );
-      }
-
-      event.target.value =
-        "";
-    };
-
-
-  reader.onerror =
-    function () {
-
-      alert(
-        "Could not read the selected file."
-      );
-
-      event.target.value =
-        "";
-    };
-
-
-  reader.readAsText(file);
-}
-
-
 /* ============================================================
    NAVIGATION
    ============================================================ */
 
 function buildNavigation() {
+  const nav = document.getElementById("navigation");
 
-  const nav =
-    document.getElementById(
-      "navigation"
+  if (!nav) return;
+
+  nav.innerHTML = "";
+
+  const dashboard = document.createElement("button");
+
+  dashboard.type = "button";
+  dashboard.className =
+    currentCategory === "dashboard" ? "active" : "";
+  dashboard.innerHTML = "🏠 <span>Dashboard</span>";
+
+  dashboard.addEventListener("click", showDashboard);
+
+  nav.appendChild(dashboard);
+
+  categories.forEach(category => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className =
+      currentCategory === category.id ? "active" : "";
+
+    button.innerHTML =
+      escapeHTML(category.icon) +
+      " <span>" +
+      escapeHTML(category.name) +
+      "</span>";
+
+    button.addEventListener("click", () =>
+      showCategory(category.id)
     );
 
-  if (!nav) {
-    return;
-  }
-
-  nav.innerHTML =
-    "";
-
-
-  const dashboard =
-    document.createElement("button");
-
-  dashboard.type =
-    "button";
-
-  dashboard.textContent =
-    "🏠 Dashboard";
-
-  dashboard.className =
-    currentCategory === "dashboard"
-      ? "active"
-      : "";
-
-  dashboard.addEventListener(
-    "click",
-    showDashboard
-  );
-
-  nav.appendChild(
-    dashboard
-  );
-
-
-  categories.forEach(
-    category => {
-
-      const button =
-        document.createElement("button");
-
-      button.type =
-        "button";
-
-      button.textContent =
-        category.icon +
-        " " +
-        category.name;
-
-      button.className =
-        currentCategory === category.id
-          ? "active"
-          : "";
-
-      button.addEventListener(
-        "click",
-        () => showCategory(
-          category.id
-        )
-      );
-
-      nav.appendChild(
-        button
-      );
-
-    }
-  );
+    nav.appendChild(button);
+  });
 }
 
-
 /* ============================================================
-   DASHBOARD
+   PAGE NAVIGATION
    ============================================================ */
 
 function showDashboard() {
+  currentCategory = "dashboard";
 
-  currentCategory =
-    "dashboard";
+  const dashboardPage = document.getElementById("dashboardPage");
+  const categoryPage = document.getElementById("categoryPage");
 
-
-  const dashboardPage =
-    document.getElementById(
-      "dashboardPage"
-    );
-
-  const categoryPage =
-    document.getElementById(
-      "categoryPage"
-    );
-
-  const managePage =
-    document.getElementById(
-      "managePage"
-    );
-
-
-  if (dashboardPage) {
-    dashboardPage.style.display =
-      "block";
-  }
-
-  if (categoryPage) {
-    categoryPage.style.display =
-      "none";
-  }
-
-  if (managePage) {
-    managePage.style.display =
-      "none";
-  }
-
+  if (dashboardPage) dashboardPage.style.display = "block";
+  if (categoryPage) categoryPage.style.display = "none";
 
   buildNavigation();
-
   renderDashboard();
 
   window.scrollTo({
@@ -951,293 +514,34 @@ function showDashboard() {
   });
 }
 
-
-/* ============================================================
-   DASHBOARD RENDER
-   ============================================================ */
-
-function renderDashboard() {
-
-  let total = 0;
-  let done = 0;
-  let progress = 0;
-
-
-  categories.forEach(
-    category => {
-
-      category.items.forEach(
-        item => {
-
-          const data =
-            getItem(
-              category.id,
-              item
-            );
-
-          if (!data.enabled) {
-            return;
-          }
-
-          total++;
-
-
-          if (
-            data.status === "done"
-          ) {
-            done++;
-          }
-
-
-          if (
-            data.status === "progress"
-          ) {
-            progress++;
-          }
-
-        }
-      );
-
-    }
-  );
-
-
-  const percent =
-    total > 0
-      ? Math.round(
-          (done / total) * 100
-        )
-      : 0;
-
-
-  const totalCount =
-    document.getElementById(
-      "totalCount"
-    );
-
-  const doneCount =
-    document.getElementById(
-      "doneCount"
-    );
-
-  const progressCount =
-    document.getElementById(
-      "progressCount"
-    );
-
-  const categoryCount =
-    document.getElementById(
-      "categoryCount"
-    );
-
-  const overallPercent =
-    document.getElementById(
-      "overallPercent"
-    );
-
-  const overallFill =
-    document.getElementById(
-      "overallFill"
-    );
-
-
-  if (totalCount) {
-    totalCount.textContent =
-      total;
-  }
-
-  if (doneCount) {
-    doneCount.textContent =
-      done;
-  }
-
-  if (progressCount) {
-    progressCount.textContent =
-      progress;
-  }
-
-  if (categoryCount) {
-    categoryCount.textContent =
-      categories.length;
-  }
-
-  if (overallPercent) {
-    overallPercent.textContent =
-      percent + "%";
-  }
-
-  if (overallFill) {
-    overallFill.style.width =
-      percent + "%";
-  }
-
-
-  const grid =
-    document.getElementById(
-      "summaryGrid"
-    );
-
-  if (!grid) {
-    return;
-  }
-
-  grid.innerHTML =
-    "";
-
-
-  categories.forEach(
-    category => {
-
-      const stats =
-        getCategoryStats(
-          category
-        );
-
-
-      const card =
-        document.createElement("div");
-
-      card.className =
-        "summary-card";
-
-
-      card.innerHTML =
-        '<div class="summary-icon">' +
-          escapeHTML(
-            category.icon
-          ) +
-        "</div>" +
-
-        "<h3>" +
-          escapeHTML(
-            category.name
-          ) +
-        "</h3>" +
-
-        "<p>" +
-          stats.done +
-          " / " +
-          stats.total +
-          " completed" +
-        "</p>" +
-
-        '<div class="summary-bar">' +
-          '<div style="width:' +
-            stats.percent +
-            '%"></div>' +
-        "</div>";
-
-
-      card.addEventListener(
-        "click",
-        () => showCategory(
-          category.id
-        )
-      );
-
-
-      grid.appendChild(
-        card
-      );
-
-    }
-  );
-}
-
-
-/* ============================================================
-   CATEGORY
-   ============================================================ */
-
 function showCategory(id) {
+  const category = categories.find(c => c.id === id);
 
-  const category =
-    categories.find(
-      c => c.id === id
-    );
+  if (!category) return;
 
-  if (!category) {
-    return;
+  currentCategory = id;
+
+  const dashboardPage = document.getElementById("dashboardPage");
+  const categoryPage = document.getElementById("categoryPage");
+
+  if (dashboardPage) dashboardPage.style.display = "none";
+  if (categoryPage) categoryPage.style.display = "block";
+
+  const title = document.getElementById("categoryTitle");
+
+  if (title) {
+    title.textContent =
+      category.icon + " " + category.name;
   }
 
+  const search = document.getElementById("itemSearch");
+  const filter = document.getElementById("itemStatusFilter");
 
-  currentCategory =
-    id;
-
-
-  const dashboardPage =
-    document.getElementById(
-      "dashboardPage"
-    );
-
-  const categoryPage =
-    document.getElementById(
-      "categoryPage"
-    );
-
-  const managePage =
-    document.getElementById(
-      "managePage"
-    );
-
-
-  if (dashboardPage) {
-    dashboardPage.style.display =
-      "none";
-  }
-
-  if (categoryPage) {
-    categoryPage.style.display =
-      "block";
-  }
-
-  if (managePage) {
-    managePage.style.display =
-      "none";
-  }
-
-
-  const categoryTitle =
-    document.getElementById(
-      "categoryTitle"
-    );
-
-
-  if (categoryTitle) {
-
-    categoryTitle.textContent =
-      category.icon +
-      " " +
-      category.name;
-  }
-
-
-  const search =
-    document.getElementById(
-      "itemSearch"
-    );
-
-  const filter =
-    document.getElementById(
-      "itemStatusFilter"
-    );
-
-
-  if (search) {
-    search.value =
-      "";
-  }
-
-  if (filter) {
-    filter.value =
-      "all";
-  }
-
+  if (search) search.value = "";
+  if (filter) filter.value = "all";
 
   buildNavigation();
-
   renderCategory();
-
 
   window.scrollTo({
     top: 0,
@@ -1245,1320 +549,1137 @@ function showCategory(id) {
   });
 }
 
-
 /* ============================================================
-   CATEGORY STATS
+   DASHBOARD
    ============================================================ */
 
-function getCategoryStats(category) {
-
+function renderDashboard() {
   let total = 0;
   let done = 0;
+  let progress = 0;
 
+  categories.forEach(category => {
+    category.items.forEach(item => {
+      const data = getItem(category.id, item);
 
-  category.items.forEach(
-    item => {
-
-      const data =
-        getItem(
-          category.id,
-          item
-        );
-
-
-      if (!data.enabled) {
-        return;
-      }
-
+      if (!data.enabled) return;
 
       total++;
 
-
-      if (
-        data.status === "done"
-      ) {
-        done++;
-      }
-
-    }
-  );
-
+      if (data.status === "done") done++;
+      if (data.status === "progress") progress++;
+    });
+  });
 
   const percent =
-    total > 0
-      ? Math.round(
-          (done / total) * 100
-        )
-      : 0;
+    total > 0 ? Math.round((done / total) * 100) : 0;
 
+  const totalCount = document.getElementById("totalCount");
+  const doneCount = document.getElementById("doneCount");
+  const progressCount = document.getElementById("progressCount");
+  const categoryCount = document.getElementById("categoryCount");
+  const overallPercent = document.getElementById("overallPercent");
+  const overallFill = document.getElementById("overallFill");
+
+  if (totalCount) totalCount.textContent = total;
+  if (doneCount) doneCount.textContent = done;
+  if (progressCount) progressCount.textContent = progress;
+  if (categoryCount) categoryCount.textContent = categories.length;
+  if (overallPercent) overallPercent.textContent = percent + "%";
+  if (overallFill) overallFill.style.width = percent + "%";
+
+  const grid = document.getElementById("summaryGrid");
+
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  categories.forEach(category => {
+    const stats = getCategoryStats(category);
+
+    const card = document.createElement("button");
+
+    card.type = "button";
+    card.className = "summary-card";
+
+    card.innerHTML = `
+      <div class="summary-icon">${escapeHTML(category.icon)}</div>
+
+      <h3>${escapeHTML(category.name)}</h3>
+
+      <p>${stats.done} / ${stats.total} completed</p>
+
+      <div class="summary-bar">
+        <div style="width:${stats.percent}%"></div>
+      </div>
+    `;
+
+    card.addEventListener("click", () =>
+      showCategory(category.id)
+    );
+
+    grid.appendChild(card);
+  });
+}
+
+function getCategoryStats(category) {
+  let total = 0;
+  let done = 0;
+
+  category.items.forEach(item => {
+    const data = getItem(category.id, item);
+
+    if (!data.enabled) return;
+
+    total++;
+
+    if (data.status === "done") {
+      done++;
+    }
+  });
 
   return {
     total,
     done,
-    percent
+    percent:
+      total > 0
+        ? Math.round((done / total) * 100)
+        : 0
   };
 }
 
-
 /* ============================================================
-   CATEGORY RENDER
+   CATEGORY
    ============================================================ */
 
 function renderCategory() {
+  const category = categories.find(
+    c => c.id === currentCategory
+  );
 
-  const category =
-    categories.find(
-      c => c.id === currentCategory
-    );
+  if (!category) return;
 
-
-  if (!category) {
-    return;
-  }
-
-
-  const stats =
-    getCategoryStats(
-      category
-    );
-
+  const stats = getCategoryStats(category);
 
   const categoryPercent =
-    document.getElementById(
-      "categoryPercent"
-    );
+    document.getElementById("categoryPercent");
 
   const categoryProgressText =
-    document.getElementById(
-      "categoryProgressText"
-    );
-
+    document.getElementById("categoryProgressText");
 
   if (categoryPercent) {
-
-    categoryPercent.textContent =
-      stats.percent + "%";
+    categoryPercent.textContent = stats.percent + "%";
   }
-
 
   if (categoryProgressText) {
-
     categoryProgressText.textContent =
-      stats.done +
-      " / " +
-      stats.total +
-      " completed";
+      stats.done + " / " + stats.total + " completed";
   }
-
 
   const searchInput =
-    document.getElementById(
-      "itemSearch"
-    );
+    document.getElementById("itemSearch");
 
   const statusInput =
-    document.getElementById(
-      "itemStatusFilter"
-    );
+    document.getElementById("itemStatusFilter");
 
+  const search = searchInput
+    ? searchInput.value.toLowerCase().trim()
+    : "";
 
-  const search =
-    searchInput
-      ? searchInput.value
-          .toLowerCase()
-          .trim()
-      : "";
+  const status = statusInput
+    ? statusInput.value
+    : "all";
 
+  const grid = document.getElementById("itemsGrid");
 
-  const status =
-    statusInput
-      ? statusInput.value
-      : "all";
+  if (!grid) return;
 
-
-  const grid =
-    document.getElementById(
-      "itemsGrid"
-    );
-
-
-  if (!grid) {
-    return;
-  }
-
-
-  grid.innerHTML =
-    "";
-
+  grid.innerHTML = "";
 
   let visible = 0;
 
+  category.items.forEach(item => {
+    const data = getItem(category.id, item);
 
-  category.items.forEach(
-    item => {
+    if (!data.enabled) return;
 
-      const data =
-        getItem(
-          category.id,
-          item
-        );
+    const searchable =
+      (
+        item +
+        " " +
+        data.vendor +
+        " " +
+        data.notes
+      ).toLowerCase();
 
+    const matchesSearch =
+      !search || searchable.includes(search);
 
-      if (!data.enabled) {
-        return;
-      }
+    const matchesStatus =
+      status === "all" ||
+      data.status === status;
 
-
-      const itemText =
-        item.toLowerCase();
-
-
-      const vendorText =
-        String(
-          data.vendor || ""
-        ).toLowerCase();
-
-
-      const notesText =
-        String(
-          data.notes || ""
-        ).toLowerCase();
-
-
-      const matchesSearch =
-        !search ||
-        itemText.includes(search) ||
-        vendorText.includes(search) ||
-        notesText.includes(search);
-
-
-      const matchesStatus =
-        status === "all" ||
-        data.status === status;
-
-
-      if (
-        !matchesSearch ||
-        !matchesStatus
-      ) {
-        return;
-      }
-
-
-      visible++;
-
-
-      const card =
-        document.createElement("div");
-
-      card.className =
-        "item-card";
-
-
-      if (
-        data.status === "done"
-      ) {
-        card.classList.add(
-          "done"
-        );
-      }
-
-
-      let statusText =
-        "Not started";
-
-      let statusClass =
-        "";
-
-
-      if (
-        data.status === "progress"
-      ) {
-
-        statusText =
-          "In progress";
-
-        statusClass =
-          " progress";
-      }
-
-
-      if (
-        data.status === "done"
-      ) {
-
-        statusText =
-          "Completed";
-
-        statusClass =
-          " done";
-      }
-
-
-      const vendorHTML =
-        data.vendor
-          ? "<p>👤 " +
-            escapeHTML(
-              data.vendor
-            ) +
-            "</p>"
-
-          : "<p>Click to add details</p>";
-
-
-      const deadlineHTML =
-        data.deadline
-
-          ? '<div class="item-meta">📅 ' +
-            escapeHTML(
-              formatDate(
-                data.deadline
-              )
-            ) +
-            "</div>"
-
-          : "";
-
-
-      card.innerHTML =
-
-        '<div class="item-top">' +
-
-          '<div class="item-icon">' +
-            escapeHTML(
-              category.icon
-            ) +
-          "</div>" +
-
-          '<div class="item-status' +
-            statusClass +
-          '">' +
-            statusText +
-          "</div>" +
-
-        "</div>" +
-
-        "<h3>" +
-          escapeHTML(item) +
-        "</h3>" +
-
-        vendorHTML +
-
-        deadlineHTML;
-
-
-      card.addEventListener(
-        "click",
-        () => openModal(
-          category.id,
-          item
-        )
-      );
-
-
-      grid.appendChild(
-        card
-      );
-
+    if (!matchesSearch || !matchesStatus) {
+      return;
     }
-  );
 
+    visible++;
 
-  const emptyMessage =
-    document.getElementById(
-      "emptyMessage"
+    const card = document.createElement("button");
+
+    card.type = "button";
+    card.className =
+      "item-card" +
+      (data.status === "done" ? " done" : "");
+
+    let statusText = "Not started";
+    let statusClass = "";
+
+    if (data.status === "progress") {
+      statusText = "In progress";
+      statusClass = " progress";
+    }
+
+    if (data.status === "done") {
+      statusText = "Completed";
+      statusClass = " done";
+    }
+
+    const vendorHTML = data.vendor
+      ? `<p>👤 ${escapeHTML(data.vendor)}</p>`
+      : `<p class="item-placeholder">Click to add details</p>`;
+
+    const deadlineHTML = data.deadline
+      ? `
+        <div class="item-meta">
+          📅 ${escapeHTML(formatDate(data.deadline))}
+        </div>
+      `
+      : "";
+
+    card.innerHTML = `
+      <div class="item-top">
+        <div class="item-icon">
+          ${escapeHTML(category.icon)}
+        </div>
+
+        <div class="item-status${statusClass}">
+          ${statusText}
+        </div>
+      </div>
+
+      <h3>${escapeHTML(item)}</h3>
+
+      ${vendorHTML}
+
+      ${deadlineHTML}
+    `;
+
+    card.addEventListener("click", () =>
+      openModal(category.id, item)
     );
 
+    grid.appendChild(card);
+  });
+
+  const emptyMessage =
+    document.getElementById("emptyMessage");
 
   if (emptyMessage) {
-
     emptyMessage.style.display =
-      visible > 0
-        ? "none"
-        : "block";
+      visible > 0 ? "none" : "block";
   }
 }
-
 
 /* ============================================================
    ITEM MODAL
    ============================================================ */
 
-function openModal(
-  categoryId,
-  item
-) {
+function openModal(categoryId, item) {
+  const category = categories.find(
+    c => c.id === categoryId
+  );
+
+  if (!category) return;
 
   currentItem = {
     categoryId,
     item
   };
 
+  const data = getItem(categoryId, item);
 
-  const category =
-    categories.find(
-      c => c.id === categoryId
-    );
+  document.getElementById("modalCategory").textContent =
+    category.name;
 
+  document.getElementById("modalTitle").textContent =
+    item;
 
-  if (!category) {
-    return;
-  }
+  document.getElementById("vendorInput").value =
+    data.vendor;
 
+  document.getElementById("priceInput").value =
+    data.price;
 
-  const data =
-    getItem(
-      categoryId,
-      item
-    );
+  document.getElementById("deadlineInput").value =
+    data.deadline;
 
+  document.getElementById("linkInput").value =
+    data.link;
 
-  const modalCategory =
-    document.getElementById(
-      "modalCategory"
-    );
+  document.getElementById("notesInput").value =
+    data.notes;
 
-  const modalTitle =
-    document.getElementById(
-      "modalTitle"
-    );
-
-  const vendorInput =
-    document.getElementById(
-      "vendorInput"
-    );
-
-  const priceInput =
-    document.getElementById(
-      "priceInput"
-    );
-
-  const deadlineInput =
-    document.getElementById(
-      "deadlineInput"
-    );
-
-  const linkInput =
-    document.getElementById(
-      "linkInput"
-    );
-
-  const notesInput =
-    document.getElementById(
-      "notesInput"
-    );
-
-
-  if (modalCategory) {
-    modalCategory.textContent =
-      category.name;
-  }
-
-
-  if (modalTitle) {
-    modalTitle.textContent =
-      item;
-  }
-
-
-  if (vendorInput) {
-    vendorInput.value =
-      data.vendor;
-  }
-
-
-  if (priceInput) {
-    priceInput.value =
-      data.price;
-  }
-
-
-  if (deadlineInput) {
-    deadlineInput.value =
-      data.deadline;
-  }
-
-
-  if (linkInput) {
-    linkInput.value =
-      data.link;
-  }
-
-
-  if (notesInput) {
-    notesInput.value =
-      data.notes;
-  }
-
-
-  modalStatus =
-    data.status;
-
+  modalStatus = data.status;
 
   updateStatusButtons();
+  updateDisableButton();
 
+  const deleteArea =
+    document.getElementById("customItemDeleteArea");
 
-  const overlay =
-    document.getElementById(
-      "overlay"
-    );
+  if (deleteArea) {
+    deleteArea.style.display =
+      isCustomItem(categoryId, item)
+        ? "block"
+        : "none";
+  }
 
+  const overlay = document.getElementById("overlay");
 
   if (overlay) {
-    overlay.classList.add(
-      "active"
-    );
+    overlay.classList.add("active");
+    document.body.classList.add("modal-open");
   }
 }
-
-
-/* ============================================================
-   CLOSE ITEM MODAL
-   ============================================================ */
 
 function closeModal() {
-
-  const overlay =
-    document.getElementById(
-      "overlay"
-    );
-
+  const overlay = document.getElementById("overlay");
 
   if (overlay) {
-    overlay.classList.remove(
-      "active"
-    );
+    overlay.classList.remove("active");
   }
 
+  document.body.classList.remove("modal-open");
 
-  currentItem =
-    null;
+  currentItem = null;
 }
-
 
 /* ============================================================
    STATUS
    ============================================================ */
 
 function chooseStatus(status) {
-
-  modalStatus =
-    status;
-
+  modalStatus = status;
   updateStatusButtons();
 }
 
-
 function updateStatusButtons() {
+  const buttons = {
+    not: document.getElementById("notButton"),
+    progress: document.getElementById("progressButton"),
+    done: document.getElementById("doneButton")
+  };
 
-  const notButton =
-    document.getElementById(
-      "notButton"
-    );
+  Object.entries(buttons).forEach(([status, button]) => {
+    if (!button) return;
 
-  const progressButton =
-    document.getElementById(
-      "progressButton"
-    );
-
-  const doneButton =
-    document.getElementById(
-      "doneButton"
-    );
-
-
-  if (notButton) {
-
-    notButton.classList.toggle(
+    button.classList.toggle(
       "active",
-      modalStatus === "not"
+      modalStatus === status
     );
-  }
 
-
-  if (progressButton) {
-
-    progressButton.classList.toggle(
-      "active",
-      modalStatus === "progress"
+    button.setAttribute(
+      "aria-pressed",
+      modalStatus === status
+        ? "true"
+        : "false"
     );
-  }
-
-
-  if (doneButton) {
-
-    doneButton.classList.toggle(
-      "active",
-      modalStatus === "done"
-    );
-  }
+  });
 }
-
 
 /* ============================================================
    SAVE ITEM
    ============================================================ */
 
 function saveItem() {
+  if (!currentItem) return;
 
-  if (!currentItem) {
-    return;
-  }
+  const data = getItem(
+    currentItem.categoryId,
+    currentItem.item
+  );
 
-
-  const data =
-    getItem(
-      currentItem.categoryId,
-      currentItem.item
-    );
-
-
-  const vendorInput =
-    document.getElementById(
-      "vendorInput"
-    );
-
-  const priceInput =
-    document.getElementById(
-      "priceInput"
-    );
-
-  const deadlineInput =
-    document.getElementById(
-      "deadlineInput"
-    );
-
-  const linkInput =
-    document.getElementById(
-      "linkInput"
-    );
-
-  const notesInput =
-    document.getElementById(
-      "notesInput"
-    );
-
-
-  data.status =
-    modalStatus;
-
+  data.status = modalStatus;
 
   data.vendor =
-    vendorInput
-      ? vendorInput.value.trim()
-      : "";
-
+    document.getElementById("vendorInput").value.trim();
 
   data.price =
-    priceInput
-      ? priceInput.value.trim()
-      : "";
-
+    document.getElementById("priceInput").value.trim();
 
   data.deadline =
-    deadlineInput
-      ? deadlineInput.value
-      : "";
-
+    document.getElementById("deadlineInput").value;
 
   data.link =
-    linkInput
-      ? linkInput.value.trim()
-      : "";
-
+    document.getElementById("linkInput").value.trim();
 
   data.notes =
-    notesInput
-      ? notesInput.value.trim()
-      : "";
+    document.getElementById("notesInput").value.trim();
 
+  if (saveData()) {
+    closeModal();
 
-  data.enabled =
-    true;
+    if (currentCategory === "dashboard") {
+      showDashboard();
+    } else {
+      renderCategory();
+      renderDashboard();
+      buildNavigation();
+    }
 
-
-  saveData();
-
-
-  closeModal();
-
-
-  if (
-    currentCategory === "dashboard"
-  ) {
-
-    showDashboard();
-
-  } else {
-
-    showCategory(
-      currentCategory
-    );
+    showToast("Changes saved");
   }
 }
-
 
 /* ============================================================
    CLEAR ITEM
    ============================================================ */
 
 function clearItem() {
+  if (!currentItem) return;
 
-  if (!currentItem) {
-    return;
+  const confirmed = confirm(
+    "Clear all details for this item?"
+  );
+
+  if (!confirmed) return;
+
+  const data = getItem(
+    currentItem.categoryId,
+    currentItem.item
+  );
+
+  data.status = "not";
+  data.vendor = "";
+  data.price = "";
+  data.deadline = "";
+  data.link = "";
+  data.notes = "";
+
+  if (saveData()) {
+    closeModal();
+
+    if (currentCategory === "dashboard") {
+      showDashboard();
+    } else {
+      renderCategory();
+      renderDashboard();
+    }
+
+    showToast("Item details cleared");
   }
+}
 
+/* ============================================================
+   ENABLE / DISABLE ITEM
+   ============================================================ */
 
-  const data =
-    getItem(
-      currentItem.categoryId,
-      currentItem.item
+function updateDisableButton() {
+  if (!currentItem) return;
+
+  const button =
+    document.getElementById("disableItemButton");
+
+  const description =
+    document.getElementById(
+      "itemManagementDescription"
     );
 
+  if (!button) return;
 
-  data.status =
-    "not";
+  const data = getItem(
+    currentItem.categoryId,
+    currentItem.item
+  );
 
-  data.vendor =
-    "";
+  if (data.enabled) {
+    button.textContent = "Hide item";
+    button.classList.remove("restore");
+    
+    if (description) {
+      description.textContent =
+        "Hide this item from the planner without deleting its details.";
+    }
+  } else {
+    button.textContent = "Show item";
+    button.classList.add("restore");
 
-  data.price =
-    "";
+    if (description) {
+      description.textContent =
+        "This item is currently hidden. Show it again to return it to the planner.";
+    }
+  }
+}
 
-  data.deadline =
-    "";
+function toggleItemVisibility() {
+  if (!currentItem) return;
 
-  data.link =
-    "";
+  const data = getItem(
+    currentItem.categoryId,
+    currentItem.item
+  );
 
-  data.notes =
-    "";
+  data.enabled = !data.enabled;
 
+  if (!saveData()) return;
 
-  saveData();
+  const wasEnabled = data.enabled;
 
   closeModal();
 
-
-  if (
-    currentCategory === "dashboard"
-  ) {
-
-    showDashboard();
-
-  } else {
-
-    showCategory(
-      currentCategory
-    );
-  }
-}
-
-
-/* ============================================================
-   MANAGE PLANNER PAGE
-   ============================================================ */
-
-function showManagePlanner() {
-
-  currentCategory =
-    "manage";
-
-
-  const dashboardPage =
-    document.getElementById(
-      "dashboardPage"
-    );
-
-  const categoryPage =
-    document.getElementById(
-      "categoryPage"
-    );
-
-  const managePage =
-    document.getElementById(
-      "managePage"
-    );
-
-
-  if (dashboardPage) {
-    dashboardPage.style.display =
-      "none";
-  }
-
-  if (categoryPage) {
-    categoryPage.style.display =
-      "none";
-  }
-
-  if (managePage) {
-    managePage.style.display =
-      "block";
-  }
-
-
-  buildNavigation();
-
-  renderManagePlanner();
-
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-
-/* ============================================================
-   RENDER MANAGE PLANNER
-   ============================================================ */
-
-function renderManagePlanner() {
-
-  const container =
-    document.getElementById(
-      "manageCategories"
-    );
-
-
-  if (!container) {
-    return;
-  }
-
-
-  container.innerHTML =
-    "";
-
-
-  categories.forEach(
-    category => {
-
-      const wrapper =
-        document.createElement("div");
-
-
-      wrapper.className =
-        "manage-category";
-
-
-      wrapper.innerHTML =
-
-        '<div class="manage-category-header">' +
-
-          '<div>' +
-
-            '<span class="manage-category-icon">' +
-              escapeHTML(
-                category.icon
-              ) +
-            "</span>" +
-
-            "<strong>" +
-              escapeHTML(
-                category.name
-              ) +
-            "</strong>" +
-
-          "</div>" +
-
-        "</div>" +
-
-
-        '<div class="manage-items"></div>';
-
-
-      const itemsContainer =
-        wrapper.querySelector(
-          ".manage-items"
-        );
-
-
-      category.items.forEach(
-        item => {
-
-          const row =
-            document.createElement("div");
-
-
-          row.className =
-            "manage-item";
-
-
-          row.innerHTML =
-            "<span>" +
-              escapeHTML(
-                item
-              ) +
-            "</span>";
-
-
-          itemsContainer.appendChild(
-            row
-          );
-
-        }
-      );
-
-
-      container.appendChild(
-        wrapper
-      );
-
-    }
-  );
-}
-
-
-/* ============================================================
-   OPEN MANAGEMENT MODAL
-   ============================================================ */
-
-function openManagementModal(
-  mode = "category"
-) {
-
-  managementMode =
-    mode;
-
-
-  const overlay =
-    document.getElementById(
-      "managementOverlay"
-    );
-
-  const title =
-    document.getElementById(
-      "managementModalTitle"
-    );
-
-  const nameInput =
-    document.getElementById(
-      "managementNameInput"
-    );
-
-  const iconInput =
-    document.getElementById(
-      "managementIconInput"
-    );
-
-  const iconGroup =
-    document.getElementById(
-      "iconGroup"
-    );
-
-  const saveButton =
-    document.getElementById(
-      "saveManagementButton"
-    );
-
-
-  if (
-    !overlay ||
-    !title ||
-    !nameInput ||
-    !saveButton
-  ) {
-    return;
-  }
-
-
-  nameInput.value =
-    "";
-
-  if (iconInput) {
-    iconInput.value =
-      "";
-  }
-
-
-  if (
-    mode === "item"
-  ) {
-
-    const category =
-      categories.find(
-        c =>
-          c.id ===
-          currentCategory
-      );
-
-
-    if (!category) {
-      return;
-    }
-
-
-    title.textContent =
-      "Add item";
-
-
-    nameInput.placeholder =
-      "e.g. Wedding flowers";
-
-
-    if (iconGroup) {
-      iconGroup.style.display =
-        "none";
-    }
-
-
-    saveButton.textContent =
-      "Add item";
-
-  } else {
-
-    title.textContent =
-      "Add category";
-
-
-    nameInput.placeholder =
-      "e.g. Flowers";
-
-
-    if (iconGroup) {
-      iconGroup.style.display =
-        "block";
-    }
-
-
-    saveButton.textContent =
-      "Add category";
-  }
-
-
-  overlay.classList.add(
-    "active"
-  );
-
-
-  setTimeout(
-    () => nameInput.focus(),
-    100
-  );
-}
-
-
-/* ============================================================
-   CLOSE MANAGEMENT MODAL
-   ============================================================ */
-
-function closeManagementModal() {
-
-  const overlay =
-    document.getElementById(
-      "managementOverlay"
-    );
-
-
-  if (overlay) {
-
-    overlay.classList.remove(
-      "active"
-    );
-  }
-}
-
-
-/* ============================================================
-   SAVE MANAGEMENT
-   ============================================================ */
-
-function saveManagement() {
-
-  const nameInput =
-    document.getElementById(
-      "managementNameInput"
-    );
-
-  const iconInput =
-    document.getElementById(
-      "managementIconInput"
-    );
-
-
-  if (!nameInput) {
-    return;
-  }
-
-
-  const name =
-    nameInput.value.trim();
-
-
-  if (!name) {
-
-    alert(
-      managementMode === "item"
-        ? "Please enter an item name."
-        : "Please enter a category name."
-    );
-
-    nameInput.focus();
-
-    return;
-  }
-
-
-  /* ==========================================================
-     ADD ITEM
-     ========================================================== */
-
-  if (
-    managementMode === "item"
-  ) {
-
-    const category =
-      categories.find(
-        c =>
-          c.id ===
-          currentCategory
-      );
-
-
-    if (!category) {
-      return;
-    }
-
-
-    const exists =
-      category.items.some(
-        existing =>
-          existing.toLowerCase() ===
-          name.toLowerCase()
-      );
-
-
-    if (exists) {
-
-      alert(
-        "This item already exists."
-      );
-
-      nameInput.focus();
-
-      return;
-    }
-
-
-    category.items.push(
-      name
-    );
-
-
-    getItem(
-      category.id,
-      name
-    );
-
-
-    if (!saveData()) {
-      return;
-    }
-
-
-    closeManagementModal();
-
-
-    renderCategory();
-
-    renderDashboard();
-
-    buildNavigation();
-
-
-    return;
-  }
-
-
-  /* ==========================================================
-     ADD CATEGORY
-     ========================================================== */
-
-  const exists =
-    categories.some(
-      category =>
-        category.name
-          .toLowerCase() ===
-        name.toLowerCase()
-    );
-
-
-  if (exists) {
-
-    alert(
-      "A category with this name already exists."
-    );
-
-    nameInput.focus();
-
-    return;
-  }
-
-
-  const icon =
-    iconInput
-      ? iconInput.value.trim()
-      : "";
-
-
-  const category = {
-
-    id:
-      createId(name),
-
-    name:
-      name,
-
-    icon:
-      icon || "📋",
-
-    items:
-      []
-
-  };
-
-
-  categories.push(
-    category
-  );
-
-
-  if (!saveData()) {
-    return;
-  }
-
-
-  closeManagementModal();
-
-
-  renderManagePlanner();
-
+  renderCategory();
   renderDashboard();
 
-  buildNavigation();
-
-
-  alert(
-    '"' +
-    name +
-    '" has been added successfully.'
+  showToast(
+    wasEnabled
+      ? "Item shown again"
+      : "Item hidden from planner"
   );
 }
 
-
 /* ============================================================
-   ADD ITEM BUTTON
+   CUSTOM ITEM DELETE
    ============================================================ */
 
-function addItemToCurrentCategory() {
+function isCustomItem(categoryId, item) {
+  const defaultCategory =
+    defaultCategories.find(
+      category => category.id === categoryId
+    );
+
+  if (!defaultCategory) {
+    return true;
+  }
+
+  return !defaultCategory.items.includes(item);
+}
+
+function deleteCustomItem() {
+  if (!currentItem) return;
 
   if (
-    !categories.some(
-      c =>
-        c.id ===
-        currentCategory
+    !isCustomItem(
+      currentItem.categoryId,
+      currentItem.item
     )
   ) {
     return;
   }
 
+  const confirmed = confirm(
+    `Delete "${currentItem.item}" permanently?`
+  );
 
-  openManagementModal(
-    "item"
+  if (!confirmed) return;
+
+  const category = categories.find(
+    c => c.id === currentItem.categoryId
+  );
+
+  if (!category) return;
+
+  category.items = category.items.filter(
+    item => item !== currentItem.item
+  );
+
+  delete savedData[
+    itemKey(
+      currentItem.categoryId,
+      currentItem.item
+    )
+  ];
+
+  if (saveData()) {
+    closeModal();
+
+    renderCategory();
+    renderDashboard();
+    buildNavigation();
+
+    showToast("Custom item deleted");
+  }
+}
+
+/* ============================================================
+   MANAGEMENT MODAL
+   ============================================================ */
+
+function openManagementModal(mode = "category") {
+  managementMode = mode;
+
+  const overlay =
+    document.getElementById("managementOverlay");
+
+  const title =
+    document.getElementById("managementModalTitle");
+
+  const nameInput =
+    document.getElementById("managementNameInput");
+
+  const iconInput =
+    document.getElementById("managementIconInput");
+
+  const iconGroup =
+    document.getElementById("iconGroup");
+
+  const saveButton =
+    document.getElementById("saveManagementButton");
+
+  if (!overlay || !title || !nameInput || !saveButton) {
+    return;
+  }
+
+  nameInput.value = "";
+
+  if (iconInput) {
+    iconInput.value = "";
+  }
+
+  if (mode === "item") {
+    const category = categories.find(
+      c => c.id === currentCategory
+    );
+
+    if (!category) return;
+
+    title.textContent = "Add item";
+    nameInput.placeholder = "e.g. Wedding flowers";
+
+    if (iconGroup) {
+      iconGroup.style.display = "none";
+    }
+
+    saveButton.textContent = "Add item";
+  } else {
+    title.textContent = "Add category";
+    nameInput.placeholder = "e.g. Flowers";
+
+    if (iconGroup) {
+      iconGroup.style.display = "block";
+    }
+
+    saveButton.textContent = "Add category";
+  }
+
+  overlay.classList.add("active");
+  document.body.classList.add("modal-open");
+
+  setTimeout(() => nameInput.focus(), 100);
+}
+
+function closeManagementModal() {
+  const overlay =
+    document.getElementById("managementOverlay");
+
+  if (overlay) {
+    overlay.classList.remove("active");
+  }
+
+  document.body.classList.remove("modal-open");
+}
+
+function saveManagement() {
+  const nameInput =
+    document.getElementById("managementNameInput");
+
+  const iconInput =
+    document.getElementById("managementIconInput");
+
+  if (!nameInput) return;
+
+  const name = nameInput.value.trim();
+
+  if (!name) {
+    showToast(
+      managementMode === "item"
+        ? "Enter an item name."
+        : "Enter a category name.",
+      "error"
+    );
+
+    nameInput.focus();
+    return;
+  }
+
+  /* ADD ITEM */
+
+  if (managementMode === "item") {
+    const category = categories.find(
+      c => c.id === currentCategory
+    );
+
+    if (!category) return;
+
+    const exists = category.items.some(
+      item =>
+        item.toLowerCase() ===
+        name.toLowerCase()
+    );
+
+    if (exists) {
+      showToast("This item already exists.", "error");
+      nameInput.focus();
+      return;
+    }
+
+    category.items.push(name);
+
+    getItem(category.id, name);
+
+    if (!saveData()) return;
+
+    closeManagementModal();
+
+    renderCategory();
+    renderDashboard();
+
+    showToast(`"${name}" added`);
+    return;
+  }
+
+  /* ADD CATEGORY */
+
+  const exists = categories.some(
+    category =>
+      category.name.toLowerCase() ===
+      name.toLowerCase()
+  );
+
+  if (exists) {
+    showToast(
+      "A category with this name already exists.",
+      "error"
+    );
+
+    nameInput.focus();
+    return;
+  }
+
+  const icon =
+    iconInput && iconInput.value.trim()
+      ? iconInput.value.trim()
+      : "📋";
+
+  categories.push({
+    id: createId(name),
+    name,
+    icon,
+    items: []
+  });
+
+  if (!saveData()) return;
+
+  closeManagementModal();
+
+  buildNavigation();
+  renderDashboard();
+
+  showToast(`"${name}" added`);
+}
+
+/* ============================================================
+   EXPORT
+   ============================================================ */
+
+function exportData() {
+  try {
+    saveData();
+
+    const backup = {
+      app: "Tamil Wedding Planner",
+      version: 6,
+      exportedAt: new Date().toISOString(),
+      categories,
+      savedData
+    };
+
+    const blob = new Blob(
+      [JSON.stringify(backup, null, 2)],
+      { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    const now = new Date();
+
+    link.download =
+      "wedding-planner-backup-" +
+      now.getFullYear() +
+      "-" +
+      String(now.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(now.getDate()).padStart(2, "0") +
+      ".json";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+
+    showToast("Backup exported");
+  } catch (error) {
+    console.error("Export failed:", error);
+
+    showToast(
+      "Could not export planner.",
+      "error"
+    );
+  }
+}
+
+/* ============================================================
+   IMPORT
+   ============================================================ */
+
+function importData(event) {
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    try {
+      const imported = JSON.parse(
+        e.target.result
+      );
+
+      if (
+        !imported ||
+        !Array.isArray(imported.categories)
+      ) {
+        throw new Error("Invalid backup");
+      }
+
+      const confirmed = confirm(
+        "Import this wedding planner backup?\n\n" +
+        "Your current planner data will be replaced."
+      );
+
+      if (!confirmed) {
+        event.target.value = "";
+        return;
+      }
+
+      categories = imported.categories;
+
+      savedData =
+        imported.savedData &&
+        typeof imported.savedData === "object"
+          ? imported.savedData
+          : {};
+
+      normaliseCategories();
+
+      if (saveData()) {
+        showDashboard();
+
+        showToast(
+          "Wedding planner imported successfully"
+        );
+      }
+    } catch (error) {
+      console.error("Import failed:", error);
+
+      showToast(
+        "This file is not a valid planner backup.",
+        "error"
+      );
+    }
+
+    event.target.value = "";
+  };
+
+  reader.onerror = function () {
+    showToast(
+      "Could not read the selected file.",
+      "error"
+    );
+
+    event.target.value = "";
+  };
+
+  reader.readAsText(file);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+function resetPlanner() {
+  const confirmed = confirm(
+    "Reset the entire wedding planner?\n\n" +
+    "This will restore the original categories and remove all saved item details, custom categories and custom items.\n\n" +
+    "This cannot be undone unless you have an exported backup."
+  );
+
+  if (!confirmed) return;
+
+  categories = cloneDefaults();
+  savedData = {};
+
+  if (!saveData()) return;
+
+  closeModal();
+  closeManagementModal();
+
+  showDashboard();
+
+  showToast(
+    "Planner has been reset to the original setup"
   );
 }
 
+/* ============================================================
+   ADD ITEM
+   ============================================================ */
+
+function addItemToCurrentCategory() {
+  if (
+    !categories.some(
+      category => category.id === currentCategory
+    )
+  ) {
+    return;
+  }
+
+  openManagementModal("item");
+}
 
 /* ============================================================
-   SETUP EVENTS
+   KEYBOARD / MODAL BEHAVIOUR
+   ============================================================ */
+
+function setupOverlayBehaviour(overlay, closeFunction) {
+  if (!overlay) return;
+
+  overlay.addEventListener("click", event => {
+    if (event.target === overlay) {
+      closeFunction();
+    }
+  });
+}
+
+/* ============================================================
+   EVENTS
    ============================================================ */
 
 function setupEvents() {
+  /* DASHBOARD ACTIONS */
 
   const exportButton =
-    document.getElementById(
-      "exportButton"
-    );
+    document.getElementById("exportButton");
 
   const importButton =
-    document.getElementById(
-      "importButton"
-    );
+    document.getElementById("importButton");
 
   const importFile =
-    document.getElementById(
-      "importFile"
+    document.getElementById("importFile");
+
+  const resetButton =
+    document.getElementById("resetButton");
+
+  if (exportButton) {
+    exportButton.addEventListener(
+      "click",
+      exportData
     );
+  }
+
+  if (importButton && importFile) {
+    importButton.addEventListener(
+      "click",
+      () => importFile.click()
+    );
+  }
+
+  if (importFile) {
+    importFile.addEventListener(
+      "change",
+      importData
+    );
+  }
+
+  if (resetButton) {
+    resetButton.addEventListener(
+      "click",
+      resetPlanner
+    );
+  }
+
+  /* ITEM MODAL */
 
   const closeModalButton =
-    document.getElementById(
-      "closeModalButton"
-    );
+    document.getElementById("closeModalButton");
 
   const saveButton =
-    document.getElementById(
-      "saveButton"
-    );
+    document.getElementById("saveButton");
 
   const clearButton =
-    document.getElementById(
-      "clearButton"
-    );
+    document.getElementById("clearButton");
 
   const notButton =
-    document.getElementById(
-      "notButton"
-    );
+    document.getElementById("notButton");
 
   const progressButton =
-    document.getElementById(
-      "progressButton"
-    );
+    document.getElementById("progressButton");
 
   const doneButton =
+    document.getElementById("doneButton");
+
+  const disableItemButton =
+    document.getElementById("disableItemButton");
+
+  const deleteCustomItemButton =
     document.getElementById(
-      "doneButton"
+      "deleteCustomItemButton"
     );
 
   const overlay =
-    document.getElementById(
-      "overlay"
+    document.getElementById("overlay");
+
+  if (closeModalButton) {
+    closeModalButton.addEventListener(
+      "click",
+      closeModal
     );
+  }
+
+  if (saveButton) {
+    saveButton.addEventListener(
+      "click",
+      saveItem
+    );
+  }
+
+  if (clearButton) {
+    clearButton.addEventListener(
+      "click",
+      clearItem
+    );
+  }
+
+  if (notButton) {
+    notButton.addEventListener(
+      "click",
+      () => chooseStatus("not")
+    );
+  }
+
+  if (progressButton) {
+    progressButton.addEventListener(
+      "click",
+      () => chooseStatus("progress")
+    );
+  }
+
+  if (doneButton) {
+    doneButton.addEventListener(
+      "click",
+      () => chooseStatus("done")
+    );
+  }
+
+  if (disableItemButton) {
+    disableItemButton.addEventListener(
+      "click",
+      toggleItemVisibility
+    );
+  }
+
+  if (deleteCustomItemButton) {
+    deleteCustomItemButton.addEventListener(
+      "click",
+      deleteCustomItem
+    );
+  }
+
+  setupOverlayBehaviour(
+    overlay,
+    closeModal
+  );
+
+  /* SEARCH */
 
   const search =
-    document.getElementById(
-      "itemSearch"
-    );
+    document.getElementById("itemSearch");
 
   const filter =
-    document.getElementById(
-      "itemStatusFilter"
+    document.getElementById("itemStatusFilter");
+
+  if (search) {
+    search.addEventListener(
+      "input",
+      renderCategory
     );
+  }
+
+  if (filter) {
+    filter.addEventListener(
+      "change",
+      renderCategory
+    );
+  }
+
+  /* ADD CATEGORY */
 
   const addCategoryButton =
     document.getElementById(
       "addCategoryButton"
     );
 
-  const addItemButton =
-    document.getElementById(
-      "addItemButton"
+  if (addCategoryButton) {
+    addCategoryButton.addEventListener(
+      "click",
+      () => openManagementModal("category")
     );
+  }
+
+  /* ADD ITEM */
+
+  const addItemButton =
+    document.getElementById("addItemButton");
+
+  if (addItemButton) {
+    addItemButton.addEventListener(
+      "click",
+      addItemToCurrentCategory
+    );
+  }
+
+  /* BACK */
 
   const backToDashboardButton =
     document.getElementById(
       "backToDashboardButton"
     );
 
-  const manageCurrentCategoryButton =
-    document.getElementById(
-      "manageCurrentCategoryButton"
+  if (backToDashboardButton) {
+    backToDashboardButton.addEventListener(
+      "click",
+      showDashboard
     );
+  }
 
-  const manageBackButton =
-    document.getElementById(
-      "manageBackButton"
-    );
+  /* MANAGEMENT MODAL */
 
   const managementOverlay =
     document.getElementById(
@@ -2585,321 +1706,86 @@ function setupEvents() {
       "managementNameInput"
     );
 
-
-  /* ==========================================================
-     EXPORT
-     ========================================================== */
-
-  if (exportButton) {
-
-    exportButton.addEventListener(
-      "click",
-      exportData
-    );
-  }
-
-
-  /* ==========================================================
-     IMPORT
-     ========================================================== */
-
-  if (
-    importButton &&
-    importFile
-  ) {
-
-    importButton.addEventListener(
-      "click",
-      () => importFile.click()
-    );
-  }
-
-
-  if (importFile) {
-
-    importFile.addEventListener(
-      "change",
-      importData
-    );
-  }
-
-
-  /* ==========================================================
-     ITEM MODAL
-     ========================================================== */
-
-  if (closeModalButton) {
-
-    closeModalButton.addEventListener(
-      "click",
-      closeModal
-    );
-  }
-
-
-  if (saveButton) {
-
-    saveButton.addEventListener(
-      "click",
-      saveItem
-    );
-  }
-
-
-  if (clearButton) {
-
-    clearButton.addEventListener(
-      "click",
-      clearItem
-    );
-  }
-
-
-  if (notButton) {
-
-    notButton.addEventListener(
-      "click",
-      () =>
-        chooseStatus("not")
-    );
-  }
-
-
-  if (progressButton) {
-
-    progressButton.addEventListener(
-      "click",
-      () =>
-        chooseStatus("progress")
-    );
-  }
-
-
-  if (doneButton) {
-
-    doneButton.addEventListener(
-      "click",
-      () =>
-        chooseStatus("done")
-    );
-  }
-
-
-  if (overlay) {
-
-    overlay.addEventListener(
-      "click",
-      event => {
-
-        if (
-          event.target === overlay
-        ) {
-
-          closeModal();
-        }
-
-      }
-    );
-  }
-
-
-  /* ==========================================================
-     SEARCH
-     ========================================================== */
-
-  if (search) {
-
-    search.addEventListener(
-      "input",
-      renderCategory
-    );
-  }
-
-
-  if (filter) {
-
-    filter.addEventListener(
-      "change",
-      renderCategory
-    );
-  }
-
-
-  /* ==========================================================
-     ADD CATEGORY
-     ========================================================== */
-
-  if (addCategoryButton) {
-
-    addCategoryButton.addEventListener(
-      "click",
-      () =>
-        openManagementModal(
-          "category"
-        )
-    );
-  }
-
-
-  /* ==========================================================
-     ADD ITEM
-     ========================================================== */
-
-  if (addItemButton) {
-
-    addItemButton.addEventListener(
-      "click",
-      addItemToCurrentCategory
-    );
-  }
-
-
-  /* ==========================================================
-     BACK TO DASHBOARD
-     ========================================================== */
-
-  if (backToDashboardButton) {
-
-    backToDashboardButton.addEventListener(
-      "click",
-      showDashboard
-    );
-  }
-
-
-  if (manageBackButton) {
-
-    manageBackButton.addEventListener(
-      "click",
-      showDashboard
-    );
-  }
-
-
-  /* ==========================================================
-     MANAGE CURRENT CATEGORY
-     ========================================================== */
-
-  if (manageCurrentCategoryButton) {
-
-    manageCurrentCategoryButton.addEventListener(
-      "click",
-      showManagePlanner
-    );
-  }
-
-
-  /* ==========================================================
-     MANAGEMENT MODAL
-     ========================================================== */
-
   if (closeManagementButton) {
-
     closeManagementButton.addEventListener(
       "click",
       closeManagementModal
     );
   }
 
-
   if (cancelManagementButton) {
-
     cancelManagementButton.addEventListener(
       "click",
       closeManagementModal
     );
   }
 
-
   if (saveManagementButton) {
-
     saveManagementButton.addEventListener(
       "click",
       saveManagement
     );
   }
 
-
-  if (managementOverlay) {
-
-    managementOverlay.addEventListener(
-      "click",
-      event => {
-
-        if (
-          event.target ===
-          managementOverlay
-        ) {
-
-          closeManagementModal();
-        }
-
-      }
-    );
-  }
-
-
-  /* ==========================================================
-     ENTER KEY IN MANAGEMENT MODAL
-     ========================================================== */
+  setupOverlayBehaviour(
+    managementOverlay,
+    closeManagementModal
+  );
 
   if (managementNameInput) {
-
     managementNameInput.addEventListener(
       "keydown",
       event => {
-
-        if (
-          event.key === "Enter"
-        ) {
-
+        if (event.key === "Enter") {
           event.preventDefault();
-
           saveManagement();
         }
-
       }
     );
   }
 
-
-  /* ==========================================================
-     ESCAPE
-     ========================================================== */
+  /* ESCAPE */
 
   document.addEventListener(
     "keydown",
     event => {
+      if (event.key !== "Escape") return;
+
+      const overlay =
+        document.getElementById("overlay");
+
+      const managementOverlay =
+        document.getElementById(
+          "managementOverlay"
+        );
 
       if (
-        event.key === "Escape"
+        overlay &&
+        overlay.classList.contains("active")
       ) {
-
         closeModal();
-
-        closeManagementModal();
       }
 
+      if (
+        managementOverlay &&
+        managementOverlay.classList.contains("active")
+      ) {
+        closeManagementModal();
+      }
     }
   );
 }
 
-
 /* ============================================================
-   START APPLICATION
+   START
    ============================================================ */
 
 document.addEventListener(
   "DOMContentLoaded",
-  function () {
-
+  () => {
     loadData();
-
     setupEvents();
-
     buildNavigation();
-
     showDashboard();
-
   }
 );
