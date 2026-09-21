@@ -2,8 +2,6 @@
 WEDDING PLANNER
 ============================================================ */
 
-"use strict";
-
 /* ============================================================
 CATEGORIES
 ============================================================ */
@@ -445,9 +443,9 @@ const day = String(
 ).padStart(2, "0");
 
 /*
- * IMPORTANT:
- * No template literal here.
- * This avoids the syntax problem from the previous version.
+ * Deliberately use normal string concatenation here.
+ * This avoids the template-literal syntax problem
+ * that was causing the previous script to fail.
  */
 
 link.download =
@@ -500,9 +498,7 @@ IMPORT DATA
 
 function importData(event) {
 
-const file =
-event.target.files &&
-event.target.files[0];
+const file = event.target.files[0];
 
 if (!file) {
 return;
@@ -533,8 +529,9 @@ reader.onload = function (e) {
 ```
 try {
 
-  const imported =
-    JSON.parse(e.target.result);
+  const imported = JSON.parse(
+    e.target.result
+  );
 
   let importedData;
 
@@ -545,13 +542,11 @@ try {
     !Array.isArray(imported.data)
   ) {
 
-    importedData =
-      imported.data;
+    importedData = imported.data;
 
   } else {
 
-    importedData =
-      imported;
+    importedData = imported;
 
   }
 
@@ -564,19 +559,20 @@ try {
     throw new Error(
       "Invalid backup format"
     );
+
   }
 
-  const confirmed =
-    window.confirm(
-      "Import this wedding planner backup?\n\n" +
-      "Your current planner data will be replaced by the backup."
-    );
+  const confirmed = confirm(
+    "Import this wedding planner backup?\n\n" +
+    "Your current planner data will be replaced by the backup."
+  );
 
   if (!confirmed) {
 
     event.target.value = "";
 
     return;
+
   }
 
   savedData = importedData;
@@ -586,20 +582,14 @@ try {
     event.target.value = "";
 
     return;
+
   }
 
-  if (
-    currentCategory ===
-    "dashboard"
-  ) {
+  renderDashboard();
 
-    showDashboard();
+  if (currentCategory !== "dashboard") {
 
-  } else {
-
-    showCategory(
-      currentCategory
-    );
+    renderCategory();
 
   }
 
@@ -667,8 +657,7 @@ categoryId,
 item
 ) {
 
-const key =
-itemKey(
+const key = itemKey(
 categoryId,
 item
 );
@@ -691,28 +680,25 @@ savedData[key] = {
 
 }
 
-const data =
-savedData[key];
+savedData[key].status =
+savedData[key].status || "not";
 
-data.status =
-data.status || "not";
+savedData[key].vendor =
+savedData[key].vendor || "";
 
-data.vendor =
-data.vendor || "";
+savedData[key].price =
+savedData[key].price || "";
 
-data.price =
-data.price || "";
+savedData[key].deadline =
+savedData[key].deadline || "";
 
-data.deadline =
-data.deadline || "";
+savedData[key].link =
+savedData[key].link || "";
 
-data.link =
-data.link || "";
+savedData[key].notes =
+savedData[key].notes || "";
 
-data.notes =
-data.notes || "";
-
-return data;
+return savedData[key];
 
 }
 
@@ -722,8 +708,7 @@ NAVIGATION
 
 function buildNavigation() {
 
-const nav =
-document.getElementById(
+const nav = document.getElementById(
 "navigation"
 );
 
@@ -733,8 +718,9 @@ return;
 
 nav.innerHTML = "";
 
-const dashboard =
-document.createElement("button");
+const dashboard = document.createElement(
+"button"
+);
 
 dashboard.type = "button";
 
@@ -751,9 +737,7 @@ dashboard.addEventListener(
 showDashboard
 );
 
-nav.appendChild(
-dashboard
-);
+nav.appendChild(dashboard);
 
 categories.forEach(
 function (category) {
@@ -781,9 +765,7 @@ function (category) {
     }
   );
 
-  nav.appendChild(
-    button
-  );
+  nav.appendChild(button);
 
 }
 ```
@@ -798,8 +780,7 @@ DASHBOARD
 
 function showDashboard() {
 
-currentCategory =
-"dashboard";
+currentCategory = "dashboard";
 
 const dashboardPage =
 document.getElementById(
@@ -815,11 +796,9 @@ if (!dashboardPage || !categoryPage) {
 return;
 }
 
-dashboardPage.style.display =
-"block";
+dashboardPage.style.display = "block";
 
-categoryPage.style.display =
-"none";
+categoryPage.style.display = "none";
 
 buildNavigation();
 
@@ -853,26 +832,17 @@ function (category) {
 
       total++;
 
-      const data =
-        getItem(
-          category.id,
-          item
-        );
+      const data = getItem(
+        category.id,
+        item
+      );
 
-      if (
-        data.status === "done"
-      ) {
-
+      if (data.status === "done") {
         done++;
-
       }
 
-      if (
-        data.status === "progress"
-      ) {
-
+      if (data.status === "progress") {
         progress++;
-
       }
 
     }
@@ -884,7 +854,7 @@ function (category) {
 );
 
 const percent =
-total
+total > 0
 ? Math.round(
 (done / total) * 100
 )
@@ -920,6 +890,11 @@ document.getElementById(
 "overallFill"
 );
 
+const grid =
+document.getElementById(
+"summaryGrid"
+);
+
 if (totalCount) {
 totalCount.textContent = total;
 }
@@ -947,11 +922,6 @@ overallFill.style.width =
 percent + "%";
 }
 
-const grid =
-document.getElementById(
-"summaryGrid"
-);
-
 if (!grid) {
 return;
 }
@@ -963,9 +933,7 @@ function (category) {
 
 ```
   const stats =
-    getCategoryStats(
-      category
-    );
+    getCategoryStats(category);
 
   const card =
     document.createElement("div");
@@ -977,11 +945,8 @@ function (category) {
     document.createElement("div");
 
   icon.style.fontSize = "25px";
-
   icon.style.marginBottom = "10px";
-
-  icon.textContent =
-    category.icon;
+  icon.textContent = category.icon;
 
   const title =
     document.createElement("h3");
@@ -989,10 +954,10 @@ function (category) {
   title.textContent =
     category.name;
 
-  const description =
+  const text =
     document.createElement("p");
 
-  description.textContent =
+  text.textContent =
     stats.done +
     " / " +
     stats.total +
@@ -1013,19 +978,14 @@ function (category) {
   bar.appendChild(fill);
 
   card.appendChild(icon);
-
   card.appendChild(title);
-
-  card.appendChild(description);
-
+  card.appendChild(text);
   card.appendChild(bar);
 
   card.addEventListener(
     "click",
     function () {
-      showCategory(
-        category.id
-      );
+      showCategory(category.id);
     }
   );
 
@@ -1055,8 +1015,7 @@ if (!category) {
 return;
 }
 
-currentCategory =
-id;
+currentCategory = id;
 
 const dashboardPage =
 document.getElementById(
@@ -1078,15 +1037,15 @@ dashboardPage.style.display =
 categoryPage.style.display =
 "block";
 
-const categoryTitle =
+const title =
 document.getElementById(
 "categoryTitle"
 );
 
-if (categoryTitle) {
+if (title) {
 
 ```
-categoryTitle.textContent =
+title.textContent =
   category.icon +
   " " +
   category.name;
@@ -1099,14 +1058,14 @@ document.getElementById(
 "itemSearch"
 );
 
+if (search) {
+search.value = "";
+}
+
 const filter =
 document.getElementById(
 "itemStatusFilter"
 );
-
-if (search) {
-search.value = "";
-}
 
 if (filter) {
 filter.value = "all";
@@ -1151,7 +1110,7 @@ function (item) {
 ```
 
 const percent =
-total
+total > 0
 ? Math.round(
 (done / total) * 100
 )
@@ -1183,9 +1142,7 @@ return;
 }
 
 const stats =
-getCategoryStats(
-category
-);
+getCategoryStats(category);
 
 const percent =
 document.getElementById(
@@ -1195,6 +1152,26 @@ document.getElementById(
 const progressText =
 document.getElementById(
 "categoryProgressText"
+);
+
+const searchInput =
+document.getElementById(
+"itemSearch"
+);
+
+const statusFilter =
+document.getElementById(
+"itemStatusFilter"
+);
+
+const grid =
+document.getElementById(
+"itemsGrid"
+);
+
+const empty =
+document.getElementById(
+"emptyMessage"
 );
 
 if (percent) {
@@ -1218,41 +1195,21 @@ progressText.textContent =
 
 }
 
-const searchElement =
-document.getElementById(
-"itemSearch"
-);
-
-const filterElement =
-document.getElementById(
-"itemStatusFilter"
-);
+if (!grid) {
+return;
+}
 
 const search =
-searchElement
-? searchElement.value
+searchInput
+? searchInput.value
 .toLowerCase()
 .trim()
 : "";
 
 const status =
-filterElement
-? filterElement.value
+statusFilter
+? statusFilter.value
 : "all";
-
-const grid =
-document.getElementById(
-"itemsGrid"
-);
-
-const empty =
-document.getElementById(
-"emptyMessage"
-);
-
-if (!grid) {
-return;
-}
 
 grid.innerHTML = "";
 
@@ -1268,25 +1225,31 @@ function (item) {
       item
     );
 
+
   const vendor =
-    String(
-      data.vendor || ""
-    ).toLowerCase();
+    String(data.vendor || "")
+      .toLowerCase();
 
   const notes =
-    String(
-      data.notes || ""
-    ).toLowerCase();
+    String(data.notes || "")
+      .toLowerCase();
+
+
+  const itemName =
+    item.toLowerCase();
+
 
   const matchesSearch =
     !search ||
-    item.toLowerCase().includes(search) ||
+    itemName.includes(search) ||
     vendor.includes(search) ||
     notes.includes(search);
+
 
   const matchesStatus =
     status === "all" ||
     data.status === status;
+
 
   if (
     !matchesSearch ||
@@ -1297,7 +1260,9 @@ function (item) {
 
   }
 
+
   visible++;
+
 
   const card =
     document.createElement("div");
@@ -1305,19 +1270,18 @@ function (item) {
   card.className =
     "item-card";
 
-  if (
-    data.status === "done"
-  ) {
 
+  if (data.status === "done") {
     card.classList.add("done");
-
   }
+
 
   const top =
     document.createElement("div");
 
   top.className =
     "item-top";
+
 
   const icon =
     document.createElement("div");
@@ -1328,47 +1292,52 @@ function (item) {
   icon.textContent =
     category.icon;
 
-  const statusBadge =
+
+  const statusElement =
     document.createElement("div");
 
-  statusBadge.className =
+  statusElement.className =
     "item-status";
+
 
   let statusText =
     "Not started";
 
-  if (
-    data.status === "progress"
-  ) {
+
+  if (data.status === "progress") {
 
     statusText =
       "In progress";
 
-    statusBadge.classList.add(
+    statusElement.classList.add(
       "progress"
     );
 
   }
 
-  if (
-    data.status === "done"
-  ) {
+
+  if (data.status === "done") {
 
     statusText =
       "Completed";
 
-    statusBadge.classList.add(
+    statusElement.classList.add(
       "done"
     );
 
   }
 
-  statusBadge.textContent =
+
+  statusElement.textContent =
     statusText;
+
 
   top.appendChild(icon);
 
-  top.appendChild(statusBadge);
+  top.appendChild(
+    statusElement
+  );
+
 
   const title =
     document.createElement("h3");
@@ -1376,18 +1345,20 @@ function (item) {
   title.textContent =
     item;
 
+
   card.appendChild(top);
 
   card.appendChild(title);
 
+
   const vendorElement =
     document.createElement("p");
+
 
   if (data.vendor) {
 
     vendorElement.textContent =
-      "👤 " +
-      data.vendor;
+      "👤 " + data.vendor;
 
   } else {
 
@@ -1396,9 +1367,11 @@ function (item) {
 
   }
 
+
   card.appendChild(
     vendorElement
   );
+
 
   if (data.deadline) {
 
@@ -1420,6 +1393,7 @@ function (item) {
 
   }
 
+
   card.addEventListener(
     "click",
     function () {
@@ -1432,6 +1406,7 @@ function (item) {
     }
   );
 
+
   grid.appendChild(card);
 
 }
@@ -1443,7 +1418,7 @@ if (empty) {
 
 ```
 empty.style.display =
-  visible
+  visible > 0
     ? "none"
     : "block";
 ```
@@ -1558,6 +1533,29 @@ overlay.classList.add(
 
 }
 
+function setInputValue(
+id,
+value
+) {
+
+const element =
+document.getElementById(id);
+
+if (element) {
+
+```
+element.value =
+  value || "";
+```
+
+}
+
+}
+
+/* ============================================================
+CLOSE MODAL
+============================================================ */
+
 function closeModal() {
 
 const overlay =
@@ -1578,6 +1576,10 @@ overlay.classList.remove(
 currentItem = null;
 
 }
+
+/* ============================================================
+STATUS
+============================================================ */
 
 function chooseStatus(
 status
@@ -1704,10 +1706,7 @@ showDashboard();
 } else {
 
 ```
-/*
- * Do not reset the category's search
- * unnecessarily after saving.
- */
+buildNavigation();
 
 renderCategory();
 ```
@@ -1762,6 +1761,8 @@ showDashboard();
 } else {
 
 ```
+buildNavigation();
+
 renderCategory();
 ```
 
@@ -1770,7 +1771,7 @@ renderCategory();
 }
 
 /* ============================================================
-INPUT HELPERS
+GET INPUT
 ============================================================ */
 
 function getInputValue(id) {
@@ -1778,28 +1779,11 @@ function getInputValue(id) {
 const element =
 document.getElementById(id);
 
-return element
-? element.value
-: "";
-
+if (!element) {
+return "";
 }
 
-function setInputValue(
-id,
-value
-) {
-
-const element =
-document.getElementById(id);
-
-if (element) {
-
-```
-element.value =
-  value || "";
-```
-
-}
+return element.value;
 
 }
 
@@ -1817,20 +1801,11 @@ return "";
 
 const d =
 new Date(
-date +
-"T00:00:00"
+date + "T00:00:00"
 );
 
-if (
-Number.isNaN(
-d.getTime()
-)
-) {
-
-```
+if (Number.isNaN(d.getTime())) {
 return date;
-```
-
 }
 
 return d.toLocaleDateString(
@@ -1845,7 +1820,7 @@ year: "numeric"
 }
 
 /* ============================================================
-EVENT SETUP
+EVENTS
 ============================================================ */
 
 function setupEvents() {
@@ -1860,7 +1835,9 @@ if (search) {
 ```
 search.addEventListener(
   "input",
-  renderCategory
+  function () {
+    renderCategory();
+  }
 );
 ```
 
@@ -1876,7 +1853,9 @@ if (statusFilter) {
 ```
 statusFilter.addEventListener(
   "change",
-  renderCategory
+  function () {
+    renderCategory();
+  }
 );
 ```
 
@@ -1917,12 +1896,16 @@ importFile
 importButton.addEventListener(
   "click",
   function () {
-
     importFile.click();
-
   }
 );
+```
 
+}
+
+if (importFile) {
+
+```
 importFile.addEventListener(
   "change",
   importData
@@ -2046,7 +2029,8 @@ overlay.addEventListener(
   function (event) {
 
     if (
-      event.target === overlay
+      event.target ===
+      overlay
     ) {
 
       closeModal();
@@ -2097,13 +2081,13 @@ showDashboard();
 
 /*
 
-* Wait until the complete HTML document exists
-* before trying to find any elements.
+* The script is loaded at the bottom of index.html,
+* but waiting for DOMContentLoaded makes this safe even
+* if the script is moved later in the future.
   */
 
 if (
-document.readyState ===
-"loading"
+document.readyState === "loading"
 ) {
 
 document.addEventListener(
