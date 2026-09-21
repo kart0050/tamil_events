@@ -1,303 +1,303 @@
 /* ============================================================
-   WEDDING PLANNER
+WEDDING PLANNER
 ============================================================ */
 
+"use strict";
 
 /* ============================================================
-   CATEGORIES
+CATEGORIES
 ============================================================ */
 
 const categories = [
 
-  {
-    id: "guests",
-    name: "Gæster",
-    icon: "👥",
-    items: [
-      "Palaharam (Goodie bag)",
-      "Hotels"
-    ]
-  },
+{
+id: "guests",
+name: "Gæster",
+icon: "👥",
+items: [
+"Palaharam (Goodie bag)",
+"Hotels"
+]
+},
 
-  {
-    id: "toej",
-    name: "Tøj",
-    icon: "👗",
-    items: [
-      "Manavarai saree",
-      "Koorai saree (Rød)",
-      "Vetti sattai",
-      "Sko",
-      "Vetti Sattai Grooms Mate",
-      "Saree Bridesmaid",
-      "Tøj til preshoot"
-    ]
-  },
+{
+id: "toej",
+name: "Tøj",
+icon: "👗",
+items: [
+"Manavarai saree",
+"Koorai saree (Rød)",
+"Vetti sattai",
+"Sko",
+"Vetti Sattai Grooms Mate",
+"Saree Bridesmaid",
+"Tøj til preshoot"
+]
+},
 
-  {
-    id: "reception",
-    name: "Reception Songs",
-    icon: "🎵",
-    items: [
-      "Entrance",
-      "Pardans",
-      "Preshoot",
-      "Bryllupsvideo",
-      "After Party"
-    ]
-  },
+{
+id: "reception",
+name: "Reception Songs",
+icon: "🎵",
+items: [
+"Entrance",
+"Pardans",
+"Preshoot",
+"Bryllupsvideo",
+"After Party"
+]
+},
 
-  {
-    id: "sign-card",
-    name: "Wedding Sign + Card",
-    icon: "💌",
-    items: [
-      "Aviraa Creations",
-      "Ponthayadesigns",
-      "Kopuramevents.fr"
-    ]
-  },
+{
+id: "sign-card",
+name: "Wedding Sign + Card",
+icon: "💌",
+items: [
+"Aviraa Creations",
+"Ponthayadesigns",
+"Kopuramevents.fr"
+]
+},
 
-  {
-    id: "kovil-decoration",
-    name: "Decoration Kovil",
-    icon: "🛕",
-    items: [
-      "Kopuramevents.fr"
-    ]
-  },
+{
+id: "kovil-decoration",
+name: "Decoration Kovil",
+icon: "🛕",
+items: [
+"Kopuramevents.fr"
+]
+},
 
-  {
-    id: "accessories",
-    name: "Accessories",
-    icon: "✨",
-    items: [
-      "360 Booth",
-      "Bridal Corner Setup"
-    ]
-  },
+{
+id: "accessories",
+name: "Accessories",
+icon: "✨",
+items: [
+"360 Booth",
+"Bridal Corner Setup"
+]
+},
 
-  {
-    id: "henna",
-    name: "Henna Fest",
-    icon: "🌿",
-    items: [
-      "Uduupu ?",
-      "Mehendi (rosedecoration.dk)",
-      "Tamilhennecreation",
-      "Tent",
-      "Visual Eyes"
-    ]
-  },
+{
+id: "henna",
+name: "Henna Fest",
+icon: "🌿",
+items: [
+"Uduupu ?",
+"Mehendi (rosedecoration.dk)",
+"Tamilhennecreation",
+"Tent",
+"Visual Eyes"
+]
+},
 
-  {
-    id: "kalyaanam",
-    name: "Kalyaanam Veedu",
-    icon: "🏠",
-    items: [
-      "Herning Kovil",
-      "Civil Weds (Ring)",
-      "Udlandet",
-      "Amorasareesdk",
-      "Ranyasarees"
-    ]
-  },
+{
+id: "kalyaanam",
+name: "Kalyaanam Veedu",
+icon: "🏠",
+items: [
+"Herning Kovil",
+"Civil Weds (Ring)",
+"Udlandet",
+"Amorasareesdk",
+"Ranyasarees"
+]
+},
 
-  {
-    id: "makeup",
-    name: "Makeup + Hair",
-    icon: "💄",
-    items: [
-      "Janani",
-      "abinii_makeupartist",
-      "thiva_mua"
-    ]
-  },
+{
+id: "makeup",
+name: "Makeup + Hair",
+icon: "💄",
+items: [
+"Janani",
+"abinii_makeupartist",
+"thiva_mua"
+]
+},
 
-  {
-    id: "jewellery",
-    name: "Jewellery",
-    icon: "💎",
-    items: [
-      "Thaali (15 Pound)",
-      "Øreringe",
-      "Necklace",
-      "Kappu",
-      "Ring (mothiram)",
-      "Tikka (Nethi Pattam)",
-      "Kaal Sangali",
-      "Mukuthi",
-      "Waist Chain",
-      "Nails"
-    ]
-  },
+{
+id: "jewellery",
+name: "Jewellery",
+icon: "💎",
+items: [
+"Thaali (15 Pound)",
+"Øreringe",
+"Necklace",
+"Kappu",
+"Ring (mothiram)",
+"Tikka (Nethi Pattam)",
+"Kaal Sangali",
+"Mukuthi",
+"Waist Chain",
+"Nails"
+]
+},
 
-  {
-    id: "melam",
-    name: "Melam",
-    icon: "🥁",
-    items: [
-      "Chinna Mams",
-      "Mami ?"
-    ]
-  },
+{
+id: "melam",
+name: "Melam",
+icon: "🥁",
+items: [
+"Chinna Mams",
+"Mami ?"
+]
+},
 
-  {
-    id: "maalai",
-    name: "Maalai",
-    icon: "🌸",
-    items: [
-      "Herning Maalai"
-    ]
-  },
+{
+id: "maalai",
+name: "Maalai",
+icon: "🌸",
+items: [
+"Herning Maalai"
+]
+},
 
-  {
-    id: "food",
-    name: "Food",
-    icon: "🍛",
-    items: [
-      "Poovi Mama Horsens",
-      "Kammali Randers",
-      "Tamil Ondrai Aarhus",
-      "Dhoni",
-      "Appam",
-      "Vaathali og Pako"
-    ]
-  },
+{
+id: "food",
+name: "Food",
+icon: "🍛",
+items: [
+"Poovi Mama Horsens",
+"Kammali Randers",
+"Tamil Ondrai Aarhus",
+"Dhoni",
+"Appam",
+"Vaathali og Pako"
+]
+},
 
-  {
-    id: "cake",
-    name: "Bryllupskage",
-    icon: "🎂",
-    items: [
-      "Wedding Cake",
-      "Lighter + Knife"
-    ]
-  },
+{
+id: "cake",
+name: "Bryllupskage",
+icon: "🎂",
+items: [
+"Wedding Cake",
+"Lighter + Knife"
+]
+},
 
-  {
-    id: "preshoot",
-    name: "Preshoot",
-    icon: "📸",
-    items: [
-      "Views of Nivi",
-      "Sana",
-      "Visual Eyes",
-      "Nomad",
-      "Through the ringer",
-      "Swiss (Interlaken)"
-    ]
-  },
+{
+id: "preshoot",
+name: "Preshoot",
+icon: "📸",
+items: [
+"Views of Nivi",
+"Sana",
+"Visual Eyes",
+"Nomad",
+"Through the ringer",
+"Swiss (Interlaken)"
+]
+},
 
-  {
-    id: "photo-video",
-    name: "Photo + Video",
-    icon: "📷",
-    items: [
-      "Visual Eyes",
-      "Vividmemoir.dk",
-      "infocus"
-    ]
-  },
+{
+id: "photo-video",
+name: "Photo + Video",
+icon: "📷",
+items: [
+"Visual Eyes",
+"Vividmemoir.dk",
+"infocus"
+]
+},
 
-  {
-    id: "dj",
-    name: "DJ",
-    icon: "🎧",
-    items: [
-      "Playloud",
-      "Keeth Entertainment",
-      "Microphone",
-      "Iqon Musik",
-      "Resound"
-    ]
-  },
+{
+id: "dj",
+name: "DJ",
+icon: "🎧",
+items: [
+"Playloud",
+"Keeth Entertainment",
+"Microphone",
+"Iqon Musik",
+"Resound"
+]
+},
 
-  {
-    id: "hall",
-    name: "Hall",
-    icon: "🏛️",
-    items: [
-      "Sana Palace RA",
-      "E-Plaza AA",
-      "Babylon AA",
-      "Food & Drinks",
-      "Sweets for children",
-      "Bar",
-      "Dessert",
-      "Palaharam",
-      "Tea Can",
-      "Decoration"
-    ]
-  },
+{
+id: "hall",
+name: "Hall",
+icon: "🏛️",
+items: [
+"Sana Palace RA",
+"E-Plaza AA",
+"Babylon AA",
+"Food & Drinks",
+"Sweets for children",
+"Bar",
+"Dessert",
+"Palaharam",
+"Tea Can",
+"Decoration"
+]
+},
 
-  {
-    id: "entertainment",
-    name: "Entertainment",
-    icon: "💃",
-    items: [
-      "Pardans + Cinema Paattu",
-      "Bollywood Dance",
-      "Gruppedans",
-      "Abi, Vaishu og Asmi",
-      "Suji Akka solo + Bharatanatyam med os",
-      "Aishani + Aatish",
-      "Thilipa, Sonja, Deilany, Praveena og Nantheya",
-      "Family Dance",
-      "Karthie + Nantheya",
-      "Charmilie",
-      "Aalborg Kootam"
-    ]
-  },
+{
+id: "entertainment",
+name: "Entertainment",
+icon: "💃",
+items: [
+"Pardans + Cinema Paattu",
+"Bollywood Dance",
+"Gruppedans",
+"Abi, Vaishu og Asmi",
+"Suji Akka solo + Bharatanatyam med os",
+"Aishani + Aatish",
+"Thilipa, Sonja, Deilany, Praveena og Nantheya",
+"Family Dance",
+"Karthie + Nantheya",
+"Charmilie",
+"Aalborg Kootam"
+]
+},
 
-  {
-    id: "operator",
-    name: "Operator",
-    icon: "🎛️",
-    items: [
-      "Lighting",
-      "Projector"
-    ]
-  },
+{
+id: "operator",
+name: "Operator",
+icon: "🎛️",
+items: [
+"Lighting",
+"Projector"
+]
+},
 
-  {
-    id: "host",
-    name: "Host",
-    icon: "🎤",
-    items: [
-      "Vinu",
-      "Mams",
-      "Saddi",
-      "Speech",
-      "Games"
-    ]
-  },
+{
+id: "host",
+name: "Host",
+icon: "🎤",
+items: [
+"Vinu",
+"Mams",
+"Saddi",
+"Speech",
+"Games"
+]
+},
 
-  {
-    id: "games",
-    name: "Games (Yndlingsting)",
-    icon: "🎲",
-    items: [
-      "Palaharam (Goodie bag)"
-    ]
-  },
+{
+id: "games",
+name: "Games (Yndlingsting)",
+icon: "🎲",
+items: [
+"Palaharam (Goodie bag)"
+]
+},
 
-  {
-    id: "speech",
-    name: "Speech",
-    icon: "🎤",
-    items: [
-      "Speech planning",
-      "Speakers",
-      "Order of speeches"
-    ]
-  }
+{
+id: "speech",
+name: "Speech",
+icon: "🎤",
+items: [
+"Speech planning",
+"Speakers",
+"Order of speeches"
+]
+}
 
 ];
 
-
 /* ============================================================
-   STORAGE
+STORAGE
 ============================================================ */
 
 const STORAGE_KEY = "tamilWeddingPlanner_v4";
@@ -310,1309 +310,283 @@ let currentItem = null;
 
 let modalStatus = "not";
 
-
 /* ============================================================
-   LOAD DATA
+LOAD DATA
 ============================================================ */
 
 function loadData() {
 
-  try {
+try {
 
-    const stored = localStorage.getItem(STORAGE_KEY);
+```
+const stored = localStorage.getItem(STORAGE_KEY);
 
-    if (!stored) {
-      savedData = {};
-      return;
-    }
+if (stored) {
 
-    const parsed = JSON.parse(stored);
+  const parsed = JSON.parse(stored);
 
-    if (
-      parsed &&
-      typeof parsed === "object" &&
-      !Array.isArray(parsed)
-    ) {
+  if (
+    parsed &&
+    typeof parsed === "object" &&
+    !Array.isArray(parsed)
+  ) {
 
-      savedData = parsed;
+    savedData = parsed;
 
-    } else {
-
-      savedData = {};
-
-    }
-
-  } catch (error) {
-
-    console.error("Could not load saved data:", error);
+  } else {
 
     savedData = {};
 
   }
 
+} else {
+
+  savedData = {};
+
+}
+```
+
+} catch (error) {
+
+```
+console.error("Could not load saved data:", error);
+
+savedData = {};
+```
+
 }
 
+}
 
 /* ============================================================
-   SAVE DATA
+SAVE DATA
 ============================================================ */
 
 function saveData() {
 
-  try {
+try {
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(savedData)
-    );
+```
+localStorage.setItem(
+  STORAGE_KEY,
+  JSON.stringify(savedData)
+);
 
-    return true;
+return true;
+```
 
-  } catch (error) {
+} catch (error) {
 
-    console.error("Could not save data:", error);
+```
+console.error("Could not save data:", error);
 
-    alert(
-      "Your data could not be saved in this browser."
-    );
+alert(
+  "Your data could not be saved in this browser."
+);
 
-    return false;
-
-  }
+return false;
+```
 
 }
 
+}
 
 /* ============================================================
-   EXPORT DATA
+EXPORT DATA
 ============================================================ */
 
 function exportData() {
 
-  try {
+try {
 
-    if (!saveData()) {
-      return;
-    }
+```
+if (!saveData()) {
+  return;
+}
 
-    const backup = {
-      app: "Tamil Wedding Planner",
-      version: 1,
-      exportedAt: new Date().toISOString(),
-      data: savedData
-    };
+const backup = {
+  app: "Tamil Wedding Planner",
+  version: 1,
+  exportedAt: new Date().toISOString(),
+  data: savedData
+};
 
-    const json = JSON.stringify(
-      backup,
-      null,
-      2
-    );
+const json = JSON.stringify(
+  backup,
+  null,
+  2
+);
 
-    const blob = new Blob(
-      [json],
-      {
-        type: "application/json"
-      }
-    );
-
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-
-    link.href = url;
-
-    link.download = "wedding-planner-backup.json";
-
-    link.style.display = "none";
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-    setTimeout(function() {
-      URL.revokeObjectURL(url);
-    }, 1000);
-
-    console.log(
-      "Wedding planner data exported successfully."
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Export failed:",
-      error
-    );
-
-    alert(
-      "Sorry, the wedding planner data could not be exported."
-    );
-
+const blob = new Blob(
+  [json],
+  {
+    type: "application/json"
   }
+);
+
+const url = URL.createObjectURL(blob);
+
+const link = document.createElement("a");
+
+link.href = url;
+
+const now = new Date();
+
+const year = String(
+  now.getFullYear()
+);
+
+const month = String(
+  now.getMonth() + 1
+).padStart(2, "0");
+
+const day = String(
+  now.getDate()
+).padStart(2, "0");
+
+/*
+ * IMPORTANT:
+ * No template literal here.
+ * This avoids the syntax problem from the previous version.
+ */
+
+link.download =
+  "wedding-planner-backup-" +
+  year +
+  "-" +
+  month +
+  "-" +
+  day +
+  ".json";
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+setTimeout(
+  function () {
+    URL.revokeObjectURL(url);
+  },
+  1000
+);
+
+console.log(
+  "Wedding planner data exported successfully."
+);
+```
+
+} catch (error) {
+
+```
+console.error(
+  "Export failed:",
+  error
+);
+
+alert(
+  "Sorry, the wedding planner data could not be exported."
+);
+```
 
 }
 
+}
 
 /* ============================================================
-   IMPORT DATA
+IMPORT DATA
 ============================================================ */
 
 function importData(event) {
 
-  const input = event.target;
+const file =
+event.target.files &&
+event.target.files[0];
+
+if (!file) {
+return;
+}
+
+if (
+!file.name
+.toLowerCase()
+.endsWith(".json")
+) {
+
+```
+alert(
+  "Please select a .json wedding planner backup file."
+);
+
+event.target.value = "";
+
+return;
+```
+
+}
+
+const reader = new FileReader();
+
+reader.onload = function (e) {
+
+```
+try {
+
+  const imported =
+    JSON.parse(e.target.result);
+
+  let importedData;
 
   if (
-    !input ||
-    !input.files ||
-    !input.files.length
-  ) {
-    return;
-  }
-
-  const file = input.files[0];
-
-  if (
-    !file.name
-      .toLowerCase()
-      .endsWith(".json")
+    imported &&
+    imported.data &&
+    typeof imported.data === "object" &&
+    !Array.isArray(imported.data)
   ) {
 
-    alert(
-      "Please select a .json wedding planner backup file."
-    );
-
-    input.value = "";
-
-    return;
-
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = function(event) {
-
-    try {
-
-      const imported = JSON.parse(
-        event.target.result
-      );
-
-      let importedData;
-
-      if (
-        imported &&
-        imported.data &&
-        typeof imported.data === "object" &&
-        !Array.isArray(imported.data)
-      ) {
-
-        importedData = imported.data;
-
-      } else {
-
-        importedData = imported;
-
-      }
-
-      if (
-        !importedData ||
-        typeof importedData !== "object" ||
-        Array.isArray(importedData)
-      ) {
-
-        throw new Error(
-          "Invalid backup format"
-        );
-
-      }
-
-      const confirmed = window.confirm(
-        "Import this wedding planner backup?\n\n" +
-        "Your current planner data will be replaced by the backup."
-      );
-
-      if (!confirmed) {
-
-        input.value = "";
-
-        return;
-
-      }
-
-      savedData = importedData;
-
-      if (!saveData()) {
-
-        input.value = "";
-
-        return;
-
-      }
-
-      if (currentCategory === "dashboard") {
-
-        showDashboard();
-
-      } else {
-
-        showCategory(currentCategory);
-
-      }
-
-      alert(
-        "Wedding planner data imported successfully! ❤️"
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Import failed:",
-        error
-      );
-
-      alert(
-        "This file is not a valid wedding planner backup."
-      );
-
-    }
-
-    input.value = "";
-
-  };
-
-  reader.onerror = function() {
-
-    alert(
-      "Could not read the selected file."
-    );
-
-    input.value = "";
-
-  };
-
-  reader.readAsText(file);
-
-}
-
-
-/* ============================================================
-   ITEM KEY
-============================================================ */
-
-function itemKey(categoryId, item) {
-
-  return categoryId + "::" + item;
-
-}
-
-
-/* ============================================================
-   GET ITEM
-============================================================ */
-
-function getItem(categoryId, item) {
-
-  const key = itemKey(
-    categoryId,
-    item
-  );
-
-  if (
-    !savedData[key] ||
-    typeof savedData[key] !== "object"
-  ) {
-
-    savedData[key] = {
-      status: "not",
-      vendor: "",
-      price: "",
-      deadline: "",
-      link: "",
-      notes: ""
-    };
-
-  }
-
-  const data = savedData[key];
-
-  data.status =
-    data.status === "progress" ||
-    data.status === "done"
-      ? data.status
-      : "not";
-
-  data.vendor =
-    typeof data.vendor === "string"
-      ? data.vendor
-      : "";
-
-  data.price =
-    typeof data.price === "string"
-      ? data.price
-      : "";
-
-  data.deadline =
-    typeof data.deadline === "string"
-      ? data.deadline
-      : "";
-
-  data.link =
-    typeof data.link === "string"
-      ? data.link
-      : "";
-
-  data.notes =
-    typeof data.notes === "string"
-      ? data.notes
-      : "";
-
-  return data;
-
-}
-
-
-/* ============================================================
-   NAVIGATION
-============================================================ */
-
-function buildNavigation() {
-
-  const nav = document.getElementById(
-    "navigation"
-  );
-
-  if (!nav) {
-    return;
-  }
-
-  nav.innerHTML = "";
-
-  const dashboard = document.createElement(
-    "button"
-  );
-
-  dashboard.type = "button";
-
-  dashboard.textContent = "🏠 Dashboard";
-
-  dashboard.className =
-    currentCategory === "dashboard"
-      ? "active"
-      : "";
-
-  dashboard.addEventListener(
-    "click",
-    function() {
-      showDashboard();
-    }
-  );
-
-  nav.appendChild(dashboard);
-
-  categories.forEach(function(category) {
-
-    const button = document.createElement(
-      "button"
-    );
-
-    button.type = "button";
-
-    button.textContent =
-      category.icon + " " + category.name;
-
-    button.className =
-      currentCategory === category.id
-        ? "active"
-        : "";
-
-    button.addEventListener(
-      "click",
-      function() {
-        showCategory(category.id);
-      }
-    );
-
-    nav.appendChild(button);
-
-  });
-
-}
-
-
-/* ============================================================
-   DASHBOARD
-============================================================ */
-
-function showDashboard() {
-
-  currentCategory = "dashboard";
-
-  const dashboardPage =
-    document.getElementById(
-      "dashboardPage"
-    );
-
-  const categoryPage =
-    document.getElementById(
-      "categoryPage"
-    );
-
-  if (!dashboardPage || !categoryPage) {
-    return;
-  }
-
-  dashboardPage.style.display = "block";
-
-  categoryPage.style.display = "none";
-
-  buildNavigation();
-
-  renderDashboard();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-}
-
-
-/* ============================================================
-   RENDER DASHBOARD
-============================================================ */
-
-function renderDashboard() {
-
-  let total = 0;
-
-  let done = 0;
-
-  let progress = 0;
-
-  categories.forEach(function(category) {
-
-    category.items.forEach(function(item) {
-
-      total++;
-
-      const data = getItem(
-        category.id,
-        item
-      );
-
-      if (data.status === "done") {
-        done++;
-      }
-
-      if (data.status === "progress") {
-        progress++;
-      }
-
-    });
-
-  });
-
-  const percent =
-    total > 0
-      ? Math.round((done / total) * 100)
-      : 0;
-
-  const totalCount =
-    document.getElementById("totalCount");
-
-  const doneCount =
-    document.getElementById("doneCount");
-
-  const progressCount =
-    document.getElementById("progressCount");
-
-  const categoryCount =
-    document.getElementById("categoryCount");
-
-  const overallPercent =
-    document.getElementById("overallPercent");
-
-  const overallFill =
-    document.getElementById("overallFill");
-
-  const grid =
-    document.getElementById("summaryGrid");
-
-  if (totalCount) {
-    totalCount.textContent = total;
-  }
-
-  if (doneCount) {
-    doneCount.textContent = done;
-  }
-
-  if (progressCount) {
-    progressCount.textContent = progress;
-  }
-
-  if (categoryCount) {
-    categoryCount.textContent =
-      categories.length;
-  }
-
-  if (overallPercent) {
-    overallPercent.textContent =
-      percent + "%";
-  }
-
-  if (overallFill) {
-    overallFill.style.width =
-      percent + "%";
-  }
-
-  if (!grid) {
-    return;
-  }
-
-  grid.innerHTML = "";
-
-  categories.forEach(function(category) {
-
-    const stats =
-      getCategoryStats(category);
-
-    const card =
-      document.createElement("div");
-
-    card.className = "summary-card";
-
-    card.innerHTML =
-      '<div style="font-size:25px;margin-bottom:10px;">' +
-      escapeHTML(category.icon) +
-      '</div>' +
-
-      '<h3>' +
-      escapeHTML(category.name) +
-      '</h3>' +
-
-      '<p>' +
-      stats.done +
-      " / " +
-      stats.total +
-      " completed" +
-      '</p>' +
-
-      '<div class="summary-bar">' +
-
-      '<div style="width:' +
-      stats.percent +
-      '%;"></div>' +
-
-      '</div>';
-
-    card.addEventListener(
-      "click",
-      function() {
-        showCategory(category.id);
-      }
-    );
-
-    grid.appendChild(card);
-
-  });
-
-}
-
-
-/* ============================================================
-   CATEGORY
-============================================================ */
-
-function showCategory(id) {
-
-  const category =
-    categories.find(function(category) {
-      return category.id === id;
-    });
-
-  if (!category) {
-    return;
-  }
-
-  currentCategory = id;
-
-  const dashboardPage =
-    document.getElementById(
-      "dashboardPage"
-    );
-
-  const categoryPage =
-    document.getElementById(
-      "categoryPage"
-    );
-
-  if (!dashboardPage || !categoryPage) {
-    return;
-  }
-
-  dashboardPage.style.display = "none";
-
-  categoryPage.style.display = "block";
-
-  const title =
-    document.getElementById(
-      "categoryTitle"
-    );
-
-  if (title) {
-
-    title.textContent =
-      category.icon +
-      " " +
-      category.name;
-
-  }
-
-  const search =
-    document.getElementById(
-      "itemSearch"
-    );
-
-  const filter =
-    document.getElementById(
-      "itemStatusFilter"
-    );
-
-  if (search) {
-    search.value = "";
-  }
-
-  if (filter) {
-    filter.value = "all";
-  }
-
-  buildNavigation();
-
-  renderCategory();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-}
-
-
-/* ============================================================
-   CATEGORY STATS
-============================================================ */
-
-function getCategoryStats(category) {
-
-  const total =
-    category.items.length;
-
-  let done = 0;
-
-  category.items.forEach(function(item) {
-
-    const data = getItem(
-      category.id,
-      item
-    );
-
-    if (data.status === "done") {
-      done++;
-    }
-
-  });
-
-  const percent =
-    total > 0
-      ? Math.round((done / total) * 100)
-      : 0;
-
-  return {
-    total: total,
-    done: done,
-    percent: percent
-  };
-
-}
-
-
-/* ============================================================
-   RENDER CATEGORY
-============================================================ */
-
-function renderCategory() {
-
-  const category =
-    categories.find(function(category) {
-      return category.id === currentCategory;
-    });
-
-  if (!category) {
-    return;
-  }
-
-  const stats =
-    getCategoryStats(category);
-
-  const categoryPercent =
-    document.getElementById(
-      "categoryPercent"
-    );
-
-  const categoryProgressText =
-    document.getElementById(
-      "categoryProgressText"
-    );
-
-  if (categoryPercent) {
-
-    categoryPercent.textContent =
-      stats.percent + "%";
-
-  }
-
-  if (categoryProgressText) {
-
-    categoryProgressText.textContent =
-      stats.done +
-      " / " +
-      stats.total +
-      " completed";
-
-  }
-
-  const searchInput =
-    document.getElementById(
-      "itemSearch"
-    );
-
-  const statusFilter =
-    document.getElementById(
-      "itemStatusFilter"
-    );
-
-  const search =
-    searchInput
-      ? searchInput.value
-          .toLowerCase()
-          .trim()
-      : "";
-
-  const status =
-    statusFilter
-      ? statusFilter.value
-      : "all";
-
-  const grid =
-    document.getElementById(
-      "itemsGrid"
-    );
-
-  const emptyMessage =
-    document.getElementById(
-      "emptyMessage"
-    );
-
-  if (!grid) {
-    return;
-  }
-
-  grid.innerHTML = "";
-
-  let visible = 0;
-
-  category.items.forEach(function(item) {
-
-    const data = getItem(
-      category.id,
-      item
-    );
-
-    const itemText =
-      item.toLowerCase();
-
-    const vendorText =
-      data.vendor.toLowerCase();
-
-    const notesText =
-      data.notes.toLowerCase();
-
-    const matchesSearch =
-      !search ||
-      itemText.includes(search) ||
-      vendorText.includes(search) ||
-      notesText.includes(search);
-
-    const matchesStatus =
-      status === "all" ||
-      data.status === status;
-
-    if (
-      !matchesSearch ||
-      !matchesStatus
-    ) {
-      return;
-    }
-
-    visible++;
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "item-card" +
-      (data.status === "done"
-        ? " done"
-        : "");
-
-    let statusText =
-      "Not started";
-
-    if (data.status === "progress") {
-      statusText = "In progress";
-    }
-
-    if (data.status === "done") {
-      statusText = "Completed";
-    }
-
-    let vendorHTML = "";
-
-    if (data.vendor) {
-
-      vendorHTML =
-        '<p>👤 ' +
-        escapeHTML(data.vendor) +
-        '</p>';
-
-    } else {
-
-      vendorHTML =
-        '<p>Click to add details</p>';
-
-    }
-
-    let deadlineHTML = "";
-
-    if (data.deadline) {
-
-      deadlineHTML =
-        '<div class="item-meta">📅 ' +
-        escapeHTML(
-          formatDate(data.deadline)
-        ) +
-        '</div>';
-
-    }
-
-    let statusClass = "";
-
-    if (data.status === "progress") {
-      statusClass = " progress";
-    }
-
-    if (data.status === "done") {
-      statusClass = " done";
-    }
-
-    card.innerHTML =
-
-      '<div class="item-top">' +
-
-        '<div class="item-icon">' +
-          escapeHTML(category.icon) +
-        '</div>' +
-
-        '<div class="item-status' +
-          statusClass +
-        '">' +
-          escapeHTML(statusText) +
-        '</div>' +
-
-      '</div>' +
-
-      '<h3>' +
-        escapeHTML(item) +
-      '</h3>' +
-
-      vendorHTML +
-
-      deadlineHTML;
-
-    card.addEventListener(
-      "click",
-      function() {
-        openModal(
-          category.id,
-          item
-        );
-      }
-    );
-
-    grid.appendChild(card);
-
-  });
-
-  if (emptyMessage) {
-
-    emptyMessage.style.display =
-      visible > 0
-        ? "none"
-        : "block";
-
-  }
-
-}
-
-
-/* ============================================================
-   MODAL
-============================================================ */
-
-function openModal(categoryId, item) {
-
-  currentItem = {
-    categoryId: categoryId,
-    item: item
-  };
-
-  const category =
-    categories.find(function(category) {
-      return category.id === categoryId;
-    });
-
-  if (!category) {
-    return;
-  }
-
-  const data =
-    getItem(
-      categoryId,
-      item
-    );
-
-  const modalCategory =
-    document.getElementById(
-      "modalCategory"
-    );
-
-  const modalTitle =
-    document.getElementById(
-      "modalTitle"
-    );
-
-  const vendorInput =
-    document.getElementById(
-      "vendorInput"
-    );
-
-  const priceInput =
-    document.getElementById(
-      "priceInput"
-    );
-
-  const deadlineInput =
-    document.getElementById(
-      "deadlineInput"
-    );
-
-  const linkInput =
-    document.getElementById(
-      "linkInput"
-    );
-
-  const notesInput =
-    document.getElementById(
-      "notesInput"
-    );
-
-  if (modalCategory) {
-    modalCategory.textContent =
-      category.name;
-  }
-
-  if (modalTitle) {
-    modalTitle.textContent =
-      item;
-  }
-
-  if (vendorInput) {
-    vendorInput.value =
-      data.vendor;
-  }
-
-  if (priceInput) {
-    priceInput.value =
-      data.price;
-  }
-
-  if (deadlineInput) {
-    deadlineInput.value =
-      data.deadline;
-  }
-
-  if (linkInput) {
-    linkInput.value =
-      data.link;
-  }
-
-  if (notesInput) {
-    notesInput.value =
-      data.notes;
-  }
-
-  modalStatus =
-    data.status;
-
-  updateStatusButtons();
-
-  const overlay =
-    document.getElementById(
-      "overlay"
-    );
-
-  if (overlay) {
-
-    overlay.classList.add(
-      "active"
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   CLOSE MODAL
-============================================================ */
-
-function closeModal() {
-
-  const overlay =
-    document.getElementById(
-      "overlay"
-    );
-
-  if (overlay) {
-
-    overlay.classList.remove(
-      "active"
-    );
-
-  }
-
-  currentItem = null;
-
-}
-
-
-/* ============================================================
-   CHOOSE STATUS
-============================================================ */
-
-function chooseStatus(status) {
-
-  if (
-    status !== "not" &&
-    status !== "progress" &&
-    status !== "done"
-  ) {
-    return;
-  }
-
-  modalStatus = status;
-
-  updateStatusButtons();
-
-}
-
-
-/* ============================================================
-   UPDATE STATUS BUTTONS
-============================================================ */
-
-function updateStatusButtons() {
-
-  const notButton =
-    document.getElementById(
-      "notButton"
-    );
-
-  const progressButton =
-    document.getElementById(
-      "progressButton"
-    );
-
-  const doneButton =
-    document.getElementById(
-      "doneButton"
-    );
-
-  if (notButton) {
-
-    notButton.classList.toggle(
-      "active",
-      modalStatus === "not"
-    );
-
-  }
-
-  if (progressButton) {
-
-    progressButton.classList.toggle(
-      "active",
-      modalStatus === "progress"
-    );
-
-  }
-
-  if (doneButton) {
-
-    doneButton.classList.toggle(
-      "active",
-      modalStatus === "done"
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   SAVE ITEM
-============================================================ */
-
-function saveItem() {
-
-  if (!currentItem) {
-    return;
-  }
-
-  const data =
-    getItem(
-      currentItem.categoryId,
-      currentItem.item
-    );
-
-  const vendorInput =
-    document.getElementById(
-      "vendorInput"
-    );
-
-  const priceInput =
-    document.getElementById(
-      "priceInput"
-    );
-
-  const deadlineInput =
-    document.getElementById(
-      "deadlineInput"
-    );
-
-  const linkInput =
-    document.getElementById(
-      "linkInput"
-    );
-
-  const notesInput =
-    document.getElementById(
-      "notesInput"
-    );
-
-  data.status =
-    modalStatus;
-
-  data.vendor =
-    vendorInput
-      ? vendorInput.value.trim()
-      : "";
-
-  data.price =
-    priceInput
-      ? priceInput.value.trim()
-      : "";
-
-  data.deadline =
-    deadlineInput
-      ? deadlineInput.value
-      : "";
-
-  data.link =
-    linkInput
-      ? linkInput.value.trim()
-      : "";
-
-  data.notes =
-    notesInput
-      ? notesInput.value.trim()
-      : "";
-
-  if (!saveData()) {
-    return;
-  }
-
-  closeModal();
-
-  if (
-    currentCategory ===
-    "dashboard"
-  ) {
-
-    showDashboard();
+    importedData =
+      imported.data;
 
   } else {
 
-    renderCategory();
+    importedData =
+      imported;
 
   }
 
-}
+  if (
+    !importedData ||
+    typeof importedData !== "object" ||
+    Array.isArray(importedData)
+  ) {
 
-
-/* ============================================================
-   CLEAR ITEM
-============================================================ */
-
-function clearItem() {
-
-  if (!currentItem) {
-    return;
+    throw new Error(
+      "Invalid backup format"
+    );
   }
 
   const confirmed =
     window.confirm(
-      "Clear all information for this item?"
+      "Import this wedding planner backup?\n\n" +
+      "Your current planner data will be replaced by the backup."
     );
 
   if (!confirmed) {
+
+    event.target.value = "";
+
     return;
   }
 
-  const data =
-    getItem(
-      currentItem.categoryId,
-      currentItem.item
-    );
-
-  data.status = "not";
-
-  data.vendor = "";
-
-  data.price = "";
-
-  data.deadline = "";
-
-  data.link = "";
-
-  data.notes = "";
+  savedData = importedData;
 
   if (!saveData()) {
+
+    event.target.value = "";
+
     return;
   }
-
-  closeModal();
 
   if (
     currentCategory ===
@@ -1623,154 +597,1456 @@ function clearItem() {
 
   } else {
 
-    renderCategory();
-
-  }
-
-}
-
-
-/* ============================================================
-   FORMAT DATE
-============================================================ */
-
-function formatDate(date) {
-
-  if (!date) {
-    return "";
-  }
-
-  const d =
-    new Date(
-      date + "T00:00:00"
+    showCategory(
+      currentCategory
     );
 
-  if (Number.isNaN(d.getTime())) {
-    return date;
   }
 
-  return d.toLocaleDateString(
-    "en-DK",
-    {
-      day: "numeric",
-      month: "short",
-      year: "numeric"
-    }
+  alert(
+    "Wedding planner data imported successfully! ❤️"
+  );
+
+} catch (error) {
+
+  console.error(
+    "Import failed:",
+    error
+  );
+
+  alert(
+    "This file is not a valid wedding planner backup."
   );
 
 }
 
+event.target.value = "";
+```
 
-/* ============================================================
-   ESCAPE HTML
-============================================================ */
+};
 
-function escapeHTML(value) {
+reader.onerror = function () {
 
-  return String(value)
+```
+alert(
+  "Could not read the selected file."
+);
 
-    .replace(/&/g, "&amp;")
+event.target.value = "";
+```
 
-    .replace(/</g, "&lt;")
+};
 
-    .replace(/>/g, "&gt;")
-
-    .replace(/"/g, "&quot;")
-
-    .replace(/'/g, "&#039;");
-
-}
-
-
-/* ============================================================
-   INITIALIZE EVENTS
-============================================================ */
-
-function initializeEvents() {
-
-  const search =
-    document.getElementById(
-      "itemSearch"
-    );
-
-  const statusFilter =
-    document.getElementById(
-      "itemStatusFilter"
-    );
-
-  const importFile =
-    document.getElementById(
-      "importFile"
-    );
-
-  const overlay =
-    document.getElementById(
-      "overlay"
-    );
-
-  if (search) {
-
-    search.addEventListener(
-      "input",
-      function() {
-        renderCategory();
-      }
-    );
-
-  }
-
-  if (statusFilter) {
-
-    statusFilter.addEventListener(
-      "change",
-      function() {
-        renderCategory();
-      }
-    );
-
-  }
-
-  if (importFile) {
-
-    importFile.addEventListener(
-      "change",
-      importData
-    );
-
-  }
-
-  if (overlay) {
-
-    overlay.addEventListener(
-      "click",
-      function(event) {
-
-        if (
-          event.target === overlay
-        ) {
-
-          closeModal();
-
-        }
-
-      }
-    );
-
-  }
+reader.readAsText(file);
 
 }
 
-
 /* ============================================================
-   KEYBOARD EVENTS
+ITEM KEY
 ============================================================ */
 
-document.addEventListener(
-  "keydown",
-  function(event) {
+function itemKey(
+categoryId,
+item
+) {
+
+return (
+categoryId +
+"::" +
+item
+);
+
+}
+
+/* ============================================================
+GET ITEM
+============================================================ */
+
+function getItem(
+categoryId,
+item
+) {
+
+const key =
+itemKey(
+categoryId,
+item
+);
+
+if (
+!savedData[key] ||
+typeof savedData[key] !== "object"
+) {
+
+```
+savedData[key] = {
+  status: "not",
+  vendor: "",
+  price: "",
+  deadline: "",
+  link: "",
+  notes: ""
+};
+```
+
+}
+
+const data =
+savedData[key];
+
+data.status =
+data.status || "not";
+
+data.vendor =
+data.vendor || "";
+
+data.price =
+data.price || "";
+
+data.deadline =
+data.deadline || "";
+
+data.link =
+data.link || "";
+
+data.notes =
+data.notes || "";
+
+return data;
+
+}
+
+/* ============================================================
+NAVIGATION
+============================================================ */
+
+function buildNavigation() {
+
+const nav =
+document.getElementById(
+"navigation"
+);
+
+if (!nav) {
+return;
+}
+
+nav.innerHTML = "";
+
+const dashboard =
+document.createElement("button");
+
+dashboard.type = "button";
+
+dashboard.textContent =
+"🏠 Dashboard";
+
+dashboard.className =
+currentCategory === "dashboard"
+? "active"
+: "";
+
+dashboard.addEventListener(
+"click",
+showDashboard
+);
+
+nav.appendChild(
+dashboard
+);
+
+categories.forEach(
+function (category) {
+
+```
+  const button =
+    document.createElement("button");
+
+  button.type = "button";
+
+  button.textContent =
+    category.icon +
+    " " +
+    category.name;
+
+  button.className =
+    currentCategory === category.id
+      ? "active"
+      : "";
+
+  button.addEventListener(
+    "click",
+    function () {
+      showCategory(category.id);
+    }
+  );
+
+  nav.appendChild(
+    button
+  );
+
+}
+```
+
+);
+
+}
+
+/* ============================================================
+DASHBOARD
+============================================================ */
+
+function showDashboard() {
+
+currentCategory =
+"dashboard";
+
+const dashboardPage =
+document.getElementById(
+"dashboardPage"
+);
+
+const categoryPage =
+document.getElementById(
+"categoryPage"
+);
+
+if (!dashboardPage || !categoryPage) {
+return;
+}
+
+dashboardPage.style.display =
+"block";
+
+categoryPage.style.display =
+"none";
+
+buildNavigation();
+
+renderDashboard();
+
+window.scrollTo({
+top: 0,
+behavior: "smooth"
+});
+
+}
+
+/* ============================================================
+RENDER DASHBOARD
+============================================================ */
+
+function renderDashboard() {
+
+let total = 0;
+
+let done = 0;
+
+let progress = 0;
+
+categories.forEach(
+function (category) {
+
+```
+  category.items.forEach(
+    function (item) {
+
+      total++;
+
+      const data =
+        getItem(
+          category.id,
+          item
+        );
+
+      if (
+        data.status === "done"
+      ) {
+
+        done++;
+
+      }
+
+      if (
+        data.status === "progress"
+      ) {
+
+        progress++;
+
+      }
+
+    }
+  );
+
+}
+```
+
+);
+
+const percent =
+total
+? Math.round(
+(done / total) * 100
+)
+: 0;
+
+const totalCount =
+document.getElementById(
+"totalCount"
+);
+
+const doneCount =
+document.getElementById(
+"doneCount"
+);
+
+const progressCount =
+document.getElementById(
+"progressCount"
+);
+
+const categoryCount =
+document.getElementById(
+"categoryCount"
+);
+
+const overallPercent =
+document.getElementById(
+"overallPercent"
+);
+
+const overallFill =
+document.getElementById(
+"overallFill"
+);
+
+if (totalCount) {
+totalCount.textContent = total;
+}
+
+if (doneCount) {
+doneCount.textContent = done;
+}
+
+if (progressCount) {
+progressCount.textContent = progress;
+}
+
+if (categoryCount) {
+categoryCount.textContent =
+categories.length;
+}
+
+if (overallPercent) {
+overallPercent.textContent =
+percent + "%";
+}
+
+if (overallFill) {
+overallFill.style.width =
+percent + "%";
+}
+
+const grid =
+document.getElementById(
+"summaryGrid"
+);
+
+if (!grid) {
+return;
+}
+
+grid.innerHTML = "";
+
+categories.forEach(
+function (category) {
+
+```
+  const stats =
+    getCategoryStats(
+      category
+    );
+
+  const card =
+    document.createElement("div");
+
+  card.className =
+    "summary-card";
+
+  const icon =
+    document.createElement("div");
+
+  icon.style.fontSize = "25px";
+
+  icon.style.marginBottom = "10px";
+
+  icon.textContent =
+    category.icon;
+
+  const title =
+    document.createElement("h3");
+
+  title.textContent =
+    category.name;
+
+  const description =
+    document.createElement("p");
+
+  description.textContent =
+    stats.done +
+    " / " +
+    stats.total +
+    " completed";
+
+  const bar =
+    document.createElement("div");
+
+  bar.className =
+    "summary-bar";
+
+  const fill =
+    document.createElement("div");
+
+  fill.style.width =
+    stats.percent + "%";
+
+  bar.appendChild(fill);
+
+  card.appendChild(icon);
+
+  card.appendChild(title);
+
+  card.appendChild(description);
+
+  card.appendChild(bar);
+
+  card.addEventListener(
+    "click",
+    function () {
+      showCategory(
+        category.id
+      );
+    }
+  );
+
+  grid.appendChild(card);
+
+}
+```
+
+);
+
+}
+
+/* ============================================================
+CATEGORY
+============================================================ */
+
+function showCategory(id) {
+
+const category =
+categories.find(
+function (c) {
+return c.id === id;
+}
+);
+
+if (!category) {
+return;
+}
+
+currentCategory =
+id;
+
+const dashboardPage =
+document.getElementById(
+"dashboardPage"
+);
+
+const categoryPage =
+document.getElementById(
+"categoryPage"
+);
+
+if (!dashboardPage || !categoryPage) {
+return;
+}
+
+dashboardPage.style.display =
+"none";
+
+categoryPage.style.display =
+"block";
+
+const categoryTitle =
+document.getElementById(
+"categoryTitle"
+);
+
+if (categoryTitle) {
+
+```
+categoryTitle.textContent =
+  category.icon +
+  " " +
+  category.name;
+```
+
+}
+
+const search =
+document.getElementById(
+"itemSearch"
+);
+
+const filter =
+document.getElementById(
+"itemStatusFilter"
+);
+
+if (search) {
+search.value = "";
+}
+
+if (filter) {
+filter.value = "all";
+}
+
+buildNavigation();
+
+renderCategory();
+
+window.scrollTo({
+top: 0,
+behavior: "smooth"
+});
+
+}
+
+/* ============================================================
+CATEGORY STATS
+============================================================ */
+
+function getCategoryStats(
+category
+) {
+
+const total =
+category.items.length;
+
+const done =
+category.items.filter(
+function (item) {
+
+```
+    return (
+      getItem(
+        category.id,
+        item
+      ).status === "done"
+    );
+
+  }
+).length;
+```
+
+const percent =
+total
+? Math.round(
+(done / total) * 100
+)
+: 0;
+
+return {
+total: total,
+done: done,
+percent: percent
+};
+
+}
+
+/* ============================================================
+RENDER CATEGORY
+============================================================ */
+
+function renderCategory() {
+
+const category =
+categories.find(
+function (c) {
+return c.id === currentCategory;
+}
+);
+
+if (!category) {
+return;
+}
+
+const stats =
+getCategoryStats(
+category
+);
+
+const percent =
+document.getElementById(
+"categoryPercent"
+);
+
+const progressText =
+document.getElementById(
+"categoryProgressText"
+);
+
+if (percent) {
+
+```
+percent.textContent =
+  stats.percent + "%";
+```
+
+}
+
+if (progressText) {
+
+```
+progressText.textContent =
+  stats.done +
+  " / " +
+  stats.total +
+  " completed";
+```
+
+}
+
+const searchElement =
+document.getElementById(
+"itemSearch"
+);
+
+const filterElement =
+document.getElementById(
+"itemStatusFilter"
+);
+
+const search =
+searchElement
+? searchElement.value
+.toLowerCase()
+.trim()
+: "";
+
+const status =
+filterElement
+? filterElement.value
+: "all";
+
+const grid =
+document.getElementById(
+"itemsGrid"
+);
+
+const empty =
+document.getElementById(
+"emptyMessage"
+);
+
+if (!grid) {
+return;
+}
+
+grid.innerHTML = "";
+
+let visible = 0;
+
+category.items.forEach(
+function (item) {
+
+```
+  const data =
+    getItem(
+      category.id,
+      item
+    );
+
+  const vendor =
+    String(
+      data.vendor || ""
+    ).toLowerCase();
+
+  const notes =
+    String(
+      data.notes || ""
+    ).toLowerCase();
+
+  const matchesSearch =
+    !search ||
+    item.toLowerCase().includes(search) ||
+    vendor.includes(search) ||
+    notes.includes(search);
+
+  const matchesStatus =
+    status === "all" ||
+    data.status === status;
+
+  if (
+    !matchesSearch ||
+    !matchesStatus
+  ) {
+
+    return;
+
+  }
+
+  visible++;
+
+  const card =
+    document.createElement("div");
+
+  card.className =
+    "item-card";
+
+  if (
+    data.status === "done"
+  ) {
+
+    card.classList.add("done");
+
+  }
+
+  const top =
+    document.createElement("div");
+
+  top.className =
+    "item-top";
+
+  const icon =
+    document.createElement("div");
+
+  icon.className =
+    "item-icon";
+
+  icon.textContent =
+    category.icon;
+
+  const statusBadge =
+    document.createElement("div");
+
+  statusBadge.className =
+    "item-status";
+
+  let statusText =
+    "Not started";
+
+  if (
+    data.status === "progress"
+  ) {
+
+    statusText =
+      "In progress";
+
+    statusBadge.classList.add(
+      "progress"
+    );
+
+  }
+
+  if (
+    data.status === "done"
+  ) {
+
+    statusText =
+      "Completed";
+
+    statusBadge.classList.add(
+      "done"
+    );
+
+  }
+
+  statusBadge.textContent =
+    statusText;
+
+  top.appendChild(icon);
+
+  top.appendChild(statusBadge);
+
+  const title =
+    document.createElement("h3");
+
+  title.textContent =
+    item;
+
+  card.appendChild(top);
+
+  card.appendChild(title);
+
+  const vendorElement =
+    document.createElement("p");
+
+  if (data.vendor) {
+
+    vendorElement.textContent =
+      "👤 " +
+      data.vendor;
+
+  } else {
+
+    vendorElement.textContent =
+      "Click to add details";
+
+  }
+
+  card.appendChild(
+    vendorElement
+  );
+
+  if (data.deadline) {
+
+    const deadline =
+      document.createElement("div");
+
+    deadline.className =
+      "item-meta";
+
+    deadline.textContent =
+      "📅 " +
+      formatDate(
+        data.deadline
+      );
+
+    card.appendChild(
+      deadline
+    );
+
+  }
+
+  card.addEventListener(
+    "click",
+    function () {
+
+      openModal(
+        category.id,
+        item
+      );
+
+    }
+  );
+
+  grid.appendChild(card);
+
+}
+```
+
+);
+
+if (empty) {
+
+```
+empty.style.display =
+  visible
+    ? "none"
+    : "block";
+```
+
+}
+
+}
+
+/* ============================================================
+MODAL
+============================================================ */
+
+function openModal(
+categoryId,
+item
+) {
+
+currentItem = {
+categoryId: categoryId,
+item: item
+};
+
+const category =
+categories.find(
+function (c) {
+return c.id === categoryId;
+}
+);
+
+if (!category) {
+return;
+}
+
+const data =
+getItem(
+categoryId,
+item
+);
+
+const modalCategory =
+document.getElementById(
+"modalCategory"
+);
+
+const modalTitle =
+document.getElementById(
+"modalTitle"
+);
+
+if (modalCategory) {
+
+```
+modalCategory.textContent =
+  category.name;
+```
+
+}
+
+if (modalTitle) {
+
+```
+modalTitle.textContent =
+  item;
+```
+
+}
+
+setInputValue(
+"vendorInput",
+data.vendor
+);
+
+setInputValue(
+"priceInput",
+data.price
+);
+
+setInputValue(
+"deadlineInput",
+data.deadline
+);
+
+setInputValue(
+"linkInput",
+data.link
+);
+
+setInputValue(
+"notesInput",
+data.notes
+);
+
+modalStatus =
+data.status;
+
+updateStatusButtons();
+
+const overlay =
+document.getElementById(
+"overlay"
+);
+
+if (overlay) {
+
+```
+overlay.classList.add(
+  "active"
+);
+```
+
+}
+
+}
+
+function closeModal() {
+
+const overlay =
+document.getElementById(
+"overlay"
+);
+
+if (overlay) {
+
+```
+overlay.classList.remove(
+  "active"
+);
+```
+
+}
+
+currentItem = null;
+
+}
+
+function chooseStatus(
+status
+) {
+
+modalStatus =
+status;
+
+updateStatusButtons();
+
+}
+
+function updateStatusButtons() {
+
+const notButton =
+document.getElementById(
+"notButton"
+);
+
+const progressButton =
+document.getElementById(
+"progressButton"
+);
+
+const doneButton =
+document.getElementById(
+"doneButton"
+);
+
+if (notButton) {
+
+```
+notButton.classList.toggle(
+  "active",
+  modalStatus === "not"
+);
+```
+
+}
+
+if (progressButton) {
+
+```
+progressButton.classList.toggle(
+  "active",
+  modalStatus === "progress"
+);
+```
+
+}
+
+if (doneButton) {
+
+```
+doneButton.classList.toggle(
+  "active",
+  modalStatus === "done"
+);
+```
+
+}
+
+}
+
+/* ============================================================
+SAVE ITEM
+============================================================ */
+
+function saveItem() {
+
+if (!currentItem) {
+return;
+}
+
+const data =
+getItem(
+currentItem.categoryId,
+currentItem.item
+);
+
+data.status =
+modalStatus;
+
+data.vendor =
+getInputValue(
+"vendorInput"
+);
+
+data.price =
+getInputValue(
+"priceInput"
+);
+
+data.deadline =
+getInputValue(
+"deadlineInput"
+);
+
+data.link =
+getInputValue(
+"linkInput"
+);
+
+data.notes =
+getInputValue(
+"notesInput"
+);
+
+if (!saveData()) {
+return;
+}
+
+closeModal();
+
+if (
+currentCategory ===
+"dashboard"
+) {
+
+```
+showDashboard();
+```
+
+} else {
+
+```
+/*
+ * Do not reset the category's search
+ * unnecessarily after saving.
+ */
+
+renderCategory();
+```
+
+}
+
+}
+
+/* ============================================================
+CLEAR ITEM
+============================================================ */
+
+function clearItem() {
+
+if (!currentItem) {
+return;
+}
+
+const data =
+getItem(
+currentItem.categoryId,
+currentItem.item
+);
+
+data.status = "not";
+
+data.vendor = "";
+
+data.price = "";
+
+data.deadline = "";
+
+data.link = "";
+
+data.notes = "";
+
+if (!saveData()) {
+return;
+}
+
+closeModal();
+
+if (
+currentCategory ===
+"dashboard"
+) {
+
+```
+showDashboard();
+```
+
+} else {
+
+```
+renderCategory();
+```
+
+}
+
+}
+
+/* ============================================================
+INPUT HELPERS
+============================================================ */
+
+function getInputValue(id) {
+
+const element =
+document.getElementById(id);
+
+return element
+? element.value
+: "";
+
+}
+
+function setInputValue(
+id,
+value
+) {
+
+const element =
+document.getElementById(id);
+
+if (element) {
+
+```
+element.value =
+  value || "";
+```
+
+}
+
+}
+
+/* ============================================================
+FORMAT DATE
+============================================================ */
+
+function formatDate(
+date
+) {
+
+if (!date) {
+return "";
+}
+
+const d =
+new Date(
+date +
+"T00:00:00"
+);
+
+if (
+Number.isNaN(
+d.getTime()
+)
+) {
+
+```
+return date;
+```
+
+}
+
+return d.toLocaleDateString(
+"en-DK",
+{
+day: "numeric",
+month: "short",
+year: "numeric"
+}
+);
+
+}
+
+/* ============================================================
+EVENT SETUP
+============================================================ */
+
+function setupEvents() {
+
+const search =
+document.getElementById(
+"itemSearch"
+);
+
+if (search) {
+
+```
+search.addEventListener(
+  "input",
+  renderCategory
+);
+```
+
+}
+
+const statusFilter =
+document.getElementById(
+"itemStatusFilter"
+);
+
+if (statusFilter) {
+
+```
+statusFilter.addEventListener(
+  "change",
+  renderCategory
+);
+```
+
+}
+
+const exportButton =
+document.getElementById(
+"exportButton"
+);
+
+if (exportButton) {
+
+```
+exportButton.addEventListener(
+  "click",
+  exportData
+);
+```
+
+}
+
+const importButton =
+document.getElementById(
+"importButton"
+);
+
+const importFile =
+document.getElementById(
+"importFile"
+);
+
+if (
+importButton &&
+importFile
+) {
+
+```
+importButton.addEventListener(
+  "click",
+  function () {
+
+    importFile.click();
+
+  }
+);
+
+importFile.addEventListener(
+  "change",
+  importData
+);
+```
+
+}
+
+const closeButton =
+document.getElementById(
+"closeModalButton"
+);
+
+if (closeButton) {
+
+```
+closeButton.addEventListener(
+  "click",
+  closeModal
+);
+```
+
+}
+
+const notButton =
+document.getElementById(
+"notButton"
+);
+
+if (notButton) {
+
+```
+notButton.addEventListener(
+  "click",
+  function () {
+    chooseStatus("not");
+  }
+);
+```
+
+}
+
+const progressButton =
+document.getElementById(
+"progressButton"
+);
+
+if (progressButton) {
+
+```
+progressButton.addEventListener(
+  "click",
+  function () {
+    chooseStatus("progress");
+  }
+);
+```
+
+}
+
+const doneButton =
+document.getElementById(
+"doneButton"
+);
+
+if (doneButton) {
+
+```
+doneButton.addEventListener(
+  "click",
+  function () {
+    chooseStatus("done");
+  }
+);
+```
+
+}
+
+const clearButton =
+document.getElementById(
+"clearButton"
+);
+
+if (clearButton) {
+
+```
+clearButton.addEventListener(
+  "click",
+  clearItem
+);
+```
+
+}
+
+const saveButton =
+document.getElementById(
+"saveButton"
+);
+
+if (saveButton) {
+
+```
+saveButton.addEventListener(
+  "click",
+  saveItem
+);
+```
+
+}
+
+const overlay =
+document.getElementById(
+"overlay"
+);
+
+if (overlay) {
+
+```
+overlay.addEventListener(
+  "click",
+  function (event) {
 
     if (
-      event.key === "Escape"
+      event.target === overlay
     ) {
 
       closeModal();
@@ -1779,44 +2055,64 @@ document.addEventListener(
 
   }
 );
+```
 
+}
+
+document.addEventListener(
+"keydown",
+function (event) {
+
+```
+  if (
+    event.key === "Escape"
+  ) {
+
+    closeModal();
+
+  }
+
+}
+```
+
+);
+
+}
 
 /* ============================================================
-   START APPLICATION
+START APPLICATION
 ============================================================ */
 
 function startApplication() {
 
-  console.log(
-    "Wedding Planner JavaScript loaded."
-  );
+loadData();
 
-  loadData();
+setupEvents();
 
-  initializeEvents();
+buildNavigation();
 
-  buildNavigation();
-
-  showDashboard();
+showDashboard();
 
 }
 
-
 /*
- * Start after the HTML has loaded.
- */
+
+* Wait until the complete HTML document exists
+* before trying to find any elements.
+  */
 
 if (
-  document.readyState === "loading"
+document.readyState ===
+"loading"
 ) {
 
-  document.addEventListener(
-    "DOMContentLoaded",
-    startApplication
-  );
+document.addEventListener(
+"DOMContentLoaded",
+startApplication
+);
 
 } else {
 
-  startApplication();
+startApplication();
 
 }
