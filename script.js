@@ -153,7 +153,7 @@ const defaultCategories = [
       "Digital Pro",
       "Visual Eyes",
       "Vividmemoir.dk",
-      "infocus"
+      "infocus",
       "Views of Nivi",
       "Sana",
       "Visual Eyes",
