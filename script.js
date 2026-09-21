@@ -316,14 +316,16 @@ function loadData() {
 
 try {
 
-
-const stored = localStorage.getItem(
-  STORAGE_KEY
-);
+```
+const stored =
+  localStorage.getItem(
+    STORAGE_KEY
+  );
 
 if (stored) {
 
-  const parsed = JSON.parse(stored);
+  const parsed =
+    JSON.parse(stored);
 
   if (
     parsed &&
@@ -344,18 +346,18 @@ if (stored) {
   savedData = {};
 
 }
-
+```
 
 } catch (error) {
 
-
+```
 console.error(
   "Could not load saved data:",
   error
 );
 
 savedData = {};
-
+```
 
 }
 
@@ -369,18 +371,18 @@ function saveData() {
 
 try {
 
-
+```
 localStorage.setItem(
   STORAGE_KEY,
   JSON.stringify(savedData)
 );
 
 return true;
-
+```
 
 } catch (error) {
 
-
+```
 console.error(
   "Could not save data:",
   error
@@ -391,7 +393,7 @@ alert(
 );
 
 return false;
-
+```
 
 }
 
@@ -405,39 +407,46 @@ function exportData() {
 
 try {
 
-
+```
 saveData();
 
 const backup = {
   app: "Tamil Wedding Planner",
   version: 1,
-  exportedAt: new Date().toISOString(),
+  exportedAt:
+    new Date().toISOString(),
   data: savedData
 };
 
-const json = JSON.stringify(
-  backup,
-  null,
-  2
-);
+const json =
+  JSON.stringify(
+    backup,
+    null,
+    2
+  );
 
-const blob = new Blob(
-  [json],
-  {
-    type: "application/json"
-  }
-);
+const blob =
+  new Blob(
+    [json],
+    {
+      type: "application/json"
+    }
+  );
 
-const url = URL.createObjectURL(
-  blob
-);
+const url =
+  URL.createObjectURL(
+    blob
+  );
 
 const link =
-  document.createElement("a");
+  document.createElement(
+    "a"
+  );
 
 link.href = url;
 
-const now = new Date();
+const now =
+  new Date();
 
 const year =
   now.getFullYear();
@@ -481,11 +490,11 @@ setTimeout(
   },
   1000
 );
-
+```
 
 } catch (error) {
 
-
+```
 console.error(
   "Export failed:",
   error
@@ -494,7 +503,7 @@ console.error(
 alert(
   "Sorry, the wedding planner data could not be exported."
 );
-
+```
 
 }
 
@@ -519,7 +528,7 @@ if (
 .endsWith(".json")
 ) {
 
-
+```
 alert(
   "Please select a .json wedding planner backup file."
 );
@@ -527,7 +536,7 @@ alert(
 event.target.value = "";
 
 return;
-
+```
 
 }
 
@@ -537,7 +546,7 @@ new FileReader();
 reader.onload =
 function(e) {
 
-
+```
   try {
 
     const imported =
@@ -643,12 +652,12 @@ function(e) {
   event.target.value = "";
 
 };
-
+```
 
 reader.onerror =
 function() {
 
-
+```
   alert(
     "Could not read the selected file."
   );
@@ -656,7 +665,7 @@ function() {
   event.target.value = "";
 
 };
-
+```
 
 reader.readAsText(
 file
@@ -698,10 +707,11 @@ item
 
 if (
 !savedData[key] ||
-typeof savedData[key] !== "object"
+typeof savedData[key] !== "object" ||
+Array.isArray(savedData[key])
 ) {
 
-
+```
 savedData[key] = {
 
   status: "not",
@@ -712,12 +722,15 @@ savedData[key] = {
   notes: ""
 
 };
-
+```
 
 }
 
 savedData[key].status =
-savedData[key].status || "not";
+["not", "progress", "done"]
+.includes(savedData[key].status)
+? savedData[key].status
+: "not";
 
 savedData[key].vendor =
 savedData[key].vendor || "";
@@ -774,11 +787,11 @@ dashboard.addEventListener(
 "click",
 function() {
 
-
+```
   showDashboard();
 
 }
-
+```
 
 );
 
@@ -789,7 +802,7 @@ dashboard
 categories.forEach(
 function(category) {
 
-
+```
   const button =
     document.createElement(
       "button"
@@ -823,7 +836,7 @@ function(category) {
   );
 
 }
-
+```
 
 );
 
@@ -850,19 +863,19 @@ document.getElementById(
 
 if (dashboardPage) {
 
-
+```
 dashboardPage.style.display =
   "block";
-
+```
 
 }
 
 if (categoryPage) {
 
-
+```
 categoryPage.style.display =
   "none";
-
+```
 
 }
 
@@ -892,7 +905,7 @@ let progress = 0;
 categories.forEach(
 function(category) {
 
-
+```
   category.items.forEach(
     function(item) {
 
@@ -924,7 +937,7 @@ function(category) {
   );
 
 }
-
+```
 
 );
 
@@ -967,55 +980,55 @@ document.getElementById(
 
 if (totalCount) {
 
-
+```
 totalCount.textContent =
   total;
-
+```
 
 }
 
 if (doneCount) {
 
-
+```
 doneCount.textContent =
   done;
-
+```
 
 }
 
 if (progressCount) {
 
-
+```
 progressCount.textContent =
   progress;
-
+```
 
 }
 
 if (categoryCount) {
 
-
+```
 categoryCount.textContent =
   categories.length;
-
+```
 
 }
 
 if (overallPercent) {
 
-
+```
 overallPercent.textContent =
   percent + "%";
-
+```
 
 }
 
 if (overallFill) {
 
-
+```
 overallFill.style.width =
   percent + "%";
-
+```
 
 }
 
@@ -1033,7 +1046,7 @@ grid.innerHTML = "";
 categories.forEach(
 function(category) {
 
-
+```
   const stats =
     getCategoryStats(
       category
@@ -1047,10 +1060,20 @@ function(category) {
   card.className =
     "summary-card";
 
+  card.setAttribute(
+    "role",
+    "button"
+  );
+
+  card.setAttribute(
+    "tabindex",
+    "0"
+  );
+
   card.innerHTML =
 
     '<div class="summary-icon">' +
-      category.icon +
+      escapeHTML(category.icon) +
     "</div>" +
 
     "<h3>" +
@@ -1074,13 +1097,34 @@ function(category) {
 
     "</div>";
 
-  card.addEventListener(
-    "click",
+  const openCategory =
     function() {
 
       showCategory(
         category.id
       );
+
+    };
+
+  card.addEventListener(
+    "click",
+    openCategory
+  );
+
+  card.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter" ||
+        event.key === " "
+      ) {
+
+        event.preventDefault();
+
+        openCategory();
+
+      }
 
     }
   );
@@ -1090,7 +1134,7 @@ function(category) {
   );
 
 }
-
+```
 
 );
 
@@ -1106,12 +1150,12 @@ const category =
 categories.find(
 function(c) {
 
-
+```
     return c.id === id;
 
   }
 );
-
+```
 
 if (!category) {
 return;
@@ -1132,19 +1176,19 @@ document.getElementById(
 
 if (dashboardPage) {
 
-
+```
 dashboardPage.style.display =
   "none";
-
+```
 
 }
 
 if (categoryPage) {
 
-
+```
 categoryPage.style.display =
   "block";
-
+```
 
 }
 
@@ -1155,12 +1199,12 @@ document.getElementById(
 
 if (categoryTitle) {
 
-
+```
 categoryTitle.textContent =
   category.icon +
   " " +
   category.name;
-
+```
 
 }
 
@@ -1176,17 +1220,17 @@ document.getElementById(
 
 if (search) {
 
-
+```
 search.value = "";
-
+```
 
 }
 
 if (filter) {
 
-
+```
 filter.value = "all";
-
+```
 
 }
 
@@ -1217,7 +1261,7 @@ let done = 0;
 category.items.forEach(
 function(item) {
 
-
+```
   const data =
     getItem(
       category.id,
@@ -1233,7 +1277,7 @@ function(item) {
   }
 
 }
-
+```
 
 );
 
@@ -1262,12 +1306,12 @@ const category =
 categories.find(
 function(c) {
 
-
+```
     return c.id === currentCategory;
 
   }
 );
-
+```
 
 if (!category) {
 return;
@@ -1290,22 +1334,22 @@ document.getElementById(
 
 if (categoryPercent) {
 
-
+```
 categoryPercent.textContent =
   stats.percent + "%";
-
+```
 
 }
 
 if (categoryProgressText) {
 
-
+```
 categoryProgressText.textContent =
   stats.done +
   " / " +
   stats.total +
   " completed";
-
+```
 
 }
 
@@ -1347,7 +1391,7 @@ let visible = 0;
 category.items.forEach(
 function(item) {
 
-
+```
   const data =
     getItem(
       category.id,
@@ -1370,11 +1414,18 @@ function(item) {
     )
       .toLowerCase();
 
+  const priceText =
+    String(
+      data.price || ""
+    )
+      .toLowerCase();
+
   const matchesSearch =
     !search ||
     itemText.includes(search) ||
     vendorText.includes(search) ||
-    notesText.includes(search);
+    notesText.includes(search) ||
+    priceText.includes(search);
 
   const matchesStatus =
     status === "all" ||
@@ -1398,6 +1449,16 @@ function(item) {
 
   card.className =
     "item-card";
+
+  card.setAttribute(
+    "role",
+    "button"
+  );
+
+  card.setAttribute(
+    "tabindex",
+    "0"
+  );
 
   if (
     data.status === "done"
@@ -1475,7 +1536,9 @@ function(item) {
     '<div class="item-top">' +
 
       '<div class="item-icon">' +
-        category.icon +
+        escapeHTML(
+          category.icon
+        ) +
       "</div>" +
 
       '<div class="item-status' +
@@ -1494,14 +1557,35 @@ function(item) {
 
     deadlineHTML;
 
-  card.addEventListener(
-    "click",
+  const openItem =
     function() {
 
       openModal(
         category.id,
         item
       );
+
+    };
+
+  card.addEventListener(
+    "click",
+    openItem
+  );
+
+  card.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter" ||
+        event.key === " "
+      ) {
+
+        event.preventDefault();
+
+        openItem();
+
+      }
 
     }
   );
@@ -1511,7 +1595,7 @@ function(item) {
   );
 
 }
-
+```
 
 );
 
@@ -1522,12 +1606,12 @@ document.getElementById(
 
 if (emptyMessage) {
 
-
+```
 emptyMessage.style.display =
   visible > 0
     ? "none"
     : "block";
-
+```
 
 }
 
@@ -1551,12 +1635,12 @@ const category =
 categories.find(
 function(c) {
 
-
+```
     return c.id === categoryId;
 
   }
 );
-
+```
 
 if (!category) {
 return;
@@ -1605,64 +1689,64 @@ document.getElementById(
 
 if (modalCategory) {
 
-
+```
 modalCategory.textContent =
   category.name;
-
+```
 
 }
 
 if (modalTitle) {
 
-
+```
 modalTitle.textContent =
   item;
-
+```
 
 }
 
 if (vendorInput) {
 
-
+```
 vendorInput.value =
   data.vendor;
-
+```
 
 }
 
 if (priceInput) {
 
-
+```
 priceInput.value =
   data.price;
-
+```
 
 }
 
 if (deadlineInput) {
 
-
+```
 deadlineInput.value =
   data.deadline;
-
+```
 
 }
 
 if (linkInput) {
 
-
+```
 linkInput.value =
   data.link;
-
+```
 
 }
 
 if (notesInput) {
 
-
+```
 notesInput.value =
   data.notes;
-
+```
 
 }
 
@@ -1678,11 +1762,19 @@ document.getElementById(
 
 if (overlay) {
 
-
+```
 overlay.classList.add(
   "active"
 );
 
+overlay.setAttribute(
+  "aria-hidden",
+  "false"
+);
+
+document.body.style.overflow =
+  "hidden";
+```
 
 }
 
@@ -1701,13 +1793,21 @@ document.getElementById(
 
 if (overlay) {
 
-
+```
 overlay.classList.remove(
   "active"
 );
 
+overlay.setAttribute(
+  "aria-hidden",
+  "true"
+);
+```
 
 }
+
+document.body.style.overflow =
+"";
 
 currentItem =
 null;
@@ -1721,6 +1821,17 @@ CHOOSE STATUS
 function chooseStatus(
 status
 ) {
+
+if (
+!["not", "progress", "done"]
+.includes(status)
+) {
+
+```
+return;
+```
+
+}
 
 modalStatus =
 status;
@@ -1752,34 +1863,55 @@ document.getElementById(
 
 if (notButton) {
 
-
+```
 notButton.classList.toggle(
   "active",
   modalStatus === "not"
 );
 
+notButton.setAttribute(
+  "aria-pressed",
+  modalStatus === "not"
+    ? "true"
+    : "false"
+);
+```
 
 }
 
 if (progressButton) {
 
-
+```
 progressButton.classList.toggle(
   "active",
   modalStatus === "progress"
 );
 
+progressButton.setAttribute(
+  "aria-pressed",
+  modalStatus === "progress"
+    ? "true"
+    : "false"
+);
+```
 
 }
 
 if (doneButton) {
 
-
+```
 doneButton.classList.toggle(
   "active",
   modalStatus === "done"
 );
 
+doneButton.setAttribute(
+  "aria-pressed",
+  modalStatus === "done"
+    ? "true"
+    : "false"
+);
+```
 
 }
 
@@ -1831,12 +1963,12 @@ modalStatus;
 
 data.vendor =
 vendorInput
-? vendorInput.value
+? vendorInput.value.trim()
 : "";
 
 data.price =
 priceInput
-? priceInput.value
+? priceInput.value.trim()
 : "";
 
 data.deadline =
@@ -1846,15 +1978,20 @@ deadlineInput
 
 data.link =
 linkInput
-? linkInput.value
+? linkInput.value.trim()
 : "";
 
 data.notes =
 notesInput
-? notesInput.value
+? notesInput.value.trim()
 : "";
 
+const saved =
 saveData();
+
+if (!saved) {
+return;
+}
 
 closeModal();
 
@@ -1862,17 +1999,17 @@ if (
 currentCategory === "dashboard"
 ) {
 
-
+```
 showDashboard();
-
+```
 
 } else {
 
-
+```
 showCategory(
   currentCategory
 );
-
+```
 
 }
 
@@ -1912,7 +2049,12 @@ data.link =
 data.notes =
 "";
 
+const saved =
 saveData();
+
+if (!saved) {
+return;
+}
 
 closeModal();
 
@@ -1920,20 +2062,432 @@ if (
 currentCategory === "dashboard"
 ) {
 
-
+```
 showDashboard();
-
+```
 
 } else {
 
-
+```
 showCategory(
   currentCategory
 );
-
-
-}
+```
 
 }
 
-/* ===================*
+}
+
+/* ============================================================
+UTILITY FUNCTIONS
+============================================================ */
+
+function escapeHTML(value) {
+
+return String(
+value ?? ""
+)
+.replace(
+/&/g,
+"&"
+)
+.replace(
+/</g,
+"<"
+)
+.replace(
+/>/g,
+">"
+)
+.replace(
+/"/g,
+"""
+)
+.replace(
+/'/g,
+"'"
+);
+
+}
+
+function formatDate(
+dateString
+) {
+
+if (!dateString) {
+return "";
+}
+
+const date =
+new Date(
+dateString +
+"T00:00:00"
+);
+
+if (
+Number.isNaN(
+date.getTime()
+)
+) {
+
+```
+return dateString;
+```
+
+}
+
+return date.toLocaleDateString(
+undefined,
+{
+day: "numeric",
+month: "short",
+year: "numeric"
+}
+);
+
+}
+
+/* ============================================================
+EVENT LISTENERS
+============================================================ */
+
+function setupEventListeners() {
+
+/* ----------------------------------------------------------
+EXPORT
+---------------------------------------------------------- */
+
+const exportButton =
+document.getElementById(
+"exportButton"
+);
+
+if (exportButton) {
+
+```
+exportButton.addEventListener(
+  "click",
+  exportData
+);
+```
+
+}
+
+/* ----------------------------------------------------------
+IMPORT
+---------------------------------------------------------- */
+
+const importButton =
+document.getElementById(
+"importButton"
+);
+
+const importFile =
+document.getElementById(
+"importFile"
+);
+
+if (
+importButton &&
+importFile
+) {
+
+```
+importButton.addEventListener(
+  "click",
+  function() {
+
+    importFile.click();
+
+  }
+);
+
+importFile.addEventListener(
+  "change",
+  importData
+);
+```
+
+}
+
+/* ----------------------------------------------------------
+SEARCH
+---------------------------------------------------------- */
+
+const searchInput =
+document.getElementById(
+"itemSearch"
+);
+
+if (searchInput) {
+
+```
+searchInput.addEventListener(
+  "input",
+  function() {
+
+    renderCategory();
+
+  }
+);
+```
+
+}
+
+/* ----------------------------------------------------------
+STATUS FILTER
+---------------------------------------------------------- */
+
+const statusFilter =
+document.getElementById(
+"itemStatusFilter"
+);
+
+if (statusFilter) {
+
+```
+statusFilter.addEventListener(
+  "change",
+  function() {
+
+    renderCategory();
+
+  }
+);
+```
+
+}
+
+/* ----------------------------------------------------------
+MODAL CLOSE
+---------------------------------------------------------- */
+
+const closeModalButton =
+document.getElementById(
+"closeModalButton"
+);
+
+if (closeModalButton) {
+
+```
+closeModalButton.addEventListener(
+  "click",
+  closeModal
+);
+```
+
+}
+
+/* ----------------------------------------------------------
+CLOSE MODAL BY CLICKING OUTSIDE
+---------------------------------------------------------- */
+
+const overlay =
+document.getElementById(
+"overlay"
+);
+
+if (overlay) {
+
+```
+overlay.addEventListener(
+  "click",
+  function(event) {
+
+    if (
+      event.target === overlay
+    ) {
+
+      closeModal();
+
+    }
+
+  }
+);
+```
+
+}
+
+/* ----------------------------------------------------------
+STATUS BUTTONS
+---------------------------------------------------------- */
+
+const notButton =
+document.getElementById(
+"notButton"
+);
+
+const progressButton =
+document.getElementById(
+"progressButton"
+);
+
+const doneButton =
+document.getElementById(
+"doneButton"
+);
+
+if (notButton) {
+
+```
+notButton.addEventListener(
+  "click",
+  function() {
+
+    chooseStatus(
+      "not"
+    );
+
+  }
+);
+```
+
+}
+
+if (progressButton) {
+
+```
+progressButton.addEventListener(
+  "click",
+  function() {
+
+    chooseStatus(
+      "progress"
+    );
+
+  }
+);
+```
+
+}
+
+if (doneButton) {
+
+```
+doneButton.addEventListener(
+  "click",
+  function() {
+
+    chooseStatus(
+      "done"
+    );
+
+  }
+);
+```
+
+}
+
+/* ----------------------------------------------------------
+SAVE
+---------------------------------------------------------- */
+
+const saveButton =
+document.getElementById(
+"saveButton"
+);
+
+if (saveButton) {
+
+```
+saveButton.addEventListener(
+  "click",
+  saveItem
+);
+```
+
+}
+
+/* ----------------------------------------------------------
+CLEAR
+---------------------------------------------------------- */
+
+const clearButton =
+document.getElementById(
+"clearButton"
+);
+
+if (clearButton) {
+
+```
+clearButton.addEventListener(
+  "click",
+  function() {
+
+    const confirmed =
+      confirm(
+        "Clear all information for this item?"
+      );
+
+    if (confirmed) {
+
+      clearItem();
+
+    }
+
+  }
+);
+```
+
+}
+
+/* ----------------------------------------------------------
+ESCAPE KEY
+---------------------------------------------------------- */
+
+document.addEventListener(
+"keydown",
+function(event) {
+
+```
+  if (
+    event.key === "Escape" &&
+    overlay &&
+    overlay.classList.contains("active")
+  ) {
+
+    closeModal();
+
+  }
+
+}
+```
+
+);
+
+}
+
+/* ============================================================
+INITIALISE APP
+============================================================ */
+
+function init() {
+
+loadData();
+
+setupEventListeners();
+
+buildNavigation();
+
+showDashboard();
+
+}
+
+/* ============================================================
+START APP
+============================================================ */
+
+if (
+document.readyState === "loading"
+) {
+
+document.addEventListener(
+"DOMContentLoaded",
+init
+);
+
+} else {
+
+init();
+
+}
