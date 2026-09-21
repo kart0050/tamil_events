@@ -1,5 +1,5 @@
 ```yaml
-name: Deploy Wedding Planner
+name: Deploy tamil_events
 
 on:
   push:
@@ -13,10 +13,6 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -27,46 +23,60 @@ jobs:
 
     steps:
 
-      # Download the complete repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Make sure all website files exist
-      - name: Check website files
+      - name: Verify website files
         run: |
-          test -f index.html
-          test -f style.css
-          test -f script.js
+          echo "Checking website files..."
 
-          echo "All website files found:"
-          echo "✓ index.html"
-          echo "✓ style.css"
-          echo "✓ script.js"
+          echo ""
+          echo "Repository files:"
+          find . -maxdepth 2 -type f | sort
 
-      # Configure GitHub Pages
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
+          echo ""
 
-      # Put ALL three website files into the deployment package
-      - name: Prepare website
+          test -f index.html || {
+            echo "ERROR: index.html was not found"
+            exit 1
+          }
+
+          test -f style.css || {
+            echo "ERROR: style.css was not found"
+            exit 1
+          }
+
+          test -f script.js || {
+            echo "ERROR: script.js was not found"
+            exit 1
+          }
+
+          echo "✓ index.html found"
+          echo "✓ style.css found"
+          echo "✓ script.js found"
+          echo ""
+          echo "All required files are present."
+
+      - name: Prepare GitHub Pages
         run: |
           mkdir -p _site
 
-          cp index.html _site/index.html
-          cp style.css _site/style.css
-          cp script.js _site/script.js
+          cp index.html _site/
+          cp style.css _site/
+          cp script.js _site/
 
-          echo "Files being deployed:"
-          ls -la _site
+          echo "Files prepared for deployment:"
+          ls -lah _site/
 
-      # Upload all three files together
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./_site
+          path: _site
 
-      # Deploy the complete website
-      - name: Deploy to GitHub Pages
+      - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v4
 ```
