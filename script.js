@@ -303,13 +303,16 @@ const categories = [
 const STORAGE_KEY = "tamilWeddingPlanner_v4";
 
 let savedData = {};
+
 let currentCategory = "dashboard";
+
 let currentItem = null;
+
 let modalStatus = "not";
 
 
 /* ============================================================
-   STORAGE - LOAD
+   LOAD DATA
 ============================================================ */
 
 function loadData() {
@@ -351,7 +354,7 @@ function loadData() {
 
 
 /* ============================================================
-   STORAGE - SAVE
+   SAVE DATA
 ============================================================ */
 
 function saveData() {
@@ -367,7 +370,7 @@ function saveData() {
 
   } catch (error) {
 
-    console.error("Could not save saved data:", error);
+    console.error("Could not save data:", error);
 
     alert(
       "Your data could not be saved in this browser."
@@ -381,16 +384,14 @@ function saveData() {
 
 
 /* ============================================================
-   EXPORT
+   EXPORT DATA
 ============================================================ */
 
 function exportData() {
 
   try {
 
-    const saved = saveData();
-
-    if (!saved) {
+    if (!saveData()) {
       return;
     }
 
@@ -410,7 +411,7 @@ function exportData() {
     const blob = new Blob(
       [json],
       {
-        type: "application/json;charset=utf-8"
+        type: "application/json"
       }
     );
 
@@ -420,31 +421,19 @@ function exportData() {
 
     link.href = url;
 
-    const now = new Date();
+    link.download = "wedding-planner-backup.json";
 
-    const year = now.getFullYear();
-
-    const month = String(
-      now.getMonth() + 1
-    ).padStart(2, "0");
-
-    const day = String(
-      now.getDate()
-    ).padStart(2, "0");
-
-    link.download =
-      `wedding-planner-backup-${year}-${month}-${day}.json`;
+    link.style.display = "none";
 
     document.body.appendChild(link);
 
     link.click();
 
-    link.remove();
+    document.body.removeChild(link);
 
-    setTimeout(
-      () => URL.revokeObjectURL(url),
-      1000
-    );
+    setTimeout(function() {
+      URL.revokeObjectURL(url);
+    }, 1000);
 
     console.log(
       "Wedding planner data exported successfully."
@@ -467,21 +456,22 @@ function exportData() {
 
 
 /* ============================================================
-   IMPORT
+   IMPORT DATA
 ============================================================ */
 
 function importData(event) {
 
+  const input = event.target;
+
   if (
-    !event ||
-    !event.target ||
-    !event.target.files ||
-    !event.target.files.length
+    !input ||
+    !input.files ||
+    !input.files.length
   ) {
     return;
   }
 
-  const file = event.target.files[0];
+  const file = input.files[0];
 
   if (
     !file.name
@@ -493,7 +483,7 @@ function importData(event) {
       "Please select a .json wedding planner backup file."
     );
 
-    event.target.value = "";
+    input.value = "";
 
     return;
 
@@ -501,12 +491,12 @@ function importData(event) {
 
   const reader = new FileReader();
 
-  reader.onload = function(e) {
+  reader.onload = function(event) {
 
     try {
 
       const imported = JSON.parse(
-        e.target.result
+        event.target.result
       );
 
       let importedData;
@@ -538,14 +528,14 @@ function importData(event) {
 
       }
 
-      const confirmed = confirm(
+      const confirmed = window.confirm(
         "Import this wedding planner backup?\n\n" +
         "Your current planner data will be replaced by the backup."
       );
 
       if (!confirmed) {
 
-        event.target.value = "";
+        input.value = "";
 
         return;
 
@@ -555,7 +545,7 @@ function importData(event) {
 
       if (!saveData()) {
 
-        event.target.value = "";
+        input.value = "";
 
         return;
 
@@ -588,7 +578,7 @@ function importData(event) {
 
     }
 
-    event.target.value = "";
+    input.value = "";
 
   };
 
@@ -598,7 +588,7 @@ function importData(event) {
       "Could not read the selected file."
     );
 
-    event.target.value = "";
+    input.value = "";
 
   };
 
@@ -613,7 +603,7 @@ function importData(event) {
 
 function itemKey(categoryId, item) {
 
-  return `${categoryId}::${item}`;
+  return categoryId + "::" + item;
 
 }
 
@@ -634,14 +624,22 @@ function getItem(categoryId, item) {
     typeof savedData[key] !== "object"
   ) {
 
-    savedData[key] = {};
+    savedData[key] = {
+      status: "not",
+      vendor: "",
+      price: "",
+      deadline: "",
+      link: "",
+      notes: ""
+    };
 
   }
 
   const data = savedData[key];
 
   data.status =
-    typeof data.status === "string"
+    data.status === "progress" ||
+    data.status === "done"
       ? data.status
       : "not";
 
@@ -686,9 +684,6 @@ function buildNavigation() {
   );
 
   if (!nav) {
-    console.error(
-      "Wedding Planner: #navigation was not found."
-    );
     return;
   }
 
@@ -700,8 +695,7 @@ function buildNavigation() {
 
   dashboard.type = "button";
 
-  dashboard.textContent =
-    "🏠 Dashboard";
+  dashboard.textContent = "🏠 Dashboard";
 
   dashboard.className =
     currentCategory === "dashboard"
@@ -710,36 +704,39 @@ function buildNavigation() {
 
   dashboard.addEventListener(
     "click",
-    showDashboard
+    function() {
+      showDashboard();
+    }
   );
 
   nav.appendChild(dashboard);
 
-  categories.forEach(
-    category => {
+  categories.forEach(function(category) {
 
-      const button =
-        document.createElement("button");
+    const button = document.createElement(
+      "button"
+    );
 
-      button.type = "button";
+    button.type = "button";
 
-      button.textContent =
-        `${category.icon} ${category.name}`;
+    button.textContent =
+      category.icon + " " + category.name;
 
-      button.className =
-        currentCategory === category.id
-          ? "active"
-          : "";
+    button.className =
+      currentCategory === category.id
+        ? "active"
+        : "";
 
-      button.addEventListener(
-        "click",
-        () => showCategory(category.id)
-      );
+    button.addEventListener(
+      "click",
+      function() {
+        showCategory(category.id);
+      }
+    );
 
-      nav.appendChild(button);
+    nav.appendChild(button);
 
-    }
-  );
+  });
 
 }
 
@@ -763,13 +760,11 @@ function showDashboard() {
     );
 
   if (!dashboardPage || !categoryPage) {
-    console.error(
-      "Wedding Planner: dashboard/category page elements are missing."
-    );
     return;
   }
 
   dashboardPage.style.display = "block";
+
   categoryPage.style.display = "none";
 
   buildNavigation();
@@ -785,42 +780,39 @@ function showDashboard() {
 
 
 /* ============================================================
-   DASHBOARD RENDER
+   RENDER DASHBOARD
 ============================================================ */
 
 function renderDashboard() {
 
   let total = 0;
+
   let done = 0;
+
   let progress = 0;
 
-  categories.forEach(
-    category => {
+  categories.forEach(function(category) {
 
-      category.items.forEach(
-        item => {
+    category.items.forEach(function(item) {
 
-          total++;
+      total++;
 
-          const data =
-            getItem(
-              category.id,
-              item
-            );
-
-          if (data.status === "done") {
-            done++;
-          }
-
-          if (data.status === "progress") {
-            progress++;
-          }
-
-        }
+      const data = getItem(
+        category.id,
+        item
       );
 
-    }
-  );
+      if (data.status === "done") {
+        done++;
+      }
+
+      if (data.status === "progress") {
+        progress++;
+      }
+
+    });
+
+  });
 
   const percent =
     total > 0
@@ -867,12 +859,12 @@ function renderDashboard() {
 
   if (overallPercent) {
     overallPercent.textContent =
-      `${percent}%`;
+      percent + "%";
   }
 
   if (overallFill) {
     overallFill.style.width =
-      `${percent}%`;
+      percent + "%";
   }
 
   if (!grid) {
@@ -881,59 +873,50 @@ function renderDashboard() {
 
   grid.innerHTML = "";
 
-  categories.forEach(
-    category => {
+  categories.forEach(function(category) {
 
-      const stats =
-        getCategoryStats(category);
+    const stats =
+      getCategoryStats(category);
 
-      const card =
-        document.createElement("div");
+    const card =
+      document.createElement("div");
 
-      card.className =
-        "summary-card";
+    card.className = "summary-card";
 
-      card.innerHTML = `
+    card.innerHTML =
+      '<div style="font-size:25px;margin-bottom:10px;">' +
+      escapeHTML(category.icon) +
+      '</div>' +
 
-        <div
-          style="
-            font-size:25px;
-            margin-bottom:10px;
-          "
-        >
-          ${category.icon}
-        </div>
+      '<h3>' +
+      escapeHTML(category.name) +
+      '</h3>' +
 
-        <h3>
-          ${escapeHTML(category.name)}
-        </h3>
+      '<p>' +
+      stats.done +
+      " / " +
+      stats.total +
+      " completed" +
+      '</p>' +
 
-        <p>
-          ${stats.done}
-          /
-          ${stats.total}
-          completed
-        </p>
+      '<div class="summary-bar">' +
 
-        <div class="summary-bar">
+      '<div style="width:' +
+      stats.percent +
+      '%;"></div>' +
 
-          <div
-            style="width:${stats.percent}%"
-          ></div>
+      '</div>';
 
-        </div>
+    card.addEventListener(
+      "click",
+      function() {
+        showCategory(category.id);
+      }
+    );
 
-      `;
+    grid.appendChild(card);
 
-      card.addEventListener(
-        "click",
-        () => showCategory(category.id)
-      );
-
-      grid.appendChild(card);
-
-    }
-  );
+  });
 
 }
 
@@ -945,9 +928,9 @@ function renderDashboard() {
 function showCategory(id) {
 
   const category =
-    categories.find(
-      c => c.id === id
-    );
+    categories.find(function(category) {
+      return category.id === id;
+    });
 
   if (!category) {
     return;
@@ -973,14 +956,18 @@ function showCategory(id) {
 
   categoryPage.style.display = "block";
 
-  const categoryTitle =
+  const title =
     document.getElementById(
       "categoryTitle"
     );
 
-  if (categoryTitle) {
-    categoryTitle.textContent =
-      `${category.icon} ${category.name}`;
+  if (title) {
+
+    title.textContent =
+      category.icon +
+      " " +
+      category.name;
+
   }
 
   const search =
@@ -1022,14 +1009,20 @@ function getCategoryStats(category) {
   const total =
     category.items.length;
 
-  const done =
-    category.items.filter(
-      item =>
-        getItem(
-          category.id,
-          item
-        ).status === "done"
-    ).length;
+  let done = 0;
+
+  category.items.forEach(function(item) {
+
+    const data = getItem(
+      category.id,
+      item
+    );
+
+    if (data.status === "done") {
+      done++;
+    }
+
+  });
 
   const percent =
     total > 0
@@ -1037,9 +1030,9 @@ function getCategoryStats(category) {
       : 0;
 
   return {
-    total,
-    done,
-    percent
+    total: total,
+    done: done,
+    percent: percent
   };
 
 }
@@ -1052,9 +1045,9 @@ function getCategoryStats(category) {
 function renderCategory() {
 
   const category =
-    categories.find(
-      c => c.id === currentCategory
-    );
+    categories.find(function(category) {
+      return category.id === currentCategory;
+    });
 
   if (!category) {
     return;
@@ -1073,6 +1066,23 @@ function renderCategory() {
       "categoryProgressText"
     );
 
+  if (categoryPercent) {
+
+    categoryPercent.textContent =
+      stats.percent + "%";
+
+  }
+
+  if (categoryProgressText) {
+
+    categoryProgressText.textContent =
+      stats.done +
+      " / " +
+      stats.total +
+      " completed";
+
+  }
+
   const searchInput =
     document.getElementById(
       "itemSearch"
@@ -1082,6 +1092,18 @@ function renderCategory() {
     document.getElementById(
       "itemStatusFilter"
     );
+
+  const search =
+    searchInput
+      ? searchInput.value
+          .toLowerCase()
+          .trim()
+      : "";
+
+  const status =
+    statusFilter
+      ? statusFilter.value
+      : "all";
 
   const grid =
     document.getElementById(
@@ -1097,158 +1119,149 @@ function renderCategory() {
     return;
   }
 
-  if (categoryPercent) {
-    categoryPercent.textContent =
-      `${stats.percent}%`;
-  }
-
-  if (categoryProgressText) {
-    categoryProgressText.textContent =
-      `${stats.done} / ${stats.total} completed`;
-  }
-
-  const search =
-    searchInput
-      ? searchInput.value.toLowerCase().trim()
-      : "";
-
-  const status =
-    statusFilter
-      ? statusFilter.value
-      : "all";
-
   grid.innerHTML = "";
 
   let visible = 0;
 
-  category.items.forEach(
-    item => {
+  category.items.forEach(function(item) {
 
-      const data =
-        getItem(
+    const data = getItem(
+      category.id,
+      item
+    );
+
+    const itemText =
+      item.toLowerCase();
+
+    const vendorText =
+      data.vendor.toLowerCase();
+
+    const notesText =
+      data.notes.toLowerCase();
+
+    const matchesSearch =
+      !search ||
+      itemText.includes(search) ||
+      vendorText.includes(search) ||
+      notesText.includes(search);
+
+    const matchesStatus =
+      status === "all" ||
+      data.status === status;
+
+    if (
+      !matchesSearch ||
+      !matchesStatus
+    ) {
+      return;
+    }
+
+    visible++;
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "item-card" +
+      (data.status === "done"
+        ? " done"
+        : "");
+
+    let statusText =
+      "Not started";
+
+    if (data.status === "progress") {
+      statusText = "In progress";
+    }
+
+    if (data.status === "done") {
+      statusText = "Completed";
+    }
+
+    let vendorHTML = "";
+
+    if (data.vendor) {
+
+      vendorHTML =
+        '<p>👤 ' +
+        escapeHTML(data.vendor) +
+        '</p>';
+
+    } else {
+
+      vendorHTML =
+        '<p>Click to add details</p>';
+
+    }
+
+    let deadlineHTML = "";
+
+    if (data.deadline) {
+
+      deadlineHTML =
+        '<div class="item-meta">📅 ' +
+        escapeHTML(
+          formatDate(data.deadline)
+        ) +
+        '</div>';
+
+    }
+
+    let statusClass = "";
+
+    if (data.status === "progress") {
+      statusClass = " progress";
+    }
+
+    if (data.status === "done") {
+      statusClass = " done";
+    }
+
+    card.innerHTML =
+
+      '<div class="item-top">' +
+
+        '<div class="item-icon">' +
+          escapeHTML(category.icon) +
+        '</div>' +
+
+        '<div class="item-status' +
+          statusClass +
+        '">' +
+          escapeHTML(statusText) +
+        '</div>' +
+
+      '</div>' +
+
+      '<h3>' +
+        escapeHTML(item) +
+      '</h3>' +
+
+      vendorHTML +
+
+      deadlineHTML;
+
+    card.addEventListener(
+      "click",
+      function() {
+        openModal(
           category.id,
           item
         );
-
-      const vendor =
-        data.vendor.toLowerCase();
-
-      const notes =
-        data.notes.toLowerCase();
-
-      const matchesSearch =
-        !search ||
-        item.toLowerCase().includes(search) ||
-        vendor.includes(search) ||
-        notes.includes(search);
-
-      const matchesStatus =
-        status === "all" ||
-        data.status === status;
-
-      if (
-        !matchesSearch ||
-        !matchesStatus
-      ) {
-        return;
       }
+    );
 
-      visible++;
+    grid.appendChild(card);
 
-      const card =
-        document.createElement("div");
-
-      card.className =
-        `item-card ${
-          data.status === "done"
-            ? "done"
-            : ""
-        }`;
-
-      let statusText = "Not started";
-
-      if (data.status === "progress") {
-        statusText = "In progress";
-      }
-
-      if (data.status === "done") {
-        statusText = "Completed";
-      }
-
-      let vendorHTML = `
-        <p>
-          Click to add details
-        </p>
-      `;
-
-      if (data.vendor) {
-        vendorHTML = `
-          <p>
-            👤
-            ${escapeHTML(data.vendor)}
-          </p>
-        `;
-      }
-
-      let deadlineHTML = "";
-
-      if (data.deadline) {
-        deadlineHTML = `
-          <div class="item-meta">
-            📅
-            ${formatDate(data.deadline)}
-          </div>
-        `;
-      }
-
-      card.innerHTML = `
-
-        <div class="item-top">
-
-          <div class="item-icon">
-            ${category.icon}
-          </div>
-
-          <div
-            class="
-              item-status
-              ${data.status === "progress" ? "progress" : ""}
-              ${data.status === "done" ? "done" : ""}
-            "
-          >
-            ${statusText}
-          </div>
-
-        </div>
-
-        <h3>
-          ${escapeHTML(item)}
-        </h3>
-
-        ${vendorHTML}
-
-        ${deadlineHTML}
-
-      `;
-
-      card.addEventListener(
-        "click",
-        () => openModal(
-          category.id,
-          item
-        )
-      );
-
-      grid.appendChild(card);
-
-    }
-  );
+  });
 
   if (emptyMessage) {
+
     emptyMessage.style.display =
       visible > 0
         ? "none"
         : "block";
+
   }
 
 }
@@ -1261,14 +1274,14 @@ function renderCategory() {
 function openModal(categoryId, item) {
 
   currentItem = {
-    categoryId,
-    item
+    categoryId: categoryId,
+    item: item
   };
 
   const category =
-    categories.find(
-      c => c.id === categoryId
-    );
+    categories.find(function(category) {
+      return category.id === categoryId;
+    });
 
   if (!category) {
     return;
@@ -1361,7 +1374,11 @@ function openModal(categoryId, item) {
     );
 
   if (overlay) {
-    overlay.classList.add("active");
+
+    overlay.classList.add(
+      "active"
+    );
+
   }
 
 }
@@ -1379,7 +1396,11 @@ function closeModal() {
     );
 
   if (overlay) {
-    overlay.classList.remove("active");
+
+    overlay.classList.remove(
+      "active"
+    );
+
   }
 
   currentItem = null;
@@ -1388,7 +1409,7 @@ function closeModal() {
 
 
 /* ============================================================
-   STATUS
+   CHOOSE STATUS
 ============================================================ */
 
 function chooseStatus(status) {
@@ -1408,6 +1429,10 @@ function chooseStatus(status) {
 }
 
 
+/* ============================================================
+   UPDATE STATUS BUTTONS
+============================================================ */
+
 function updateStatusButtons() {
 
   const notButton =
@@ -1426,24 +1451,30 @@ function updateStatusButtons() {
     );
 
   if (notButton) {
+
     notButton.classList.toggle(
       "active",
       modalStatus === "not"
     );
+
   }
 
   if (progressButton) {
+
     progressButton.classList.toggle(
       "active",
       modalStatus === "progress"
     );
+
   }
 
   if (doneButton) {
+
     doneButton.classList.toggle(
       "active",
       modalStatus === "done"
     );
+
   }
 
 }
@@ -1495,12 +1526,12 @@ function saveItem() {
 
   data.vendor =
     vendorInput
-      ? vendorInput.value
+      ? vendorInput.value.trim()
       : "";
 
   data.price =
     priceInput
-      ? priceInput.value
+      ? priceInput.value.trim()
       : "";
 
   data.deadline =
@@ -1510,12 +1541,12 @@ function saveItem() {
 
   data.link =
     linkInput
-      ? linkInput.value
+      ? linkInput.value.trim()
       : "";
 
   data.notes =
     notesInput
-      ? notesInput.value
+      ? notesInput.value.trim()
       : "";
 
   if (!saveData()) {
@@ -1524,10 +1555,17 @@ function saveItem() {
 
   closeModal();
 
-  if (currentCategory === "dashboard") {
+  if (
+    currentCategory ===
+    "dashboard"
+  ) {
+
     showDashboard();
+
   } else {
-    showCategory(currentCategory);
+
+    renderCategory();
+
   }
 
 }
@@ -1543,6 +1581,15 @@ function clearItem() {
     return;
   }
 
+  const confirmed =
+    window.confirm(
+      "Clear all information for this item?"
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
   const data =
     getItem(
       currentItem.categoryId,
@@ -1550,10 +1597,15 @@ function clearItem() {
     );
 
   data.status = "not";
+
   data.vendor = "";
+
   data.price = "";
+
   data.deadline = "";
+
   data.link = "";
+
   data.notes = "";
 
   if (!saveData()) {
@@ -1562,10 +1614,17 @@ function clearItem() {
 
   closeModal();
 
-  if (currentCategory === "dashboard") {
+  if (
+    currentCategory ===
+    "dashboard"
+  ) {
+
     showDashboard();
+
   } else {
-    showCategory(currentCategory);
+
+    renderCategory();
+
   }
 
 }
@@ -1583,7 +1642,7 @@ function formatDate(date) {
 
   const d =
     new Date(
-      `${date}T00:00:00`
+      date + "T00:00:00"
     );
 
   if (Number.isNaN(d.getTime())) {
@@ -1609,10 +1668,15 @@ function formatDate(date) {
 function escapeHTML(value) {
 
   return String(value)
+
     .replace(/&/g, "&amp;")
+
     .replace(/</g, "&lt;")
+
     .replace(/>/g, "&gt;")
+
     .replace(/"/g, "&quot;")
+
     .replace(/'/g, "&#039;");
 
 }
@@ -1624,12 +1688,12 @@ function escapeHTML(value) {
 
 function initializeEvents() {
 
-  const itemSearch =
+  const search =
     document.getElementById(
       "itemSearch"
     );
 
-  const itemStatusFilter =
+  const statusFilter =
     document.getElementById(
       "itemStatusFilter"
     );
@@ -1644,20 +1708,24 @@ function initializeEvents() {
       "overlay"
     );
 
-  if (itemSearch) {
+  if (search) {
 
-    itemSearch.addEventListener(
+    search.addEventListener(
       "input",
-      renderCategory
+      function() {
+        renderCategory();
+      }
     );
 
   }
 
-  if (itemStatusFilter) {
+  if (statusFilter) {
 
-    itemStatusFilter.addEventListener(
+    statusFilter.addEventListener(
       "change",
-      renderCategory
+      function() {
+        renderCategory();
+      }
     );
 
   }
@@ -1690,62 +1758,52 @@ function initializeEvents() {
 
   }
 
-  document.addEventListener(
-    "keydown",
-    function(event) {
+}
 
-      if (
-        event.key === "Escape"
-      ) {
 
-        closeModal();
+/* ============================================================
+   KEYBOARD EVENTS
+============================================================ */
 
-      }
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (
+      event.key === "Escape"
+    ) {
+
+      closeModal();
 
     }
-  );
 
-}
+  }
+);
 
 
 /* ============================================================
    START APPLICATION
 ============================================================ */
 
-function initializeWeddingPlanner() {
+function startApplication() {
 
   console.log(
-    "Wedding Planner: JavaScript loaded."
+    "Wedding Planner JavaScript loaded."
   );
 
-  try {
+  loadData();
 
-    loadData();
+  initializeEvents();
 
-    initializeEvents();
+  buildNavigation();
 
-    buildNavigation();
-
-    showDashboard();
-
-    console.log(
-      "Wedding Planner: application started successfully."
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Wedding Planner failed to start:",
-      error
-    );
-
-  }
+  showDashboard();
 
 }
 
 
 /*
- * Wait until the complete HTML document is ready.
+ * Start after the HTML has loaded.
  */
 
 if (
@@ -1754,11 +1812,11 @@ if (
 
   document.addEventListener(
     "DOMContentLoaded",
-    initializeWeddingPlanner
+    startApplication
   );
 
 } else {
 
-  initializeWeddingPlanner();
+  startApplication();
 
 }
