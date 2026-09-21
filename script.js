@@ -180,6 +180,7 @@ const defaultCategories = [
     icon: "🏛️",
     items: [
       "Sana Palace RA",
+      "Uranus Partyhouse",
       "E-Plaza AA",
       "Babylon AA",
       "Food & Drinks",
