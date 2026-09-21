@@ -60,10 +60,16 @@ const defaultCategories = [
     items: ["Kopuramevents.fr"]
   },
   {
-    id: "accessories",
-    name: "Accessories",
-    icon: "✨",
-    items: ["360 Booth", "Bridal Corner Setup"]
+    id: "accessories-gifts",
+    name: "Accessories + Gifts",
+    icon: "✨ 🎁",
+    items: [
+       "360 Booth", 
+       "Bridal Corner Setup", 
+       "Children Sweets",
+       "Palaharam (Goodie bag)", 
+       "Yndlingsting"
+    ]
   },
   {
     id: "henna",
@@ -141,15 +147,13 @@ const defaultCategories = [
     icon: "📷",
     items: [
       "Digital Pro",
+      "Ajeenth Video",
       "Visual Eyes",
+      "Nomad",
       "Vividmemoir.dk",
       "infocus",
       "Views of Nivi",
       "Sana",
-      "Visual Eyes",
-      "Nomad",
-      "Through the ringer",
-      "Swiss (Interlaken)"
     ]
   },
   {
@@ -223,7 +227,7 @@ const defaultCategories = [
     id: "games",
     name: "Games",
     icon: "🎲",
-    items: ["Palaharam (Goodie bag)", "Yndlingsting"]
+    items: ["Bingo"]
   }
 ];
 
