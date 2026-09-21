@@ -7,10 +7,12 @@
 
   <title>Our Wedding Planner 💍</title>
 
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
+  <!-- HERO -->
 
   <header class="hero">
     <div class="hero-inner">
@@ -28,24 +30,27 @@
 
   </header>
 
+  <!-- NAVIGATION -->
+
   <div class="nav-wrapper">
     <nav class="nav" id="navigation"></nav>
   </div>
+
+  <!-- MAIN APP -->
 
   <main class="app">
 
 ```
 <!-- DASHBOARD -->
-
 <section id="dashboardPage">
 
   <div class="page-header">
-
     <div>
       <h2>Wedding Dashboard</h2>
 
       <p>
-        Keep track of everything for the big day.
+        Keep track of everything
+        for the big day.
       </p>
     </div>
 
@@ -75,48 +80,89 @@
       >
 
     </div>
-
   </div>
 
 
   <!-- STATS -->
-
   <div class="stats">
 
     <div class="stat">
       <div class="stat-icon">📋</div>
-      <div class="stat-number" id="totalCount">0</div>
-      <div class="stat-label">Total items</div>
+
+      <div
+        class="stat-number"
+        id="totalCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Total items
+      </div>
     </div>
+
 
     <div class="stat">
       <div class="stat-icon">✅</div>
-      <div class="stat-number" id="doneCount">0</div>
-      <div class="stat-label">Completed</div>
+
+      <div
+        class="stat-number"
+        id="doneCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Completed
+      </div>
     </div>
+
 
     <div class="stat">
       <div class="stat-icon">⏳</div>
-      <div class="stat-number" id="progressCount">0</div>
-      <div class="stat-label">In progress</div>
+
+      <div
+        class="stat-number"
+        id="progressCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        In progress
+      </div>
     </div>
+
 
     <div class="stat">
       <div class="stat-icon">🗂️</div>
-      <div class="stat-number" id="categoryCount">0</div>
-      <div class="stat-label">Categories</div>
+
+      <div
+        class="stat-number"
+        id="categoryCount"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Categories
+      </div>
     </div>
 
   </div>
 
 
   <!-- OVERALL PROGRESS -->
-
   <div class="progress-card">
 
     <div class="progress-heading">
+
       <h2>Overall progress</h2>
-      <span id="overallPercent">0%</span>
+
+      <span id="overallPercent">
+        0%
+      </span>
+
     </div>
 
     <div class="progress-bar">
@@ -130,7 +176,6 @@
 
 
   <!-- CATEGORIES -->
-
   <div class="page-header">
 
     <div>
@@ -143,6 +188,7 @@
 
   </div>
 
+
   <div
     class="category-summary-grid"
     id="summaryGrid"
@@ -152,7 +198,6 @@
 
 
 <!-- CATEGORY PAGE -->
-
 <section
   id="categoryPage"
   style="display:none;"
@@ -161,12 +206,15 @@
   <div class="page-header">
 
     <div>
+
       <h2 id="categoryTitle"></h2>
 
       <p>
         Select an item to see more details.
       </p>
+
     </div>
+
 
     <div class="category-progress">
 
@@ -184,7 +232,6 @@
 
 
   <!-- SEARCH -->
-
   <div class="search-area">
 
     <input
@@ -217,7 +264,6 @@
 
 
   <!-- ITEMS -->
-
   <div
     class="items-grid"
     id="itemsGrid"
@@ -242,6 +288,8 @@
 ```
 
   </main>
+
+  <!-- FOOTER -->
 
   <footer>
     Made with ❤️ for our wedding
@@ -270,6 +318,7 @@
 
     </div>
 
+
     <button
       class="close"
       id="closeModalButton"
@@ -285,7 +334,6 @@
   <div class="modal-body">
 
     <!-- STATUS -->
-
     <div class="form-group">
 
       <label>Status</label>
@@ -322,7 +370,6 @@
 
 
     <!-- VENDOR -->
-
     <div class="form-group">
 
       <label for="vendorInput">
@@ -339,7 +386,6 @@
 
 
     <!-- PRICE -->
-
     <div class="form-group">
 
       <label for="priceInput">
@@ -356,7 +402,6 @@
 
 
     <!-- DEADLINE -->
-
     <div class="form-group">
 
       <label for="deadlineInput">
@@ -372,7 +417,6 @@
 
 
     <!-- LINK -->
-
     <div class="form-group">
 
       <label for="linkInput">
@@ -389,7 +433,6 @@
 
 
     <!-- NOTES -->
-
     <div class="form-group">
 
       <label for="notesInput">
@@ -405,7 +448,6 @@
 
 
     <!-- ACTIONS -->
-
     <div class="modal-actions">
 
       <button
@@ -432,6 +474,8 @@
 ```
 
   </div>
+
+  <!-- JAVASCRIPT -->
 
   <script src="./script.js"></script>
 
