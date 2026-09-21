@@ -316,7 +316,6 @@ function loadData() {
 
 try {
 
-```
 const stored = localStorage.getItem(STORAGE_KEY);
 
 if (stored) {
