@@ -203,15 +203,9 @@ const defaultCategories = [
     ]
   },
   {
-    id: "operator",
-    name: "Operator",
-    icon: "🎛️",
-    items: ["Lighting", "Projector"]
-  },
-  {
-    id: "speech-host",
-    name: "Speech + Host",
-    icon: "🎤",
+    id: "speech-host-operator",
+    name: "Speech + Host + Operator",
+    icon: "🎤 🎛️",
     items: [
       "Vinu",
       "Mams",
@@ -220,7 +214,9 @@ const defaultCategories = [
       "Games",
       "Speech planning",
       "Speakers",
-      "Order of speeches"
+      "Order of speeches",
+      "Lighting",
+      "Projector"
     ]
   },
   {
