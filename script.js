@@ -317,7 +317,7 @@ function loadData() {
 
 try {
 
-```
+
 const stored = localStorage.getItem(STORAGE_KEY);
 
 if (stored) {
@@ -343,15 +343,12 @@ if (stored) {
   savedData = {};
 
 }
-```
 
 } catch (error) {
 
-```
 console.error("Could not load saved data:", error);
 
 savedData = {};
-```
 
 }
 
@@ -365,18 +362,18 @@ function saveData() {
 
 try {
 
-```
+
 localStorage.setItem(
   STORAGE_KEY,
   JSON.stringify(savedData)
 );
 
 return true;
-```
+
 
 } catch (error) {
 
-```
+
 console.error("Could not save data:", error);
 
 alert(
@@ -384,7 +381,7 @@ alert(
 );
 
 return false;
-```
+
 
 }
 
@@ -398,7 +395,7 @@ function exportData() {
 
 try {
 
-```
+
 saveData();
 
 const backup = {
@@ -464,11 +461,11 @@ setTimeout(
 console.log(
   "Wedding planner data exported successfully."
 );
-```
+
 
 } catch (error) {
 
-```
+
 console.error(
   "Export failed:",
   error
@@ -477,7 +474,7 @@ console.error(
 alert(
   "Sorry, the wedding planner data could not be exported."
 );
-```
+
 
 }
 
@@ -506,7 +503,7 @@ if (
 .endsWith(".json")
 ) {
 
-```
+
 alert(
   "Please select a .json wedding planner backup file."
 );
@@ -514,7 +511,7 @@ alert(
 input.value = "";
 
 return;
-```
+
 
 }
 
@@ -522,7 +519,7 @@ const reader = new FileReader();
 
 reader.onload = function(e) {
 
-```
+
 try {
 
   const imported =
@@ -614,19 +611,19 @@ try {
 }
 
 input.value = "";
-```
+
 
 };
 
 reader.onerror = function() {
 
-```
+
 alert(
   "Could not read the selected file."
 );
 
 input.value = "";
-```
+
 
 };
 
@@ -660,7 +657,7 @@ if (
 typeof savedData[key] !== "object"
 ) {
 
-```
+
 savedData[key] = {
   status: "not",
   vendor: "",
@@ -669,7 +666,7 @@ savedData[key] = {
   link: "",
   notes: ""
 };
-```
+
 
 }
 
@@ -735,7 +732,7 @@ nav.appendChild(dashboard);
 categories.forEach(
 function(category) {
 
-```
+
   const button =
     document.createElement("button");
 
@@ -761,7 +758,7 @@ function(category) {
   nav.appendChild(button);
 
 }
-```
+
 
 );
 
@@ -819,7 +816,7 @@ let progress = 0;
 categories.forEach(
 function(category) {
 
-```
+
   category.items.forEach(
     function(item) {
 
@@ -843,7 +840,7 @@ function(category) {
   );
 
 }
-```
+
 
 );
 
@@ -925,7 +922,7 @@ grid.innerHTML = "";
 categories.forEach(
 function(category) {
 
-```
+
   const stats =
     getCategoryStats(category);
 
@@ -967,7 +964,7 @@ function(category) {
   grid.appendChild(card);
 
 }
-```
+
 
 );
 
@@ -1017,12 +1014,12 @@ document.getElementById(
 
 if (categoryTitle) {
 
-```
+
 categoryTitle.textContent =
   category.icon +
   " " +
   category.name;
-```
+
 
 }
 
@@ -1069,7 +1066,7 @@ let done = 0;
 category.items.forEach(
 function(item) {
 
-```
+
   const data =
     getItem(
       category.id,
@@ -1081,7 +1078,7 @@ function(item) {
   }
 
 }
-```
+
 
 );
 
@@ -1132,22 +1129,22 @@ document.getElementById(
 
 if (categoryPercent) {
 
-```
+
 categoryPercent.textContent =
   stats.percent + "%";
-```
+
 
 }
 
 if (categoryProgressText) {
 
-```
+
 categoryProgressText.textContent =
   stats.done +
   " / " +
   stats.total +
   " completed";
-```
+
 
 }
 
@@ -1187,7 +1184,7 @@ let visible = 0;
 category.items.forEach(
 function(item) {
 
-```
+
   const data =
     getItem(
       category.id,
@@ -1331,7 +1328,7 @@ function(item) {
   grid.appendChild(card);
 
 }
-```
+
 
 );
 
@@ -1342,12 +1339,12 @@ document.getElementById(
 
 if (emptyMessage) {
 
-```
+
 emptyMessage.style.display =
   visible > 0
     ? "none"
     : "block";
-```
+
 
 }
 
@@ -1466,11 +1463,11 @@ document.getElementById(
 
 if (overlay) {
 
-```
+
 overlay.classList.add(
   "active"
 );
-```
+
 
 }
 
@@ -1489,11 +1486,11 @@ document.getElementById(
 
 if (overlay) {
 
-```
+
 overlay.classList.remove(
   "active"
 );
-```
+
 
 }
 
@@ -1536,34 +1533,34 @@ document.getElementById(
 
 if (notButton) {
 
-```
+
 notButton.classList.toggle(
   "active",
   modalStatus === "not"
 );
-```
+
 
 }
 
 if (progressButton) {
 
-```
+
 progressButton.classList.toggle(
   "active",
   modalStatus === "progress"
 );
-```
+
 
 }
 
 if (doneButton) {
 
-```
+
 doneButton.classList.toggle(
   "active",
   modalStatus === "done"
 );
-```
+
 
 }
 
@@ -1646,17 +1643,17 @@ if (
 currentCategory === "dashboard"
 ) {
 
-```
+
 showDashboard();
-```
+
 
 } else {
 
-```
+
 showCategory(
   currentCategory
 );
-```
+
 
 }
 
@@ -1698,17 +1695,17 @@ if (
 currentCategory === "dashboard"
 ) {
 
-```
+
 showDashboard();
-```
+
 
 } else {
 
-```
+
 showCategory(
   currentCategory
 );
-```
+
 
 }
 
@@ -1756,7 +1753,7 @@ function escapeHTML(value) {
 
 return String(value)
 
-```
+
 .replace(
   /&/g,
   "&amp;"
@@ -1781,7 +1778,7 @@ return String(value)
   /'/g,
   "&#039;"
 );
-```
+
 
 }
 
@@ -1793,7 +1790,7 @@ document.addEventListener(
 "DOMContentLoaded",
 function() {
 
-```
+
 const search =
   document.getElementById(
     "itemSearch"
@@ -1884,7 +1881,7 @@ loadData();
 buildNavigation();
 
 showDashboard();
-```
+
 
 }
 );
