@@ -2,7 +2,7 @@
    TAMIL WEDDING PLANNER
    ============================================================ */
 
-const STORAGE_KEY = "tamilWeddingPlanner_v6";
+const STORAGE_KEY = "TamilWeddingPlanner_v1";
 
 /* ============================================================
    DEFAULT CATEGORIES
@@ -26,7 +26,9 @@ const defaultCategories = [
       "Sko",
       "Vetti Sattai Grooms Mate",
       "Saree Bridesmaid",
-      "Tøj til preshoot"
+      "Tøj til preshoot",
+      "Amorasareesdk",
+      "Ranyasarees"
     ]
   },
   {
@@ -52,8 +54,8 @@ const defaultCategories = [
     ]
   },
   {
-    id: "kovil-decoration",
-    name: "Decoration Kovil",
+    id: "Decoration",
+    name: "Decoration",
     icon: "🛕",
     items: ["Kopuramevents.fr"]
   },
@@ -73,18 +75,6 @@ const defaultCategories = [
       "Tamilhennecreation",
       "Tent",
       "Visual Eyes"
-    ]
-  },
-  {
-    id: "kalyaanam",
-    name: "Kalyaanam Veedu",
-    icon: "🏠",
-    items: [
-      "Herning Kovil",
-      "Civil Weds (Ring)",
-      "Udlandet",
-      "Amorasareesdk",
-      "Ranyasarees"
     ]
   },
   {
@@ -175,21 +165,25 @@ const defaultCategories = [
     ]
   },
   {
-    id: "hall",
-    name: "Hall",
+    id: "hall-kovil",
+    name: "Hall + Kovil",
     icon: "🏛️",
     items: [
       "Sana Palace RA",
       "Uranus Partyhouse",
       "E-Plaza AA",
       "Babylon AA",
+      "Herning Kovil",
       "Food & Drinks",
       "Sweets for children",
       "Bar",
       "Dessert",
       "Palaharam",
       "Tea Can",
-      "Decoration"
+      "Civil Weds (Ring)",
+      "Udlandet"
+    ]
+  },
     ]
   },
   {
