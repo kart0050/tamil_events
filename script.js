@@ -329,27 +329,10 @@ function loadData() {
         STORAGE_KEY
       );
 
+    if (stored) {
 
-    if (!stored) {
-
-      savedData = {};
-
-      return;
-
-    }
-
-
-    const parsed =
-      JSON.parse(stored);
-
-
-    if (
-      parsed &&
-      typeof parsed === "object" &&
-      !Array.isArray(parsed)
-    ) {
-
-      savedData = parsed;
+      savedData =
+        JSON.parse(stored);
 
     } else {
 
@@ -360,7 +343,7 @@ function loadData() {
   } catch (error) {
 
     console.error(
-      "Could not load wedding planner data:",
+      "Could not load saved data:",
       error
     );
 
@@ -384,15 +367,174 @@ function saveData() {
       JSON.stringify(savedData)
     );
 
+    return true;
+
   } catch (error) {
 
     console.error(
-      "Could not save wedding planner data:",
+      "Could not save data:",
       error
     );
 
     alert(
-      "Your changes could not be saved. Your browser storage may be full or unavailable."
+      "Your data could not be saved in this browser."
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* ============================================================
+   EXPORT DATA
+============================================================ */
+
+function exportData() {
+
+  try {
+
+    /*
+     * Make sure everything currently in memory
+     * is also stored in localStorage.
+     */
+
+    saveData();
+
+
+    /*
+     * Create a complete backup object.
+     */
+
+    const backup = {
+
+      app:
+        "Tamil Wedding Planner",
+
+      version:
+        1,
+
+      exportedAt:
+        new Date().toISOString(),
+
+      data:
+        savedData
+
+    };
+
+
+    /*
+     * Convert the backup to readable JSON.
+     */
+
+    const json =
+      JSON.stringify(
+        backup,
+        null,
+        2
+      );
+
+
+    /*
+     * Create a downloadable file.
+     */
+
+    const blob =
+      new Blob(
+        [json],
+        {
+          type:
+            "application/json;charset=utf-8"
+        }
+      );
+
+
+    /*
+     * Create a temporary URL.
+     */
+
+    const url =
+      URL.createObjectURL(blob);
+
+
+    /*
+     * Create an invisible download link.
+     */
+
+    const link =
+      document.createElement("a");
+
+
+    link.href =
+      url;
+
+
+    /*
+     * Create a filename with today's date.
+     */
+
+    const now =
+      new Date();
+
+    const year =
+      now.getFullYear();
+
+    const month =
+      String(
+        now.getMonth() + 1
+      ).padStart(2,"0");
+
+    const day =
+      String(
+        now.getDate()
+      ).padStart(2,"0");
+
+
+    link.download =
+      `wedding-planner-backup-${year}-${month}-${day}.json`;
+
+
+    /*
+     * Trigger the download.
+     */
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+
+    /*
+     * Release the temporary URL.
+     */
+
+    setTimeout(
+      () => {
+        URL.revokeObjectURL(url);
+      },
+      1000
+    );
+
+
+    /*
+     * Small confirmation.
+     */
+
+    console.log(
+      "Wedding planner data exported successfully."
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Export failed:",
+      error
+    );
+
+    alert(
+      "Sorry, the wedding planner data could not be exported."
     );
 
   }
@@ -401,7 +543,221 @@ function saveData() {
 
 
 /* ============================================================
-   ITEM DATA
+   IMPORT DATA
+============================================================ */
+
+function importData(event) {
+
+  const file =
+    event.target.files[0];
+
+
+  if (!file) {
+    return;
+  }
+
+
+  /*
+   * Make sure the file is JSON.
+   */
+
+  if (
+    !file.name.toLowerCase().endsWith(".json")
+  ) {
+
+    alert(
+      "Please select a .json wedding planner backup file."
+    );
+
+    event.target.value = "";
+
+    return;
+
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(e) {
+
+      try {
+
+        const imported =
+          JSON.parse(
+            e.target.result
+          );
+
+
+        /*
+         * Accept our backup format:
+         *
+         * {
+         *   app: "...",
+         *   version: 1,
+         *   exportedAt: "...",
+         *   data: {...}
+         * }
+         */
+
+        let importedData;
+
+
+        if (
+          imported &&
+          imported.data &&
+          typeof imported.data === "object"
+        ) {
+
+          importedData =
+            imported.data;
+
+        } else {
+
+          /*
+           * Also support a plain old
+           * localStorage JSON backup.
+           */
+
+          importedData =
+            imported;
+
+        }
+
+
+        /*
+         * Validate the imported object.
+         */
+
+        if (
+          !importedData ||
+          typeof importedData !== "object" ||
+          Array.isArray(importedData)
+        ) {
+
+          throw new Error(
+            "Invalid backup format"
+          );
+
+        }
+
+
+        /*
+         * Ask the user before replacing
+         * their current data.
+         */
+
+        const confirmed =
+          confirm(
+            "Import this wedding planner backup?\n\n" +
+            "Your current planner data will be replaced by the backup."
+          );
+
+
+        if (!confirmed) {
+
+          event.target.value = "";
+
+          return;
+
+        }
+
+
+        /*
+         * Replace current data.
+         */
+
+        savedData =
+          importedData;
+
+
+        /*
+         * Save imported data.
+         */
+
+        const saved =
+          saveData();
+
+
+        if (!saved) {
+
+          event.target.value = "";
+
+          return;
+
+        }
+
+
+        /*
+         * Refresh the page.
+         */
+
+        if (
+          currentCategory ===
+          "dashboard"
+        ) {
+
+          showDashboard();
+
+        } else {
+
+          showCategory(
+            currentCategory
+          );
+
+        }
+
+
+        alert(
+          "Wedding planner data imported successfully! ❤️"
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Import failed:",
+          error
+        );
+
+        alert(
+          "This file is not a valid wedding planner backup."
+        );
+
+      }
+
+
+      /*
+       * Clear the file input so the
+       * same file can be selected again.
+       */
+
+      event.target.value = "";
+
+    };
+
+
+  reader.onerror =
+    function() {
+
+      alert(
+        "Could not read the selected file."
+      );
+
+      event.target.value = "";
+
+    };
+
+
+  reader.readAsText(file);
+
+}
+
+
+/* ============================================================
+   ITEM KEY
 ============================================================ */
 
 function itemKey(
@@ -417,6 +773,10 @@ function itemKey(
 
 }
 
+
+/* ============================================================
+   GET ITEM
+============================================================ */
 
 function getItem(
   categoryId,
@@ -451,312 +811,30 @@ function getItem(
   }
 
 
-  const data =
-    savedData[key];
+  /*
+   * Protect against old/incomplete data.
+   */
 
+  savedData[key].status =
+    savedData[key].status || "not";
 
-  if (typeof data.status !== "string") {
-    data.status = "not";
-  }
+  savedData[key].vendor =
+    savedData[key].vendor || "";
 
-  if (typeof data.vendor !== "string") {
-    data.vendor = "";
-  }
+  savedData[key].price =
+    savedData[key].price || "";
 
-  if (typeof data.price !== "string") {
-    data.price = "";
-  }
+  savedData[key].deadline =
+    savedData[key].deadline || "";
 
-  if (typeof data.deadline !== "string") {
-    data.deadline = "";
-  }
+  savedData[key].link =
+    savedData[key].link || "";
 
-  if (typeof data.link !== "string") {
-    data.link = "";
-  }
+  savedData[key].notes =
+    savedData[key].notes || "";
 
-  if (typeof data.notes !== "string") {
-    data.notes = "";
-  }
 
-
-  return data;
-
-}
-
-
-/* ============================================================
-   EXPORT DATA
-============================================================ */
-
-function exportData() {
-
-  try {
-
-    loadData();
-
-
-    const exportObject = {
-
-      app:"Tamil Wedding Planner",
-
-      version:4,
-
-      exportedAt:
-        new Date().toISOString(),
-
-      data:savedData
-
-    };
-
-
-    const json =
-      JSON.stringify(
-        exportObject,
-        null,
-        2
-      );
-
-
-    const blob =
-      new Blob(
-        [json],
-        {
-          type:"application/json"
-        }
-      );
-
-
-    const url =
-      URL.createObjectURL(blob);
-
-
-    const link =
-      document.createElement("a");
-
-
-    link.href =
-      url;
-
-
-    link.download =
-      "wedding-planner-data.json";
-
-
-    document.body.appendChild(
-      link
-    );
-
-
-    link.click();
-
-
-    document.body.removeChild(
-      link
-    );
-
-
-    setTimeout(
-      () => URL.revokeObjectURL(url),
-      100
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "Export failed:",
-      error
-    );
-
-
-    alert(
-      "Sorry, the wedding planner data could not be exported."
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   IMPORT DATA
-============================================================ */
-
-function importDataFromFile(
-  file
-) {
-
-  if (!file) {
-    return;
-  }
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload =
-    function(event) {
-
-      try {
-
-        const imported =
-          JSON.parse(
-            event.target.result
-          );
-
-
-        let importedData;
-
-
-        if (
-          imported &&
-          imported.data &&
-          typeof imported.data === "object" &&
-          !Array.isArray(imported.data)
-        ) {
-
-          importedData =
-            imported.data;
-
-        } else {
-
-          importedData =
-            imported;
-
-        }
-
-
-        if (
-          !importedData ||
-          typeof importedData !== "object" ||
-          Array.isArray(importedData)
-        ) {
-
-          throw new Error(
-            "Invalid wedding planner data."
-          );
-
-        }
-
-
-        const confirmed =
-          confirm(
-            "Import this wedding planner data?\n\n" +
-            "Your current saved planner data will be replaced."
-          );
-
-
-        if (!confirmed) {
-          return;
-        }
-
-
-        savedData =
-          importedData;
-
-
-        saveData();
-
-
-        if (
-          currentCategory ===
-          "dashboard"
-        ) {
-
-          showDashboard();
-
-        } else {
-
-          showCategory(
-            currentCategory
-          );
-
-        }
-
-
-        alert(
-          "Wedding planner data imported successfully! 💍"
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Import failed:",
-          error
-        );
-
-
-        alert(
-          "This file is not a valid wedding planner data file."
-        );
-
-      }
-
-    };
-
-
-  reader.onerror =
-    function() {
-
-      alert(
-        "The file could not be read."
-      );
-
-    };
-
-
-  reader.readAsText(file);
-
-}
-
-
-/* ============================================================
-   IMPORT FILE EVENT
-============================================================ */
-
-function setupImportButton() {
-
-  const importFile =
-    document.getElementById(
-      "importFile"
-    );
-
-
-  if (!importFile) {
-
-    console.error(
-      "Import file input was not found."
-    );
-
-    return;
-
-  }
-
-
-  importFile.addEventListener(
-    "change",
-    function(event) {
-
-      const file =
-        event.target.files[0];
-
-
-      if (file) {
-
-        importDataFromFile(
-          file
-        );
-
-      }
-
-
-      event.target.value = "";
-
-    }
-  );
+  return savedData[key];
 
 }
 
@@ -772,13 +850,17 @@ function buildNavigation() {
       "navigation"
     );
 
+
+  if (!nav) {
+    return;
+  }
+
+
   nav.innerHTML = "";
 
 
   const dashboard =
-    document.createElement(
-      "button"
-    );
+    document.createElement("button");
 
 
   dashboard.textContent =
@@ -804,9 +886,7 @@ function buildNavigation() {
     category => {
 
       const button =
-        document.createElement(
-          "button"
-        );
+        document.createElement("button");
 
 
       button.textContent =
@@ -873,11 +953,14 @@ function showDashboard() {
 
 function renderDashboard() {
 
-  let total = 0;
+  let total =
+    0;
 
-  let done = 0;
+  let done =
+    0;
 
-  let progress = 0;
+  let progress =
+    0;
 
 
   categories.forEach(
@@ -1050,9 +1133,7 @@ function renderDashboard() {
    CATEGORY
 ============================================================ */
 
-function showCategory(
-  id
-) {
+function showCategory(id) {
 
   const category =
     categories.find(
@@ -1112,6 +1193,10 @@ function showCategory(
 }
 
 
+/* ============================================================
+   CATEGORY STATS
+============================================================ */
+
 function getCategoryStats(
   category
 ) {
@@ -1146,6 +1231,10 @@ function getCategoryStats(
 
 }
 
+
+/* ============================================================
+   RENDER CATEGORY
+============================================================ */
 
 function renderCategory() {
 
@@ -1201,7 +1290,8 @@ function renderCategory() {
   grid.innerHTML = "";
 
 
-  let visible = 0;
+  let visible =
+    0;
 
 
   category.items.forEach(
@@ -1214,18 +1304,6 @@ function renderCategory() {
         );
 
 
-      const vendor =
-        String(
-          data.vendor || ""
-        );
-
-
-      const notes =
-        String(
-          data.notes || ""
-        );
-
-
       const matchesSearch =
         !search ||
 
@@ -1233,11 +1311,11 @@ function renderCategory() {
           .toLowerCase()
           .includes(search) ||
 
-        vendor
+        data.vendor
           .toLowerCase()
           .includes(search) ||
 
-        notes
+        data.notes
           .toLowerCase()
           .includes(search);
 
@@ -1417,11 +1495,6 @@ function openModal(
     categories.find(
       c => c.id === categoryId
     );
-
-
-  if (!category) {
-    return;
-  }
 
 
   const data =
@@ -1688,7 +1761,7 @@ function clearItem() {
 
 
 /* ============================================================
-   HELPERS
+   FORMAT DATE
 ============================================================ */
 
 function formatDate(
@@ -1702,7 +1775,8 @@ function formatDate(
 
   const d =
     new Date(
-      date + "T00:00:00"
+      date +
+      "T00:00:00"
     );
 
 
@@ -1717,6 +1791,10 @@ function formatDate(
 
 }
 
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
 
 function escapeHTML(
   value
@@ -1756,47 +1834,49 @@ function escapeHTML(
    EVENTS
 ============================================================ */
 
-const itemSearch =
-  document.getElementById(
+document
+  .getElementById(
     "itemSearch"
-  );
-
-
-if (itemSearch) {
-
-  itemSearch.addEventListener(
+  )
+  .addEventListener(
     "input",
     renderCategory
   );
 
-}
 
-
-const itemStatusFilter =
-  document.getElementById(
+document
+  .getElementById(
     "itemStatusFilter"
-  );
-
-
-if (itemStatusFilter) {
-
-  itemStatusFilter.addEventListener(
+  )
+  .addEventListener(
     "change",
     renderCategory
   );
 
-}
 
+/*
+ * Import button/file input.
+ */
 
-const overlay =
-  document.getElementById(
-    "overlay"
+document
+  .getElementById(
+    "importFile"
+  )
+  .addEventListener(
+    "change",
+    importData
   );
 
 
-if (overlay) {
+/*
+ * Close modal when clicking outside it.
+ */
 
-  overlay.addEventListener(
+document
+  .getElementById(
+    "overlay"
+  )
+  .addEventListener(
     "click",
     function(event) {
 
@@ -1811,8 +1891,10 @@ if (overlay) {
     }
   );
 
-}
 
+/*
+ * Close modal with Escape.
+ */
 
 document.addEventListener(
   "keydown",
@@ -1831,12 +1913,10 @@ document.addEventListener(
 
 
 /* ============================================================
-   START
+   START APPLICATION
 ============================================================ */
 
 loadData();
-
-setupImportButton();
 
 buildNavigation();
 
