@@ -2,7 +2,7 @@
    WEDDING PLANNER
    ============================================================ */
 
-const STORAGE_KEY = "tamilWeddingPlanner_v5";
+const STORAGE_KEY = "tamilWeddingPlanner_v6";
 
 
 /* ============================================================
@@ -301,10 +301,13 @@ const defaultCategories = [
    ============================================================ */
 
 let categories = [];
+
 let savedData = {};
 
 let currentCategory = "dashboard";
+
 let currentItem = null;
+
 let modalStatus = "not";
 
 let managementMode = "category";
@@ -343,7 +346,9 @@ function formatDate(dateString) {
   }
 
   const date =
-    new Date(dateString + "T00:00:00");
+    new Date(
+      dateString + "T00:00:00"
+    );
 
   if (Number.isNaN(date.getTime())) {
     return dateString;
@@ -361,19 +366,52 @@ function formatDate(dateString) {
 
 
 /* ============================================================
+   TOAST
+   ============================================================ */
+
+let toastTimer = null;
+
+
+function showToast(message) {
+  const toast =
+    document.getElementById("toast");
+
+  if (!toast) {
+    return;
+  }
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2800);
+}
+
+
+/* ============================================================
    LOAD DATA
    ============================================================ */
 
 function loadData() {
   try {
     const stored =
-      localStorage.getItem(STORAGE_KEY);
+      localStorage.getItem(
+        STORAGE_KEY
+      );
 
     if (!stored) {
       categories =
-        structuredClone(defaultCategories);
+        structuredClone(
+          defaultCategories
+        );
 
       savedData = {};
+
+      initialiseDefaultItems();
 
       saveData();
 
@@ -399,9 +437,13 @@ function loadData() {
           : {};
     } else {
       categories =
-        structuredClone(defaultCategories);
+        structuredClone(
+          defaultCategories
+        );
 
       savedData = {};
+
+      initialiseDefaultItems();
 
       saveData();
     }
@@ -414,12 +456,50 @@ function loadData() {
     );
 
     categories =
-      structuredClone(defaultCategories);
+      structuredClone(
+        defaultCategories
+      );
 
     savedData = {};
+
+    initialiseDefaultItems();
   }
 
   normaliseCategories();
+}
+
+
+/* ============================================================
+   INITIALISE DEFAULT ITEMS
+   ============================================================ */
+
+function initialiseDefaultItems() {
+
+  defaultCategories.forEach(category => {
+
+    category.items.forEach(item => {
+
+      const key =
+        itemKey(
+          category.id,
+          item
+        );
+
+      savedData[key] = {
+        status: "not",
+        vendor: "",
+        price: "",
+        deadline: "",
+        link: "",
+        notes: "",
+        enabled: true,
+        predefined: true
+      };
+
+    });
+
+  });
+
 }
 
 
@@ -464,11 +544,18 @@ function normaliseCategories() {
             ),
 
           items:
-            Array.isArray(category.items)
+            Array.isArray(
+              category.items
+            )
               ? category.items.map(
-                  item => String(item)
+                  item =>
+                    String(item)
                 )
-              : []
+              : [],
+
+          predefined:
+            category.predefined === true
+
         };
 
       });
@@ -486,9 +573,13 @@ function saveData() {
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
-        version: 5,
+
+        version: 6,
+
         categories,
+
         savedData
+
       })
     );
 
@@ -514,8 +605,16 @@ function saveData() {
    ITEM KEY
    ============================================================ */
 
-function itemKey(categoryId, item) {
-  return categoryId + "::" + item;
+function itemKey(
+  categoryId,
+  item
+) {
+
+  return (
+    categoryId +
+    "::" +
+    item
+  );
 }
 
 
@@ -523,7 +622,10 @@ function itemKey(categoryId, item) {
    GET ITEM
    ============================================================ */
 
-function getItem(categoryId, item) {
+function getItem(
+  categoryId,
+  item
+) {
 
   const key =
     itemKey(
@@ -536,15 +638,29 @@ function getItem(categoryId, item) {
     typeof savedData[key] !== "object"
   ) {
 
+    const predefined =
+      isPredefinedItem(
+        categoryId,
+        item
+      );
+
     savedData[key] = {
 
       status: "not",
+
       vendor: "",
+
       price: "",
+
       deadline: "",
+
       link: "",
+
       notes: "",
-      enabled: true
+
+      enabled: true,
+
+      predefined
 
     };
   }
@@ -579,7 +695,41 @@ function getItem(categoryId, item) {
     data.enabled = true;
   }
 
+  if (
+    typeof data.predefined !== "boolean"
+  ) {
+
+    data.predefined =
+      isPredefinedItem(
+        categoryId,
+        item
+      );
+  }
+
   return data;
+}
+
+
+/* ============================================================
+   CHECK PREDEFINED ITEM
+   ============================================================ */
+
+function isPredefinedItem(
+  categoryId,
+  item
+) {
+
+  const category =
+    defaultCategories.find(
+      category =>
+        category.id === categoryId
+    );
+
+  if (!category) {
+    return false;
+  }
+
+  return category.items.includes(item);
 }
 
 
@@ -598,13 +748,13 @@ function exportData() {
       app:
         "Tamil Wedding Planner",
 
-      version:
-        5,
+      version: 6,
 
       exportedAt:
         new Date().toISOString(),
 
       categories,
+
       savedData
 
     };
@@ -620,15 +770,20 @@ function exportData() {
       new Blob(
         [json],
         {
-          type: "application/json"
+          type:
+            "application/json"
         }
       );
 
     const url =
-      URL.createObjectURL(blob);
+      URL.createObjectURL(
+        blob
+      );
 
     const link =
-      document.createElement("a");
+      document.createElement(
+        "a"
+      );
 
     link.href = url;
 
@@ -651,15 +806,26 @@ function exportData() {
     link.download =
       filename;
 
-    document.body.appendChild(link);
+    document.body.appendChild(
+      link
+    );
 
     link.click();
 
-    document.body.removeChild(link);
+    document.body.removeChild(
+      link
+    );
 
-    setTimeout(
-      () => URL.revokeObjectURL(url),
-      1000
+    setTimeout(() => {
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    }, 1000);
+
+    showToast(
+      "Planner exported successfully."
     );
 
   } catch (error) {
@@ -728,7 +894,8 @@ function importData(event) {
         else if (
           imported &&
           imported.data &&
-          typeof imported.data === "object"
+          typeof imported.data ===
+            "object"
         ) {
 
           importedCategories =
@@ -746,7 +913,8 @@ function importData(event) {
             importedCategories
           ) ||
           !importedSavedData ||
-          typeof importedSavedData !== "object"
+          typeof importedSavedData !==
+            "object"
         ) {
 
           throw new Error(
@@ -757,8 +925,7 @@ function importData(event) {
 
         const confirmed =
           confirm(
-            "Import this wedding planner backup?\n\n" +
-            "Your current planner data will be replaced."
+            "Import this wedding planner backup?\n\nYour current planner data will be replaced."
           );
 
         if (!confirmed) {
@@ -783,10 +950,11 @@ function importData(event) {
 
           showDashboard();
 
-          alert(
-            "Wedding planner data imported successfully! ❤️"
+          showToast(
+            "Wedding planner imported successfully."
           );
         }
+
 
       } catch (error) {
 
@@ -799,6 +967,7 @@ function importData(event) {
           "This file is not a valid wedding planner backup."
         );
       }
+
 
       event.target.value =
         "";
@@ -822,6 +991,46 @@ function importData(event) {
 
 
 /* ============================================================
+   RESET
+   ============================================================ */
+
+function resetPlanner() {
+
+  const confirmed =
+    confirm(
+      "Reset the wedding planner?\n\nThis will remove custom categories and custom items and restore all predefined categories and items."
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  categories =
+    structuredClone(
+      defaultCategories
+    );
+
+  savedData = {};
+
+  initialiseDefaultItems();
+
+
+  if (saveData()) {
+
+    currentCategory =
+      "dashboard";
+
+    showDashboard();
+
+    showToast(
+      "Planner has been reset."
+    );
+  }
+}
+
+
+/* ============================================================
    NAVIGATION
    ============================================================ */
 
@@ -841,7 +1050,9 @@ function buildNavigation() {
 
 
   const dashboard =
-    document.createElement("button");
+    document.createElement(
+      "button"
+    );
 
   dashboard.type =
     "button";
@@ -850,7 +1061,8 @@ function buildNavigation() {
     "🏠 Dashboard";
 
   dashboard.className =
-    currentCategory === "dashboard"
+    currentCategory ===
+    "dashboard"
       ? "active"
       : "";
 
@@ -868,7 +1080,9 @@ function buildNavigation() {
     category => {
 
       const button =
-        document.createElement("button");
+        document.createElement(
+          "button"
+        );
 
       button.type =
         "button";
@@ -879,15 +1093,17 @@ function buildNavigation() {
         category.name;
 
       button.className =
-        currentCategory === category.id
+        currentCategory ===
+        category.id
           ? "active"
           : "";
 
       button.addEventListener(
         "click",
-        () => showCategory(
-          category.id
-        )
+        () =>
+          showCategory(
+            category.id
+          )
       );
 
       nav.appendChild(
@@ -919,11 +1135,6 @@ function showDashboard() {
       "categoryPage"
     );
 
-  const managePage =
-    document.getElementById(
-      "managePage"
-    );
-
 
   if (dashboardPage) {
     dashboardPage.style.display =
@@ -935,15 +1146,11 @@ function showDashboard() {
       "none";
   }
 
-  if (managePage) {
-    managePage.style.display =
-      "none";
-  }
-
 
   buildNavigation();
 
   renderDashboard();
+
 
   window.scrollTo({
     top: 0,
@@ -959,7 +1166,9 @@ function showDashboard() {
 function renderDashboard() {
 
   let total = 0;
+
   let done = 0;
+
   let progress = 0;
 
 
@@ -983,14 +1192,16 @@ function renderDashboard() {
 
 
           if (
-            data.status === "done"
+            data.status ===
+            "done"
           ) {
             done++;
           }
 
 
           if (
-            data.status === "progress"
+            data.status ===
+            "progress"
           ) {
             progress++;
           }
@@ -1005,7 +1216,8 @@ function renderDashboard() {
   const percent =
     total > 0
       ? Math.round(
-          (done / total) * 100
+          (done / total) *
+            100
         )
       : 0;
 
@@ -1095,7 +1307,9 @@ function renderDashboard() {
 
 
       const card =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       card.className =
         "summary-card";
@@ -1103,36 +1317,39 @@ function renderDashboard() {
 
       card.innerHTML =
         '<div class="summary-icon">' +
-          escapeHTML(
-            category.icon
-          ) +
+        escapeHTML(
+          category.icon
+        ) +
         "</div>" +
 
         "<h3>" +
-          escapeHTML(
-            category.name
-          ) +
+        escapeHTML(
+          category.name
+        ) +
         "</h3>" +
 
         "<p>" +
-          stats.done +
-          " / " +
-          stats.total +
-          " completed" +
+        stats.done +
+        " / " +
+        stats.total +
+        " completed" +
         "</p>" +
 
         '<div class="summary-bar">' +
-          '<div style="width:' +
-            stats.percent +
-            '%"></div>' +
+
+        '<div style="width:' +
+        stats.percent +
+        '%"></div>' +
+
         "</div>";
 
 
       card.addEventListener(
         "click",
-        () => showCategory(
-          category.id
-        )
+        () =>
+          showCategory(
+            category.id
+          )
       );
 
 
@@ -1175,11 +1392,6 @@ function showCategory(id) {
       "categoryPage"
     );
 
-  const managePage =
-    document.getElementById(
-      "managePage"
-    );
-
 
   if (dashboardPage) {
     dashboardPage.style.display =
@@ -1189,11 +1401,6 @@ function showCategory(id) {
   if (categoryPage) {
     categoryPage.style.display =
       "block";
-  }
-
-  if (managePage) {
-    managePage.style.display =
-      "none";
   }
 
 
@@ -1224,13 +1431,11 @@ function showCategory(id) {
 
 
   if (search) {
-    search.value =
-      "";
+    search.value = "";
   }
 
   if (filter) {
-    filter.value =
-      "all";
+    filter.value = "all";
   }
 
 
@@ -1250,9 +1455,12 @@ function showCategory(id) {
    CATEGORY STATS
    ============================================================ */
 
-function getCategoryStats(category) {
+function getCategoryStats(
+  category
+) {
 
   let total = 0;
+
   let done = 0;
 
 
@@ -1275,7 +1483,8 @@ function getCategoryStats(category) {
 
 
       if (
-        data.status === "done"
+        data.status ===
+        "done"
       ) {
         done++;
       }
@@ -1287,7 +1496,8 @@ function getCategoryStats(category) {
   const percent =
     total > 0
       ? Math.round(
-          (done / total) * 100
+          (done / total) *
+            100
         )
       : 0;
 
@@ -1308,9 +1518,9 @@ function renderCategory() {
 
   const category =
     categories.find(
-      c => c.id === currentCategory
+      c => c.id ===
+        currentCategory
     );
-
 
   if (!category) {
     return;
@@ -1337,7 +1547,8 @@ function renderCategory() {
   if (categoryPercent) {
 
     categoryPercent.textContent =
-      stats.percent + "%";
+      stats.percent +
+      "%";
   }
 
 
@@ -1427,14 +1638,21 @@ function renderCategory() {
 
       const matchesSearch =
         !search ||
-        itemText.includes(search) ||
-        vendorText.includes(search) ||
-        notesText.includes(search);
+        itemText.includes(
+          search
+        ) ||
+        vendorText.includes(
+          search
+        ) ||
+        notesText.includes(
+          search
+        );
 
 
       const matchesStatus =
         status === "all" ||
-        data.status === status;
+        data.status ===
+          status;
 
 
       if (
@@ -1449,14 +1667,18 @@ function renderCategory() {
 
 
       const card =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       card.className =
         "item-card";
 
 
       if (
-        data.status === "done"
+        data.status ===
+        "done"
       ) {
         card.classList.add(
           "done"
@@ -1472,7 +1694,8 @@ function renderCategory() {
 
 
       if (
-        data.status === "progress"
+        data.status ===
+        "progress"
       ) {
 
         statusText =
@@ -1484,7 +1707,8 @@ function renderCategory() {
 
 
       if (
-        data.status === "done"
+        data.status ===
+        "done"
       ) {
 
         statusText =
@@ -1497,6 +1721,7 @@ function renderCategory() {
 
       const vendorHTML =
         data.vendor
+
           ? "<p>👤 " +
             escapeHTML(
               data.vendor
@@ -1521,25 +1746,26 @@ function renderCategory() {
 
 
       card.innerHTML =
-
         '<div class="item-top">' +
 
-          '<div class="item-icon">' +
-            escapeHTML(
-              category.icon
-            ) +
-          "</div>" +
+        '<div class="item-icon">' +
+        escapeHTML(
+          category.icon
+        ) +
+        "</div>" +
 
-          '<div class="item-status' +
-            statusClass +
-          '">' +
-            statusText +
-          "</div>" +
+        '<div class="item-status' +
+        statusClass +
+        '">' +
+        statusText +
+        "</div>" +
 
         "</div>" +
 
         "<h3>" +
-          escapeHTML(item) +
+        escapeHTML(
+          item
+        ) +
         "</h3>" +
 
         vendorHTML +
@@ -1549,10 +1775,11 @@ function renderCategory() {
 
       card.addEventListener(
         "click",
-        () => openModal(
-          category.id,
-          item
-        )
+        () =>
+          openModal(
+            category.id,
+            item
+          )
       );
 
 
@@ -1650,12 +1877,14 @@ function openModal(
 
 
   if (modalCategory) {
+
     modalCategory.textContent =
       category.name;
   }
 
 
   if (modalTitle) {
+
     modalTitle.textContent =
       item;
   }
@@ -1697,6 +1926,8 @@ function openModal(
 
   updateStatusButtons();
 
+  updateItemManagement();
+
 
   const overlay =
     document.getElementById(
@@ -1705,9 +1936,99 @@ function openModal(
 
 
   if (overlay) {
+
     overlay.classList.add(
       "active"
     );
+  }
+}
+
+
+/* ============================================================
+   UPDATE ITEM MANAGEMENT
+   ============================================================ */
+
+function updateItemManagement() {
+
+  if (!currentItem) {
+    return;
+  }
+
+
+  const data =
+    getItem(
+      currentItem.categoryId,
+      currentItem.item
+    );
+
+
+  const disableButton =
+    document.getElementById(
+      "disableItemButton"
+    );
+
+
+  const description =
+    document.getElementById(
+      "itemManagementDescription"
+    );
+
+
+  const deleteArea =
+    document.getElementById(
+      "customItemDeleteArea"
+    );
+
+
+  if (disableButton) {
+
+    if (data.enabled) {
+
+      disableButton.textContent =
+        "Disable item";
+
+      disableButton.classList.remove(
+        "enabled"
+      );
+
+    } else {
+
+      disableButton.textContent =
+        "Enable item";
+
+      disableButton.classList.add(
+        "enabled"
+      );
+    }
+  }
+
+
+  if (description) {
+
+    if (data.enabled) {
+
+      description.textContent =
+        "Disable this item if you do not want it shown in the planner.";
+
+    } else {
+
+      description.textContent =
+        "This item is currently disabled and hidden from the planner.";
+    }
+  }
+
+
+  /*
+   * Predefined items cannot be deleted.
+   * Custom items can be deleted.
+   */
+
+  if (deleteArea) {
+
+    deleteArea.style.display =
+      data.predefined
+        ? "none"
+        : "block";
   }
 }
 
@@ -1725,6 +2046,7 @@ function closeModal() {
 
 
   if (overlay) {
+
     overlay.classList.remove(
       "active"
     );
@@ -1737,10 +2059,12 @@ function closeModal() {
 
 
 /* ============================================================
-   STATUS
+   CHOOSE STATUS
    ============================================================ */
 
-function chooseStatus(status) {
+function chooseStatus(
+  status
+) {
 
   modalStatus =
     status;
@@ -1748,6 +2072,10 @@ function chooseStatus(status) {
   updateStatusButtons();
 }
 
+
+/* ============================================================
+   UPDATE STATUS BUTTONS
+   ============================================================ */
 
 function updateStatusButtons() {
 
@@ -1771,7 +2099,8 @@ function updateStatusButtons() {
 
     notButton.classList.toggle(
       "active",
-      modalStatus === "not"
+      modalStatus ===
+        "not"
     );
   }
 
@@ -1780,7 +2109,8 @@ function updateStatusButtons() {
 
     progressButton.classList.toggle(
       "active",
-      modalStatus === "progress"
+      modalStatus ===
+        "progress"
     );
   }
 
@@ -1789,7 +2119,8 @@ function updateStatusButtons() {
 
     doneButton.classList.toggle(
       "active",
-      modalStatus === "done"
+      modalStatus ===
+        "done"
     );
   }
 }
@@ -1873,26 +2204,26 @@ function saveItem() {
       : "";
 
 
-  data.enabled =
-    true;
+  if (saveData()) {
 
+    closeModal();
 
-  saveData();
+    if (
+      currentCategory ===
+      "dashboard"
+    ) {
 
+      showDashboard();
 
-  closeModal();
+    } else {
 
+      showCategory(
+        currentCategory
+      );
+    }
 
-  if (
-    currentCategory === "dashboard"
-  ) {
-
-    showDashboard();
-
-  } else {
-
-    showCategory(
-      currentCategory
+    showToast(
+      "Item saved successfully."
     );
   }
 }
@@ -1941,7 +2272,8 @@ function clearItem() {
 
 
   if (
-    currentCategory === "dashboard"
+    currentCategory ===
+    "dashboard"
   ) {
 
     showDashboard();
@@ -1952,179 +2284,155 @@ function clearItem() {
       currentCategory
     );
   }
-}
 
 
-/* ============================================================
-   MANAGE PLANNER PAGE
-   ============================================================ */
-
-function showManagePlanner() {
-
-  currentCategory =
-    "manage";
-
-
-  const dashboardPage =
-    document.getElementById(
-      "dashboardPage"
-    );
-
-  const categoryPage =
-    document.getElementById(
-      "categoryPage"
-    );
-
-  const managePage =
-    document.getElementById(
-      "managePage"
-    );
-
-
-  if (dashboardPage) {
-    dashboardPage.style.display =
-      "none";
-  }
-
-  if (categoryPage) {
-    categoryPage.style.display =
-      "none";
-  }
-
-  if (managePage) {
-    managePage.style.display =
-      "block";
-  }
-
-
-  buildNavigation();
-
-  renderManagePlanner();
-
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-
-/* ============================================================
-   RENDER MANAGE PLANNER
-   ============================================================ */
-
-function renderManagePlanner() {
-
-  const container =
-    document.getElementById(
-      "manageCategories"
-    );
-
-
-  if (!container) {
-    return;
-  }
-
-
-  container.innerHTML =
-    "";
-
-
-  categories.forEach(
-    category => {
-
-      const wrapper =
-        document.createElement("div");
-
-
-      wrapper.className =
-        "manage-category";
-
-
-      wrapper.innerHTML =
-
-        '<div class="manage-category-header">' +
-
-          '<div>' +
-
-            '<span class="manage-category-icon">' +
-              escapeHTML(
-                category.icon
-              ) +
-            "</span>" +
-
-            "<strong>" +
-              escapeHTML(
-                category.name
-              ) +
-            "</strong>" +
-
-          "</div>" +
-
-        "</div>" +
-
-
-        '<div class="manage-items"></div>';
-
-
-      const itemsContainer =
-        wrapper.querySelector(
-          ".manage-items"
-        );
-
-
-      category.items.forEach(
-        item => {
-
-          const row =
-            document.createElement("div");
-
-
-          row.className =
-            "manage-item";
-
-
-          row.innerHTML =
-            "<span>" +
-              escapeHTML(
-                item
-              ) +
-            "</span>";
-
-
-          itemsContainer.appendChild(
-            row
-          );
-
-        }
-      );
-
-
-      container.appendChild(
-        wrapper
-      );
-
-    }
+  showToast(
+    "Item details cleared."
   );
 }
 
 
 /* ============================================================
-   OPEN MANAGEMENT MODAL
+   TOGGLE ITEM ENABLED
    ============================================================ */
 
-function openManagementModal(
-  mode = "category"
-) {
+function toggleCurrentItemEnabled() {
+
+  if (!currentItem) {
+    return;
+  }
+
+
+  const data =
+    getItem(
+      currentItem.categoryId,
+      currentItem.item
+    );
+
+
+  data.enabled =
+    !data.enabled;
+
+
+  saveData();
+
+
+  updateItemManagement();
+
+
+  renderCategory();
+
+
+  renderDashboard();
+
+
+  showToast(
+    data.enabled
+      ? "Item enabled."
+      : "Item disabled."
+  );
+}
+
+
+/* ============================================================
+   DELETE CUSTOM ITEM
+   ============================================================ */
+
+function deleteCurrentCustomItem() {
+
+  if (!currentItem) {
+    return;
+  }
+
+
+  const data =
+    getItem(
+      currentItem.categoryId,
+      currentItem.item
+    );
+
+
+  /*
+   * Safety:
+   * predefined items can NEVER be deleted.
+   */
+
+  if (data.predefined) {
+
+    alert(
+      "Predefined items cannot be deleted. They can only be disabled."
+    );
+
+    return;
+  }
+
+
+  const category =
+    categories.find(
+      category =>
+        category.id ===
+        currentItem.categoryId
+    );
+
+
+  if (!category) {
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      'Delete "' +
+      currentItem.item +
+      '" permanently?'
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  category.items =
+    category.items.filter(
+      item =>
+        item !==
+        currentItem.item
+    );
+
+
+  delete savedData[
+    itemKey(
+      currentItem.categoryId,
+      currentItem.item
+    )
+  ];
+
+
+  saveData();
+
+  closeModal();
+
+  showCategory(
+    currentItem.categoryId
+  );
+
+
+  showToast(
+    "Custom item deleted."
+  );
+}
+
+
+/* ============================================================
+   ADD CATEGORY MODAL
+   ============================================================ */
+
+function openAddCategoryModal() {
 
   managementMode =
-    mode;
+    "category";
 
-
-  const overlay =
-    document.getElementById(
-      "managementOverlay"
-    );
 
   const title =
     document.getElementById(
@@ -2146,95 +2454,194 @@ function openManagementModal(
       "iconGroup"
     );
 
+  const help =
+    document.getElementById(
+      "managementHelp"
+    );
+
   const saveButton =
     document.getElementById(
       "saveManagementButton"
     );
 
 
-  if (
-    !overlay ||
-    !title ||
-    !nameInput ||
-    !saveButton
-  ) {
+  if (title) {
+
+    title.textContent =
+      "Add category";
+  }
+
+
+  if (nameInput) {
+
+    nameInput.value =
+      "";
+
+    nameInput.placeholder =
+      "Enter category name...";
+  }
+
+
+  if (iconInput) {
+
+    iconInput.value =
+      "";
+
+    iconInput.placeholder =
+      "💍";
+  }
+
+
+  if (iconGroup) {
+
+    iconGroup.style.display =
+      "block";
+  }
+
+
+  if (help) {
+
+    help.textContent =
+      "Create a new category for your wedding planner.";
+  }
+
+
+  if (saveButton) {
+
+    saveButton.textContent =
+      "Add category";
+  }
+
+
+  openManagementModal();
+}
+
+
+/* ============================================================
+   ADD ITEM MODAL
+   ============================================================ */
+
+function openAddItemModal() {
+
+  const category =
+    categories.find(
+      category =>
+        category.id ===
+        currentCategory
+    );
+
+
+  if (!category) {
     return;
   }
 
 
-  nameInput.value =
-    "";
+  managementMode =
+    "item";
 
-  if (iconInput) {
-    iconInput.value =
+
+  const title =
+    document.getElementById(
+      "managementModalTitle"
+    );
+
+  const nameInput =
+    document.getElementById(
+      "managementNameInput"
+    );
+
+  const iconGroup =
+    document.getElementById(
+      "iconGroup"
+    );
+
+  const help =
+    document.getElementById(
+      "managementHelp"
+    );
+
+  const saveButton =
+    document.getElementById(
+      "saveManagementButton"
+    );
+
+
+  if (title) {
+
+    title.textContent =
+      "Add item";
+  }
+
+
+  if (nameInput) {
+
+    nameInput.value =
       "";
+
+    nameInput.placeholder =
+      "Enter item name...";
   }
 
 
-  if (
-    mode === "item"
-  ) {
+  if (iconGroup) {
 
-    const category =
-      categories.find(
-        c =>
-          c.id ===
-          currentCategory
-      );
-
-
-    if (!category) {
-      return;
-    }
-
-
-    title.textContent =
-      "Add item";
-
-
-    nameInput.placeholder =
-      "e.g. Wedding flowers";
-
-
-    if (iconGroup) {
-      iconGroup.style.display =
-        "none";
-    }
-
-
-    saveButton.textContent =
-      "Add item";
-
-  } else {
-
-    title.textContent =
-      "Add category";
-
-
-    nameInput.placeholder =
-      "e.g. Flowers";
-
-
-    if (iconGroup) {
-      iconGroup.style.display =
-        "block";
-    }
-
-
-    saveButton.textContent =
-      "Add category";
+    iconGroup.style.display =
+      "none";
   }
 
 
-  overlay.classList.add(
-    "active"
-  );
+  if (help) {
+
+    help.textContent =
+      'Add a new item to "' +
+      category.name +
+      '".';
+  }
 
 
-  setTimeout(
-    () => nameInput.focus(),
-    100
-  );
+  if (saveButton) {
+
+    saveButton.textContent =
+      "Add item";
+  }
+
+
+  openManagementModal();
+}
+
+
+/* ============================================================
+   OPEN MANAGEMENT MODAL
+   ============================================================ */
+
+function openManagementModal() {
+
+  const overlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+
+  if (overlay) {
+
+    overlay.classList.add(
+      "active"
+    );
+
+
+    setTimeout(() => {
+
+      const input =
+        document.getElementById(
+          "managementNameInput"
+        );
+
+      if (input) {
+        input.focus();
+      }
+
+    }, 100);
+  }
 }
 
 
@@ -2260,10 +2667,10 @@ function closeManagementModal() {
 
 
 /* ============================================================
-   SAVE MANAGEMENT
+   SAVE MANAGEMENT MODAL
    ============================================================ */
 
-function saveManagement() {
+function saveManagementModal() {
 
   const nameInput =
     document.getElementById(
@@ -2276,41 +2683,115 @@ function saveManagement() {
     );
 
 
-  if (!nameInput) {
-    return;
-  }
-
-
   const name =
-    nameInput.value.trim();
+    nameInput
+      ? nameInput.value.trim()
+      : "";
 
 
   if (!name) {
 
     alert(
-      managementMode === "item"
-        ? "Please enter an item name."
-        : "Please enter a category name."
+      managementMode ===
+        "category"
+        ? "Please enter a category name."
+        : "Please enter an item name."
     );
-
-    nameInput.focus();
 
     return;
   }
 
 
   /* ==========================================================
-     ADD ITEM
+     CATEGORY
      ========================================================== */
 
   if (
-    managementMode === "item"
+    managementMode ===
+    "category"
+  ) {
+
+    const exists =
+      categories.some(
+        category =>
+          category.name
+            .toLowerCase() ===
+          name.toLowerCase()
+      );
+
+
+    if (exists) {
+
+      alert(
+        "A category with this name already exists."
+      );
+
+      return;
+    }
+
+
+    const icon =
+      iconInput
+        ? iconInput.value.trim()
+        : "";
+
+
+    const category = {
+
+      id:
+        createId(name),
+
+      name,
+
+      icon:
+        icon ||
+        "📋",
+
+      items: [],
+
+      predefined: false
+
+    };
+
+
+    categories.push(
+      category
+    );
+
+
+    if (saveData()) {
+
+      closeManagementModal();
+
+      buildNavigation();
+
+      renderDashboard();
+
+      showToast(
+        '"' +
+        name +
+        '" category added.'
+      );
+    }
+
+
+    return;
+  }
+
+
+  /* ==========================================================
+     ITEM
+     ========================================================== */
+
+  if (
+    managementMode ===
+    "item"
   ) {
 
     const category =
       categories.find(
-        c =>
-          c.id ===
+        category =>
+          category.id ===
           currentCategory
       );
 
@@ -2323,7 +2804,8 @@ function saveManagement() {
     const exists =
       category.items.some(
         existing =>
-          existing.toLowerCase() ===
+          existing
+            .toLowerCase() ===
           name.toLowerCase()
       );
 
@@ -2334,8 +2816,6 @@ function saveManagement() {
         "This item already exists."
       );
 
-      nameInput.focus();
-
       return;
     }
 
@@ -2345,132 +2825,52 @@ function saveManagement() {
     );
 
 
-    getItem(
-      category.id,
-      name
-    );
+    savedData[
+      itemKey(
+        category.id,
+        name
+      )
+    ] = {
+
+      status: "not",
+
+      vendor: "",
+
+      price: "",
+
+      deadline: "",
+
+      link: "",
+
+      notes: "",
+
+      enabled: true,
+
+      predefined: false
+
+    };
 
 
-    if (!saveData()) {
-      return;
+    if (saveData()) {
+
+      closeManagementModal();
+
+      renderCategory();
+
+      renderDashboard();
+
+      showToast(
+        '"' +
+        name +
+        '" item added.'
+      );
     }
-
-
-    closeManagementModal();
-
-
-    renderCategory();
-
-    renderDashboard();
-
-    buildNavigation();
-
-
-    return;
   }
-
-
-  /* ==========================================================
-     ADD CATEGORY
-     ========================================================== */
-
-  const exists =
-    categories.some(
-      category =>
-        category.name
-          .toLowerCase() ===
-        name.toLowerCase()
-    );
-
-
-  if (exists) {
-
-    alert(
-      "A category with this name already exists."
-    );
-
-    nameInput.focus();
-
-    return;
-  }
-
-
-  const icon =
-    iconInput
-      ? iconInput.value.trim()
-      : "";
-
-
-  const category = {
-
-    id:
-      createId(name),
-
-    name:
-      name,
-
-    icon:
-      icon || "📋",
-
-    items:
-      []
-
-  };
-
-
-  categories.push(
-    category
-  );
-
-
-  if (!saveData()) {
-    return;
-  }
-
-
-  closeManagementModal();
-
-
-  renderManagePlanner();
-
-  renderDashboard();
-
-  buildNavigation();
-
-
-  alert(
-    '"' +
-    name +
-    '" has been added successfully.'
-  );
 }
 
 
 /* ============================================================
-   ADD ITEM BUTTON
-   ============================================================ */
-
-function addItemToCurrentCategory() {
-
-  if (
-    !categories.some(
-      c =>
-        c.id ===
-        currentCategory
-    )
-  ) {
-    return;
-  }
-
-
-  openManagementModal(
-    "item"
-  );
-}
-
-
-/* ============================================================
-   SETUP EVENTS
+   EVENTS
    ============================================================ */
 
 function setupEvents() {
@@ -2490,6 +2890,12 @@ function setupEvents() {
       "importFile"
     );
 
+  const resetButton =
+    document.getElementById(
+      "resetButton"
+    );
+
+
   const closeModalButton =
     document.getElementById(
       "closeModalButton"
@@ -2504,6 +2910,7 @@ function setupEvents() {
     document.getElementById(
       "clearButton"
     );
+
 
   const notButton =
     document.getElementById(
@@ -2520,10 +2927,47 @@ function setupEvents() {
       "doneButton"
     );
 
+
+  const disableItemButton =
+    document.getElementById(
+      "disableItemButton"
+    );
+
+  const deleteCustomItemButton =
+    document.getElementById(
+      "deleteCustomItemButton"
+    );
+
+
   const overlay =
     document.getElementById(
       "overlay"
     );
+
+
+  const managementOverlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+
+  const closeManagementButton =
+    document.getElementById(
+      "closeManagementButton"
+    );
+
+
+  const cancelManagementButton =
+    document.getElementById(
+      "cancelManagementButton"
+    );
+
+
+  const saveManagementButton =
+    document.getElementById(
+      "saveManagementButton"
+    );
+
 
   const search =
     document.getElementById(
@@ -2534,6 +2978,7 @@ function setupEvents() {
     document.getElementById(
       "itemStatusFilter"
     );
+
 
   const addCategoryButton =
     document.getElementById(
@@ -2548,41 +2993,6 @@ function setupEvents() {
   const backToDashboardButton =
     document.getElementById(
       "backToDashboardButton"
-    );
-
-  const manageCurrentCategoryButton =
-    document.getElementById(
-      "manageCurrentCategoryButton"
-    );
-
-  const manageBackButton =
-    document.getElementById(
-      "manageBackButton"
-    );
-
-  const managementOverlay =
-    document.getElementById(
-      "managementOverlay"
-    );
-
-  const closeManagementButton =
-    document.getElementById(
-      "closeManagementButton"
-    );
-
-  const cancelManagementButton =
-    document.getElementById(
-      "cancelManagementButton"
-    );
-
-  const saveManagementButton =
-    document.getElementById(
-      "saveManagementButton"
-    );
-
-  const managementNameInput =
-    document.getElementById(
-      "managementNameInput"
     );
 
 
@@ -2610,7 +3020,8 @@ function setupEvents() {
 
     importButton.addEventListener(
       "click",
-      () => importFile.click()
+      () =>
+        importFile.click()
     );
   }
 
@@ -2620,6 +3031,19 @@ function setupEvents() {
     importFile.addEventListener(
       "change",
       importData
+    );
+  }
+
+
+  /* ==========================================================
+     RESET
+     ========================================================== */
+
+  if (resetButton) {
+
+    resetButton.addEventListener(
+      "click",
+      resetPlanner
     );
   }
 
@@ -2660,7 +3084,9 @@ function setupEvents() {
     notButton.addEventListener(
       "click",
       () =>
-        chooseStatus("not")
+        chooseStatus(
+          "not"
+        )
     );
   }
 
@@ -2670,7 +3096,9 @@ function setupEvents() {
     progressButton.addEventListener(
       "click",
       () =>
-        chooseStatus("progress")
+        chooseStatus(
+          "progress"
+        )
     );
   }
 
@@ -2680,10 +3108,36 @@ function setupEvents() {
     doneButton.addEventListener(
       "click",
       () =>
-        chooseStatus("done")
+        chooseStatus(
+          "done"
+        )
     );
   }
 
+
+  if (disableItemButton) {
+
+    disableItemButton.addEventListener(
+      "click",
+      toggleCurrentItemEnabled
+    );
+  }
+
+
+  if (
+    deleteCustomItemButton
+  ) {
+
+    deleteCustomItemButton.addEventListener(
+      "click",
+      deleteCurrentCustomItem
+    );
+  }
+
+
+  /* ==========================================================
+     ITEM MODAL BACKDROP
+     ========================================================== */
 
   if (overlay) {
 
@@ -2692,7 +3146,8 @@ function setupEvents() {
       event => {
 
         if (
-          event.target === overlay
+          event.target ===
+          overlay
         ) {
 
           closeModal();
@@ -2704,96 +3159,12 @@ function setupEvents() {
 
 
   /* ==========================================================
-     SEARCH
-     ========================================================== */
-
-  if (search) {
-
-    search.addEventListener(
-      "input",
-      renderCategory
-    );
-  }
-
-
-  if (filter) {
-
-    filter.addEventListener(
-      "change",
-      renderCategory
-    );
-  }
-
-
-  /* ==========================================================
-     ADD CATEGORY
-     ========================================================== */
-
-  if (addCategoryButton) {
-
-    addCategoryButton.addEventListener(
-      "click",
-      () =>
-        openManagementModal(
-          "category"
-        )
-    );
-  }
-
-
-  /* ==========================================================
-     ADD ITEM
-     ========================================================== */
-
-  if (addItemButton) {
-
-    addItemButton.addEventListener(
-      "click",
-      addItemToCurrentCategory
-    );
-  }
-
-
-  /* ==========================================================
-     BACK TO DASHBOARD
-     ========================================================== */
-
-  if (backToDashboardButton) {
-
-    backToDashboardButton.addEventListener(
-      "click",
-      showDashboard
-    );
-  }
-
-
-  if (manageBackButton) {
-
-    manageBackButton.addEventListener(
-      "click",
-      showDashboard
-    );
-  }
-
-
-  /* ==========================================================
-     MANAGE CURRENT CATEGORY
-     ========================================================== */
-
-  if (manageCurrentCategoryButton) {
-
-    manageCurrentCategoryButton.addEventListener(
-      "click",
-      showManagePlanner
-    );
-  }
-
-
-  /* ==========================================================
      MANAGEMENT MODAL
      ========================================================== */
 
-  if (closeManagementButton) {
+  if (
+    closeManagementButton
+  ) {
 
     closeManagementButton.addEventListener(
       "click",
@@ -2802,7 +3173,9 @@ function setupEvents() {
   }
 
 
-  if (cancelManagementButton) {
+  if (
+    cancelManagementButton
+  ) {
 
     cancelManagementButton.addEventListener(
       "click",
@@ -2811,16 +3184,20 @@ function setupEvents() {
   }
 
 
-  if (saveManagementButton) {
+  if (
+    saveManagementButton
+  ) {
 
     saveManagementButton.addEventListener(
       "click",
-      saveManagement
+      saveManagementModal
     );
   }
 
 
-  if (managementOverlay) {
+  if (
+    managementOverlay
+  ) {
 
     managementOverlay.addEventListener(
       "click",
@@ -2840,31 +3217,74 @@ function setupEvents() {
 
 
   /* ==========================================================
-     ENTER KEY IN MANAGEMENT MODAL
+     ADD CATEGORY
      ========================================================== */
 
-  if (managementNameInput) {
+  if (addCategoryButton) {
 
-    managementNameInput.addEventListener(
-      "keydown",
-      event => {
-
-        if (
-          event.key === "Enter"
-        ) {
-
-          event.preventDefault();
-
-          saveManagement();
-        }
-
-      }
+    addCategoryButton.addEventListener(
+      "click",
+      openAddCategoryModal
     );
   }
 
 
   /* ==========================================================
-     ESCAPE
+     ADD ITEM
+     ========================================================== */
+
+  if (addItemButton) {
+
+    addItemButton.addEventListener(
+      "click",
+      openAddItemModal
+    );
+  }
+
+
+  /* ==========================================================
+     BACK TO DASHBOARD
+     ========================================================== */
+
+  if (
+    backToDashboardButton
+  ) {
+
+    backToDashboardButton.addEventListener(
+      "click",
+      showDashboard
+    );
+  }
+
+
+  /* ==========================================================
+     SEARCH
+     ========================================================== */
+
+  if (search) {
+
+    search.addEventListener(
+      "input",
+      renderCategory
+    );
+  }
+
+
+  /* ==========================================================
+     FILTER
+     ========================================================== */
+
+  if (filter) {
+
+    filter.addEventListener(
+      "change",
+      renderCategory
+    );
+  }
+
+
+  /* ==========================================================
+     KEYBOARD
      ========================================================== */
 
   document.addEventListener(
@@ -2872,12 +3292,25 @@ function setupEvents() {
     event => {
 
       if (
-        event.key === "Escape"
+        event.key ===
+        "Escape"
       ) {
 
         closeModal();
 
         closeManagementModal();
+      }
+
+
+      if (
+        event.key ===
+          "Enter" &&
+        document.activeElement &&
+        document.activeElement.id ===
+          "managementNameInput"
+      ) {
+
+        saveManagementModal();
       }
 
     }
