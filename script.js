@@ -130,6 +130,7 @@ const defaultCategories = [
       "Poovi Mama Horsens",
       "Kammali Randers",
       "Tamil Ondrai Aarhus",
+      "Arusuvai"
       "Dhoni",
       "Appam",
       "Vaathali og Pako"
