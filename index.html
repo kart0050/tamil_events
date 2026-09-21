@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Our Wedding Planner 💍</title>
+  <title>Our Wedding Planner</title>
 
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+  <!-- HERO -->
   <header class="hero">
     <div class="hero-inner">
       <div class="eyebrow">Tamil Wedding Planner</div>
@@ -24,14 +25,12 @@
     </div>
   </header>
 
+  <!-- NAVIGATION -->
   <div class="nav-wrapper">
-    <nav
-      class="nav"
-      id="navigation"
-      aria-label="Wedding planner navigation"
-    ></nav>
+    <nav class="nav" id="navigation"></nav>
   </div>
 
+  <!-- MAIN APP -->
   <main class="app">
 
     <!-- DASHBOARD -->
@@ -81,12 +80,7 @@
         <div class="stat">
           <div class="stat-icon">📋</div>
 
-          <div
-            class="stat-number"
-            id="totalCount"
-          >
-            0
-          </div>
+          <div class="stat-number" id="totalCount">0</div>
 
           <div class="stat-label">
             Total items
@@ -96,12 +90,7 @@
         <div class="stat">
           <div class="stat-icon">✅</div>
 
-          <div
-            class="stat-number"
-            id="doneCount"
-          >
-            0
-          </div>
+          <div class="stat-number" id="doneCount">0</div>
 
           <div class="stat-label">
             Completed
@@ -111,12 +100,7 @@
         <div class="stat">
           <div class="stat-icon">⏳</div>
 
-          <div
-            class="stat-number"
-            id="progressCount"
-          >
-            0
-          </div>
+          <div class="stat-number" id="progressCount">0</div>
 
           <div class="stat-label">
             In progress
@@ -126,12 +110,7 @@
         <div class="stat">
           <div class="stat-icon">🗂️</div>
 
-          <div
-            class="stat-number"
-            id="categoryCount"
-          >
-            0
-          </div>
+          <div class="stat-number" id="categoryCount">0</div>
 
           <div class="stat-label">
             Categories
@@ -144,13 +123,11 @@
       <div class="progress-card">
 
         <div class="progress-heading">
-
           <h2>Overall progress</h2>
 
           <span id="overallPercent">
             0%
           </span>
-
         </div>
 
         <div class="progress-bar">
@@ -162,8 +139,38 @@
 
       </div>
 
+      <!-- CATEGORY MANAGEMENT -->
+      <div class="management-card">
+
+        <div class="management-header">
+
+          <div>
+            <h2>Manage planner</h2>
+
+            <p>
+              Add, edit or disable categories and items.
+            </p>
+          </div>
+
+          <button
+            class="primary-button"
+            id="addCategoryButton"
+            type="button"
+          >
+            + Add category
+          </button>
+
+        </div>
+
+        <div
+          class="management-list"
+          id="managementList"
+        ></div>
+
+      </div>
+
       <!-- CATEGORIES -->
-      <div class="page-header">
+      <div class="page-header category-heading">
 
         <div>
           <h2>Categories</h2>
@@ -185,19 +192,17 @@
     <!-- CATEGORY PAGE -->
     <section
       id="categoryPage"
-      style="display: none;"
+      style="display:none;"
     >
 
       <div class="page-header">
 
         <div>
-
           <h2 id="categoryTitle"></h2>
 
           <p>
             Select an item to see more details.
           </p>
-
         </div>
 
         <div class="category-progress">
@@ -214,6 +219,34 @@
 
       </div>
 
+      <div class="category-toolbar">
+
+        <button
+          class="secondary-button"
+          id="backToDashboardButton"
+          type="button"
+        >
+          ← Dashboard
+        </button>
+
+        <button
+          class="primary-button"
+          id="addItemButton"
+          type="button"
+        >
+          + Add item
+        </button>
+
+        <button
+          class="secondary-button"
+          id="manageCurrentCategoryButton"
+          type="button"
+        >
+          ⚙ Manage category
+        </button>
+
+      </div>
+
       <!-- SEARCH -->
       <div class="search-area">
 
@@ -221,7 +254,6 @@
           id="itemSearch"
           type="search"
           placeholder="🔎 Search within this category..."
-          autocomplete="off"
         >
 
         <select id="itemStatusFilter">
@@ -255,7 +287,7 @@
       <div
         class="empty"
         id="emptyMessage"
-        style="display: none;"
+        style="display:none;"
       >
 
         <h3>No items found</h3>
@@ -270,35 +302,28 @@
 
   </main>
 
+  <!-- FOOTER -->
   <footer>
     Made with ❤️ for our wedding
   </footer>
 
-  <!-- MODAL -->
+  <!-- ITEM MODAL -->
   <div
     class="overlay"
     id="overlay"
-    aria-hidden="true"
   >
 
-    <div
-      class="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modalTitle"
-    >
+    <div class="modal">
 
       <div class="modal-header">
 
         <div>
-
           <div
             class="modal-category"
             id="modalCategory"
           ></div>
 
           <h2 id="modalTitle"></h2>
-
         </div>
 
         <button
@@ -314,7 +339,6 @@
 
       <div class="modal-body">
 
-        <!-- STATUS -->
         <div class="form-group">
 
           <label>Status</label>
@@ -349,7 +373,6 @@
 
         </div>
 
-        <!-- VENDOR -->
         <div class="form-group">
 
           <label for="vendorInput">
@@ -360,12 +383,10 @@
             id="vendorInput"
             type="text"
             placeholder="Who is responsible?"
-            autocomplete="off"
           >
 
         </div>
 
-        <!-- PRICE -->
         <div class="form-group">
 
           <label for="priceInput">
@@ -376,12 +397,10 @@
             id="priceInput"
             type="text"
             placeholder="e.g. 2,500 kr"
-            inputmode="decimal"
           >
 
         </div>
 
-        <!-- DEADLINE -->
         <div class="form-group">
 
           <label for="deadlineInput">
@@ -395,7 +414,6 @@
 
         </div>
 
-        <!-- LINK -->
         <div class="form-group">
 
           <label for="linkInput">
@@ -406,12 +424,10 @@
             id="linkInput"
             type="url"
             placeholder="https://..."
-            autocomplete="url"
           >
 
         </div>
 
-        <!-- NOTES -->
         <div class="form-group">
 
           <label for="notesInput">
@@ -425,7 +441,6 @@
 
         </div>
 
-        <!-- ACTIONS -->
         <div class="modal-actions">
 
           <button
@@ -442,6 +457,99 @@
             type="button"
           >
             Save changes
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MANAGEMENT MODAL -->
+  <div
+    class="overlay"
+    id="managementOverlay"
+  >
+
+    <div class="modal management-modal">
+
+      <div class="modal-header">
+
+        <div>
+
+          <div class="modal-category">
+            PLANNER MANAGEMENT
+          </div>
+
+          <h2 id="managementModalTitle">
+            Add category
+          </h2>
+
+        </div>
+
+        <button
+          class="close"
+          id="closeManagementButton"
+          type="button"
+          aria-label="Close"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="form-group">
+
+          <label for="managementNameInput">
+            Name
+          </label>
+
+          <input
+            id="managementNameInput"
+            type="text"
+            placeholder="Category or item name"
+          >
+
+        </div>
+
+        <div
+          class="form-group"
+          id="iconGroup"
+        >
+
+          <label for="managementIconInput">
+            Icon
+          </label>
+
+          <input
+            id="managementIconInput"
+            type="text"
+            maxlength="4"
+            placeholder="💍"
+          >
+
+        </div>
+
+        <div class="management-modal-actions">
+
+          <button
+            class="clear"
+            id="cancelManagementButton"
+            type="button"
+          >
+            Cancel
+          </button>
+
+          <button
+            class="save"
+            id="saveManagementButton"
+            type="button"
+          >
+            Save
           </button>
 
         </div>
