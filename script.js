@@ -1,9 +1,9 @@
 /* ============================================================
-   WEDDING PLANNER
+   OUR WEDDING PLANNER
+   script.js
    ============================================================ */
 
-const STORAGE_KEY = "tamilWeddingPlanner_v6";
-
+const STORAGE_KEY = "tamilWeddingPlanner_v8";
 
 /* ============================================================
    DEFAULT CATEGORIES
@@ -14,6 +14,8 @@ const defaultCategories = [
     id: "guests",
     name: "Gæster",
     icon: "👥",
+    predefined: true,
+    enabled: true,
     items: [
       "Palaharam (Goodie bag)",
       "Hotels"
@@ -24,6 +26,8 @@ const defaultCategories = [
     id: "toej",
     name: "Tøj",
     icon: "👗",
+    predefined: true,
+    enabled: true,
     items: [
       "Manavarai saree",
       "Koorai saree (Rød)",
@@ -39,6 +43,8 @@ const defaultCategories = [
     id: "reception",
     name: "Reception Songs",
     icon: "🎵",
+    predefined: true,
+    enabled: true,
     items: [
       "Entrance",
       "Pardans",
@@ -52,6 +58,8 @@ const defaultCategories = [
     id: "sign-card",
     name: "Wedding Sign + Card",
     icon: "💌",
+    predefined: true,
+    enabled: true,
     items: [
       "Aviraa Creations",
       "Ponthayadesigns",
@@ -63,6 +71,8 @@ const defaultCategories = [
     id: "kovil-decoration",
     name: "Decoration Kovil",
     icon: "🛕",
+    predefined: true,
+    enabled: true,
     items: [
       "Kopuramevents.fr"
     ]
@@ -72,6 +82,8 @@ const defaultCategories = [
     id: "accessories",
     name: "Accessories",
     icon: "✨",
+    predefined: true,
+    enabled: true,
     items: [
       "360 Booth",
       "Bridal Corner Setup"
@@ -82,6 +94,8 @@ const defaultCategories = [
     id: "henna",
     name: "Henna Fest",
     icon: "🌿",
+    predefined: true,
+    enabled: true,
     items: [
       "Uduupu ?",
       "Mehendi (rosedecoration.dk)",
@@ -95,6 +109,8 @@ const defaultCategories = [
     id: "kalyaanam",
     name: "Kalyaanam Veedu",
     icon: "🏠",
+    predefined: true,
+    enabled: true,
     items: [
       "Herning Kovil",
       "Civil Weds (Ring)",
@@ -108,6 +124,8 @@ const defaultCategories = [
     id: "makeup",
     name: "Makeup + Hair",
     icon: "💄",
+    predefined: true,
+    enabled: true,
     items: [
       "Janani",
       "abinii_makeupartist",
@@ -119,6 +137,8 @@ const defaultCategories = [
     id: "jewellery",
     name: "Jewellery",
     icon: "💎",
+    predefined: true,
+    enabled: true,
     items: [
       "Thaali (15 Pound)",
       "Øreringe",
@@ -137,6 +157,8 @@ const defaultCategories = [
     id: "melam",
     name: "Melam",
     icon: "🥁",
+    predefined: true,
+    enabled: true,
     items: [
       "Chinna Mams",
       "Mami ?"
@@ -147,6 +169,8 @@ const defaultCategories = [
     id: "maalai",
     name: "Maalai",
     icon: "🌸",
+    predefined: true,
+    enabled: true,
     items: [
       "Herning Maalai"
     ]
@@ -156,6 +180,8 @@ const defaultCategories = [
     id: "food",
     name: "Food",
     icon: "🍛",
+    predefined: true,
+    enabled: true,
     items: [
       "Poovi Mama Horsens",
       "Kammali Randers",
@@ -170,6 +196,8 @@ const defaultCategories = [
     id: "cake",
     name: "Bryllupskage",
     icon: "🎂",
+    predefined: true,
+    enabled: true,
     items: [
       "Wedding Cake",
       "Lighter + Knife"
@@ -180,6 +208,8 @@ const defaultCategories = [
     id: "preshoot",
     name: "Preshoot",
     icon: "📸",
+    predefined: true,
+    enabled: true,
     items: [
       "Views of Nivi",
       "Sana",
@@ -194,6 +224,8 @@ const defaultCategories = [
     id: "photo-video",
     name: "Photo + Video",
     icon: "📷",
+    predefined: true,
+    enabled: true,
     items: [
       "Visual Eyes",
       "Vividmemoir.dk",
@@ -205,6 +237,8 @@ const defaultCategories = [
     id: "dj",
     name: "DJ",
     icon: "🎧",
+    predefined: true,
+    enabled: true,
     items: [
       "Playloud",
       "Keeth Entertainment",
@@ -218,6 +252,8 @@ const defaultCategories = [
     id: "hall",
     name: "Hall",
     icon: "🏛️",
+    predefined: true,
+    enabled: true,
     items: [
       "Sana Palace RA",
       "E-Plaza AA",
@@ -236,6 +272,8 @@ const defaultCategories = [
     id: "entertainment",
     name: "Entertainment",
     icon: "💃",
+    predefined: true,
+    enabled: true,
     items: [
       "Pardans + Cinema Paattu",
       "Bollywood Dance",
@@ -255,6 +293,8 @@ const defaultCategories = [
     id: "operator",
     name: "Operator",
     icon: "🎛️",
+    predefined: true,
+    enabled: true,
     items: [
       "Lighting",
       "Projector"
@@ -265,6 +305,8 @@ const defaultCategories = [
     id: "host",
     name: "Host",
     icon: "🎤",
+    predefined: true,
+    enabled: true,
     items: [
       "Vinu",
       "Mams",
@@ -278,6 +320,8 @@ const defaultCategories = [
     id: "games",
     name: "Games (Yndlingsting)",
     icon: "🎲",
+    predefined: true,
+    enabled: true,
     items: [
       "Palaharam (Goodie bag)"
     ]
@@ -287,6 +331,8 @@ const defaultCategories = [
     id: "speech",
     name: "Speech",
     icon: "🎤",
+    predefined: true,
+    enabled: true,
     items: [
       "Speech planning",
       "Speakers",
@@ -297,20 +343,18 @@ const defaultCategories = [
 
 
 /* ============================================================
-   DATA
+   APPLICATION STATE
    ============================================================ */
 
 let categories = [];
-
 let savedData = {};
 
 let currentCategory = "dashboard";
-
 let currentItem = null;
 
 let modalStatus = "not";
 
-let managementMode = "category";
+let weddingDate = "";
 
 
 /* ============================================================
@@ -345,10 +389,9 @@ function formatDate(dateString) {
     return "";
   }
 
-  const date =
-    new Date(
-      dateString + "T00:00:00"
-    );
+  const date = new Date(
+    dateString + "T00:00:00"
+  );
 
   if (Number.isNaN(date.getTime())) {
     return dateString;
@@ -366,52 +409,21 @@ function formatDate(dateString) {
 
 
 /* ============================================================
-   TOAST
-   ============================================================ */
-
-let toastTimer = null;
-
-
-function showToast(message) {
-  const toast =
-    document.getElementById("toast");
-
-  if (!toast) {
-    return;
-  }
-
-  toast.textContent = message;
-
-  toast.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2800);
-}
-
-
-/* ============================================================
    LOAD DATA
    ============================================================ */
 
 function loadData() {
   try {
     const stored =
-      localStorage.getItem(
-        STORAGE_KEY
-      );
+      localStorage.getItem(STORAGE_KEY);
 
     if (!stored) {
       categories =
-        structuredClone(
-          defaultCategories
-        );
+        structuredClone(defaultCategories);
 
       savedData = {};
 
-      initialiseDefaultItems();
+      weddingDate = "";
 
       saveData();
 
@@ -423,29 +435,28 @@ function loadData() {
 
     if (
       parsed &&
-      typeof parsed === "object" &&
-      !Array.isArray(parsed) &&
-      Array.isArray(parsed.categories)
+      typeof parsed === "object"
     ) {
       categories =
-        parsed.categories;
+        Array.isArray(parsed.categories)
+          ? parsed.categories
+          : structuredClone(defaultCategories);
 
       savedData =
         parsed.savedData &&
         typeof parsed.savedData === "object"
           ? parsed.savedData
           : {};
+
+      weddingDate =
+        parsed.weddingDate || "";
     } else {
       categories =
-        structuredClone(
-          defaultCategories
-        );
+        structuredClone(defaultCategories);
 
       savedData = {};
 
-      initialiseDefaultItems();
-
-      saveData();
+      weddingDate = "";
     }
 
   } catch (error) {
@@ -456,50 +467,14 @@ function loadData() {
     );
 
     categories =
-      structuredClone(
-        defaultCategories
-      );
+      structuredClone(defaultCategories);
 
     savedData = {};
 
-    initialiseDefaultItems();
+    weddingDate = "";
   }
 
   normaliseCategories();
-}
-
-
-/* ============================================================
-   INITIALISE DEFAULT ITEMS
-   ============================================================ */
-
-function initialiseDefaultItems() {
-
-  defaultCategories.forEach(category => {
-
-    category.items.forEach(item => {
-
-      const key =
-        itemKey(
-          category.id,
-          item
-        );
-
-      savedData[key] = {
-        status: "not",
-        vendor: "",
-        price: "",
-        deadline: "",
-        link: "",
-        notes: "",
-        enabled: true,
-        predefined: true
-      };
-
-    });
-
-  });
-
 }
 
 
@@ -523,7 +498,6 @@ function normaliseCategories() {
       .map(category => {
 
         return {
-
           id:
             category.id ||
             createId(
@@ -543,19 +517,20 @@ function normaliseCategories() {
               "📋"
             ),
 
-          items:
-            Array.isArray(
-              category.items
-            )
-              ? category.items.map(
-                  item =>
-                    String(item)
-                )
-              : [],
-
           predefined:
-            category.predefined === true
+            Boolean(
+              category.predefined
+            ),
 
+          enabled:
+            category.enabled !== false,
+
+          items:
+            Array.isArray(category.items)
+              ? category.items.map(
+                  item => String(item)
+                )
+              : []
         };
 
       });
@@ -573,13 +548,10 @@ function saveData() {
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
-
-        version: 6,
-
+        version: 8,
+        weddingDate,
         categories,
-
         savedData
-
       })
     );
 
@@ -619,7 +591,7 @@ function itemKey(
 
 
 /* ============================================================
-   GET ITEM
+   GET ITEM DATA
    ============================================================ */
 
 function getItem(
@@ -638,12 +610,6 @@ function getItem(
     typeof savedData[key] !== "object"
   ) {
 
-    const predefined =
-      isPredefinedItem(
-        categoryId,
-        item
-      );
-
     savedData[key] = {
 
       status: "not",
@@ -660,8 +626,7 @@ function getItem(
 
       enabled: true,
 
-      predefined
-
+      custom: false
     };
   }
 
@@ -669,8 +634,13 @@ function getItem(
     savedData[key];
 
   data.status =
-    ["not", "progress", "done"]
-      .includes(data.status)
+    [
+      "not",
+      "progress",
+      "done"
+    ].includes(
+      data.status
+    )
       ? data.status
       : "not";
 
@@ -696,14 +666,9 @@ function getItem(
   }
 
   if (
-    typeof data.predefined !== "boolean"
+    typeof data.custom !== "boolean"
   ) {
-
-    data.predefined =
-      isPredefinedItem(
-        categoryId,
-        item
-      );
+    data.custom = false;
   }
 
   return data;
@@ -711,25 +676,157 @@ function getItem(
 
 
 /* ============================================================
-   CHECK PREDEFINED ITEM
+   WEDDING DATE
    ============================================================ */
 
-function isPredefinedItem(
-  categoryId,
-  item
-) {
+function setWeddingDate(date) {
 
-  const category =
-    defaultCategories.find(
-      category =>
-        category.id === categoryId
+  weddingDate =
+    date || "";
+
+  saveData();
+
+  updateCountdown();
+}
+
+
+function updateCountdown() {
+
+  const countdown =
+    document.getElementById(
+      "weddingCountdown"
     );
 
-  if (!category) {
-    return false;
+  const countdownText =
+    document.getElementById(
+      "weddingCountdownText"
+    );
+
+  const dateInput =
+    document.getElementById(
+      "weddingDateInput"
+    );
+
+  if (dateInput) {
+    dateInput.value =
+      weddingDate;
   }
 
-  return category.items.includes(item);
+  if (
+    !countdown &&
+    !countdownText
+  ) {
+    return;
+  }
+
+  if (!weddingDate) {
+
+    if (countdown) {
+      countdown.textContent =
+        "Set your wedding date";
+    }
+
+    if (countdownText) {
+      countdownText.textContent =
+        "Choose your date to start the countdown.";
+    }
+
+    return;
+  }
+
+  const today =
+    new Date();
+
+  const target =
+    new Date(
+      weddingDate +
+      "T00:00:00"
+    );
+
+  today.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+  target.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+  const difference =
+    target.getTime() -
+    today.getTime();
+
+  const days =
+    Math.ceil(
+      difference /
+      (1000 * 60 * 60 * 24)
+    );
+
+  if (days > 0) {
+
+    const months =
+      Math.floor(
+        days / 30
+      );
+
+    const remainingDays =
+      days % 30;
+
+    if (countdown) {
+
+      countdown.textContent =
+        days +
+        " days";
+    }
+
+    if (countdownText) {
+
+      countdownText.textContent =
+        months +
+        " month" +
+        (months === 1 ? "" : "s") +
+        " and " +
+        remainingDays +
+        " day" +
+        (remainingDays === 1 ? "" : "s") +
+        " to go";
+
+    }
+
+  } else if (days === 0) {
+
+    if (countdown) {
+      countdown.textContent =
+        "Today ❤️";
+    }
+
+    if (countdownText) {
+      countdownText.textContent =
+        "It's your wedding day!";
+    }
+
+  } else {
+
+    const pastDays =
+      Math.abs(days);
+
+    if (countdown) {
+      countdown.textContent =
+        "Married ❤️";
+    }
+
+    if (countdownText) {
+      countdownText.textContent =
+        "Your wedding was " +
+        pastDays +
+        " days ago.";
+    }
+  }
 }
 
 
@@ -746,17 +843,18 @@ function exportData() {
     const backup = {
 
       app:
-        "Tamil Wedding Planner",
+        "Our Wedding Planner",
 
-      version: 6,
+      version: 8,
 
       exportedAt:
         new Date().toISOString(),
 
+      weddingDate,
+
       categories,
 
       savedData
-
     };
 
     const json =
@@ -790,7 +888,7 @@ function exportData() {
     const now =
       new Date();
 
-    const filename =
+    link.download =
       "wedding-planner-backup-" +
       now.getFullYear() +
       "-" +
@@ -803,9 +901,6 @@ function exportData() {
       ).padStart(2, "0") +
       ".json";
 
-    link.download =
-      filename;
-
     document.body.appendChild(
       link
     );
@@ -816,16 +911,13 @@ function exportData() {
       link
     );
 
-    setTimeout(() => {
-
-      URL.revokeObjectURL(
-        url
-      );
-
-    }, 1000);
-
-    showToast(
-      "Planner exported successfully."
+    setTimeout(
+      () => {
+        URL.revokeObjectURL(
+          url
+        );
+      },
+      1000
     );
 
   } catch (error) {
@@ -868,60 +960,17 @@ function importData(event) {
             e.target.result
           );
 
-        let importedCategories =
-          null;
-
-        let importedSavedData =
-          null;
-
-
         if (
-          imported &&
-          Array.isArray(
+          !imported ||
+          !Array.isArray(
             imported.categories
           )
-        ) {
-
-          importedCategories =
-            imported.categories;
-
-          importedSavedData =
-            imported.savedData || {};
-
-        }
-
-
-        else if (
-          imported &&
-          imported.data &&
-          typeof imported.data ===
-            "object"
-        ) {
-
-          importedCategories =
-            structuredClone(
-              defaultCategories
-            );
-
-          importedSavedData =
-            imported.data;
-        }
-
-
-        if (
-          !Array.isArray(
-            importedCategories
-          ) ||
-          !importedSavedData ||
-          typeof importedSavedData !==
-            "object"
         ) {
 
           throw new Error(
             "Invalid backup"
           );
         }
-
 
         const confirmed =
           confirm(
@@ -936,25 +985,32 @@ function importData(event) {
           return;
         }
 
-
         categories =
-          importedCategories;
+          imported.categories;
 
         savedData =
-          importedSavedData;
+          imported.savedData &&
+          typeof imported.savedData ===
+            "object"
+            ? imported.savedData
+            : {};
+
+        weddingDate =
+          imported.weddingDate ||
+          "";
 
         normaliseCategories();
-
 
         if (saveData()) {
 
           showDashboard();
 
-          showToast(
-            "Wedding planner imported successfully."
+          updateCountdown();
+
+          alert(
+            "Wedding planner imported successfully! ❤️"
           );
         }
-
 
       } catch (error) {
 
@@ -968,11 +1024,9 @@ function importData(event) {
         );
       }
 
-
       event.target.value =
         "";
     };
-
 
   reader.onerror =
     function () {
@@ -985,26 +1039,33 @@ function importData(event) {
         "";
     };
 
-
   reader.readAsText(file);
 }
 
 
 /* ============================================================
-   RESET
+   RESET PLANNER
    ============================================================ */
 
 function resetPlanner() {
 
   const confirmed =
     confirm(
-      "Reset the wedding planner?\n\nThis will remove custom categories and custom items and restore all predefined categories and items."
+      "Reset the entire wedding planner?\n\nThis will remove your categories, items, wedding date and saved information."
     );
 
   if (!confirmed) {
     return;
   }
 
+  const secondConfirm =
+    confirm(
+      "Are you absolutely sure?\n\nThis cannot be undone unless you have an exported backup."
+    );
+
+  if (!secondConfirm) {
+    return;
+  }
 
   categories =
     structuredClone(
@@ -1013,20 +1074,23 @@ function resetPlanner() {
 
   savedData = {};
 
-  initialiseDefaultItems();
+  weddingDate = "";
 
+  currentCategory =
+    "dashboard";
 
-  if (saveData()) {
+  currentItem =
+    null;
 
-    currentCategory =
-      "dashboard";
+  saveData();
 
-    showDashboard();
+  showDashboard();
 
-    showToast(
-      "Planner has been reset."
-    );
-  }
+  updateCountdown();
+
+  alert(
+    "Your wedding planner has been reset."
+  );
 }
 
 
@@ -1048,7 +1112,6 @@ function buildNavigation() {
   nav.innerHTML =
     "";
 
-
   const dashboard =
     document.createElement(
       "button"
@@ -1057,14 +1120,14 @@ function buildNavigation() {
   dashboard.type =
     "button";
 
-  dashboard.textContent =
-    "🏠 Dashboard";
-
   dashboard.className =
     currentCategory ===
     "dashboard"
       ? "active"
       : "";
+
+  dashboard.innerHTML =
+    "🏠 <span>Dashboard</span>";
 
   dashboard.addEventListener(
     "click",
@@ -1075,55 +1138,62 @@ function buildNavigation() {
     dashboard
   );
 
+  categories
+    .filter(
+      category =>
+        category.enabled
+    )
+    .forEach(
+      category => {
 
-  categories.forEach(
-    category => {
+        const button =
+          document.createElement(
+            "button"
+          );
 
-      const button =
-        document.createElement(
-          "button"
+        button.type =
+          "button";
+
+        button.className =
+          currentCategory ===
+          category.id
+            ? "active"
+            : "";
+
+        button.innerHTML =
+          escapeHTML(
+            category.icon
+          ) +
+          " <span>" +
+          escapeHTML(
+            category.name
+          ) +
+          "</span>";
+
+        button.addEventListener(
+          "click",
+          () =>
+            showCategory(
+              category.id
+            )
         );
 
-      button.type =
-        "button";
-
-      button.textContent =
-        category.icon +
-        " " +
-        category.name;
-
-      button.className =
-        currentCategory ===
-        category.id
-          ? "active"
-          : "";
-
-      button.addEventListener(
-        "click",
-        () =>
-          showCategory(
-            category.id
-          )
-      );
-
-      nav.appendChild(
-        button
-      );
-
-    }
-  );
+        nav.appendChild(
+          button
+        );
+      }
+    );
 }
 
 
 /* ============================================================
-   DASHBOARD
+   SHOW DASHBOARD
    ============================================================ */
 
 function showDashboard() {
 
   currentCategory =
     "dashboard";
-
 
   const dashboardPage =
     document.getElementById(
@@ -1135,6 +1205,10 @@ function showDashboard() {
       "categoryPage"
     );
 
+  const managePage =
+    document.getElementById(
+      "managePage"
+    );
 
   if (dashboardPage) {
     dashboardPage.style.display =
@@ -1146,11 +1220,16 @@ function showDashboard() {
       "none";
   }
 
+  if (managePage) {
+    managePage.style.display =
+      "none";
+  }
 
   buildNavigation();
 
   renderDashboard();
 
+  updateCountdown();
 
   window.scrollTo({
     top: 0,
@@ -1160,67 +1239,63 @@ function showDashboard() {
 
 
 /* ============================================================
-   DASHBOARD RENDER
+   DASHBOARD
    ============================================================ */
 
 function renderDashboard() {
 
   let total = 0;
-
   let done = 0;
-
   let progress = 0;
 
+  categories
+    .filter(
+      category =>
+        category.enabled
+    )
+    .forEach(
+      category => {
 
-  categories.forEach(
-    category => {
+        category.items.forEach(
+          item => {
 
-      category.items.forEach(
-        item => {
+            const data =
+              getItem(
+                category.id,
+                item
+              );
 
-          const data =
-            getItem(
-              category.id,
-              item
-            );
+            if (!data.enabled) {
+              return;
+            }
 
-          if (!data.enabled) {
-            return;
+            total++;
+
+            if (
+              data.status ===
+              "done"
+            ) {
+              done++;
+            }
+
+            if (
+              data.status ===
+              "progress"
+            ) {
+              progress++;
+            }
           }
-
-          total++;
-
-
-          if (
-            data.status ===
-            "done"
-          ) {
-            done++;
-          }
-
-
-          if (
-            data.status ===
-            "progress"
-          ) {
-            progress++;
-          }
-
-        }
-      );
-
-    }
-  );
-
+        );
+      }
+    );
 
   const percent =
     total > 0
       ? Math.round(
           (done / total) *
-            100
+          100
         )
       : 0;
-
 
   const totalCount =
     document.getElementById(
@@ -1252,7 +1327,6 @@ function renderDashboard() {
       "overallFill"
     );
 
-
   if (totalCount) {
     totalCount.textContent =
       total;
@@ -1270,7 +1344,10 @@ function renderDashboard() {
 
   if (categoryCount) {
     categoryCount.textContent =
-      categories.length;
+      categories.filter(
+        category =>
+          category.enabled
+      ).length;
   }
 
   if (overallPercent) {
@@ -1282,7 +1359,6 @@ function renderDashboard() {
     overallFill.style.width =
       percent + "%";
   }
-
 
   const grid =
     document.getElementById(
@@ -1296,158 +1372,69 @@ function renderDashboard() {
   grid.innerHTML =
     "";
 
+  categories
+    .filter(
+      category =>
+        category.enabled
+    )
+    .forEach(
+      category => {
 
-  categories.forEach(
-    category => {
+        const stats =
+          getCategoryStats(
+            category
+          );
 
-      const stats =
-        getCategoryStats(
-          category
+        const card =
+          document.createElement(
+            "div"
+          );
+
+        card.className =
+          "summary-card";
+
+        card.innerHTML =
+
+          '<div class="summary-icon">' +
+          escapeHTML(
+            category.icon
+          ) +
+          "</div>" +
+
+          "<h3>" +
+          escapeHTML(
+            category.name
+          ) +
+          "</h3>" +
+
+          "<p>" +
+          stats.done +
+          " / " +
+          stats.total +
+          " completed" +
+          "</p>" +
+
+          '<div class="summary-bar">' +
+
+          '<div style="width:' +
+          stats.percent +
+          '%"></div>' +
+
+          "</div>";
+
+        card.addEventListener(
+          "click",
+          () =>
+            showCategory(
+              category.id
+            )
         );
 
-
-      const card =
-        document.createElement(
-          "div"
+        grid.appendChild(
+          card
         );
-
-      card.className =
-        "summary-card";
-
-
-      card.innerHTML =
-        '<div class="summary-icon">' +
-        escapeHTML(
-          category.icon
-        ) +
-        "</div>" +
-
-        "<h3>" +
-        escapeHTML(
-          category.name
-        ) +
-        "</h3>" +
-
-        "<p>" +
-        stats.done +
-        " / " +
-        stats.total +
-        " completed" +
-        "</p>" +
-
-        '<div class="summary-bar">' +
-
-        '<div style="width:' +
-        stats.percent +
-        '%"></div>' +
-
-        "</div>";
-
-
-      card.addEventListener(
-        "click",
-        () =>
-          showCategory(
-            category.id
-          )
-      );
-
-
-      grid.appendChild(
-        card
-      );
-
-    }
-  );
-}
-
-
-/* ============================================================
-   CATEGORY
-   ============================================================ */
-
-function showCategory(id) {
-
-  const category =
-    categories.find(
-      c => c.id === id
+      }
     );
-
-  if (!category) {
-    return;
-  }
-
-
-  currentCategory =
-    id;
-
-
-  const dashboardPage =
-    document.getElementById(
-      "dashboardPage"
-    );
-
-  const categoryPage =
-    document.getElementById(
-      "categoryPage"
-    );
-
-
-  if (dashboardPage) {
-    dashboardPage.style.display =
-      "none";
-  }
-
-  if (categoryPage) {
-    categoryPage.style.display =
-      "block";
-  }
-
-
-  const categoryTitle =
-    document.getElementById(
-      "categoryTitle"
-    );
-
-
-  if (categoryTitle) {
-
-    categoryTitle.textContent =
-      category.icon +
-      " " +
-      category.name;
-  }
-
-
-  const search =
-    document.getElementById(
-      "itemSearch"
-    );
-
-  const filter =
-    document.getElementById(
-      "itemStatusFilter"
-    );
-
-
-  if (search) {
-    search.value = "";
-  }
-
-  if (filter) {
-    filter.value = "all";
-  }
-
-
-  buildNavigation();
-
-  renderCategory();
-
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
 }
 
 
@@ -1460,9 +1447,7 @@ function getCategoryStats(
 ) {
 
   let total = 0;
-
   let done = 0;
-
 
   category.items.forEach(
     item => {
@@ -1473,14 +1458,11 @@ function getCategoryStats(
           item
         );
 
-
       if (!data.enabled) {
         return;
       }
 
-
       total++;
-
 
       if (
         data.status ===
@@ -1488,19 +1470,16 @@ function getCategoryStats(
       ) {
         done++;
       }
-
     }
   );
-
 
   const percent =
     total > 0
       ? Math.round(
           (done / total) *
-            100
+          100
         )
       : 0;
-
 
   return {
     total,
@@ -1511,14 +1490,113 @@ function getCategoryStats(
 
 
 /* ============================================================
-   CATEGORY RENDER
+   SHOW CATEGORY
+   ============================================================ */
+
+function showCategory(
+  id
+) {
+
+  const category =
+    categories.find(
+      c =>
+        c.id === id
+    );
+
+  if (
+    !category ||
+    !category.enabled
+  ) {
+    return;
+  }
+
+  currentCategory =
+    id;
+
+  const dashboardPage =
+    document.getElementById(
+      "dashboardPage"
+    );
+
+  const categoryPage =
+    document.getElementById(
+      "categoryPage"
+    );
+
+  const managePage =
+    document.getElementById(
+      "managePage"
+    );
+
+  if (dashboardPage) {
+    dashboardPage.style.display =
+      "none";
+  }
+
+  if (categoryPage) {
+    categoryPage.style.display =
+      "block";
+  }
+
+  if (managePage) {
+    managePage.style.display =
+      "none";
+  }
+
+  const categoryTitle =
+    document.getElementById(
+      "categoryTitle"
+    );
+
+  if (categoryTitle) {
+
+    categoryTitle.textContent =
+      category.icon +
+      " " +
+      category.name;
+  }
+
+  const search =
+    document.getElementById(
+      "itemSearch"
+    );
+
+  const filter =
+    document.getElementById(
+      "itemStatusFilter"
+    );
+
+  if (search) {
+    search.value =
+      "";
+  }
+
+  if (filter) {
+    filter.value =
+      "all";
+  }
+
+  buildNavigation();
+
+  renderCategory();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+/* ============================================================
+   RENDER CATEGORY
    ============================================================ */
 
 function renderCategory() {
 
   const category =
     categories.find(
-      c => c.id ===
+      c =>
+        c.id ===
         currentCategory
     );
 
@@ -1526,12 +1604,10 @@ function renderCategory() {
     return;
   }
 
-
   const stats =
     getCategoryStats(
       category
     );
-
 
   const categoryPercent =
     document.getElementById(
@@ -1543,14 +1619,11 @@ function renderCategory() {
       "categoryProgressText"
     );
 
-
   if (categoryPercent) {
-
     categoryPercent.textContent =
       stats.percent +
       "%";
   }
-
 
   if (categoryProgressText) {
 
@@ -1560,7 +1633,6 @@ function renderCategory() {
       stats.total +
       " completed";
   }
-
 
   const searchInput =
     document.getElementById(
@@ -1572,7 +1644,6 @@ function renderCategory() {
       "itemStatusFilter"
     );
 
-
   const search =
     searchInput
       ? searchInput.value
@@ -1580,30 +1651,24 @@ function renderCategory() {
           .trim()
       : "";
 
-
   const status =
     statusInput
       ? statusInput.value
       : "all";
-
 
   const grid =
     document.getElementById(
       "itemsGrid"
     );
 
-
   if (!grid) {
     return;
   }
 
-
   grid.innerHTML =
     "";
 
-
   let visible = 0;
-
 
   category.items.forEach(
     item => {
@@ -1614,27 +1679,22 @@ function renderCategory() {
           item
         );
 
-
       if (!data.enabled) {
         return;
       }
 
-
       const itemText =
         item.toLowerCase();
-
 
       const vendorText =
         String(
           data.vendor || ""
         ).toLowerCase();
 
-
       const notesText =
         String(
           data.notes || ""
         ).toLowerCase();
-
 
       const matchesSearch =
         !search ||
@@ -1648,12 +1708,9 @@ function renderCategory() {
           search
         );
 
-
       const matchesStatus =
         status === "all" ||
-        data.status ===
-          status;
-
+        data.status === status;
 
       if (
         !matchesSearch ||
@@ -1662,19 +1719,15 @@ function renderCategory() {
         return;
       }
 
-
       visible++;
-
 
       const card =
         document.createElement(
           "div"
         );
 
-
       card.className =
         "item-card";
-
 
       if (
         data.status ===
@@ -1685,13 +1738,11 @@ function renderCategory() {
         );
       }
 
-
       let statusText =
         "Not started";
 
       let statusClass =
         "";
-
 
       if (
         data.status ===
@@ -1705,7 +1756,6 @@ function renderCategory() {
           " progress";
       }
 
-
       if (
         data.status ===
         "done"
@@ -1718,22 +1768,17 @@ function renderCategory() {
           " done";
       }
 
-
       const vendorHTML =
         data.vendor
-
           ? "<p>👤 " +
             escapeHTML(
               data.vendor
             ) +
             "</p>"
-
           : "<p>Click to add details</p>";
-
 
       const deadlineHTML =
         data.deadline
-
           ? '<div class="item-meta">📅 ' +
             escapeHTML(
               formatDate(
@@ -1741,11 +1786,10 @@ function renderCategory() {
               )
             ) +
             "</div>"
-
           : "";
 
-
       card.innerHTML =
+
         '<div class="item-top">' +
 
         '<div class="item-icon">' +
@@ -1772,7 +1816,6 @@ function renderCategory() {
 
         deadlineHTML;
 
-
       card.addEventListener(
         "click",
         () =>
@@ -1782,20 +1825,16 @@ function renderCategory() {
           )
       );
 
-
       grid.appendChild(
         card
       );
-
     }
   );
-
 
   const emptyMessage =
     document.getElementById(
       "emptyMessage"
     );
-
 
   if (emptyMessage) {
 
@@ -1821,24 +1860,22 @@ function openModal(
     item
   };
 
-
   const category =
     categories.find(
-      c => c.id === categoryId
+      c =>
+        c.id ===
+        categoryId
     );
-
 
   if (!category) {
     return;
   }
-
 
   const data =
     getItem(
       categoryId,
       item
     );
-
 
   const modalCategory =
     document.getElementById(
@@ -1875,13 +1912,11 @@ function openModal(
       "notesInput"
     );
 
-
   if (modalCategory) {
 
     modalCategory.textContent =
       category.name;
   }
-
 
   if (modalTitle) {
 
@@ -1889,54 +1924,42 @@ function openModal(
       item;
   }
 
-
   if (vendorInput) {
     vendorInput.value =
       data.vendor;
   }
-
 
   if (priceInput) {
     priceInput.value =
       data.price;
   }
 
-
   if (deadlineInput) {
     deadlineInput.value =
       data.deadline;
   }
-
 
   if (linkInput) {
     linkInput.value =
       data.link;
   }
 
-
   if (notesInput) {
     notesInput.value =
       data.notes;
   }
 
-
   modalStatus =
     data.status;
 
-
   updateStatusButtons();
-
-  updateItemManagement();
-
 
   const overlay =
     document.getElementById(
       "overlay"
     );
 
-
   if (overlay) {
-
     overlay.classList.add(
       "active"
     );
@@ -1945,96 +1968,7 @@ function openModal(
 
 
 /* ============================================================
-   UPDATE ITEM MANAGEMENT
-   ============================================================ */
-
-function updateItemManagement() {
-
-  if (!currentItem) {
-    return;
-  }
-
-
-  const data =
-    getItem(
-      currentItem.categoryId,
-      currentItem.item
-    );
-
-
-  const disableButton =
-    document.getElementById(
-      "disableItemButton"
-    );
-
-
-  const description =
-    document.getElementById(
-      "itemManagementDescription"
-    );
-
-
-  const deleteArea =
-    document.getElementById(
-      "customItemDeleteArea"
-    );
-
-
-  if (disableButton) {
-
-    if (data.enabled) {
-
-      disableButton.textContent =
-        "Disable item";
-
-      disableButton.classList.remove(
-        "enabled"
-      );
-
-    } else {
-
-      disableButton.textContent =
-        "Enable item";
-
-      disableButton.classList.add(
-        "enabled"
-      );
-    }
-  }
-
-
-  if (description) {
-
-    if (data.enabled) {
-
-      description.textContent =
-        "Disable this item if you do not want it shown in the planner.";
-
-    } else {
-
-      description.textContent =
-        "This item is currently disabled and hidden from the planner.";
-    }
-  }
-
-
-  /*
-   * Predefined items cannot be deleted.
-   * Custom items can be deleted.
-   */
-
-  if (deleteArea) {
-
-    deleteArea.style.display =
-      data.predefined
-        ? "none"
-        : "block";
-  }
-}
-
-
-/* ============================================================
-   CLOSE ITEM MODAL
+   CLOSE MODAL
    ============================================================ */
 
 function closeModal() {
@@ -2044,7 +1978,6 @@ function closeModal() {
       "overlay"
     );
 
-
   if (overlay) {
 
     overlay.classList.remove(
@@ -2052,14 +1985,13 @@ function closeModal() {
     );
   }
 
-
   currentItem =
     null;
 }
 
 
 /* ============================================================
-   CHOOSE STATUS
+   STATUS
    ============================================================ */
 
 function chooseStatus(
@@ -2072,10 +2004,6 @@ function chooseStatus(
   updateStatusButtons();
 }
 
-
-/* ============================================================
-   UPDATE STATUS BUTTONS
-   ============================================================ */
 
 function updateStatusButtons() {
 
@@ -2094,7 +2022,6 @@ function updateStatusButtons() {
       "doneButton"
     );
 
-
   if (notButton) {
 
     notButton.classList.toggle(
@@ -2104,7 +2031,6 @@ function updateStatusButtons() {
     );
   }
 
-
   if (progressButton) {
 
     progressButton.classList.toggle(
@@ -2113,7 +2039,6 @@ function updateStatusButtons() {
         "progress"
     );
   }
-
 
   if (doneButton) {
 
@@ -2136,13 +2061,11 @@ function saveItem() {
     return;
   }
 
-
   const data =
     getItem(
       currentItem.categoryId,
       currentItem.item
     );
-
 
   const vendorInput =
     document.getElementById(
@@ -2169,61 +2092,49 @@ function saveItem() {
       "notesInput"
     );
 
-
   data.status =
     modalStatus;
-
 
   data.vendor =
     vendorInput
       ? vendorInput.value.trim()
       : "";
 
-
   data.price =
     priceInput
       ? priceInput.value.trim()
       : "";
-
 
   data.deadline =
     deadlineInput
       ? deadlineInput.value
       : "";
 
-
   data.link =
     linkInput
       ? linkInput.value.trim()
       : "";
-
 
   data.notes =
     notesInput
       ? notesInput.value.trim()
       : "";
 
+  data.enabled =
+    true;
 
-  if (saveData()) {
+  saveData();
 
-    closeModal();
+  closeModal();
 
-    if (
-      currentCategory ===
-      "dashboard"
-    ) {
-
-      showDashboard();
-
-    } else {
-
-      showCategory(
-        currentCategory
-      );
-    }
-
-    showToast(
-      "Item saved successfully."
+  if (
+    currentCategory ===
+    "dashboard"
+  ) {
+    showDashboard();
+  } else {
+    showCategory(
+      currentCategory
     );
   }
 }
@@ -2239,13 +2150,11 @@ function clearItem() {
     return;
   }
 
-
   const data =
     getItem(
       currentItem.categoryId,
       currentItem.item
     );
-
 
   data.status =
     "not";
@@ -2265,72 +2174,235 @@ function clearItem() {
   data.notes =
     "";
 
-
   saveData();
 
   closeModal();
-
 
   if (
     currentCategory ===
     "dashboard"
   ) {
-
     showDashboard();
-
   } else {
-
     showCategory(
       currentCategory
     );
   }
+}
 
 
-  showToast(
-    "Item details cleared."
+/* ============================================================
+   ADD CATEGORY
+   ============================================================ */
+
+function addCategory() {
+
+  const nameInput =
+    document.getElementById(
+      "newCategoryName"
+    );
+
+  const iconInput =
+    document.getElementById(
+      "newCategoryIcon"
+    );
+
+  const name =
+    nameInput
+      ? nameInput.value.trim()
+      : "";
+
+  const icon =
+    iconInput
+      ? iconInput.value.trim()
+      : "";
+
+  if (!name) {
+
+    alert(
+      "Please enter a category name."
+    );
+
+    if (nameInput) {
+      nameInput.focus();
+    }
+
+    return;
+  }
+
+  const exists =
+    categories.some(
+      category =>
+        category.name
+          .toLowerCase() ===
+        name.toLowerCase()
+    );
+
+  if (exists) {
+
+    alert(
+      "A category with this name already exists."
+    );
+
+    return;
+  }
+
+  const category = {
+
+    id:
+      createId(name),
+
+    name,
+
+    icon:
+      icon || "💍",
+
+    predefined:
+      false,
+
+    enabled:
+      true,
+
+    items:
+      []
+  };
+
+  categories.push(
+    category
+  );
+
+  if (!saveData()) {
+    return;
+  }
+
+  if (nameInput) {
+    nameInput.value =
+      "";
+  }
+
+  if (iconInput) {
+    iconInput.value =
+      "";
+  }
+
+  closeManagementModal();
+
+  buildNavigation();
+
+  renderDashboard();
+
+  alert(
+    '"' +
+    name +
+    '" has been added successfully. ❤️'
   );
 }
 
 
 /* ============================================================
-   TOGGLE ITEM ENABLED
+   ADD ITEM
    ============================================================ */
 
-function toggleCurrentItemEnabled() {
+function addItem(
+  categoryId
+) {
 
-  if (!currentItem) {
+  const category =
+    categories.find(
+      c =>
+        c.id ===
+        categoryId
+    );
+
+  if (!category) {
     return;
   }
 
+  const item =
+    prompt(
+      'Add a new item to "' +
+      category.name +
+      '":'
+    );
+
+  if (item === null) {
+    return;
+  }
+
+  const cleanItem =
+    item.trim();
+
+  if (!cleanItem) {
+    return;
+  }
+
+  const exists =
+    category.items.some(
+      existing =>
+        existing
+          .toLowerCase() ===
+        cleanItem
+          .toLowerCase()
+    );
+
+  if (exists) {
+
+    alert(
+      "This item already exists."
+    );
+
+    return;
+  }
+
+  category.items.push(
+    cleanItem
+  );
 
   const data =
     getItem(
-      currentItem.categoryId,
-      currentItem.item
+      category.id,
+      cleanItem
     );
 
+  data.custom =
+    true;
+
+  saveData();
+
+  renderCategory();
+}
+
+
+/* ============================================================
+   TOGGLE ITEM
+   ============================================================ */
+
+function toggleItem(
+  categoryId,
+  item
+) {
+
+  const data =
+    getItem(
+      categoryId,
+      item
+    );
 
   data.enabled =
     !data.enabled;
 
-
   saveData();
 
+  renderManageCategory();
 
-  updateItemManagement();
-
-
-  renderCategory();
-
+  if (
+    currentCategory ===
+    categoryId
+  ) {
+    renderCategory();
+  }
 
   renderDashboard();
-
-
-  showToast(
-    data.enabled
-      ? "Item enabled."
-      : "Item disabled."
-  );
 }
 
 
@@ -2338,316 +2410,360 @@ function toggleCurrentItemEnabled() {
    DELETE CUSTOM ITEM
    ============================================================ */
 
-function deleteCurrentCustomItem() {
-
-  if (!currentItem) {
-    return;
-  }
-
-
-  const data =
-    getItem(
-      currentItem.categoryId,
-      currentItem.item
-    );
-
-
-  /*
-   * Safety:
-   * predefined items can NEVER be deleted.
-   */
-
-  if (data.predefined) {
-
-    alert(
-      "Predefined items cannot be deleted. They can only be disabled."
-    );
-
-    return;
-  }
-
+function deleteItem(
+  categoryId,
+  item
+) {
 
   const category =
     categories.find(
-      category =>
-        category.id ===
-        currentItem.categoryId
+      c =>
+        c.id ===
+        categoryId
     );
-
 
   if (!category) {
     return;
   }
 
+  const data =
+    getItem(
+      categoryId,
+      item
+    );
+
+  if (!data.custom) {
+
+    alert(
+      "Predefined items cannot be deleted. You can disable them instead."
+    );
+
+    return;
+  }
 
   const confirmed =
     confirm(
       'Delete "' +
-      currentItem.item +
-      '" permanently?'
+      item +
+      '"?'
     );
-
 
   if (!confirmed) {
     return;
   }
 
-
   category.items =
     category.items.filter(
-      item =>
-        item !==
-        currentItem.item
+      existing =>
+        existing !==
+        item
     );
-
 
   delete savedData[
     itemKey(
-      currentItem.categoryId,
-      currentItem.item
+      categoryId,
+      item
     )
   ];
 
-
   saveData();
 
-  closeModal();
+  renderManageCategory();
 
-  showCategory(
-    currentItem.categoryId
-  );
+  if (
+    currentCategory ===
+    categoryId
+  ) {
+    renderCategory();
+  }
 
-
-  showToast(
-    "Custom item deleted."
-  );
+  renderDashboard();
 }
 
 
 /* ============================================================
-   ADD CATEGORY MODAL
+   MANAGE CATEGORIES
    ============================================================ */
 
-function openAddCategoryModal() {
+function showManageCategories() {
 
-  managementMode =
-    "category";
+  currentCategory =
+    "manage";
 
-
-  const title =
+  const dashboardPage =
     document.getElementById(
-      "managementModalTitle"
+      "dashboardPage"
     );
 
-  const nameInput =
+  const categoryPage =
     document.getElementById(
-      "managementNameInput"
+      "categoryPage"
     );
 
-  const iconInput =
+  const managePage =
     document.getElementById(
-      "managementIconInput"
+      "managePage"
     );
 
-  const iconGroup =
-    document.getElementById(
-      "iconGroup"
-    );
-
-  const help =
-    document.getElementById(
-      "managementHelp"
-    );
-
-  const saveButton =
-    document.getElementById(
-      "saveManagementButton"
-    );
-
-
-  if (title) {
-
-    title.textContent =
-      "Add category";
+  if (dashboardPage) {
+    dashboardPage.style.display =
+      "none";
   }
 
-
-  if (nameInput) {
-
-    nameInput.value =
-      "";
-
-    nameInput.placeholder =
-      "Enter category name...";
+  if (categoryPage) {
+    categoryPage.style.display =
+      "none";
   }
 
-
-  if (iconInput) {
-
-    iconInput.value =
-      "";
-
-    iconInput.placeholder =
-      "💍";
-  }
-
-
-  if (iconGroup) {
-
-    iconGroup.style.display =
+  if (managePage) {
+    managePage.style.display =
       "block";
   }
 
+  buildNavigation();
 
-  if (help) {
+  renderManageCategory();
 
-    help.textContent =
-      "Create a new category for your wedding planner.";
-  }
-
-
-  if (saveButton) {
-
-    saveButton.textContent =
-      "Add category";
-  }
-
-
-  openManagementModal();
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
 
 /* ============================================================
-   ADD ITEM MODAL
+   RENDER MANAGE CATEGORIES
    ============================================================ */
 
-function openAddItemModal() {
+function renderManageCategory() {
+
+  const container =
+    document.getElementById(
+      "manageCategories"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML =
+    "";
+
+  categories.forEach(
+    category => {
+
+      const wrapper =
+        document.createElement(
+          "div"
+        );
+
+      wrapper.className =
+        "manage-category";
+
+      if (!category.enabled) {
+
+        wrapper.classList.add(
+          "disabled"
+        );
+      }
+
+      const itemCount =
+        category.items.length;
+
+      wrapper.innerHTML =
+
+        '<div class="manage-category-main">' +
+
+        '<div class="manage-category-icon">' +
+        escapeHTML(
+          category.icon
+        ) +
+        "</div>" +
+
+        '<div class="manage-category-info">' +
+
+        "<h3>" +
+        escapeHTML(
+          category.name
+        ) +
+        "</h3>" +
+
+        "<p>" +
+        itemCount +
+        " item" +
+        (itemCount === 1
+          ? ""
+          : "s") +
+        "</p>" +
+
+        "</div>" +
+
+        "</div>" +
+
+        '<div class="manage-category-actions">' +
+
+        '<button type="button" class="modern-toggle">' +
+
+        (
+          category.enabled
+            ? "✓ Enabled"
+            : "○ Disabled"
+        ) +
+
+        "</button>" +
+
+        "</div>";
+
+      const toggleButton =
+        wrapper.querySelector(
+          ".modern-toggle"
+        );
+
+      if (toggleButton) {
+
+        toggleButton.addEventListener(
+          "click",
+          () =>
+            toggleCategory(
+              category.id
+            )
+        );
+      }
+
+      container.appendChild(
+        wrapper
+      );
+    }
+  );
+}
+
+
+/* ============================================================
+   TOGGLE CATEGORY
+   ============================================================ */
+
+function toggleCategory(
+  categoryId
+) {
 
   const category =
     categories.find(
-      category =>
-        category.id ===
-        currentCategory
+      c =>
+        c.id ===
+        categoryId
     );
-
 
   if (!category) {
     return;
   }
 
+  category.enabled =
+    !category.enabled;
 
-  managementMode =
-    "item";
+  if (
+    !category.enabled &&
+    currentCategory ===
+      categoryId
+  ) {
 
-
-  const title =
-    document.getElementById(
-      "managementModalTitle"
-    );
-
-  const nameInput =
-    document.getElementById(
-      "managementNameInput"
-    );
-
-  const iconGroup =
-    document.getElementById(
-      "iconGroup"
-    );
-
-  const help =
-    document.getElementById(
-      "managementHelp"
-    );
-
-  const saveButton =
-    document.getElementById(
-      "saveManagementButton"
-    );
-
-
-  if (title) {
-
-    title.textContent =
-      "Add item";
+    currentCategory =
+      "dashboard";
   }
 
+  saveData();
 
-  if (nameInput) {
+  buildNavigation();
 
-    nameInput.value =
-      "";
+  renderManageCategory();
 
-    nameInput.placeholder =
-      "Enter item name...";
+  renderDashboard();
+
+  if (
+    currentCategory ===
+    categoryId
+  ) {
+    renderCategory();
   }
-
-
-  if (iconGroup) {
-
-    iconGroup.style.display =
-      "none";
-  }
-
-
-  if (help) {
-
-    help.textContent =
-      'Add a new item to "' +
-      category.name +
-      '".';
-  }
-
-
-  if (saveButton) {
-
-    saveButton.textContent =
-      "Add item";
-  }
-
-
-  openManagementModal();
 }
 
 
 /* ============================================================
-   OPEN MANAGEMENT MODAL
+   MANAGEMENT MODAL
    ============================================================ */
 
-function openManagementModal() {
+function openManagementModal(
+  mode = "category"
+) {
 
   const overlay =
     document.getElementById(
       "managementOverlay"
     );
 
-
-  if (overlay) {
-
-    overlay.classList.add(
-      "active"
+  const title =
+    document.getElementById(
+      "managementModalTitle"
     );
 
+  const nameInput =
+    document.getElementById(
+      "managementNameInput"
+    );
 
-    setTimeout(() => {
+  const iconGroup =
+    document.getElementById(
+      "iconGroup"
+    );
 
-      const input =
-        document.getElementById(
-          "managementNameInput"
-        );
+  const saveButton =
+    document.getElementById(
+      "saveManagementButton"
+    );
 
-      if (input) {
-        input.focus();
+  if (!overlay) {
+    return;
+  }
+
+  if (mode === "category") {
+
+    if (title) {
+      title.textContent =
+        "Add category";
+    }
+
+    if (nameInput) {
+      nameInput.placeholder =
+        "e.g. Transportation";
+    }
+
+    if (iconGroup) {
+      iconGroup.style.display =
+        "block";
+    }
+
+    if (saveButton) {
+
+      saveButton.onclick =
+        addCategory;
+    }
+  }
+
+  overlay.classList.add(
+    "active"
+  );
+
+  setTimeout(
+    () => {
+
+      if (nameInput) {
+        nameInput.focus();
       }
 
-    }, 100);
-  }
+    },
+    100
+  );
 }
 
-
-/* ============================================================
-   CLOSE MANAGEMENT MODAL
-   ============================================================ */
 
 function closeManagementModal() {
 
@@ -2655,7 +2771,6 @@ function closeManagementModal() {
     document.getElementById(
       "managementOverlay"
     );
-
 
   if (overlay) {
 
@@ -2667,210 +2782,7 @@ function closeManagementModal() {
 
 
 /* ============================================================
-   SAVE MANAGEMENT MODAL
-   ============================================================ */
-
-function saveManagementModal() {
-
-  const nameInput =
-    document.getElementById(
-      "managementNameInput"
-    );
-
-  const iconInput =
-    document.getElementById(
-      "managementIconInput"
-    );
-
-
-  const name =
-    nameInput
-      ? nameInput.value.trim()
-      : "";
-
-
-  if (!name) {
-
-    alert(
-      managementMode ===
-        "category"
-        ? "Please enter a category name."
-        : "Please enter an item name."
-    );
-
-    return;
-  }
-
-
-  /* ==========================================================
-     CATEGORY
-     ========================================================== */
-
-  if (
-    managementMode ===
-    "category"
-  ) {
-
-    const exists =
-      categories.some(
-        category =>
-          category.name
-            .toLowerCase() ===
-          name.toLowerCase()
-      );
-
-
-    if (exists) {
-
-      alert(
-        "A category with this name already exists."
-      );
-
-      return;
-    }
-
-
-    const icon =
-      iconInput
-        ? iconInput.value.trim()
-        : "";
-
-
-    const category = {
-
-      id:
-        createId(name),
-
-      name,
-
-      icon:
-        icon ||
-        "📋",
-
-      items: [],
-
-      predefined: false
-
-    };
-
-
-    categories.push(
-      category
-    );
-
-
-    if (saveData()) {
-
-      closeManagementModal();
-
-      buildNavigation();
-
-      renderDashboard();
-
-      showToast(
-        '"' +
-        name +
-        '" category added.'
-      );
-    }
-
-
-    return;
-  }
-
-
-  /* ==========================================================
-     ITEM
-     ========================================================== */
-
-  if (
-    managementMode ===
-    "item"
-  ) {
-
-    const category =
-      categories.find(
-        category =>
-          category.id ===
-          currentCategory
-      );
-
-
-    if (!category) {
-      return;
-    }
-
-
-    const exists =
-      category.items.some(
-        existing =>
-          existing
-            .toLowerCase() ===
-          name.toLowerCase()
-      );
-
-
-    if (exists) {
-
-      alert(
-        "This item already exists."
-      );
-
-      return;
-    }
-
-
-    category.items.push(
-      name
-    );
-
-
-    savedData[
-      itemKey(
-        category.id,
-        name
-      )
-    ] = {
-
-      status: "not",
-
-      vendor: "",
-
-      price: "",
-
-      deadline: "",
-
-      link: "",
-
-      notes: "",
-
-      enabled: true,
-
-      predefined: false
-
-    };
-
-
-    if (saveData()) {
-
-      closeManagementModal();
-
-      renderCategory();
-
-      renderDashboard();
-
-      showToast(
-        '"' +
-        name +
-        '" item added.'
-      );
-    }
-  }
-}
-
-
-/* ============================================================
-   EVENTS
+   SETUP EVENTS
    ============================================================ */
 
 function setupEvents() {
@@ -2895,7 +2807,6 @@ function setupEvents() {
       "resetButton"
     );
 
-
   const closeModalButton =
     document.getElementById(
       "closeModalButton"
@@ -2910,7 +2821,6 @@ function setupEvents() {
     document.getElementById(
       "clearButton"
     );
-
 
   const notButton =
     document.getElementById(
@@ -2927,47 +2837,10 @@ function setupEvents() {
       "doneButton"
     );
 
-
-  const disableItemButton =
-    document.getElementById(
-      "disableItemButton"
-    );
-
-  const deleteCustomItemButton =
-    document.getElementById(
-      "deleteCustomItemButton"
-    );
-
-
   const overlay =
     document.getElementById(
       "overlay"
     );
-
-
-  const managementOverlay =
-    document.getElementById(
-      "managementOverlay"
-    );
-
-
-  const closeManagementButton =
-    document.getElementById(
-      "closeManagementButton"
-    );
-
-
-  const cancelManagementButton =
-    document.getElementById(
-      "cancelManagementButton"
-    );
-
-
-  const saveManagementButton =
-    document.getElementById(
-      "saveManagementButton"
-    );
-
 
   const search =
     document.getElementById(
@@ -2979,7 +2852,6 @@ function setupEvents() {
       "itemStatusFilter"
     );
 
-
   const addCategoryButton =
     document.getElementById(
       "addCategoryButton"
@@ -2990,15 +2862,40 @@ function setupEvents() {
       "addItemButton"
     );
 
-  const backToDashboardButton =
+  const manageCategoriesButton =
+    document.getElementById(
+      "manageCategoriesButton"
+    );
+
+  const backButton =
     document.getElementById(
       "backToDashboardButton"
     );
 
+  const closeManagementButton =
+    document.getElementById(
+      "closeManagementButton"
+    );
 
-  /* ==========================================================
+  const cancelManagementButton =
+    document.getElementById(
+      "cancelManagementButton"
+    );
+
+  const managementOverlay =
+    document.getElementById(
+      "managementOverlay"
+    );
+
+  const weddingDateInput =
+    document.getElementById(
+      "weddingDateInput"
+    );
+
+
+  /* ----------------------------------------------------------
      EXPORT
-     ========================================================== */
+     ---------------------------------------------------------- */
 
   if (exportButton) {
 
@@ -3009,9 +2906,9 @@ function setupEvents() {
   }
 
 
-  /* ==========================================================
+  /* ----------------------------------------------------------
      IMPORT
-     ========================================================== */
+     ---------------------------------------------------------- */
 
   if (
     importButton &&
@@ -3025,7 +2922,6 @@ function setupEvents() {
     );
   }
 
-
   if (importFile) {
 
     importFile.addEventListener(
@@ -3035,9 +2931,9 @@ function setupEvents() {
   }
 
 
-  /* ==========================================================
+  /* ----------------------------------------------------------
      RESET
-     ========================================================== */
+     ---------------------------------------------------------- */
 
   if (resetButton) {
 
@@ -3048,9 +2944,9 @@ function setupEvents() {
   }
 
 
-  /* ==========================================================
+  /* ----------------------------------------------------------
      ITEM MODAL
-     ========================================================== */
+     ---------------------------------------------------------- */
 
   if (closeModalButton) {
 
@@ -3060,7 +2956,6 @@ function setupEvents() {
     );
   }
 
-
   if (saveButton) {
 
     saveButton.addEventListener(
@@ -3068,7 +2963,6 @@ function setupEvents() {
       saveItem
     );
   }
-
 
   if (clearButton) {
 
@@ -3078,6 +2972,10 @@ function setupEvents() {
     );
   }
 
+
+  /* ----------------------------------------------------------
+     STATUS
+     ---------------------------------------------------------- */
 
   if (notButton) {
 
@@ -3090,7 +2988,6 @@ function setupEvents() {
     );
   }
 
-
   if (progressButton) {
 
     progressButton.addEventListener(
@@ -3101,7 +2998,6 @@ function setupEvents() {
         )
     );
   }
-
 
   if (doneButton) {
 
@@ -3115,29 +3011,9 @@ function setupEvents() {
   }
 
 
-  if (disableItemButton) {
-
-    disableItemButton.addEventListener(
-      "click",
-      toggleCurrentItemEnabled
-    );
-  }
-
-
-  if (
-    deleteCustomItemButton
-  ) {
-
-    deleteCustomItemButton.addEventListener(
-      "click",
-      deleteCurrentCustomItem
-    );
-  }
-
-
-  /* ==========================================================
-     ITEM MODAL BACKDROP
-     ========================================================== */
+  /* ----------------------------------------------------------
+     ITEM MODAL OVERLAY
+     ---------------------------------------------------------- */
 
   if (overlay) {
 
@@ -3149,7 +3025,6 @@ function setupEvents() {
           event.target ===
           overlay
         ) {
-
           closeModal();
         }
 
@@ -3158,108 +3033,9 @@ function setupEvents() {
   }
 
 
-  /* ==========================================================
-     MANAGEMENT MODAL
-     ========================================================== */
-
-  if (
-    closeManagementButton
-  ) {
-
-    closeManagementButton.addEventListener(
-      "click",
-      closeManagementModal
-    );
-  }
-
-
-  if (
-    cancelManagementButton
-  ) {
-
-    cancelManagementButton.addEventListener(
-      "click",
-      closeManagementModal
-    );
-  }
-
-
-  if (
-    saveManagementButton
-  ) {
-
-    saveManagementButton.addEventListener(
-      "click",
-      saveManagementModal
-    );
-  }
-
-
-  if (
-    managementOverlay
-  ) {
-
-    managementOverlay.addEventListener(
-      "click",
-      event => {
-
-        if (
-          event.target ===
-          managementOverlay
-        ) {
-
-          closeManagementModal();
-        }
-
-      }
-    );
-  }
-
-
-  /* ==========================================================
-     ADD CATEGORY
-     ========================================================== */
-
-  if (addCategoryButton) {
-
-    addCategoryButton.addEventListener(
-      "click",
-      openAddCategoryModal
-    );
-  }
-
-
-  /* ==========================================================
-     ADD ITEM
-     ========================================================== */
-
-  if (addItemButton) {
-
-    addItemButton.addEventListener(
-      "click",
-      openAddItemModal
-    );
-  }
-
-
-  /* ==========================================================
-     BACK TO DASHBOARD
-     ========================================================== */
-
-  if (
-    backToDashboardButton
-  ) {
-
-    backToDashboardButton.addEventListener(
-      "click",
-      showDashboard
-    );
-  }
-
-
-  /* ==========================================================
+  /* ----------------------------------------------------------
      SEARCH
-     ========================================================== */
+     ---------------------------------------------------------- */
 
   if (search) {
 
@@ -3270,9 +3046,9 @@ function setupEvents() {
   }
 
 
-  /* ==========================================================
+  /* ----------------------------------------------------------
      FILTER
-     ========================================================== */
+     ---------------------------------------------------------- */
 
   if (filter) {
 
@@ -3283,9 +3059,136 @@ function setupEvents() {
   }
 
 
-  /* ==========================================================
+  /* ----------------------------------------------------------
+     ADD CATEGORY
+     ---------------------------------------------------------- */
+
+  if (addCategoryButton) {
+
+    addCategoryButton.addEventListener(
+      "click",
+      () =>
+        openManagementModal(
+          "category"
+        )
+    );
+  }
+
+
+  /* ----------------------------------------------------------
+     ADD ITEM
+     ---------------------------------------------------------- */
+
+  if (addItemButton) {
+
+    addItemButton.addEventListener(
+      "click",
+      () => {
+
+        if (
+          currentCategory &&
+          currentCategory !==
+            "dashboard" &&
+          currentCategory !==
+            "manage"
+        ) {
+
+          addItem(
+            currentCategory
+          );
+        }
+
+      }
+    );
+  }
+
+
+  /* ----------------------------------------------------------
+     MANAGE CATEGORIES
+     ---------------------------------------------------------- */
+
+  if (manageCategoriesButton) {
+
+    manageCategoriesButton.addEventListener(
+      "click",
+      showManageCategories
+    );
+  }
+
+
+  /* ----------------------------------------------------------
+     BACK TO DASHBOARD
+     ---------------------------------------------------------- */
+
+  if (backButton) {
+
+    backButton.addEventListener(
+      "click",
+      showDashboard
+    );
+  }
+
+
+  /* ----------------------------------------------------------
+     MANAGEMENT MODAL
+     ---------------------------------------------------------- */
+
+  if (closeManagementButton) {
+
+    closeManagementButton.addEventListener(
+      "click",
+      closeManagementModal
+    );
+  }
+
+  if (cancelManagementButton) {
+
+    cancelManagementButton.addEventListener(
+      "click",
+      closeManagementModal
+    );
+  }
+
+  if (managementOverlay) {
+
+    managementOverlay.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          managementOverlay
+        ) {
+          closeManagementModal();
+        }
+
+      }
+    );
+  }
+
+
+  /* ----------------------------------------------------------
+     WEDDING DATE
+     ---------------------------------------------------------- */
+
+  if (weddingDateInput) {
+
+    weddingDateInput.value =
+      weddingDate;
+
+    weddingDateInput.addEventListener(
+      "change",
+      event =>
+        setWeddingDate(
+          event.target.value
+        )
+    );
+  }
+
+
+  /* ----------------------------------------------------------
      KEYBOARD
-     ========================================================== */
+     ---------------------------------------------------------- */
 
   document.addEventListener(
     "keydown",
@@ -3299,18 +3202,6 @@ function setupEvents() {
         closeModal();
 
         closeManagementModal();
-      }
-
-
-      if (
-        event.key ===
-          "Enter" &&
-        document.activeElement &&
-        document.activeElement.id ===
-          "managementNameInput"
-      ) {
-
-        saveManagementModal();
       }
 
     }
@@ -3333,6 +3224,8 @@ document.addEventListener(
     buildNavigation();
 
     showDashboard();
+
+    updateCountdown();
 
   }
 );
