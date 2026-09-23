@@ -59,7 +59,7 @@ const defaultCategories = [
         mainCategory: "wedding",
         items: [
             "Aviraa Creations",
-            "Ponthayadesigns",
+            "Ponthayadesigns"
         ]
     },
 
@@ -221,7 +221,7 @@ const defaultCategories = [
             "Elegance Brørup",
             "Babylon AA",
             "Sociale Palace Silkeborg",
-            "Herning Kovil",
+            "Herning Kovil"
         ]
     },
 
@@ -234,11 +234,11 @@ const defaultCategories = [
             "Groom & Bride (Pardans)",
             "Groom & Bride (Cinema Paattu)",
             "Bollywood Dance",
-            "Gruppedans",,
+            "Gruppedance",
             "Girls Dance",
             "Boys Dance",
             "Family Dance",
-            "Dance Club",
+            "Dance Club"
         ]
     },
 
@@ -255,7 +255,7 @@ const defaultCategories = [
             "Lighting",
             "Projector"
         ]
-    },
+    }
 ];
 
 
@@ -264,7 +264,7 @@ const defaultCategories = [
    ========================================================= */
 
 let categories = [];
-let savedData = {};
+let savedData = [];
 
 let responsibleIndividualsGroups = [];
 
@@ -282,6 +282,7 @@ let managementMode = "category";
    ========================================================= */
 
 function getMainCategoryLabel(mainCategory) {
+
     return mainCategory === "reception"
         ? "Reception"
         : "Wedding";
@@ -293,6 +294,7 @@ function getMainCategoryLabel(mainCategory) {
    ========================================================= */
 
 function getElement(id) {
+
     return document.getElementById(id);
 }
 
@@ -302,11 +304,15 @@ function getElement(id) {
    ========================================================= */
 
 function cloneDefaults() {
-    return JSON.parse(JSON.stringify(defaultCategories));
+
+    return JSON.parse(
+        JSON.stringify(defaultCategories)
+    );
 }
 
 
 function createId(prefix = "id") {
+
     return (
         prefix +
         "_" +
@@ -320,6 +326,7 @@ function createId(prefix = "id") {
 
 
 function escapeHTML(value) {
+
     return String(value ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -330,13 +337,21 @@ function escapeHTML(value) {
 
 
 function formatDate(dateString) {
+
     if (!dateString) {
         return "";
     }
 
-    const date = new Date(`${dateString}T00:00:00`);
+    const date =
+        new Date(
+            `${dateString}T00:00:00`
+        );
 
-    if (Number.isNaN(date.getTime())) {
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
         return dateString;
     }
 
@@ -352,131 +367,75 @@ function formatDate(dateString) {
 
 
 function showToast(message) {
-    const toast = getElement("toast");
+
+    const toast =
+        getElement("toast");
 
     if (!toast) {
         return;
     }
 
-    toast.textContent = message;
+    toast.textContent =
+        message;
+
     toast.classList.add("show");
 
-    clearTimeout(showToast.timeout);
+    clearTimeout(
+        showToast.timeout
+    );
 
-    showToast.timeout = setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2500);
+    showToast.timeout =
+        setTimeout(
+            () => {
+                toast.classList.remove(
+                    "show"
+                );
+            },
+            2500
+        );
 }
 
 
 /* =========================================================
-   RESPONSIBLE INDIVIDUAL/GROUP NORMALISATION
+   RESPONSIBLE INDIVIDUAL / GROUP NORMALISATION
    ========================================================= */
 
 function normaliseResponsibleIndividualsGroups(input) {
+
     if (!Array.isArray(input)) {
         return [];
     }
 
     const seen = new Set();
+
     const result = [];
 
     input.forEach(value => {
-        const cleanValue = String(value ?? "").trim();
+
+        const cleanValue =
+            String(
+                value ?? ""
+            ).trim();
 
         if (!cleanValue) {
             return;
         }
 
-        const key = cleanValue.toLowerCase();
+        const key =
+            cleanValue.toLowerCase();
 
         if (seen.has(key)) {
             return;
         }
 
         seen.add(key);
-        result.push(cleanValue);
+
+        result.push(
+            cleanValue
+        );
     });
 
     return result;
-}
-
-
-/* =========================================================
-   LOAD DATA
-   ========================================================= */
-
-function loadData() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-
-    if (!raw) {
-        categories = cloneDefaults();
-        savedData = {};
-        responsibleIndividualsGroups = [];
-        return;
-    }
-
-    try {
-        const parsed = JSON.parse(raw);
-
-        categories = normaliseCategories(
-            Array.isArray(parsed.categories)
-                ? parsed.categories
-                : cloneDefaults()
-        );
-
-        savedData =
-            parsed.savedData &&
-            typeof parsed.savedData === "object"
-                ? parsed.savedData
-                : {};
-
-        responsibleIndividualsGroups =
-            normaliseResponsibleIndividualsGroups(
-                parsed.responsibleIndividualsGroups
-            );
-
-        migrateSavedData();
-
-    } catch (error) {
-        console.error(
-            "Could not load saved planner data:",
-            error
-        );
-
-        categories = cloneDefaults();
-        savedData = {};
-        responsibleIndividualsGroups = [];
-
-        showToast(
-            "Saved data could not be loaded. Defaults restored."
-        );
-    }
-}
-
-
-/* =========================================================
-   SAVE DATA
-   ========================================================= */
-
-function saveData() {
-    const data = {
-        version: 8,
-        categories,
-        savedData,
-        responsibleIndividualsGroups:
-            normaliseResponsibleIndividualsGroups(
-                responsibleIndividualsGroups
-            )
-    };
-
-    responsibleIndividualsGroups =
-        data.responsibleIndividualsGroups;
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-    );
 }
 
 
@@ -485,6 +444,7 @@ function saveData() {
    ========================================================= */
 
 function normaliseCategories(input) {
+
     if (!Array.isArray(input)) {
         return cloneDefaults();
     }
@@ -492,18 +452,37 @@ function normaliseCategories(input) {
     return input
         .map(category => {
 
-            if (!category || typeof category !== "object") {
+            if (
+                !category ||
+                typeof category !== "object"
+            ) {
                 return null;
             }
 
             const name =
-                String(category.name ?? "").trim();
+                String(
+                    category.name ?? ""
+                ).trim();
 
             if (!name) {
                 return null;
             }
 
+            /*
+             * IMPORTANT:
+             * Preserve mainCategory.
+             *
+             * Old saved categories that do not have
+             * mainCategory are assigned to Wedding.
+             */
+            const mainCategory =
+                category.mainCategory ===
+                    "reception"
+                    ? "reception"
+                    : "wedding";
+
             return {
+
                 id:
                     String(
                         category.id ||
@@ -514,17 +493,24 @@ function normaliseCategories(input) {
 
                 icon:
                     String(
-                        category.icon || "📋"
+                        category.icon ||
+                        "📋"
                     ),
 
+                mainCategory,
+
                 items:
-                    Array.isArray(category.items)
+                    Array.isArray(
+                        category.items
+                    )
                         ? category.items
                             .map(item => {
 
                                 if (
-                                    typeof item === "string"
+                                    typeof item ===
+                                    "string"
                                 ) {
+
                                     return {
                                         name: item,
                                         custom: false
@@ -533,12 +519,15 @@ function normaliseCategories(input) {
 
                                 if (
                                     item &&
-                                    typeof item === "object"
+                                    typeof item ===
+                                    "object"
                                 ) {
+
                                     return {
                                         name:
                                             String(
-                                                item.name ?? ""
+                                                item.name ??
+                                                ""
                                             ).trim(),
 
                                         custom:
@@ -563,72 +552,242 @@ function normaliseCategories(input) {
 
 
 /* =========================================================
+   LOAD DATA
+   ========================================================= */
+
+function loadData() {
+
+    const raw =
+        localStorage.getItem(
+            STORAGE_KEY
+        );
+
+    if (!raw) {
+
+        categories =
+            cloneDefaults();
+
+        savedData = {};
+
+        responsibleIndividualsGroups =
+            [];
+
+        return;
+    }
+
+
+    try {
+
+        const parsed =
+            JSON.parse(raw);
+
+
+        categories =
+            normaliseCategories(
+                Array.isArray(
+                    parsed.categories
+                )
+                    ? parsed.categories
+                    : cloneDefaults()
+            );
+
+
+        savedData =
+            parsed.savedData &&
+            typeof parsed.savedData ===
+                "object"
+                ? parsed.savedData
+                : {};
+
+
+        responsibleIndividualsGroups =
+            normaliseResponsibleIndividualsGroups(
+                parsed.responsibleIndividualsGroups
+            );
+
+
+        migrateSavedData();
+
+
+    } catch (error) {
+
+        console.error(
+            "Could not load saved planner data:",
+            error
+        );
+
+
+        categories =
+            cloneDefaults();
+
+        savedData = {};
+
+        responsibleIndividualsGroups =
+            [];
+
+
+        showToast(
+            "Saved data could not be loaded. Defaults restored."
+        );
+    }
+}
+
+
+/* =========================================================
+   SAVE DATA
+   ========================================================= */
+
+function saveData() {
+
+    const data = {
+
+        version: 9,
+
+        categories,
+
+        savedData,
+
+        responsibleIndividualsGroups:
+            normaliseResponsibleIndividualsGroups(
+                responsibleIndividualsGroups
+            )
+    };
+
+
+    responsibleIndividualsGroups =
+        data.responsibleIndividualsGroups;
+
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(data)
+    );
+}
+
+
+/* =========================================================
    SAVED ITEM DATA MIGRATION
    ========================================================= */
 
 function migrateSavedData() {
+
     Object.keys(savedData).forEach(key => {
 
-        const item = savedData[key];
+        const item =
+            savedData[key];
 
-        if (!item || typeof item !== "object") {
+
+        if (
+            !item ||
+            typeof item !== "object"
+        ) {
+
             savedData[key] = {};
+
             return;
         }
+
 
         if (
             !item.responsiblePerson &&
             item.vendor
         ) {
+
             item.responsiblePerson =
-                String(item.vendor);
+                String(
+                    item.vendor
+                );
         }
+
 
         if (
-            item.responsiblePerson === undefined
+            item.responsiblePerson ===
+            undefined
         ) {
-            item.responsiblePerson = "";
+            item.responsiblePerson =
+                "";
         }
 
-        if (item.deposit === undefined) {
+
+        if (
+            item.deposit ===
+            undefined
+        ) {
             item.deposit = "";
         }
 
-        if (item.mobile === undefined) {
+
+        if (
+            item.mobile ===
+            undefined
+        ) {
             item.mobile = "";
         }
 
-        if (item.email === undefined) {
+
+        if (
+            item.email ===
+            undefined
+        ) {
             item.email = "";
         }
 
-        if (item.contactPerson === undefined) {
+
+        if (
+            item.contactPerson ===
+            undefined
+        ) {
             item.contactPerson = "";
         }
 
-        if (item.status === undefined) {
+
+        if (
+            item.status ===
+            undefined
+        ) {
             item.status = "not";
         }
 
-        if (item.price === undefined) {
+
+        if (
+            item.price ===
+            undefined
+        ) {
             item.price = "";
         }
 
-        if (item.deadline === undefined) {
+
+        if (
+            item.deadline ===
+            undefined
+        ) {
             item.deadline = "";
         }
 
-        if (item.link === undefined) {
+
+        if (
+            item.link ===
+            undefined
+        ) {
             item.link = "";
         }
 
-        if (item.notes === undefined) {
+
+        if (
+            item.notes ===
+            undefined
+        ) {
             item.notes = "";
         }
 
-        if (item.enabled === undefined) {
+
+        if (
+            item.enabled ===
+            undefined
+        ) {
             item.enabled = true;
         }
+
 
         delete item.vendor;
     });
@@ -639,84 +798,163 @@ function migrateSavedData() {
    ITEM DATA
    ========================================================= */
 
-function getItem(categoryId, item) {
+function getItem(
+    categoryId,
+    item
+) {
+
     const itemName =
         typeof item === "string"
             ? item
             : item.name;
 
+
     const key =
         `${categoryId}::${itemName}`;
 
+
     if (
         !savedData[key] ||
-        typeof savedData[key] !== "object"
+        typeof savedData[key] !==
+            "object"
     ) {
+
         savedData[key] = {
+
             status: "not",
+
             responsiblePerson: "",
+
             deposit: "",
+
             price: "",
+
             mobile: "",
+
             email: "",
+
             contactPerson: "",
+
             deadline: "",
+
             link: "",
+
             notes: "",
+
             enabled: true
         };
     }
 
-    const data = savedData[key];
 
-    if (data.responsiblePerson === undefined) {
-        data.responsiblePerson = "";
+    const data =
+        savedData[key];
+
+
+    if (
+        data.responsiblePerson ===
+        undefined
+    ) {
+        data.responsiblePerson =
+            "";
     }
 
-    if (data.deposit === undefined) {
-        data.deposit = "";
+
+    if (
+        data.deposit ===
+        undefined
+    ) {
+        data.deposit =
+            "";
     }
 
-    if (data.price === undefined) {
-        data.price = "";
+
+    if (
+        data.price ===
+        undefined
+    ) {
+        data.price =
+            "";
     }
 
-    if (data.mobile === undefined) {
-        data.mobile = "";
+
+    if (
+        data.mobile ===
+        undefined
+    ) {
+        data.mobile =
+            "";
     }
 
-    if (data.email === undefined) {
-        data.email = "";
+
+    if (
+        data.email ===
+        undefined
+    ) {
+        data.email =
+            "";
     }
 
-    if (data.contactPerson === undefined) {
-        data.contactPerson = "";
+
+    if (
+        data.contactPerson ===
+        undefined
+    ) {
+        data.contactPerson =
+            "";
     }
 
-    if (data.status === undefined) {
-        data.status = "not";
+
+    if (
+        data.status ===
+        undefined
+    ) {
+        data.status =
+            "not";
     }
 
-    if (data.deadline === undefined) {
-        data.deadline = "";
+
+    if (
+        data.deadline ===
+        undefined
+    ) {
+        data.deadline =
+            "";
     }
 
-    if (data.link === undefined) {
-        data.link = "";
+
+    if (
+        data.link ===
+        undefined
+    ) {
+        data.link =
+            "";
     }
 
-    if (data.notes === undefined) {
-        data.notes = "";
+
+    if (
+        data.notes ===
+        undefined
+    ) {
+        data.notes =
+            "";
     }
 
-    if (data.enabled === undefined) {
-        data.enabled = true;
+
+    if (
+        data.enabled ===
+        undefined
+    ) {
+        data.enabled =
+            true;
     }
+
 
     delete data.vendor;
 
+
     return data;
 }
+
 
 /* =========================================================
    MAIN CATEGORY NAVIGATION
@@ -729,12 +967,14 @@ function buildMainCategoryNavigation() {
             "mainCategoryNavigation"
         );
 
+
     if (!navigation) {
         return;
     }
 
 
-    navigation.innerHTML = "";
+    navigation.innerHTML =
+        "";
 
 
     const mainCategories = [
@@ -765,6 +1005,7 @@ function buildMainCategoryNavigation() {
             button.type =
                 "button";
 
+
             button.className =
                 "main-category-button";
 
@@ -791,6 +1032,7 @@ function buildMainCategoryNavigation() {
                         mainCategory.name
                     )}
                 </span>
+
             `;
 
 
@@ -798,76 +1040,27 @@ function buildMainCategoryNavigation() {
                 "click",
                 () => {
 
-                    /*
-                     * Change the selected
-                     * main category.
-                     */
                     currentMainCategory =
                         mainCategory.id;
 
 
                     /*
-                     * Rebuild both navigation
-                     * areas so the correct
-                     * categories appear.
+                     * When changing between Wedding
+                     * and Reception, always return to
+                     * the dashboard.
                      */
+                    currentCategory =
+                        "dashboard";
+
+                    currentItem =
+                        null;
+
+
                     buildMainCategoryNavigation();
+
                     buildNavigation();
 
-
-                    /*
-                     * If the user is currently
-                     * looking at a category
-                     * belonging to the other
-                     * section, return to dashboard.
-                     */
-                    if (
-                        currentCategory !==
-                            "dashboard" &&
-
-                        currentCategory !==
-                            "tagging" &&
-
-                        currentCategory !==
-                            "hidden" &&
-
-                        currentCategory !==
-                            "budget"
-                    ) {
-
-                        const selectedCategory =
-                            categories.find(
-                                category =>
-                                    category.id ===
-                                    currentCategory
-                            );
-
-
-                        if (
-                            !selectedCategory ||
-                            selectedCategory.mainCategory !==
-                                currentMainCategory
-                        ) {
-
-                            showDashboard();
-
-                            return;
-                        }
-                    }
-
-
-                    /*
-                     * If already on dashboard,
-                     * refresh the dashboard.
-                     */
-                    if (
-                        currentCategory ===
-                        "dashboard"
-                    ) {
-
-                        renderDashboard();
-                    }
-
+                    showDashboard();
                 }
             );
 
@@ -880,40 +1073,64 @@ function buildMainCategoryNavigation() {
 }
 
 
-
 /* =========================================================
    NAVIGATION
    ========================================================= */
 
 function buildNavigation() {
-    const topNavigation = getElement("topNavigation");
-    const navigation = getElement("navigation");
 
-    if (!topNavigation || !navigation) {
+    const topNavigation =
+        getElement(
+            "topNavigation"
+        );
+
+
+    const navigation =
+        getElement(
+            "navigation"
+        );
+
+
+    if (
+        !topNavigation ||
+        !navigation
+    ) {
         return;
     }
 
-    topNavigation.innerHTML = "";
-    navigation.innerHTML = "";
+
+    topNavigation.innerHTML =
+        "";
+
+    navigation.innerHTML =
+        "";
 
 
     /* =====================================================
        TOP NAVIGATION
-       Dashboard / Tagging / Hidden Items
        ===================================================== */
 
     const dashboardButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    dashboardButton.type = "button";
-    dashboardButton.className = "nav-button";
+
+    dashboardButton.type =
+        "button";
+
+    dashboardButton.className =
+        "nav-button";
+
     dashboardButton.textContent =
         "🏠 Dashboard";
+
 
     dashboardButton.addEventListener(
         "click",
         showDashboard
     );
+
 
     topNavigation.appendChild(
         dashboardButton
@@ -921,17 +1138,26 @@ function buildNavigation() {
 
 
     const taggingButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    taggingButton.type = "button";
-    taggingButton.className = "nav-button";
+
+    taggingButton.type =
+        "button";
+
+    taggingButton.className =
+        "nav-button";
+
     taggingButton.textContent =
         "🏷️ Tagging";
+
 
     taggingButton.addEventListener(
         "click",
         showTagging
     );
+
 
     topNavigation.appendChild(
         taggingButton
@@ -939,68 +1165,112 @@ function buildNavigation() {
 
 
     const hiddenButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    hiddenButton.type = "button";
-    hiddenButton.className = "nav-button";
+
+    hiddenButton.type =
+        "button";
+
+    hiddenButton.className =
+        "nav-button";
+
     hiddenButton.textContent =
         "👁️ Hidden Items";
+
 
     hiddenButton.addEventListener(
         "click",
         showHiddenItems
     );
 
+
     topNavigation.appendChild(
         hiddenButton
     );
 
-    /* =====================================================
-       BUDGET OVERVIEW
-       ===================================================== */
 
     const budgetButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    budgetButton.type = "button";
-    budgetButton.className = "nav-button";
+
+    budgetButton.type =
+        "button";
+
+    budgetButton.className =
+        "nav-button";
+
     budgetButton.textContent =
         "💰 Budget Overview";
+
 
     budgetButton.addEventListener(
         "click",
         showBudgetOverview
     );
 
+
     topNavigation.appendChild(
         budgetButton
     );
 
+
     /* =====================================================
        CATEGORY NAVIGATION
-       Only wedding categories stay in original navigation
+
+       ONLY categories belonging to the currently
+       selected Wedding / Reception section are shown.
        ===================================================== */
 
-    categories.forEach(category => {
+    categories
+        .filter(
+            category =>
+                category.mainCategory ===
+                currentMainCategory
+        )
+        .forEach(
+            category => {
 
-        const button =
-            document.createElement("button");
+                const button =
+                    document.createElement(
+                        "button"
+                    );
 
-        button.type = "button";
-        button.className = "nav-button";
 
-        button.textContent =
-            `${category.icon} ${category.name}`;
+                button.type =
+                    "button";
 
-        button.addEventListener(
-            "click",
-            () => showCategory(category.id)
+                button.className =
+                    "nav-button";
+
+
+                button.textContent =
+                    `${category.icon} ${category.name}`;
+
+
+                button.addEventListener(
+                    "click",
+                    () =>
+                        showCategory(
+                            category.id
+                        )
+                );
+
+
+                navigation.appendChild(
+                    button
+                );
+            }
         );
 
-        navigation.appendChild(
-            button
-        );
-    });
+
+    /*
+     * Always rebuild Wedding / Reception buttons.
+     */
+    buildMainCategoryNavigation();
 }
 
 
@@ -1009,33 +1279,56 @@ function buildNavigation() {
    ========================================================= */
 
 function hideAllPages() {
+
     const dashboardPage =
-        getElement("dashboardPage");
+        getElement(
+            "dashboardPage"
+        );
+
 
     const categoryPage =
-        getElement("categoryPage");
+        getElement(
+            "categoryPage"
+        );
+
 
     const taggingPage =
-        getElement("taggingPage");
+        getElement(
+            "taggingPage"
+        );
+
 
     const budgetPage =
-        getElement("budgetPage");
+        getElement(
+            "budgetPage"
+        );
 
 
     if (dashboardPage) {
-        dashboardPage.classList.add("hidden");
+        dashboardPage.classList.add(
+            "hidden"
+        );
     }
+
 
     if (categoryPage) {
-        categoryPage.classList.add("hidden");
+        categoryPage.classList.add(
+            "hidden"
+        );
     }
+
 
     if (taggingPage) {
-        taggingPage.classList.add("hidden");
+        taggingPage.classList.add(
+            "hidden"
+        );
     }
 
+
     if (budgetPage) {
-        budgetPage.classList.add("hidden");
+        budgetPage.classList.add(
+            "hidden"
+        );
     }
 }
 
@@ -1045,19 +1338,33 @@ function hideAllPages() {
    ========================================================= */
 
 function showDashboard() {
+
     hideAllPages();
 
+
     const dashboardPage =
-        getElement("dashboardPage");
+        getElement(
+            "dashboardPage"
+        );
+
 
     if (dashboardPage) {
-        dashboardPage.classList.remove("hidden");
+
+        dashboardPage.classList.remove(
+            "hidden"
+        );
     }
 
-    currentCategory = "dashboard";
-    currentItem = null;
+
+    currentCategory =
+        "dashboard";
+
+    currentItem =
+        null;
+
 
     renderDashboard();
+
 
     window.scrollTo({
         top: 0,
@@ -1067,158 +1374,259 @@ function showDashboard() {
 
 
 function renderDashboard() {
+
     const summaryGrid =
-        getElement("summaryGrid");
+        getElement(
+            "summaryGrid"
+        );
+
 
     if (!summaryGrid) {
         return;
     }
 
-    summaryGrid.innerHTML = "";
 
-    let totalItems = 0;
-    let completedItems = 0;
-    let progressItems = 0;
+    summaryGrid.innerHTML =
+        "";
 
-    categories.forEach(category => {
 
-        let categoryTotal = 0;
-        let categoryDone = 0;
+    let totalItems =
+        0;
 
-        category.items.forEach(item => {
+    let completedItems =
+        0;
 
-            const data =
-                getItem(
-                    category.id,
-                    item
-                );
+    let progressItems =
+        0;
 
-            if (data.enabled === false) {
-                return;
-            }
 
-            totalItems++;
-            categoryTotal++;
-
-            if (data.status === "done") {
-                completedItems++;
-                categoryDone++;
-            }
-
-            if (data.status === "progress") {
-                progressItems++;
-            }
-        });
-
-        const percent =
-            categoryTotal > 0
-                ? Math.round(
-                    (categoryDone /
-                        categoryTotal) *
-                    100
-                )
-                : 0;
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "category-summary-card";
-
-        card.innerHTML = `
-            <div class="category-card-top">
-
-                <span class="category-icon">
-                    ${escapeHTML(category.icon)}
-                </span>
-
-                <span class="category-percent">
-                    ${percent}%
-                </span>
-
-            </div>
-
-            <h3>
-                ${escapeHTML(category.name)}
-            </h3>
-
-            <p>
-                ${categoryDone} of
-                ${categoryTotal}
-                completed
-            </p>
-
-            <div class="progress-bar small">
-                <div
-                    class="progress-fill"
-                    style="width: ${percent}%"
-                ></div>
-            </div>
-        `;
-
-        card.addEventListener(
-            "click",
-            () => showCategory(category.id)
+    /*
+     * Dashboard only shows categories
+     * belonging to the current section.
+     */
+    const visibleCategories =
+        categories.filter(
+            category =>
+                category.mainCategory ===
+                currentMainCategory
         );
 
-        summaryGrid.appendChild(card);
-    });
+
+    visibleCategories.forEach(
+        category => {
+
+            let categoryTotal =
+                0;
+
+            let categoryDone =
+                0;
+
+
+            category.items.forEach(
+                item => {
+
+                    const data =
+                        getItem(
+                            category.id,
+                            item
+                        );
+
+
+                    if (
+                        data.enabled ===
+                        false
+                    ) {
+                        return;
+                    }
+
+
+                    totalItems++;
+
+                    categoryTotal++;
+
+
+                    if (
+                        data.status ===
+                        "done"
+                    ) {
+
+                        completedItems++;
+
+                        categoryDone++;
+                    }
+
+
+                    if (
+                        data.status ===
+                        "progress"
+                    ) {
+
+                        progressItems++;
+                    }
+                }
+            );
+
+
+            const percent =
+                categoryTotal > 0
+                    ? Math.round(
+                        (
+                            categoryDone /
+                            categoryTotal
+                        ) * 100
+                    )
+                    : 0;
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "category-summary-card";
+
+
+            card.innerHTML = `
+
+                <div class="category-card-top">
+
+                    <span class="category-icon">
+                        ${escapeHTML(
+                            category.icon
+                        )}
+                    </span>
+
+                    <span class="category-percent">
+                        ${percent}%
+                    </span>
+
+                </div>
+
+                <h3>
+                    ${escapeHTML(
+                        category.name
+                    )}
+                </h3>
+
+                <p>
+                    ${categoryDone} of
+                    ${categoryTotal}
+                    completed
+                </p>
+
+                <div class="progress-bar small">
+
+                    <div
+                        class="progress-fill"
+                        style="width: ${percent}%"
+                    ></div>
+
+                </div>
+            `;
+
+
+            card.addEventListener(
+                "click",
+                () =>
+                    showCategory(
+                        category.id
+                    )
+            );
+
+
+            summaryGrid.appendChild(
+                card
+            );
+        }
+    );
 
 
     const overallPercent =
         totalItems > 0
             ? Math.round(
-                (completedItems /
-                    totalItems) *
-                100
+                (
+                    completedItems /
+                    totalItems
+                ) * 100
             )
             : 0;
 
+
     const totalItemsElement =
-        getElement("totalItems");
+        getElement(
+            "totalItems"
+        );
+
 
     const completedItemsElement =
-        getElement("completedItems");
+        getElement(
+            "completedItems"
+        );
+
 
     const progressItemsElement =
-        getElement("progressItems");
+        getElement(
+            "progressItems"
+        );
+
 
     const responsibleGroupsCount =
-        getElement("responsibleGroupsCount");
+        getElement(
+            "responsibleGroupsCount"
+        );
+
 
     const overallPercentElement =
-        getElement("overallPercent");
+        getElement(
+            "overallPercent"
+        );
+
 
     const overallProgressFill =
-        getElement("overallProgressFill");
+        getElement(
+            "overallProgressFill"
+        );
 
 
     if (totalItemsElement) {
+
         totalItemsElement.textContent =
             totalItems;
     }
 
+
     if (completedItemsElement) {
+
         completedItemsElement.textContent =
             completedItems;
     }
 
+
     if (progressItemsElement) {
+
         progressItemsElement.textContent =
             progressItems;
     }
 
+
     if (responsibleGroupsCount) {
+
         responsibleGroupsCount.textContent =
             responsibleIndividualsGroups.length;
     }
 
+
     if (overallPercentElement) {
+
         overallPercentElement.textContent =
             `${overallPercent}%`;
     }
 
+
     if (overallProgressFill) {
+
         overallProgressFill.style.width =
             `${overallPercent}%`;
     }
@@ -1230,19 +1638,33 @@ function renderDashboard() {
    ========================================================= */
 
 function showTagging() {
+
     hideAllPages();
 
+
     const taggingPage =
-        getElement("taggingPage");
+        getElement(
+            "taggingPage"
+        );
+
 
     if (taggingPage) {
-        taggingPage.classList.remove("hidden");
+
+        taggingPage.classList.remove(
+            "hidden"
+        );
     }
 
-    currentCategory = "tagging";
-    currentItem = null;
+
+    currentCategory =
+        "tagging";
+
+    currentItem =
+        null;
+
 
     renderTagging();
+
 
     window.scrollTo({
         top: 0,
@@ -1297,24 +1719,28 @@ function renderTagging() {
             card.className =
                 "tagging-card";
 
+
             const nameElement =
                 document.createElement("div");
 
             nameElement.className =
                 "tagging-card-name";
 
-            nameElement.textContent = name;
+            nameElement.textContent =
+                name;
 
 
             const deleteButton =
                 document.createElement("button");
 
             deleteButton.type = "button";
+
             deleteButton.className =
                 "danger-button tagging-delete-button";
 
             deleteButton.textContent =
                 "Delete";
+
 
             deleteButton.addEventListener(
                 "click",
@@ -1333,7 +1759,9 @@ function renderTagging() {
                 deleteButton
             );
 
-            taggingGrid.appendChild(card);
+            taggingGrid.appendChild(
+                card
+            );
         }
     );
 }
@@ -1351,8 +1779,10 @@ function addResponsibleIndividualGroup() {
         return;
     }
 
+
     const value =
         input.value.trim();
+
 
     if (!value) {
         showToast(
@@ -1372,6 +1802,7 @@ function addResponsibleIndividualGroup() {
                 value.toLowerCase()
         );
 
+
     if (duplicate) {
         showToast(
             "This individual/group already exists."
@@ -1383,12 +1814,16 @@ function addResponsibleIndividualGroup() {
     }
 
 
-    responsibleIndividualsGroups.push(value);
+    responsibleIndividualsGroups.push(
+        value
+    );
+
 
     responsibleIndividualsGroups =
         normaliseResponsibleIndividualsGroups(
             responsibleIndividualsGroups
         );
+
 
     saveData();
 
@@ -1420,6 +1855,7 @@ function deleteResponsibleIndividualGroup(
             `Delete "${name}" from the Tagging list?\n\nExisting item assignments will not be removed.`
         );
 
+
     if (!confirmed) {
         return;
     }
@@ -1428,12 +1864,14 @@ function deleteResponsibleIndividualGroup(
     const lowerName =
         name.toLowerCase();
 
+
     responsibleIndividualsGroups =
         responsibleIndividualsGroups.filter(
             existing =>
                 existing.toLowerCase() !==
                 lowerName
         );
+
 
     saveData();
 
@@ -1465,10 +1903,12 @@ function populateResponsibleIndividualSelect(
         return;
     }
 
+
     const currentValue =
         selectedValue !== null
             ? selectedValue
             : select.value;
+
 
     select.innerHTML = "";
 
@@ -1477,8 +1917,10 @@ function populateResponsibleIndividualSelect(
         document.createElement("option");
 
     emptyOption.value = "";
+
     emptyOption.textContent =
         "No assignment (use tagging)";
+
 
     select.appendChild(
         emptyOption
@@ -1493,14 +1935,25 @@ function populateResponsibleIndividualSelect(
                     "option"
                 );
 
-            option.value = name;
-            option.textContent = name;
+            option.value =
+                name;
 
-            select.appendChild(option);
+            option.textContent =
+                name;
+
+
+            select.appendChild(
+                option
+            );
         }
     );
 
 
+    /*
+     * Keep an old assignment available
+     * even if that person/group was later
+     * removed from Tagging.
+     */
     if (
         currentValue &&
         !responsibleIndividualsGroups.some(
@@ -1508,6 +1961,7 @@ function populateResponsibleIndividualSelect(
                 name === currentValue
         )
     ) {
+
         const legacyOption =
             document.createElement(
                 "option"
@@ -1518,6 +1972,7 @@ function populateResponsibleIndividualSelect(
 
         legacyOption.textContent =
             `${currentValue} (saved assignment)`;
+
 
         select.appendChild(
             legacyOption
@@ -1535,20 +1990,34 @@ function populateResponsibleIndividualSelect(
    ========================================================= */
 
 function showCategory(categoryId) {
+
     const category =
         categories.find(
             item =>
                 item.id === categoryId
         );
 
+
     if (!category) {
         return;
     }
 
+
+    /*
+     * IMPORTANT:
+     * Opening a category automatically selects
+     * its Wedding / Reception section.
+     */
+    currentMainCategory =
+        category.mainCategory || "wedding";
+
+
     hideAllPages();
+
 
     const categoryPage =
         getElement("categoryPage");
+
 
     if (categoryPage) {
         categoryPage.classList.remove(
@@ -1556,7 +2025,10 @@ function showCategory(categoryId) {
         );
     }
 
-    currentCategory = categoryId;
+
+    currentCategory =
+        categoryId;
+
     currentItem = null;
 
 
@@ -1581,25 +2053,41 @@ function showCategory(categoryId) {
             category.name;
     }
 
+
     if (categoryPageHeading) {
         categoryPageHeading.textContent =
             category.name;
     }
+
 
     if (addItemButton) {
         addItemButton.style.display =
             "";
     }
 
+
     if (itemSearch) {
         itemSearch.value = "";
     }
 
+
     if (itemStatusFilter) {
-        itemStatusFilter.value = "all";
+        itemStatusFilter.value =
+            "all";
     }
 
+
+    /*
+     * Refresh the main category buttons
+     * so the correct section is highlighted.
+     */
+    buildMainCategoryNavigation();
+
+    buildNavigation();
+
+
     renderCategory();
+
 
     window.scrollTo({
         top: 0,
@@ -1613,15 +2101,18 @@ function showCategory(categoryId) {
    ========================================================= */
 
 function renderCategory() {
+
     const category =
         categories.find(
             item =>
                 item.id === currentCategory
         );
 
+
     if (!category) {
         return;
     }
+
 
     const itemsGrid =
         getElement("itemsGrid");
@@ -1629,9 +2120,11 @@ function renderCategory() {
     const emptyMessage =
         getElement("emptyMessage");
 
+
     if (!itemsGrid) {
         return;
     }
+
 
     itemsGrid.innerHTML = "";
 
@@ -1650,6 +2143,7 @@ function renderCategory() {
                 .toLowerCase()
             : "";
 
+
     const filter =
         statusFilter
             ? statusFilter.value
@@ -1657,44 +2151,59 @@ function renderCategory() {
 
 
     const visibleItems =
-        category.items.filter(item => {
+        category.items.filter(
+            item => {
 
-            const itemName =
-                typeof item === "string"
-                    ? item
-                    : item.name;
+                const itemName =
+                    typeof item === "string"
+                        ? item
+                        : item.name;
 
-            const data =
-                getItem(
-                    category.id,
-                    item
-                );
 
-            if (data.enabled === false) {
-                return false;
+                const data =
+                    getItem(
+                        category.id,
+                        item
+                    );
+
+
+                /*
+                 * Hidden items don't appear
+                 * in normal category views.
+                 */
+                if (
+                    data.enabled === false
+                ) {
+                    return false;
+                }
+
+
+                if (
+                    search &&
+                    !itemName
+                        .toLowerCase()
+                        .includes(search)
+                ) {
+                    return false;
+                }
+
+
+                if (
+                    filter !== "all" &&
+                    data.status !== filter
+                ) {
+                    return false;
+                }
+
+
+                return true;
             }
-
-            if (
-                search &&
-                !itemName
-                    .toLowerCase()
-                    .includes(search)
-            ) {
-                return false;
-            }
-
-            if (
-                filter !== "all" &&
-                data.status !== filter
-            ) {
-                return false;
-            }
-
-            return true;
-        });
+        );
 
 
-    if (visibleItems.length === 0) {
+    if (
+        visibleItems.length === 0
+    ) {
 
         if (emptyMessage) {
             emptyMessage.style.display =
@@ -1709,16 +2218,21 @@ function renderCategory() {
         }
 
 
-        visibleItems.forEach(item => {
+        visibleItems.forEach(
+            item => {
 
-            const card =
-                createItemCard(
-                    category,
-                    item
+                const card =
+                    createItemCard(
+                        category,
+                        item
+                    );
+
+
+                itemsGrid.appendChild(
+                    card
                 );
-
-            itemsGrid.appendChild(card);
-        });
+            }
+        );
     }
 
 
@@ -1741,6 +2255,7 @@ function createItemCard(
             ? item
             : item.name;
 
+
     const data =
         getItem(
             category.id,
@@ -1750,6 +2265,7 @@ function createItemCard(
 
     const card =
         document.createElement("div");
+
 
     card.className =
         "item-card";
@@ -1764,12 +2280,15 @@ function createItemCard(
     let details = "";
 
 
-    if (data.responsiblePerson) {
+    if (
+        data.responsiblePerson
+    ) {
         details += `
             <div class="item-detail">
                 <span>
                     Responsible individual/group
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.responsiblePerson
@@ -1780,12 +2299,15 @@ function createItemCard(
     }
 
 
-    if (data.price !== "") {
+    if (
+        data.price !== ""
+    ) {
         details += `
             <div class="item-detail">
                 <span>
                     Price
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.price
@@ -1796,12 +2318,15 @@ function createItemCard(
     }
 
 
-    if (data.deposit !== "") {
+    if (
+        data.deposit !== ""
+    ) {
         details += `
             <div class="item-detail">
                 <span>
                     Depositum
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.deposit
@@ -1812,12 +2337,15 @@ function createItemCard(
     }
 
 
-    if (data.contactPerson) {
+    if (
+        data.contactPerson
+    ) {
         details += `
             <div class="item-detail">
                 <span>
                     Contact
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.contactPerson
@@ -1828,12 +2356,15 @@ function createItemCard(
     }
 
 
-    if (data.mobile) {
+    if (
+        data.mobile
+    ) {
         details += `
             <div class="item-detail">
                 <span>
                     Mobile
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.mobile
@@ -1844,12 +2375,15 @@ function createItemCard(
     }
 
 
-    if (data.deadline) {
+    if (
+        data.deadline
+    ) {
         details += `
             <div class="item-detail">
                 <span>
                     Deadline
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         formatDate(
@@ -1877,9 +2411,13 @@ function createItemCard(
 
         </div>
 
+
         <h3>
-            ${escapeHTML(itemName)}
+            ${escapeHTML(
+                itemName
+            )}
         </h3>
+
 
         ${
             details
@@ -1912,6 +2450,7 @@ function createItemCard(
    ========================================================= */
 
 function getStatusLabel(status) {
+
     switch (status) {
 
         case "done":
@@ -1927,11 +2466,25 @@ function getStatusLabel(status) {
 
 
 function updateStatusButtons() {
+
     const buttons = {
-        not: getElement("notButton"),
-        progress: getElement("progressButton"),
-        done: getElement("doneButton")
+
+        not:
+            getElement(
+                "notButton"
+            ),
+
+        progress:
+            getElement(
+                "progressButton"
+            ),
+
+        done:
+            getElement(
+                "doneButton"
+            )
     };
+
 
     Object.entries(buttons).forEach(
         ([status, button]) => {
@@ -1939,6 +2492,7 @@ function updateStatusButtons() {
             if (!button) {
                 return;
             }
+
 
             button.classList.toggle(
                 "active",
@@ -1957,11 +2511,13 @@ function openModal(
     categoryId,
     item
 ) {
+
     const category =
         categories.find(
             category =>
                 category.id === categoryId
         );
+
 
     if (!category) {
         return;
@@ -1979,6 +2535,14 @@ function openModal(
 
     currentItem =
         itemName;
+
+
+    /*
+     * Keep the Wedding / Reception
+     * navigation synchronized.
+     */
+    currentMainCategory =
+        category.mainCategory || "wedding";
 
 
     const data =
@@ -2006,6 +2570,7 @@ function openModal(
         modalCategory.textContent =
             category.name;
     }
+
 
     if (modalTitle) {
         modalTitle.textContent =
@@ -2061,9 +2626,11 @@ function openModal(
 
     updateStatusButtons();
 
+
     updateItemVisibilityButton(
         data.enabled !== false
     );
+
 
     updateCustomDeleteVisibility(
         categoryId,
@@ -2073,7 +2640,9 @@ function openModal(
 
     if (overlay) {
 
-        overlay.classList.add("open");
+        overlay.classList.add(
+            "open"
+        );
 
         overlay.setAttribute(
             "aria-hidden",
@@ -2098,6 +2667,7 @@ function setInputValue(
     const element =
         getElement(id);
 
+
     if (element) {
         element.value =
             value ?? "";
@@ -2110,10 +2680,13 @@ function setInputValue(
    ========================================================= */
 
 function closeModal() {
+
     const overlay =
         getElement("overlay");
 
+
     if (overlay) {
+
         overlay.classList.remove(
             "open"
         );
@@ -2124,12 +2697,13 @@ function closeModal() {
         );
     }
 
+
     currentItem = null;
+
 
     document.body.style.overflow =
         "";
 }
-
 
 /* =========================================================
    ITEM VISIBILITY
