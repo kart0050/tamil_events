@@ -469,10 +469,9 @@ function normaliseCategories(input) {
             }
 
             /*
-             * IMPORTANT:
-             * Preserve mainCategory.
+             * Preserve Wedding / Reception.
              *
-             * Old saved categories that do not have
+             * Old saved categories without
              * mainCategory are assigned to Wedding.
              */
             const mainCategory =
@@ -641,7 +640,7 @@ function saveData() {
 
     const data = {
 
-        version: 9,
+        version: 10,
 
         categories,
 
@@ -1044,11 +1043,6 @@ function buildMainCategoryNavigation() {
                         mainCategory.id;
 
 
-                    /*
-                     * When changing between Wedding
-                     * and Reception, always return to
-                     * the dashboard.
-                     */
                     currentCategory =
                         "dashboard";
 
@@ -1220,9 +1214,6 @@ function buildNavigation() {
 
     /* =====================================================
        CATEGORY NAVIGATION
-
-       ONLY categories belonging to the currently
-       selected Wedding / Reception section are shown.
        ===================================================== */
 
     categories
@@ -1267,9 +1258,6 @@ function buildNavigation() {
         );
 
 
-    /*
-     * Always rebuild Wedding / Reception buttons.
-     */
     buildMainCategoryNavigation();
 }
 
@@ -1400,10 +1388,6 @@ function renderDashboard() {
         0;
 
 
-    /*
-     * Dashboard only shows categories
-     * belonging to the current section.
-     */
     const visibleCategories =
         categories.filter(
             category =>
@@ -1591,42 +1575,36 @@ function renderDashboard() {
 
 
     if (totalItemsElement) {
-
         totalItemsElement.textContent =
             totalItems;
     }
 
 
     if (completedItemsElement) {
-
         completedItemsElement.textContent =
             completedItems;
     }
 
 
     if (progressItemsElement) {
-
         progressItemsElement.textContent =
             progressItems;
     }
 
 
     if (responsibleGroupsCount) {
-
         responsibleGroupsCount.textContent =
             responsibleIndividualsGroups.length;
     }
 
 
     if (overallPercentElement) {
-
         overallPercentElement.textContent =
             `${overallPercent}%`;
     }
 
 
     if (overallProgressFill) {
-
         overallProgressFill.style.width =
             `${overallPercent}%`;
     }
@@ -1674,17 +1652,26 @@ function showTagging() {
 
 
 function renderTagging() {
+
     const taggingGrid =
-        getElement("taggingGrid");
+        getElement(
+            "taggingGrid"
+        );
 
     const emptyMessage =
-        getElement("taggingEmptyMessage");
+        getElement(
+            "taggingEmptyMessage"
+        );
+
 
     if (!taggingGrid) {
         return;
     }
 
-    taggingGrid.innerHTML = "";
+
+    taggingGrid.innerHTML =
+        "";
+
 
     responsibleIndividualsGroups =
         normaliseResponsibleIndividualsGroups(
@@ -1695,6 +1682,7 @@ function renderTagging() {
     if (
         responsibleIndividualsGroups.length === 0
     ) {
+
         if (emptyMessage) {
             emptyMessage.style.display =
                 "block";
@@ -1714,29 +1702,42 @@ function renderTagging() {
         name => {
 
             const card =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             card.className =
                 "tagging-card";
 
 
             const nameElement =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             nameElement.className =
                 "tagging-card-name";
+
 
             nameElement.textContent =
                 name;
 
 
             const deleteButton =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
-            deleteButton.type = "button";
+
+            deleteButton.type =
+                "button";
+
 
             deleteButton.className =
                 "danger-button tagging-delete-button";
+
 
             deleteButton.textContent =
                 "Delete";
@@ -1755,9 +1756,11 @@ function renderTagging() {
                 nameElement
             );
 
+
             card.appendChild(
                 deleteButton
             );
+
 
             taggingGrid.appendChild(
                 card
@@ -1772,8 +1775,12 @@ function renderTagging() {
    ========================================================= */
 
 function addResponsibleIndividualGroup() {
+
     const input =
-        getElement("taggingInput");
+        getElement(
+            "taggingInput"
+        );
+
 
     if (!input) {
         return;
@@ -1785,11 +1792,14 @@ function addResponsibleIndividualGroup() {
 
 
     if (!value) {
+
         showToast(
             "Please enter an individual or group."
         );
 
+
         input.focus();
+
 
         return;
     }
@@ -1804,11 +1814,14 @@ function addResponsibleIndividualGroup() {
 
 
     if (duplicate) {
+
         showToast(
             "This individual/group already exists."
         );
 
+
         input.focus();
+
 
         return;
     }
@@ -1827,17 +1840,24 @@ function addResponsibleIndividualGroup() {
 
     saveData();
 
-    input.value = "";
+
+    input.value =
+        "";
+
 
     renderTagging();
 
+
     populateResponsibleIndividualSelect();
 
+
     renderDashboard();
+
 
     showToast(
         `"${value}" added to Tagging.`
     );
+
 
     input.focus();
 }
@@ -1850,6 +1870,7 @@ function addResponsibleIndividualGroup() {
 function deleteResponsibleIndividualGroup(
     name
 ) {
+
     const confirmed =
         window.confirm(
             `Delete "${name}" from the Tagging list?\n\nExisting item assignments will not be removed.`
@@ -1875,11 +1896,15 @@ function deleteResponsibleIndividualGroup(
 
     saveData();
 
+
     renderTagging();
+
 
     populateResponsibleIndividualSelect();
 
+
     renderDashboard();
+
 
     showToast(
         `"${name}" removed from Tagging.`
@@ -1894,10 +1919,12 @@ function deleteResponsibleIndividualGroup(
 function populateResponsibleIndividualSelect(
     selectedValue = null
 ) {
+
     const select =
         getElement(
             "responsiblePersonInput"
         );
+
 
     if (!select) {
         return;
@@ -1910,13 +1937,19 @@ function populateResponsibleIndividualSelect(
             : select.value;
 
 
-    select.innerHTML = "";
+    select.innerHTML =
+        "";
 
 
     const emptyOption =
-        document.createElement("option");
+        document.createElement(
+            "option"
+        );
 
-    emptyOption.value = "";
+
+    emptyOption.value =
+        "";
+
 
     emptyOption.textContent =
         "No assignment (use tagging)";
@@ -1935,8 +1968,10 @@ function populateResponsibleIndividualSelect(
                     "option"
                 );
 
+
             option.value =
                 name;
+
 
             option.textContent =
                 name;
@@ -1949,11 +1984,6 @@ function populateResponsibleIndividualSelect(
     );
 
 
-    /*
-     * Keep an old assignment available
-     * even if that person/group was later
-     * removed from Tagging.
-     */
     if (
         currentValue &&
         !responsibleIndividualsGroups.some(
@@ -1967,8 +1997,10 @@ function populateResponsibleIndividualSelect(
                 "option"
             );
 
+
         legacyOption.value =
             currentValue;
+
 
         legacyOption.textContent =
             `${currentValue} (saved assignment)`;
@@ -2003,20 +2035,18 @@ function showCategory(categoryId) {
     }
 
 
-    /*
-     * IMPORTANT:
-     * Opening a category automatically selects
-     * its Wedding / Reception section.
-     */
     currentMainCategory =
-        category.mainCategory || "wedding";
+        category.mainCategory ||
+        "wedding";
 
 
     hideAllPages();
 
 
     const categoryPage =
-        getElement("categoryPage");
+        getElement(
+            "categoryPage"
+        );
 
 
     if (categoryPage) {
@@ -2029,23 +2059,39 @@ function showCategory(categoryId) {
     currentCategory =
         categoryId;
 
-    currentItem = null;
+
+    currentItem =
+        null;
 
 
     const categoryTitle =
-        getElement("categoryTitle");
+        getElement(
+            "categoryTitle"
+        );
+
 
     const categoryPageHeading =
-        getElement("categoryPageHeading");
+        getElement(
+            "categoryPageHeading"
+        );
+
 
     const addItemButton =
-        getElement("addItemButton");
+        getElement(
+            "addItemButton"
+        );
+
 
     const itemSearch =
-        getElement("itemSearch");
+        getElement(
+            "itemSearch"
+        );
+
 
     const itemStatusFilter =
-        getElement("itemStatusFilter");
+        getElement(
+            "itemStatusFilter"
+        );
 
 
     if (categoryTitle) {
@@ -2067,7 +2113,8 @@ function showCategory(categoryId) {
 
 
     if (itemSearch) {
-        itemSearch.value = "";
+        itemSearch.value =
+            "";
     }
 
 
@@ -2077,10 +2124,6 @@ function showCategory(categoryId) {
     }
 
 
-    /*
-     * Refresh the main category buttons
-     * so the correct section is highlighted.
-     */
     buildMainCategoryNavigation();
 
     buildNavigation();
@@ -2115,10 +2158,15 @@ function renderCategory() {
 
 
     const itemsGrid =
-        getElement("itemsGrid");
+        getElement(
+            "itemsGrid"
+        );
+
 
     const emptyMessage =
-        getElement("emptyMessage");
+        getElement(
+            "emptyMessage"
+        );
 
 
     if (!itemsGrid) {
@@ -2126,14 +2174,20 @@ function renderCategory() {
     }
 
 
-    itemsGrid.innerHTML = "";
+    itemsGrid.innerHTML =
+        "";
 
 
     const searchInput =
-        getElement("itemSearch");
+        getElement(
+            "itemSearch"
+        );
+
 
     const statusFilter =
-        getElement("itemStatusFilter");
+        getElement(
+            "itemStatusFilter"
+        );
 
 
     const search =
@@ -2167,12 +2221,9 @@ function renderCategory() {
                     );
 
 
-                /*
-                 * Hidden items don't appear
-                 * in normal category views.
-                 */
                 if (
-                    data.enabled === false
+                    data.enabled ===
+                    false
                 ) {
                     return false;
                 }
@@ -2537,10 +2588,6 @@ function openModal(
         itemName;
 
 
-    /*
-     * Keep the Wedding / Reception
-     * navigation synchronized.
-     */
     currentMainCategory =
         category.mainCategory || "wedding";
 
@@ -2675,6 +2722,18 @@ function setInputValue(
 }
 
 
+function getInputValue(id) {
+
+    const element =
+        getElement(id);
+
+
+    return element
+        ? element.value.trim()
+        : "";
+}
+
+
 /* =========================================================
    ITEM MODAL CLOSE
    ========================================================= */
@@ -2705,6 +2764,7 @@ function closeModal() {
         "";
 }
 
+
 /* =========================================================
    ITEM VISIBILITY
    ========================================================= */
@@ -2712,14 +2772,17 @@ function closeModal() {
 function updateItemVisibilityButton(
     enabled
 ) {
+
     const button =
         getElement(
             "disableItemButton"
         );
 
+
     if (!button) {
         return;
     }
+
 
     button.textContent =
         enabled
@@ -2729,6 +2792,7 @@ function updateItemVisibilityButton(
 
 
 function toggleCurrentItemVisibility() {
+
     if (
         !currentCategory ||
         currentCategory === "dashboard" ||
@@ -2741,10 +2805,18 @@ function toggleCurrentItemVisibility() {
     }
 
 
+    const categoryId =
+        currentCategory;
+
+
+    const itemName =
+        currentItem;
+
+
     const data =
         getItem(
-            currentCategory,
-            currentItem
+            categoryId,
+            itemName
         );
 
 
@@ -2754,30 +2826,40 @@ function toggleCurrentItemVisibility() {
 
     saveData();
 
+
     updateItemVisibilityButton(
         data.enabled
     );
 
 
+    closeModal();
+
+
     if (data.enabled) {
+
         showToast(
             "Item restored."
         );
+
     } else {
+
         showToast(
             "Item hidden."
         );
     }
 
 
-    closeModal();
+    if (
+        categoryId === "hidden"
+    ) {
 
-
-    if (currentCategory === "hidden") {
         renderHiddenItems();
+
     } else {
+
         renderCategory();
     }
+
 
     renderDashboard();
 }
@@ -2791,14 +2873,17 @@ function updateCustomDeleteVisibility(
     categoryId,
     itemName
 ) {
+
     const area =
         getElement(
             "customItemDeleteArea"
         );
 
+
     if (!area) {
         return;
     }
+
 
     const category =
         categories.find(
@@ -2806,21 +2891,30 @@ function updateCustomDeleteVisibility(
                 item.id === categoryId
         );
 
+
     if (!category) {
-        area.classList.add("hidden");
+
+        area.classList.add(
+            "hidden"
+        );
+
         return;
     }
 
+
     const categoryItem =
-        category.items.find(item => {
+        category.items.find(
+            item => {
 
-            const name =
-                typeof item === "string"
-                    ? item
-                    : item.name;
+                const name =
+                    typeof item === "string"
+                        ? item
+                        : item.name;
 
-            return name === itemName;
-        });
+
+                return name === itemName;
+            }
+        );
 
 
     if (
@@ -2828,10 +2922,13 @@ function updateCustomDeleteVisibility(
         typeof categoryItem === "object" &&
         categoryItem.custom
     ) {
+
         area.classList.remove(
             "hidden"
         );
+
     } else {
+
         area.classList.add(
             "hidden"
         );
@@ -2840,6 +2937,7 @@ function updateCustomDeleteVisibility(
 
 
 function deleteCurrentCustomItem() {
+
     if (
         !currentCategory ||
         currentCategory === "dashboard" ||
@@ -2858,6 +2956,7 @@ function deleteCurrentCustomItem() {
                 item.id === currentCategory
         );
 
+
     if (!category) {
         return;
     }
@@ -2872,6 +2971,7 @@ function deleteCurrentCustomItem() {
                         ? current
                         : current.name;
 
+
                 return name === currentItem;
             }
         );
@@ -2884,6 +2984,7 @@ function deleteCurrentCustomItem() {
 
 
     if (!isCustom) {
+
         showToast(
             "Default items cannot be deleted."
         );
@@ -2896,6 +2997,7 @@ function deleteCurrentCustomItem() {
         window.confirm(
             `Delete "${currentItem}" permanently?`
         );
+
 
     if (!confirmed) {
         return;
@@ -2918,6 +3020,7 @@ function deleteCurrentCustomItem() {
                         ? current
                         : current.name;
 
+
                 return name !== currentItem;
             }
         );
@@ -2925,11 +3028,14 @@ function deleteCurrentCustomItem() {
 
     saveData();
 
+
     closeModal();
+
 
     renderCategory();
 
     renderDashboard();
+
 
     showToast(
         "Custom item deleted."
@@ -2942,6 +3048,7 @@ function deleteCurrentCustomItem() {
    ========================================================= */
 
 function saveItem() {
+
     if (
         !currentCategory ||
         currentCategory === "dashboard" ||
@@ -2982,35 +3089,42 @@ function saveItem() {
             "depositInput"
         );
 
+
     data.price =
         getInputValue(
             "priceInput"
         );
+
 
     data.mobile =
         getInputValue(
             "mobileInput"
         );
 
+
     data.email =
         getInputValue(
             "emailInput"
         );
+
 
     data.contactPerson =
         getInputValue(
             "contactPersonInput"
         );
 
+
     data.deadline =
         getInputValue(
             "deadlineInput"
         );
 
+
     data.link =
         getInputValue(
             "linkInput"
         );
+
 
     data.notes =
         getInputValue(
@@ -3020,8 +3134,10 @@ function saveItem() {
 
     saveData();
 
+
     const categoryBeforeClose =
         currentCategory;
+
 
     closeModal();
 
@@ -3029,26 +3145,29 @@ function saveItem() {
     if (
         categoryBeforeClose === "hidden"
     ) {
+
         renderHiddenItems();
+
     } else {
+
         renderCategory();
     }
 
+
     renderDashboard();
+
+
+    /*
+     * Refresh Budget Overview too,
+     * because the saved price/deposit
+     * may have changed.
+     */
+    renderBudgetOverview();
+
 
     showToast(
         "Item saved."
     );
-}
-
-
-function getInputValue(id) {
-    const element =
-        getElement(id);
-
-    return element
-        ? element.value.trim()
-        : "";
 }
 
 
@@ -3057,53 +3176,66 @@ function getInputValue(id) {
    ========================================================= */
 
 function clearItem() {
-    modalStatus = "not";
+
+    modalStatus =
+        "not";
+
 
     updateStatusButtons();
+
 
     populateResponsibleIndividualSelect(
         ""
     );
+
 
     setInputValue(
         "depositInput",
         ""
     );
 
+
     setInputValue(
         "priceInput",
         ""
     );
+
 
     setInputValue(
         "mobileInput",
         ""
     );
 
+
     setInputValue(
         "emailInput",
         ""
     );
+
 
     setInputValue(
         "contactPersonInput",
         ""
     );
 
+
     setInputValue(
         "deadlineInput",
         ""
     );
+
 
     setInputValue(
         "linkInput",
         ""
     );
 
+
     setInputValue(
         "notesInput",
         ""
     );
+
 
     showToast(
         "Fields cleared."
@@ -3116,62 +3248,98 @@ function clearItem() {
    ========================================================= */
 
 function showHiddenItems() {
+
     hideAllPages();
 
+
     const categoryPage =
-        getElement("categoryPage");
+        getElement(
+            "categoryPage"
+        );
+
 
     if (categoryPage) {
+
         categoryPage.classList.remove(
             "hidden"
         );
     }
 
-    currentCategory = "hidden";
-    currentItem = null;
+
+    currentCategory =
+        "hidden";
+
+    currentItem =
+        null;
 
 
     const categoryTitle =
-        getElement("categoryTitle");
+        getElement(
+            "categoryTitle"
+        );
+
 
     const categoryPageHeading =
-        getElement("categoryPageHeading");
+        getElement(
+            "categoryPageHeading"
+        );
+
 
     const addItemButton =
-        getElement("addItemButton");
+        getElement(
+            "addItemButton"
+        );
+
 
     const itemSearch =
-        getElement("itemSearch");
+        getElement(
+            "itemSearch"
+        );
+
 
     const itemStatusFilter =
-        getElement("itemStatusFilter");
+        getElement(
+            "itemStatusFilter"
+        );
 
 
     if (categoryTitle) {
+
         categoryTitle.textContent =
             "Hidden Items";
     }
 
+
     if (categoryPageHeading) {
+
         categoryPageHeading.textContent =
             "Hidden Items";
     }
 
+
     if (addItemButton) {
+
         addItemButton.style.display =
             "none";
     }
 
+
     if (itemSearch) {
-        itemSearch.value = "";
+
+        itemSearch.value =
+            "";
     }
 
+
     if (itemStatusFilter) {
-        itemStatusFilter.value = "all";
+
+        itemStatusFilter.value =
+            "all";
     }
 
 
     renderHiddenItems();
+
 
     window.scrollTo({
         top: 0,
@@ -3181,56 +3349,77 @@ function showHiddenItems() {
 
 
 function renderHiddenItems() {
+
     const itemsGrid =
-        getElement("itemsGrid");
+        getElement(
+            "itemsGrid"
+        );
+
 
     const emptyMessage =
-        getElement("emptyMessage");
+        getElement(
+            "emptyMessage"
+        );
+
 
     if (!itemsGrid) {
         return;
     }
 
-    itemsGrid.innerHTML = "";
+
+    itemsGrid.innerHTML =
+        "";
 
 
-    const hiddenItems = [];
+    const hiddenItems =
+        [];
 
 
-    categories.forEach(category => {
+    categories.forEach(
+        category => {
 
-        category.items.forEach(item => {
+            category.items.forEach(
+                item => {
 
-            const itemName =
-                typeof item === "string"
-                    ? item
-                    : item.name;
-
-            const data =
-                getItem(
-                    category.id,
-                    item
-                );
+                    const itemName =
+                        typeof item === "string"
+                            ? item
+                            : item.name;
 
 
-            if (data.enabled === false) {
-
-                hiddenItems.push({
-                    category,
-                    item,
-                    itemName,
-                    data
-                });
-            }
-        });
-    });
+                    const data =
+                        getItem(
+                            category.id,
+                            item
+                        );
 
 
-    if (hiddenItems.length === 0) {
+                    if (
+                        data.enabled === false
+                    ) {
+
+                        hiddenItems.push({
+                            category,
+                            item,
+                            itemName,
+                            data
+                        });
+                    }
+                }
+            );
+        }
+    );
+
+
+    if (
+        hiddenItems.length === 0
+    ) {
 
         if (emptyMessage) {
+
             emptyMessage.style.display =
                 "block";
+
 
             emptyMessage.innerHTML = `
                 <div
@@ -3250,13 +3439,16 @@ function renderHiddenItems() {
             `;
         }
 
+
         updateHiddenProgress();
+
 
         return;
     }
 
 
     if (emptyMessage) {
+
         emptyMessage.style.display =
             "none";
     }
@@ -3275,6 +3467,7 @@ function renderHiddenItems() {
                     "div"
                 );
 
+
             card.className =
                 "item-card hidden-item-card";
 
@@ -3283,6 +3476,7 @@ function renderHiddenItems() {
                 data.responsiblePerson
                     ? `
                         <div class="item-detail">
+
                             <span>
                                 Responsible individual/group
                             </span>
@@ -3292,6 +3486,7 @@ function renderHiddenItems() {
                                     data.responsiblePerson
                                 )}
                             </strong>
+
                         </div>
                     `
                     : "";
@@ -3307,7 +3502,9 @@ function renderHiddenItems() {
                 </div>
 
                 <h3>
-                    ${escapeHTML(itemName)}
+                    ${escapeHTML(
+                        itemName
+                    )}
                 </h3>
 
                 <p class="hidden-item-label">
@@ -3352,13 +3549,20 @@ function renderHiddenItems() {
 
                     event.stopPropagation();
 
-                    data.enabled = true;
+
+                    data.enabled =
+                        true;
+
 
                     saveData();
+
 
                     renderHiddenItems();
 
                     renderDashboard();
+
+                    renderBudgetOverview();
+
 
                     showToast(
                         `"${itemName}" is visible again.`
@@ -3377,7 +3581,9 @@ function renderHiddenItems() {
             );
 
 
-            itemsGrid.appendChild(card);
+            itemsGrid.appendChild(
+                card
+            );
         }
     );
 
@@ -3387,15 +3593,18 @@ function renderHiddenItems() {
 
 
 function updateHiddenProgress() {
+
     const progressText =
         getElement(
             "categoryProgressText"
         );
 
+
     const categoryPercent =
         getElement(
             "categoryPercent"
         );
+
 
     const progressFill =
         getElement(
@@ -3404,39 +3613,59 @@ function updateHiddenProgress() {
 
 
     if (progressText) {
+
         progressText.textContent =
             "Hidden items";
     }
 
+
     if (categoryPercent) {
+
         categoryPercent.textContent =
             "";
     }
 
+
     if (progressFill) {
+
         progressFill.style.width =
             "0%";
     }
 }
+
 
 /* =========================================================
    BUDGET OVERVIEW
    ========================================================= */
 
 function showBudgetOverview() {
+
     hideAllPages();
 
+
     const budgetPage =
-        getElement("budgetPage");
+        getElement(
+            "budgetPage"
+        );
+
 
     if (budgetPage) {
-        budgetPage.classList.remove("hidden");
+
+        budgetPage.classList.remove(
+            "hidden"
+        );
     }
 
-    currentCategory = "budget";
-    currentItem = null;
+
+    currentCategory =
+        "budget";
+
+    currentItem =
+        null;
+
 
     renderBudgetOverview();
+
 
     window.scrollTo({
         top: 0,
@@ -3449,14 +3678,19 @@ function showBudgetOverview() {
    BUDGET HELPERS
    ========================================================= */
 
-function parseBudgetNumber(value) {
+function parseBudgetNumber(
+    value
+) {
+
     if (
         value === null ||
         value === undefined ||
         value === ""
     ) {
+
         return 0;
     }
+
 
     const number =
         Number(
@@ -3465,13 +3699,17 @@ function parseBudgetNumber(value) {
                 .trim()
         );
 
+
     return Number.isFinite(number)
         ? number
         : 0;
 }
 
 
-function formatBudgetCurrency(value) {
+function formatBudgetCurrency(
+    value
+) {
+
     return (
         new Intl.NumberFormat(
             "da-DK",
@@ -3486,76 +3724,126 @@ function formatBudgetCurrency(value) {
 
 
 /* =========================================================
-   GET ACTIVE BUDGET ITEMS
+   GET BUDGET ITEMS
    ========================================================= */
 
-function getBudgetItems() {
+function getBudgetItems(
+    mainCategoryFilter = "all"
+) {
+
     const result = [];
 
-    categories.forEach(category => {
 
-        category.items.forEach(item => {
-
-            const itemName =
-                typeof item === "string"
-                    ? item
-                    : item.name;
-
-            const data =
-                getItem(
-                    category.id,
-                    item
-                );
-
+    categories.forEach(
+        category => {
 
             /*
-             * Hidden items are intentionally excluded
-             * from the active Budget Overview.
-             */
-            if (data.enabled === false) {
-                return;
-            }
-
-
-            const deposit =
-                parseBudgetNumber(
-                    data.deposit
-                );
-
-            const price =
-                parseBudgetNumber(
-                    data.price
-                );
-
-
-            /*
-             * Only include items that actually
-             * contain financial information.
+             * Filter:
+             *
+             * all       = Wedding + Reception
+             * wedding   = Wedding only
+             * reception = Reception only
              */
             if (
-                deposit === 0 &&
-                price === 0
+                mainCategoryFilter !== "all" &&
+                category.mainCategory !==
+                    mainCategoryFilter
             ) {
+
                 return;
             }
 
 
-            result.push({
-                categoryId: category.id,
-                categoryName: category.name,
-                categoryIcon: category.icon,
-                itemName,
-                responsible:
-                    data.responsiblePerson
-                        ? data.responsiblePerson.trim()
-                        : "",
-                deposit,
-                price,
-                total:
-                    deposit + price
-            });
-        });
-    });
+            category.items.forEach(
+                item => {
+
+                    const itemName =
+                        typeof item === "string"
+                            ? item
+                            : item.name;
+
+
+                    const data =
+                        getItem(
+                            category.id,
+                            item
+                        );
+
+
+                    /*
+                     * Hidden items are excluded.
+                     */
+                    if (
+                        data.enabled === false
+                    ) {
+
+                        return;
+                    }
+
+
+                    const deposit =
+                        parseBudgetNumber(
+                            data.deposit
+                        );
+
+
+                    const price =
+                        parseBudgetNumber(
+                            data.price
+                        );
+
+
+                    /*
+                     * Only show items with
+                     * financial information.
+                     */
+                    if (
+                        deposit === 0 &&
+                        price === 0
+                    ) {
+
+                        return;
+                    }
+
+
+                    result.push({
+
+                        categoryId:
+                            category.id,
+
+                        categoryName:
+                            category.name,
+
+                        categoryIcon:
+                            category.icon,
+
+                        /*
+                         * NEW:
+                         * Keep Wedding / Reception.
+                         */
+                        mainCategory:
+                            category.mainCategory ||
+                            "wedding",
+
+                        itemName,
+
+                        responsible:
+                            data.responsiblePerson
+                                ? data.responsiblePerson.trim()
+                                : "",
+
+                        deposit,
+
+                        price,
+
+                        total:
+                            deposit + price
+                    });
+                }
+            );
+        }
+    );
+
 
     return result;
 }
@@ -3565,52 +3853,74 @@ function getBudgetItems() {
    GROUP BUDGET ITEMS
    ========================================================= */
 
-function groupBudgetItems(items) {
-    const groups = new Map();
+function groupBudgetItems(
+    items
+) {
+
+    const groups =
+        new Map();
 
 
-    items.forEach(item => {
+    items.forEach(
+        item => {
 
-        const responsible =
-            item.responsible ||
-            "Unassigned";
+            const responsible =
+                item.responsible ||
+                "Unassigned";
 
 
-        if (!groups.has(responsible)) {
+            if (
+                !groups.has(
+                    responsible
+                )
+            ) {
 
-            groups.set(
-                responsible,
-                {
-                    name: responsible,
-                    items: [],
-                    deposit: 0,
-                    price: 0,
-                    total: 0
-                }
+                groups.set(
+                    responsible,
+                    {
+                        name:
+                            responsible,
+
+                        items: [],
+
+                        deposit: 0,
+
+                        price: 0,
+
+                        total: 0
+                    }
+                );
+            }
+
+
+            const group =
+                groups.get(
+                    responsible
+                );
+
+
+            group.items.push(
+                item
             );
+
+
+            group.deposit +=
+                item.deposit;
+
+
+            group.price +=
+                item.price;
+
+
+            group.total +=
+                item.total;
         }
-
-
-        const group =
-            groups.get(responsible);
-
-
-        group.items.push(item);
-
-        group.deposit +=
-            item.deposit;
-
-        group.price +=
-            item.price;
-
-        group.total +=
-            item.total;
-    });
+    );
 
 
     /*
-     * Put named responsible people/groups first
-     * and Unassigned last.
+     * Named people/groups first.
+     * Unassigned last.
      */
     return Array.from(
         groups.values()
@@ -3618,16 +3928,22 @@ function groupBudgetItems(items) {
         (a, b) => {
 
             if (
-                a.name === "Unassigned"
+                a.name ===
+                "Unassigned"
             ) {
+
                 return 1;
             }
 
+
             if (
-                b.name === "Unassigned"
+                b.name ===
+                "Unassigned"
             ) {
+
                 return -1;
             }
+
 
             return a.name.localeCompare(
                 b.name
@@ -3642,14 +3958,22 @@ function groupBudgetItems(items) {
    ========================================================= */
 
 function renderBudgetOverview() {
+
     const grid =
         getElement(
             "budgetResponsibleGrid"
         );
 
+
     const emptyMessage =
         getElement(
             "budgetEmptyMessage"
+        );
+
+
+    const filter =
+        getElement(
+            "budgetCategoryFilter"
         );
 
 
@@ -3658,25 +3982,44 @@ function renderBudgetOverview() {
     }
 
 
-    grid.innerHTML = "";
+    grid.innerHTML =
+        "";
+
+
+    /*
+     * Read selected filter.
+     */
+    const selectedCategory =
+        filter
+            ? filter.value
+            : "all";
 
 
     const items =
-        getBudgetItems();
+        getBudgetItems(
+            selectedCategory
+        );
 
 
-    let totalDeposit = 0;
-    let totalPrice = 0;
+    let totalDeposit =
+        0;
 
 
-    items.forEach(item => {
+    let totalPrice =
+        0;
 
-        totalDeposit +=
-            item.deposit;
 
-        totalPrice +=
-            item.price;
-    });
+    items.forEach(
+        item => {
+
+            totalDeposit +=
+                item.deposit;
+
+
+            totalPrice +=
+                item.price;
+        }
+    );
 
 
     const grandTotal =
@@ -3693,10 +4036,12 @@ function renderBudgetOverview() {
             "budgetTotalDeposit"
         );
 
+
     const totalPriceElement =
         getElement(
             "budgetTotalPrice"
         );
+
 
     const grandTotalElement =
         getElement(
@@ -3705,6 +4050,7 @@ function renderBudgetOverview() {
 
 
     if (totalDepositElement) {
+
         totalDepositElement.textContent =
             formatBudgetCurrency(
                 totalDeposit
@@ -3713,6 +4059,7 @@ function renderBudgetOverview() {
 
 
     if (totalPriceElement) {
+
         totalPriceElement.textContent =
             formatBudgetCurrency(
                 totalPrice
@@ -3721,6 +4068,7 @@ function renderBudgetOverview() {
 
 
     if (grandTotalElement) {
+
         grandTotalElement.textContent =
             formatBudgetCurrency(
                 grandTotal
@@ -3732,18 +4080,42 @@ function renderBudgetOverview() {
        EMPTY STATE
        ===================================================== */
 
-    if (items.length === 0) {
+    if (
+        items.length === 0
+    ) {
 
         if (emptyMessage) {
+
             emptyMessage.style.display =
                 "block";
+
+
+            emptyMessage.innerHTML = `
+                <div
+                    class="empty-icon"
+                    aria-hidden="true"
+                >
+                    💰
+                </div>
+
+                <h3>
+                    No budget items
+                </h3>
+
+                <p>
+                    Add a price or depositum to an item
+                    to see it here.
+                </p>
+            `;
         }
+
 
         return;
     }
 
 
     if (emptyMessage) {
+
         emptyMessage.style.display =
             "none";
     }
@@ -3754,235 +4126,269 @@ function renderBudgetOverview() {
        ===================================================== */
 
     const groups =
-        groupBudgetItems(items);
+        groupBudgetItems(
+            items
+        );
 
 
-    groups.forEach(group => {
+    groups.forEach(
+        group => {
 
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "budget-responsible-card";
-
-
-        const isUnassigned =
-            group.name === "Unassigned";
+            const card =
+                document.createElement(
+                    "div"
+                );
 
 
-        const itemsHTML =
-            group.items
-                .map(item => {
-
-                    return `
-                        <div class="budget-item-row">
-
-                            <div class="budget-item-info">
-
-                                <span class="budget-item-category">
-                                    ${escapeHTML(
-                                        item.categoryIcon
-                                    )}
-                                    ${escapeHTML(
-                                        item.categoryName
-                                    )}
-                                </span>
-
-                                <strong class="budget-item-name">
-                                    ${escapeHTML(
-                                        item.itemName
-                                    )}
-                                </strong>
-
-                            </div>
+            card.className =
+                "budget-responsible-card";
 
 
-                            <div class="budget-item-money">
+            const isUnassigned =
+                group.name ===
+                "Unassigned";
 
-                                <div class="budget-money-column">
 
-                                    <span>
-                                        Depositum
-                                    </span>
+            const itemsHTML =
+                group.items
+                    .map(
+                        item => {
 
-                                    <strong>
-                                        ${formatBudgetCurrency(
-                                            item.deposit
-                                        )}
-                                    </strong>
+                            /*
+                             * Show the main category
+                             * clearly for each item.
+                             */
+                            const mainCategoryLabel =
+                                item.mainCategory ===
+                                    "reception"
+                                    ? "🎉 Reception"
+                                    : "💍 Wedding";
+
+
+                            return `
+                                <div class="budget-item-row">
+
+                                    <div class="budget-item-info">
+
+                                        <span class="budget-item-category">
+                                            ${escapeHTML(
+                                                item.categoryIcon
+                                            )}
+
+                                            ${escapeHTML(
+                                                item.categoryName
+                                            )}
+                                        </span>
+
+
+                                        <span class="budget-main-category">
+                                            ${mainCategoryLabel}
+                                        </span>
+
+
+                                        <strong class="budget-item-name">
+                                            ${escapeHTML(
+                                                item.itemName
+                                            )}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="budget-item-money">
+
+                                        <div class="budget-money-column">
+
+                                            <span>
+                                                Depositum
+                                            </span>
+
+                                            <strong>
+                                                ${formatBudgetCurrency(
+                                                    item.deposit
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="budget-money-column">
+
+                                            <span>
+                                                Price
+                                            </span>
+
+                                            <strong>
+                                                ${formatBudgetCurrency(
+                                                    item.price
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="budget-money-column budget-item-total">
+
+                                            <span>
+                                                Total
+                                            </span>
+
+                                            <strong>
+                                                ${formatBudgetCurrency(
+                                                    item.total
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
 
                                 </div>
-
-
-                                <div class="budget-money-column">
-
-                                    <span>
-                                        Price
-                                    </span>
-
-                                    <strong>
-                                        ${formatBudgetCurrency(
-                                            item.price
-                                        )}
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="budget-money-column budget-item-total">
-
-                                    <span>
-                                        Total
-                                    </span>
-
-                                    <strong>
-                                        ${formatBudgetCurrency(
-                                            item.total
-                                        )}
-                                    </strong>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    `;
-                })
-                .join("");
-
-
-        card.innerHTML = `
-
-            <div class="budget-responsible-header">
-
-                <div>
-
-                    <span class="budget-responsible-icon">
-                        ${
-                            isUnassigned
-                                ? "❓"
-                                : "👤"
+                            `;
                         }
-                    </span>
+                    )
+                    .join("");
 
-                    <div class="budget-responsible-title">
 
-                        <span>
+            card.innerHTML = `
+
+                <div class="budget-responsible-header">
+
+                    <div>
+
+                        <span class="budget-responsible-icon">
                             ${
                                 isUnassigned
-                                    ? "Items without assignment"
-                                    : "Responsible individual/group"
+                                    ? "❓"
+                                    : "👤"
                             }
                         </span>
 
-                        <h3>
-                            ${escapeHTML(
-                                group.name
+
+                        <div class="budget-responsible-title">
+
+                            <span>
+                                ${
+                                    isUnassigned
+                                        ? "Items without assignment"
+                                        : "Responsible individual/group"
+                                }
+                            </span>
+
+
+                            <h3>
+                                ${escapeHTML(
+                                    group.name
+                                )}
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="budget-responsible-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            ${formatBudgetCurrency(
+                                group.total
                             )}
-                        </h3>
+                        </strong>
 
                     </div>
 
                 </div>
 
 
-                <div class="budget-responsible-total">
+                <div class="budget-items-list">
 
-                    <span>
-                        Total
-                    </span>
+                    <div class="budget-table-header">
 
-                    <strong>
-                        ${formatBudgetCurrency(
-                            group.total
-                        )}
-                    </strong>
+                        <span>
+                            Item
+                        </span>
 
-                </div>
+                        <span>
+                            Depositum
+                        </span>
 
-            </div>
+                        <span>
+                            Price
+                        </span>
 
+                        <span>
+                            Total
+                        </span>
 
-            <div class="budget-items-list">
-
-                <div class="budget-table-header">
-
-                    <span>
-                        Item
-                    </span>
-
-                    <span>
-                        Depositum
-                    </span>
-
-                    <span>
-                        Price
-                    </span>
-
-                    <span>
-                        Total
-                    </span>
-
-                </div>
-
-                ${itemsHTML}
-
-            </div>
+                    </div>
 
 
-            <div class="budget-responsible-footer">
-
-                <div>
-
-                    <span>
-                        Depositum
-                    </span>
-
-                    <strong>
-                        ${formatBudgetCurrency(
-                            group.deposit
-                        )}
-                    </strong>
+                    ${itemsHTML}
 
                 </div>
 
 
-                <div>
+                <div class="budget-responsible-footer">
 
-                    <span>
-                        Price
-                    </span>
+                    <div>
 
-                    <strong>
-                        ${formatBudgetCurrency(
-                            group.price
-                        )}
-                    </strong>
+                        <span>
+                            Depositum
+                        </span>
+
+                        <strong>
+                            ${formatBudgetCurrency(
+                                group.deposit
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Price
+                        </span>
+
+                        <strong>
+                            ${formatBudgetCurrency(
+                                group.price
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            ${formatBudgetCurrency(
+                                group.total
+                            )}
+                        </strong>
+
+                    </div>
 
                 </div>
+            `;
 
 
-                <div>
-
-                    <span>
-                        Total
-                    </span>
-
-                    <strong>
-                        ${formatBudgetCurrency(
-                            group.total
-                        )}
-                    </strong>
-
-                </div>
-
-            </div>
-        `;
-
-
-        grid.appendChild(card);
-    });
+            grid.appendChild(
+                card
+            );
+        }
+    );
 }
+
 
 /* =========================================================
    CATEGORY PROGRESS
@@ -3991,36 +4397,54 @@ function renderBudgetOverview() {
 function updateCategoryProgress(
     category
 ) {
-    let total = 0;
-    let completed = 0;
+
+    let total =
+        0;
 
 
-    category.items.forEach(item => {
+    let completed =
+        0;
 
-        const data =
-            getItem(
-                category.id,
-                item
-            );
 
-        if (data.enabled === false) {
-            return;
+    category.items.forEach(
+        item => {
+
+            const data =
+                getItem(
+                    category.id,
+                    item
+                );
+
+
+            if (
+                data.enabled === false
+            ) {
+
+                return;
+            }
+
+
+            total++;
+
+
+            if (
+                data.status ===
+                "done"
+            ) {
+
+                completed++;
+            }
         }
-
-        total++;
-
-        if (data.status === "done") {
-            completed++;
-        }
-    });
+    );
 
 
     const percent =
         total > 0
             ? Math.round(
-                (completed /
-                    total) *
-                100
+                (
+                    completed /
+                    total
+                ) * 100
             )
             : 0;
 
@@ -4030,10 +4454,12 @@ function updateCategoryProgress(
             "categoryProgressText"
         );
 
+
     const categoryPercent =
         getElement(
             "categoryPercent"
         );
+
 
     const progressFill =
         getElement(
@@ -4042,16 +4468,21 @@ function updateCategoryProgress(
 
 
     if (progressText) {
+
         progressText.textContent =
             `${completed} of ${total} completed`;
     }
 
+
     if (categoryPercent) {
+
         categoryPercent.textContent =
             `${percent}%`;
     }
 
+
     if (progressFill) {
+
         progressFill.style.width =
             `${percent}%`;
     }
@@ -4169,6 +4600,7 @@ function openManagementModal(
 
 
     if (overlay) {
+
         overlay.classList.add("open");
 
         overlay.setAttribute(
@@ -4193,12 +4625,14 @@ function openManagementModal(
 
 
 function closeManagementModal() {
+
     const overlay =
         getElement(
             "managementOverlay"
         );
 
     if (overlay) {
+
         overlay.classList.remove(
             "open"
         );
@@ -4219,6 +4653,7 @@ function closeManagementModal() {
    ========================================================= */
 
 function saveManagement() {
+
     const nameInput =
         getElement(
             "managementNameInput"
@@ -4242,6 +4677,7 @@ function saveManagement() {
 
 
     if (!name) {
+
         showToast(
             "Please enter a name."
         );
@@ -4253,6 +4689,10 @@ function saveManagement() {
         return;
     }
 
+
+    /* =====================================================
+       ADD CATEGORY
+       ===================================================== */
 
     if (managementMode === "category") {
 
@@ -4266,6 +4706,7 @@ function saveManagement() {
 
 
         if (duplicate) {
+
             showToast(
                 "This category already exists."
             );
@@ -4274,10 +4715,25 @@ function saveManagement() {
         }
 
 
+        /*
+         * IMPORTANT:
+         * New categories are created inside
+         * the currently selected Wedding /
+         * Reception section.
+         */
         categories.push({
-            id: createId("category"),
+
+            id:
+                createId("category"),
+
             name,
-            icon: icon || "📋",
+
+            icon:
+                icon || "📋",
+
+            mainCategory:
+                currentMainCategory,
+
             items: []
         });
 
@@ -4291,12 +4747,20 @@ function saveManagement() {
         renderDashboard();
 
         showToast(
-            "Category added."
+            `${
+                currentMainCategory === "reception"
+                    ? "Reception"
+                    : "Wedding"
+            } category added.`
         );
 
         return;
     }
 
+
+    /* =====================================================
+       ADD ITEM
+       ===================================================== */
 
     if (
         currentCategory === "dashboard" ||
@@ -4304,6 +4768,7 @@ function saveManagement() {
         currentCategory === "budget" ||
         currentCategory === "hidden"
     ) {
+
         showToast(
             "Please open a category first."
         );
@@ -4332,6 +4797,7 @@ function saveManagement() {
                     ? item
                     : item.name;
 
+
             return (
                 itemName.toLowerCase() ===
                 name.toLowerCase()
@@ -4340,6 +4806,7 @@ function saveManagement() {
 
 
     if (duplicate) {
+
         showToast(
             "This item already exists."
         );
@@ -4349,7 +4816,9 @@ function saveManagement() {
 
 
     category.items.push({
+
         name,
+
         custom: true
     });
 
@@ -4373,6 +4842,7 @@ function saveManagement() {
    ========================================================= */
 
 function addItemToCurrentCategory() {
+
     if (
         !currentCategory ||
         currentCategory === "dashboard" ||
@@ -4380,10 +4850,18 @@ function addItemToCurrentCategory() {
         currentCategory === "budget" ||
         currentCategory === "hidden"
     ) {
+
+        showToast(
+            "Please open a category first."
+        );
+
         return;
     }
 
-    openManagementModal("item");
+
+    openManagementModal(
+        "item"
+    );
 }
 
 
@@ -4392,12 +4870,18 @@ function addItemToCurrentCategory() {
    ========================================================= */
 
 function exportData() {
+
     const data = {
-        version: 8,
+
+        version: 9,
+
         exportedAt:
             new Date().toISOString(),
+
         categories,
+
         savedData,
+
         responsibleIndividualsGroups:
             normaliseResponsibleIndividualsGroups(
                 responsibleIndividualsGroups
@@ -4422,24 +4906,38 @@ function exportData() {
 
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
 
 
     const link =
-        document.createElement("a");
+        document.createElement(
+            "a"
+        );
 
-    link.href = url;
+
+    link.href =
+        url;
+
 
     link.download =
         "tamil-wedding-planner.json";
 
-    document.body.appendChild(link);
+
+    document.body.appendChild(
+        link
+    );
+
 
     link.click();
 
     link.remove();
 
-    URL.revokeObjectURL(url);
+
+    URL.revokeObjectURL(
+        url
+    );
 
 
     showToast(
@@ -4453,6 +4951,7 @@ function exportData() {
    ========================================================= */
 
 function importData(file) {
+
     if (!file) {
         return;
     }
@@ -4462,74 +4961,80 @@ function importData(file) {
         new FileReader();
 
 
-    reader.onload = event => {
+    reader.onload =
+        event => {
 
-        try {
+            try {
 
-            const parsed =
-                JSON.parse(
-                    event.target.result
+                const parsed =
+                    JSON.parse(
+                        event.target.result
+                    );
+
+
+                if (
+                    !parsed ||
+                    !Array.isArray(
+                        parsed.categories
+                    )
+                ) {
+
+                    throw new Error(
+                        "Invalid planner file."
+                    );
+                }
+
+
+                categories =
+                    normaliseCategories(
+                        parsed.categories
+                    );
+
+
+                savedData =
+                    parsed.savedData &&
+                    typeof parsed.savedData ===
+                        "object"
+                        ? parsed.savedData
+                        : {};
+
+
+                responsibleIndividualsGroups =
+                    normaliseResponsibleIndividualsGroups(
+                        parsed.responsibleIndividualsGroups
+                    );
+
+
+                migrateSavedData();
+
+                saveData();
+
+                buildNavigation();
+
+                showDashboard();
+
+                showToast(
+                    "Planner imported successfully."
                 );
 
 
-            if (
-                !parsed ||
-                !Array.isArray(
-                    parsed.categories
-                )
-            ) {
-                throw new Error(
-                    "Invalid planner file."
+            } catch (error) {
+
+                console.error(
+                    "Import failed:",
+                    error
+                );
+
+                showToast(
+                    "Import failed. Please select a valid planner file."
                 );
             }
+        };
 
 
-            categories =
-                normaliseCategories(
-                    parsed.categories
-                );
-
-
-            savedData =
-                parsed.savedData &&
-                typeof parsed.savedData === "object"
-                    ? parsed.savedData
-                    : {};
-
-
-            responsibleIndividualsGroups =
-                normaliseResponsibleIndividualsGroups(
-                    parsed.responsibleIndividualsGroups
-                );
-
-
-            migrateSavedData();
-
-            saveData();
-
-            buildNavigation();
-
-            showDashboard();
-
-            showToast(
-                "Planner imported successfully."
-            );
-
-        } catch (error) {
-
-            console.error(
-                "Import failed:",
-                error
-            );
-
-            showToast(
-                "Import failed. Please select a valid planner file."
-            );
-        }
-    };
-
-
-    reader.readAsText(file);
+    reader.readAsText(
+        file
+    );
 }
 
 
@@ -4538,6 +5043,7 @@ function importData(file) {
    ========================================================= */
 
 function resetPlanner() {
+
     const confirmed =
         window.confirm(
             "Reset the entire wedding planner?\n\nThis will delete all saved progress, custom categories, custom items and Tagging entries."
@@ -4554,7 +5060,8 @@ function resetPlanner() {
 
     savedData = {};
 
-    responsibleIndividualsGroups = [];
+    responsibleIndividualsGroups =
+        [];
 
 
     localStorage.removeItem(
@@ -4583,13 +5090,18 @@ function resetPlanner() {
 
 function setupEvents() {
 
-    /* Dashboard */
+    /* =====================================================
+       DASHBOARD
+       ===================================================== */
+
     const addCategoryButton =
         getElement(
             "addCategoryButton"
         );
 
+
     if (addCategoryButton) {
+
         addCategoryButton.addEventListener(
             "click",
             () =>
@@ -4605,7 +5117,9 @@ function setupEvents() {
             "exportButton"
         );
 
+
     if (exportButton) {
+
         exportButton.addEventListener(
             "click",
             exportData
@@ -4617,6 +5131,7 @@ function setupEvents() {
         getElement(
             "importButton"
         );
+
 
     const importFileInput =
         getElement(
@@ -4643,11 +5158,16 @@ function setupEvents() {
                 const file =
                     event.target.files[0];
 
+
                 if (file) {
-                    importData(file);
+                    importData(
+                        file
+                    );
                 }
 
-                event.target.value = "";
+
+                event.target.value =
+                    "";
             }
         );
     }
@@ -4658,7 +5178,9 @@ function setupEvents() {
             "resetButton"
         );
 
+
     if (resetButton) {
+
         resetButton.addEventListener(
             "click",
             resetPlanner
@@ -4666,13 +5188,18 @@ function setupEvents() {
     }
 
 
-    /* Tagging */
+    /* =====================================================
+       TAGGING
+       ===================================================== */
+
     const addTaggingButton =
         getElement(
             "addTaggingButton"
         );
 
+
     if (addTaggingButton) {
+
         addTaggingButton.addEventListener(
             "click",
             addResponsibleIndividualGroup
@@ -4685,6 +5212,7 @@ function setupEvents() {
             "taggingInput"
         );
 
+
     if (taggingInput) {
 
         taggingInput.addEventListener(
@@ -4692,7 +5220,8 @@ function setupEvents() {
             event => {
 
                 if (
-                    event.key === "Enter"
+                    event.key ===
+                    "Enter"
                 ) {
 
                     event.preventDefault();
@@ -4704,13 +5233,18 @@ function setupEvents() {
     }
 
 
-    /* Category page */
+    /* =====================================================
+       CATEGORY PAGE
+       ===================================================== */
+
     const backButton =
         getElement(
             "backToDashboardButton"
         );
 
+
     if (backButton) {
+
         backButton.addEventListener(
             "click",
             showDashboard
@@ -4723,7 +5257,9 @@ function setupEvents() {
             "addItemButton"
         );
 
+
     if (addItemButton) {
+
         addItemButton.addEventListener(
             "click",
             addItemToCurrentCategory
@@ -4736,7 +5272,9 @@ function setupEvents() {
             "itemSearch"
         );
 
+
     if (itemSearch) {
+
         itemSearch.addEventListener(
             "input",
             () => {
@@ -4745,13 +5283,16 @@ function setupEvents() {
                     currentCategory ===
                     "hidden"
                 ) {
+
                     renderHiddenItems();
+
                 } else if (
                     currentCategory !==
-                    "dashboard" &&
+                        "dashboard" &&
                     currentCategory !==
-                    "tagging"
+                        "tagging"
                 ) {
+
                     renderCategory();
                 }
             }
@@ -4764,19 +5305,22 @@ function setupEvents() {
             "itemStatusFilter"
         );
 
+
     if (itemStatusFilter) {
+
         itemStatusFilter.addEventListener(
             "change",
             () => {
 
                 if (
                     currentCategory !==
-                    "dashboard" &&
+                        "dashboard" &&
                     currentCategory !==
-                    "tagging" &&
+                        "tagging" &&
                     currentCategory !==
-                    "hidden"
+                        "hidden"
                 ) {
+
                     renderCategory();
                 }
             }
@@ -4784,23 +5328,55 @@ function setupEvents() {
     }
 
 
-    /* Item modal */
+    /* =====================================================
+       BUDGET CATEGORY FILTER
+       ===================================================== */
+
+    const budgetCategoryFilter =
+        getElement(
+            "budgetCategoryFilter"
+        );
+
+
+    if (budgetCategoryFilter) {
+
+        budgetCategoryFilter.addEventListener(
+            "change",
+            renderBudgetOverview
+        );
+    }
+
+
+    /* =====================================================
+       ITEM MODAL
+       ===================================================== */
+
     const notButton =
-        getElement("notButton");
+        getElement(
+            "notButton"
+        );
+
 
     const progressButton =
-        getElement("progressButton");
+        getElement(
+            "progressButton"
+        );
+
 
     const doneButton =
-        getElement("doneButton");
+        getElement(
+            "doneButton"
+        );
 
 
     if (notButton) {
+
         notButton.addEventListener(
             "click",
             () => {
 
-                modalStatus = "not";
+                modalStatus =
+                    "not";
 
                 updateStatusButtons();
             }
@@ -4809,11 +5385,13 @@ function setupEvents() {
 
 
     if (progressButton) {
+
         progressButton.addEventListener(
             "click",
             () => {
 
-                modalStatus = "progress";
+                modalStatus =
+                    "progress";
 
                 updateStatusButtons();
             }
@@ -4822,11 +5400,13 @@ function setupEvents() {
 
 
     if (doneButton) {
+
         doneButton.addEventListener(
             "click",
             () => {
 
-                modalStatus = "done";
+                modalStatus =
+                    "done";
 
                 updateStatusButtons();
             }
@@ -4839,6 +5419,7 @@ function setupEvents() {
             "closeModalButton"
         );
 
+
     const closeModalButtonTop =
         getElement(
             "closeModalButtonTop"
@@ -4846,6 +5427,7 @@ function setupEvents() {
 
 
     if (closeModalButton) {
+
         closeModalButton.addEventListener(
             "click",
             closeModal
@@ -4854,6 +5436,7 @@ function setupEvents() {
 
 
     if (closeModalButtonTop) {
+
         closeModalButtonTop.addEventListener(
             "click",
             closeModal
@@ -4866,7 +5449,9 @@ function setupEvents() {
             "clearButton"
         );
 
+
     if (clearButton) {
+
         clearButton.addEventListener(
             "click",
             clearItem
@@ -4879,7 +5464,9 @@ function setupEvents() {
             "saveButton"
         );
 
+
     if (saveButton) {
+
         saveButton.addEventListener(
             "click",
             saveItem
@@ -4892,7 +5479,9 @@ function setupEvents() {
             "disableItemButton"
         );
 
+
     if (disableItemButton) {
+
         disableItemButton.addEventListener(
             "click",
             toggleCurrentItemVisibility
@@ -4905,7 +5494,9 @@ function setupEvents() {
             "deleteCustomItemButton"
         );
 
+
     if (deleteCustomItemButton) {
+
         deleteCustomItemButton.addEventListener(
             "click",
             deleteCurrentCustomItem
@@ -4913,19 +5504,15 @@ function setupEvents() {
     }
 
 
-    /*
-     * Important:
-     * There is deliberately NO backdrop click
-     * handler. Clicking outside the modal will
-     * therefore not close it.
-     */
+    /* =====================================================
+       MANAGEMENT MODAL
+       ===================================================== */
 
-
-    /* Management modal */
     const managementCloseButton =
         getElement(
             "managementCloseButton"
         );
+
 
     const managementCancelButton =
         getElement(
@@ -4934,6 +5521,7 @@ function setupEvents() {
 
 
     if (managementCloseButton) {
+
         managementCloseButton.addEventListener(
             "click",
             closeManagementModal
@@ -4942,6 +5530,7 @@ function setupEvents() {
 
 
     if (managementCancelButton) {
+
         managementCancelButton.addEventListener(
             "click",
             closeManagementModal
@@ -4954,7 +5543,9 @@ function setupEvents() {
             "managementSaveButton"
         );
 
+
     if (managementSaveButton) {
+
         managementSaveButton.addEventListener(
             "click",
             saveManagement
@@ -4967,6 +5558,7 @@ function setupEvents() {
             "managementNameInput"
         );
 
+
     if (managementNameInput) {
 
         managementNameInput.addEventListener(
@@ -4974,7 +5566,8 @@ function setupEvents() {
             event => {
 
                 if (
-                    event.key === "Enter"
+                    event.key ===
+                    "Enter"
                 ) {
 
                     event.preventDefault();
@@ -4986,20 +5579,27 @@ function setupEvents() {
     }
 
 
-    /* Escape closes modals */
+    /* =====================================================
+       ESCAPE CLOSES MODALS
+       ===================================================== */
+
     document.addEventListener(
         "keydown",
         event => {
 
             if (
-                event.key !== "Escape"
+                event.key !==
+                "Escape"
             ) {
                 return;
             }
 
 
             const overlay =
-                getElement("overlay");
+                getElement(
+                    "overlay"
+                );
+
 
             const managementOverlay =
                 getElement(
@@ -5013,6 +5613,7 @@ function setupEvents() {
                     "open"
                 )
             ) {
+
                 closeModal();
 
                 return;
@@ -5025,6 +5626,7 @@ function setupEvents() {
                     "open"
                 )
             ) {
+
                 closeManagementModal();
             }
         }
@@ -5050,14 +5652,18 @@ document.addEventListener(
 
         showDashboard();
 
-        toggleCurrentItemVisibility()
-        
-        deleteCurrentCustomItem()
-        
-        saveItem()
-        
-        saveManagement()
-        
-        addItemToCurrentCategory()
+        /*
+         * IMPORTANT:
+         * Do NOT call these here:
+         *
+         * toggleCurrentItemVisibility()
+         * deleteCurrentCustomItem()
+         * saveItem()
+         * saveManagement()
+         * addItemToCurrentCategory()
+         *
+         * They are user actions and should only
+         * run after their buttons are clicked.
+         */
     }
 );
