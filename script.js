@@ -1326,7 +1326,7 @@ function populateResponsibleIndividualSelect(
 
     emptyOption.value = "";
     emptyOption.textContent =
-        "No assignment";
+        "No assignment (use tagging)";
 
     select.appendChild(
         emptyOption
