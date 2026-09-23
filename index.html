@@ -1,804 +1,1232 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
+    <meta charset="UTF-8">
 
-  <title>Our Wedding Planner</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-  <link rel="stylesheet" href="style.css">
+    <meta
+        name="description"
+        content="Tamil Wedding Planner"
+    >
+
+    <title>Tamil Wedding Planner</title>
+
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 
-  <!-- =========================================================
-       HERO
-       ========================================================= -->
-
-  <header class="hero">
-
-    <div class="hero-inner">
-
-      <div class="eyebrow">
-        Tamil Wedding Planner
-      </div>
-
-      <h1>
-        💍 Our Big Day
-      </h1>
-
-      <p>
-        Everything we need for our wedding,
-        beautifully organised.
-      </p>
-
-    </div>
-
-  </header>
-
-
-  <!-- =========================================================
-       NAVIGATION
-       ========================================================= -->
-
-  <div class="nav-wrapper">
-
-    <nav
-      class="nav"
-      id="navigation"
-      aria-label="Wedding categories"
-    ></nav>
-
-  </div>
-
-
-  <!-- =========================================================
-       MAIN APP
-       ========================================================= -->
-
-  <main class="app">
-
-
-    <!-- =======================================================
-         DASHBOARD
-         ======================================================= -->
-
-    <section id="dashboardPage">
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Wedding Dashboard
-          </h2>
-
-          <p>
-            Keep track of everything
-            for the big day.
-          </p>
-
-        </div>
-
-
-        <div class="data-actions">
-
-          <button
-            class="export-button"
-            id="exportButton"
-            type="button"
-          >
-            <span>📥</span>
-            Export
-          </button>
-
-
-          <button
-            class="import-button"
-            id="importButton"
-            type="button"
-          >
-            <span>📤</span>
-            Import
-          </button>
-
-
-          <button
-            class="reset-button"
-            id="resetButton"
-            type="button"
-          >
-            <span>↻</span>
-            Reset
-          </button>
-
-
-          <input
-            type="file"
-            id="importFile"
-            accept=".json,application/json"
-            hidden
-          >
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================================
-           STATS
-           ===================================================== -->
-
-      <div class="stats">
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            📋
-          </div>
-
-          <div
-            class="stat-number"
-            id="totalCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            Total items
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            ✅
-          </div>
-
-          <div
-            class="stat-number"
-            id="doneCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            Completed
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            ⏳
-          </div>
-
-          <div
-            class="stat-number"
-            id="progressCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            In progress
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            🗂️
-          </div>
-
-          <div
-            class="stat-number"
-            id="categoryCount"
-          >
-            0
-          </div>
-
-          <div class="stat-label">
-            Categories
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================================
-           OVERALL PROGRESS
-           ===================================================== -->
-
-      <div class="progress-card">
-
-        <div class="progress-heading">
-
-          <h2>
-            Overall progress
-          </h2>
-
-          <span id="overallPercent">
-            0%
-          </span>
-
-        </div>
-
-
-        <div class="progress-bar">
-
-          <div
-            class="progress-fill"
-            id="overallFill"
-          ></div>
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================================
-           QUICK ACTIONS
-           ===================================================== -->
-
-      <div class="quick-actions">
-
-        <button
-          class="primary-button"
-          id="addCategoryButton"
-          type="button"
-        >
-          <span>＋</span>
-          Add category
-        </button>
-
-      </div>
-
-
-      <!-- =====================================================
-           CATEGORIES
-           ===================================================== -->
-
-      <div class="page-header category-heading">
-
-        <div>
-
-          <h2>
-            Categories
-          </h2>
-
-          <p>
-            Select a category to start planning.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="category-summary-grid"
-        id="summaryGrid"
-      ></div>
-
-
-    </section>
-
-
-    <!-- =======================================================
-         CATEGORY PAGE
-         ======================================================= -->
-
-    <section
-      id="categoryPage"
-      style="display:none;"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2 id="categoryTitle"></h2>
-
-          <p>
-            Select an item to see more details.
-          </p>
-
-        </div>
-
-
-        <div class="category-progress">
-
-          <strong id="categoryPercent">
-            0%
-          </strong>
-
-          <span id="categoryProgressText">
-            0 / 0 completed
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================================
-           CATEGORY ACTIONS
-           ===================================================== -->
-
-      <div class="category-toolbar">
-
-        <button
-          class="secondary-button"
-          id="backToDashboardButton"
-          type="button"
-        >
-          ← Dashboard
-        </button>
-
-
-        <button
-          class="primary-button"
-          id="addItemButton"
-          type="button"
-        >
-          ＋ Add item
-        </button>
-
-      </div>
-
-
-      <!-- =====================================================
-           SEARCH
-           ===================================================== -->
-
-      <div class="search-area">
-
-        <input
-          id="itemSearch"
-          type="search"
-          placeholder="🔎 Search within this category..."
-          autocomplete="off"
-        >
-
-
-        <select id="itemStatusFilter">
-
-          <option value="all">
-            All items
-          </option>
-
-          <option value="not">
-            Not started
-          </option>
-
-          <option value="progress">
-            In progress
-          </option>
-
-          <option value="done">
-            Completed
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <!-- =====================================================
-           ITEMS
-           ===================================================== -->
-
-      <div
-        class="items-grid"
-        id="itemsGrid"
-      ></div>
-
-
-      <div
-        class="empty"
-        id="emptyMessage"
-        style="display:none;"
-      >
-
-        <div class="empty-icon">
-          🔎
-        </div>
-
-        <h3>
-          No items found
-        </h3>
-
-        <p>
-          Try another search or status filter.
-        </p>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- =========================================================
-       FOOTER
-       ========================================================= -->
-
-  <footer>
-    Made with ❤️ for our wedding
-  </footer>
-
-
-  <!-- =========================================================
-       ITEM MODAL
-       ========================================================= -->
-
-  <div
-    class="overlay"
-    id="overlay"
-  >
-
-    <div
-      class="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modalTitle"
-    >
-
-      <div class="modal-header">
-
-        <div>
-
-          <div
-            class="modal-category"
-            id="modalCategory"
-          ></div>
-
-          <h2 id="modalTitle"></h2>
-
-        </div>
-
-
-        <button
-          class="close"
-          id="closeModalButton"
-          type="button"
-          aria-label="Close"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <div class="modal-body">
-
-        <div class="form-group">
-
-          <label>
-            Status
-          </label>
-
-
-          <div class="status-buttons">
-
-            <button
-              class="status-button not"
-              id="notButton"
-              type="button"
+    <!-- =========================================================
+         HERO
+         ========================================================= -->
+    <header class="hero">
+
+        <div class="hero-content">
+
+            <div
+                class="hero-ring"
+                aria-hidden="true"
             >
-              ○ Not started
-            </button>
+                💍
+            </div>
 
+            <h1>
+                Tamil Wedding Planner
+            </h1>
 
-            <button
-              class="status-button progress"
-              id="progressButton"
-              type="button"
-            >
-              ◐ In progress
-            </button>
-
-
-            <button
-              class="status-button done"
-              id="doneButton"
-              type="button"
-            >
-              ✓ Completed
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="vendorInput">
-            Vendor / Person
-          </label>
-
-          <input
-            id="vendorInput"
-            type="text"
-            placeholder="Who is responsible?"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="priceInput">
-            Price
-          </label>
-
-          <input
-            id="priceInput"
-            type="text"
-            placeholder="e.g. 2,500 kr"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="deadlineInput">
-            Deadline
-          </label>
-
-          <input
-            id="deadlineInput"
-            type="date"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="linkInput">
-            Website / Instagram / Link
-          </label>
-
-          <input
-            id="linkInput"
-            type="url"
-            placeholder="https://..."
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="notesInput">
-            Notes
-          </label>
-
-          <textarea
-            id="notesInput"
-            placeholder="Add notes, ideas, contact details, measurements..."
-          ></textarea>
-
-        </div>
-
-
-        <!-- ITEM MANAGEMENT -->
-
-        <div class="item-management">
-
-          <div>
-
-            <strong>
-              Item visibility
-            </strong>
-
-            <p id="itemManagementDescription">
-              Disable this item if you do not want it shown in the planner.
+            <p class="hero-subtitle">
+                Plan Every Detail of Your Special Day
             </p>
 
-          </div>
-
-
-          <button
-            class="disable-item-button"
-            id="disableItemButton"
-            type="button"
-          >
-            Disable item
-          </button>
+            <p class="hero-tagline">
+                Organise • Track • Celebrate
+            </p>
 
         </div>
 
+    </header>
 
-        <div
-          class="custom-item-delete"
-          id="customItemDeleteArea"
-          style="display:none;"
+
+    <!-- =========================================================
+         TOP NAVIGATION
+         Dashboard / Tagging / Hidden Items
+         ========================================================= -->
+    <nav
+        id="topNavigation"
+        class="top-navigation"
+        aria-label="Planner navigation"
+    ></nav>
+
+
+    <!-- =========================================================
+         CATEGORY NAVIGATION
+         Generated by script.js
+         ========================================================= -->
+    <nav
+        id="navigation"
+        class="navigation"
+        aria-label="Wedding categories"
+    ></nav>
+
+
+    <!-- =========================================================
+         MAIN APPLICATION
+         ========================================================= -->
+    <main class="app-container">
+
+
+        <!-- =====================================================
+             DASHBOARD PAGE
+             ===================================================== -->
+        <section
+            id="dashboardPage"
+            class="page"
         >
 
-          <button
-            class="delete-custom-item-button"
-            id="deleteCustomItemButton"
-            type="button"
-          >
-            🗑 Delete custom item
-          </button>
+            <div class="page-header">
 
-        </div>
+                <div>
 
+                    <span class="section-kicker">
+                        Wedding Overview
+                    </span>
 
-        <div class="modal-actions">
+                    <h2>
+                        Dashboard
+                    </h2>
 
-          <button
-            class="clear"
-            id="clearButton"
-            type="button"
-          >
-            Clear
-          </button>
+                    <p>
+                        Keep track of every part of your Tamil wedding.
+                    </p>
+
+                </div>
 
 
-          <button
-            class="save"
-            id="saveButton"
-            type="button"
-          >
-            Save changes
-          </button>
+                <div class="dashboard-actions">
 
-        </div>
+                    <button
+                        type="button"
+                        id="exportButton"
+                        class="secondary-button"
+                    >
+                        Export
+                    </button>
 
-      </div>
+                    <button
+                        type="button"
+                        id="importButton"
+                        class="secondary-button"
+                    >
+                        Import
+                    </button>
 
-    </div>
+                    <button
+                        type="button"
+                        id="resetButton"
+                        class="danger-button"
+                    >
+                        Reset
+                    </button>
 
-  </div>
+                    <input
+                        type="file"
+                        id="importFileInput"
+                        accept=".json,application/json"
+                        class="hidden"
+                    >
+
+                </div>
+
+            </div>
 
 
-  <!-- =========================================================
-       ADD / EDIT MODAL
-       ========================================================= -->
+            <!-- =================================================
+                 DASHBOARD STATISTICS
+                 ================================================= -->
+            <div class="stats-grid">
 
-  <div
-    class="overlay"
-    id="managementOverlay"
-  >
+                <div class="stat-card">
 
+                    <div
+                        class="stat-icon"
+                        aria-hidden="true"
+                    >
+                        📋
+                    </div>
+
+                    <div>
+
+                        <span class="stat-label">
+                            Total Items
+                        </span>
+
+                        <strong id="totalItems">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div
+                        class="stat-icon"
+                        aria-hidden="true"
+                    >
+                        ✅
+                    </div>
+
+                    <div>
+
+                        <span class="stat-label">
+                            Completed
+                        </span>
+
+                        <strong id="completedItems">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div
+                        class="stat-icon"
+                        aria-hidden="true"
+                    >
+                        ⏳
+                    </div>
+
+                    <div>
+
+                        <span class="stat-label">
+                            In Progress
+                        </span>
+
+                        <strong id="progressItems">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div
+                        class="stat-icon"
+                        aria-hidden="true"
+                    >
+                        🏷️
+                    </div>
+
+                    <div>
+
+                        <span class="stat-label">
+                            Responsible Groups
+                        </span>
+
+                        <strong id="responsibleGroupsCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 OVERALL PROGRESS
+                 ================================================= -->
+            <div class="progress-card">
+
+                <div class="progress-card-header">
+
+                    <h3>
+                        Overall Progress
+                    </h3>
+
+                    <strong id="overallPercent">
+                        0%
+                    </strong>
+
+                </div>
+
+                <div
+                    class="progress-bar"
+                    aria-label="Overall wedding planning progress"
+                >
+
+                    <div
+                        id="overallProgressFill"
+                        class="progress-fill"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CATEGORIES
+                 ================================================= -->
+            <div class="section-actions">
+
+                <div>
+
+                    <h3>
+                        Wedding Categories
+                    </h3>
+
+                    <p>
+                        Select a category to manage its items.
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="addCategoryButton"
+                    class="primary-button"
+                >
+                    + Add Category
+                </button>
+
+            </div>
+
+
+            <div
+                id="summaryGrid"
+                class="category-grid"
+            ></div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TAGGING PAGE
+             ===================================================== -->
+        <section
+            id="taggingPage"
+            class="page hidden"
+        >
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="section-kicker">
+                        Management
+                    </span>
+
+                    <h2>
+                        Tagging
+                    </h2>
+
+                    <p>
+                        Save individuals or groups that can be assigned
+                        to wedding planning items.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ADD RESPONSIBLE INDIVIDUAL/GROUP
+                 ================================================= -->
+            <div class="tagging-add-card">
+
+                <div class="form-group">
+
+                    <label for="taggingInput">
+                        Responsible individual/group
+                    </label>
+
+                    <input
+                        id="taggingInput"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="e.g. Name of the person responsible, Bride & Groom, Family"
+                    >
+
+                </div>
+
+                <button
+                    type="button"
+                    id="addTaggingButton"
+                    class="primary-button"
+                >
+                    + Add
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 SAVED RESPONSIBLE INDIVIDUALS/GROUPS
+                 ================================================= -->
+            <div class="section-actions">
+
+                <div>
+
+                    <h3>
+                        Saved individuals/groups
+                    </h3>
+
+                    <p>
+                        These names will be available when assigning
+                        responsibility to an item.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="taggingGrid"
+                class="tagging-grid"
+            ></div>
+
+
+            <div
+                id="taggingEmptyMessage"
+                class="empty-message"
+                style="display: none;"
+            >
+
+                <div
+                    class="empty-icon"
+                    aria-hidden="true"
+                >
+                    🏷️
+                </div>
+
+                <h3>
+                    No saved individuals/groups
+                </h3>
+
+                <p>
+                    Add someone or a group above.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             BUDGET OVERVIEW PAGE
+             ===================================================== -->
+        <section
+            id="budgetPage"
+            class="page hidden"
+        >
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="section-kicker">
+                        Financial Overview
+                    </span>
+
+                    <h2>
+                        Budget Overview
+                    </h2>
+
+                    <p>
+                        See prices and depositum for every wedding item,
+                        grouped by responsible individual or group.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 OVERALL BUDGET
+                 ================================================= -->
+            <div class="budget-overview-summary">
+
+                <div class="budget-summary-card">
+
+                    <span class="budget-summary-icon">
+                        💰
+                    </span>
+
+                    <div>
+
+                        <span class="budget-summary-label">
+                            Total Depositum
+                        </span>
+
+                        <strong id="budgetTotalDeposit">
+                            0 kr.
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="budget-summary-card">
+
+                    <span class="budget-summary-icon">
+                        💳
+                    </span>
+
+                    <div>
+
+                        <span class="budget-summary-label">
+                            Total Price
+                        </span>
+
+                        <strong id="budgetTotalPrice">
+                            0 kr.
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="budget-summary-card budget-summary-total">
+
+                    <span class="budget-summary-icon">
+                        📊
+                    </span>
+
+                    <div>
+
+                        <span class="budget-summary-label">
+                            Total Budget
+                        </span>
+
+                        <strong id="budgetGrandTotal">
+                            0 kr.
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BUDGET BY RESPONSIBLE
+                 ================================================= -->
+            <div class="section-actions">
+
+                <div>
+
+                    <h3>
+                        Budget by Responsible Individual / Group
+                    </h3>
+
+                    <p>
+                        Every item is grouped according to its
+                        Responsible individual/group tag.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="budgetResponsibleGrid"
+                class="budget-responsible-grid"
+            ></div>
+
+
+            <!-- =================================================
+                 EMPTY BUDGET MESSAGE
+                 ================================================= -->
+            <div
+                id="budgetEmptyMessage"
+                class="empty-message"
+                style="display: none;"
+            >
+
+                <div
+                    class="empty-icon"
+                    aria-hidden="true"
+                >
+                    💰
+                </div>
+
+                <h3>
+                    No budget information yet
+                </h3>
+
+                <p>
+                    Add prices, depositum and responsible individuals/groups
+                    to your wedding items.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+             CATEGORY PAGE
+             ===================================================== -->
+        <section
+            id="categoryPage"
+            class="page hidden"
+        >
+
+            <div class="page-header">
+
+                <div>
+
+                    <button
+                        type="button"
+                        id="backToDashboardButton"
+                        class="back-button"
+                    >
+                        ← Back to Dashboard
+                    </button>
+
+                    <span
+                        id="categoryTitle"
+                        class="section-kicker"
+                    >
+                        Category
+                    </span>
+
+                    <h2 id="categoryPageHeading">
+                        Category
+                    </h2>
+
+                </div>
+
+
+                <div class="category-header-actions">
+
+                    <div class="category-progress-summary">
+
+                        <strong id="categoryPercent">
+                            0%
+                        </strong>
+
+                        <div class="progress-bar small">
+
+                            <div
+                                id="categoryProgressFill"
+                                class="progress-fill"
+                            ></div>
+
+                        </div>
+
+                        <span id="categoryProgressText">
+                            0 of 0 completed
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="addItemButton"
+                        class="primary-button"
+                    >
+                        + Add Item
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SEARCH AND FILTER
+                 ================================================= -->
+            <div class="filter-bar">
+
+                <div class="search-wrapper">
+
+                    <label
+                        for="itemSearch"
+                        class="sr-only"
+                    >
+                        Search items
+                    </label>
+
+                    <input
+                        type="search"
+                        id="itemSearch"
+                        placeholder="Search items..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div class="filter-wrapper">
+
+                    <label
+                        for="itemStatusFilter"
+                        class="sr-only"
+                    >
+                        Filter by status
+                    </label>
+
+                    <select id="itemStatusFilter">
+
+                        <option value="all">
+                            All statuses
+                        </option>
+
+                        <option value="not">
+                            Not started
+                        </option>
+
+                        <option value="progress">
+                            In progress
+                        </option>
+
+                        <option value="done">
+                            Done
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ITEMS
+                 ================================================= -->
+            <div
+                id="itemsGrid"
+                class="items-grid"
+            ></div>
+
+
+            <!-- =================================================
+                 EMPTY MESSAGE
+                 ================================================= -->
+            <div
+                id="emptyMessage"
+                class="empty-message"
+                style="display: none;"
+            >
+
+                <div
+                    class="empty-icon"
+                    aria-hidden="true"
+                >
+                    📋
+                </div>
+
+                <h3>
+                    No items found
+                </h3>
+
+                <p>
+                    Try changing your search or filter.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         ITEM MODAL
+         ========================================================= -->
     <div
-      class="modal management-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="managementModalTitle"
+        id="overlay"
+        class="modal-overlay"
+        aria-hidden="true"
     >
 
-      <div class="modal-header">
-
-        <div>
-
-          <div class="modal-category">
-            WEDDING PLANNER
-          </div>
-
-          <h2 id="managementModalTitle">
-            Add category
-          </h2>
-
-        </div>
-
-
-        <button
-          class="close"
-          id="closeManagementButton"
-          type="button"
-          aria-label="Close"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <div class="modal-body">
-
-        <div class="form-group">
-
-          <label for="managementNameInput">
-            Name
-          </label>
-
-          <input
-            id="managementNameInput"
-            type="text"
-            placeholder="Enter a name..."
-            autocomplete="off"
-          >
-
-        </div>
-
-
         <div
-          class="form-group"
-          id="iconGroup"
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalTitle"
         >
 
-          <label for="managementIconInput">
-            Icon
-          </label>
+            <div class="modal-header">
 
-          <input
-            id="managementIconInput"
-            type="text"
-            maxlength="4"
-            placeholder="💍"
-            autocomplete="off"
-          >
+                <div>
+
+                    <span
+                        id="modalCategory"
+                        class="modal-category"
+                    >
+                        Category
+                    </span>
+
+                    <h2 id="modalTitle">
+                        Item
+                    </h2>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="closeModalButtonTop"
+                    class="modal-close"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="form-group full-width">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <div class="status-buttons">
+
+                        <button
+                            type="button"
+                            id="notButton"
+                            class="status-button"
+                        >
+                            Not started
+                        </button>
+
+                        <button
+                            type="button"
+                            id="progressButton"
+                            class="status-button"
+                        >
+                            In progress
+                        </button>
+
+                        <button
+                            type="button"
+                            id="doneButton"
+                            class="status-button"
+                        >
+                            Done
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="responsiblePersonInput">
+                        Responsible individual/group (use tagging)
+                    </label>
+
+                    <select id="responsiblePersonInput">
+
+                        <option value="">
+                            No assignment (use tagging)
+                        </option>
+
+                    </select>
+
+                    <p class="form-help">
+                        Manage saved individuals and groups from the
+                        <strong>Tagging</strong> tab.
+                    </p>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="depositInput">
+                        Depositum
+                    </label>
+
+                    <div class="input-with-suffix">
+
+                        <input
+                            type="number"
+                            id="depositInput"
+                            min="0"
+                            step="0.01"
+                            placeholder="0"
+                        >
+
+                        <span>
+                            kr.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="priceInput">
+                        Price
+                    </label>
+
+                    <div class="input-with-suffix">
+
+                        <input
+                            type="number"
+                            id="priceInput"
+                            min="0"
+                            step="0.01"
+                            placeholder="0"
+                        >
+
+                        <span>
+                            kr.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="mobileInput">
+                        Mobile number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="mobileInput"
+                        autocomplete="tel"
+                        placeholder="e.g. +45 12 34 56 78"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="emailInput">
+                        Email address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="emailInput"
+                        autocomplete="email"
+                        placeholder="example@email.com"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="contactPersonInput">
+                        Contact person
+                    </label>
+
+                    <input
+                        type="text"
+                        id="contactPersonInput"
+                        autocomplete="name"
+                        placeholder="Name of contact person"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="deadlineInput">
+                        Deadline
+                    </label>
+
+                    <input
+                        type="date"
+                        id="deadlineInput"
+                    >
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                    <label for="linkInput">
+                        Link
+                    </label>
+
+                    <input
+                        type="url"
+                        id="linkInput"
+                        placeholder="https://..."
+                    >
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                    <label for="notesInput">
+                        Notes
+                    </label>
+
+                    <textarea
+                        id="notesInput"
+                        placeholder="Add notes..."
+                    ></textarea>
+
+                </div>
+
+
+                <div
+                    id="itemVisibilityArea"
+                    class="form-group full-width"
+                >
+
+                    <button
+                        type="button"
+                        id="disableItemButton"
+                        class="secondary-button"
+                    >
+                        Hide Item
+                    </button>
+
+                    <p class="form-help">
+                        Hidden items can be found in the
+                        <strong>Hidden Items</strong> tab.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="customItemDeleteArea"
+                    class="form-group full-width hidden"
+                >
+
+                    <button
+                        type="button"
+                        id="deleteCustomItemButton"
+                        class="danger-button"
+                    >
+                        Delete Custom Item
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    id="closeModalButton"
+                    class="secondary-button"
+                >
+                    Close
+                </button>
+
+
+                <div class="modal-footer-right">
+
+                    <button
+                        type="button"
+                        id="clearButton"
+                        class="secondary-button"
+                    >
+                        Clear
+                    </button>
+
+                    <button
+                        type="button"
+                        id="saveButton"
+                        class="primary-button"
+                    >
+                        Save
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
-
-
-        <p
-          class="management-help"
-          id="managementHelp"
-        >
-          Create a new category for your wedding planner.
-        </p>
-
-
-        <div class="management-modal-actions">
-
-          <button
-            class="clear"
-            id="cancelManagementButton"
-            type="button"
-          >
-            Cancel
-          </button>
-
-
-          <button
-            class="save"
-            id="saveManagementButton"
-            type="button"
-          >
-            Add category
-          </button>
-
-        </div>
-
-      </div>
 
     </div>
 
-  </div>
+
+    <!-- =========================================================
+         MANAGEMENT MODAL
+         ========================================================= -->
+    <div
+        id="managementOverlay"
+        class="modal-overlay"
+        aria-hidden="true"
+    >
+
+        <div
+            class="modal management-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="managementTitle"
+        >
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span
+                        id="managementCategory"
+                        class="modal-category"
+                    >
+                        Management
+                    </span>
+
+                    <h2 id="managementTitle">
+                        Add Category
+                    </h2>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="managementCloseButton"
+                    class="modal-close"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
 
 
-  <!-- =========================================================
-       TOAST
-       ========================================================= -->
+            <div class="modal-body">
 
-  <div
-    class="toast"
-    id="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
+                <div class="form-group">
+
+                    <label for="managementNameInput">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="managementNameInput"
+                        placeholder="Enter name"
+                        autocomplete="off"
+                    >
+
+                </div>
 
 
-  <script src="./script.js"></script>
+                <div
+                    id="iconGroup"
+                    class="form-group"
+                >
+
+                    <label for="managementIconInput">
+                        Icon
+                    </label>
+
+                    <input
+                        type="text"
+                        id="managementIconInput"
+                        placeholder="e.g. 💍"
+                        maxlength="4"
+                    >
+
+                </div>
+
+
+                <p
+                    id="managementHelp"
+                    class="form-help"
+                >
+                    Add a new category to your wedding planner.
+                </p>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    id="managementCancelButton"
+                    class="secondary-button"
+                >
+                    Cancel
+                </button>
+
+                <div class="modal-footer-right">
+
+                    <button
+                        type="button"
+                        id="managementSaveButton"
+                        class="primary-button"
+                    >
+                        Save
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         TOAST
+         ========================================================= -->
+    <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+    <footer class="footer">
+
+        <p>
+            Tamil Wedding Planner
+        </p>
+
+    </footer>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
+    <script src="./script.js"></script>
 
 </body>
 </html>
