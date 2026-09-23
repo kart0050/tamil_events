@@ -438,6 +438,81 @@ img {
 
 
 /* =========================================================
+   MAIN CATEGORY NAVIGATION
+   Wedding / Reception
+   ========================================================= */
+
+.main-category-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 8px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    box-shadow:
+        0 3px 10px rgba(69, 21, 38, 0.08);
+
+    position: relative;
+    z-index: 100;
+}
+
+.main-category-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    min-width: 110px;
+
+    padding: 7px 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 999px;
+
+    background: var(--white);
+    color: var(--wine-dark);
+
+    font-size: 0.82rem;
+    font-weight: 800;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.main-category-button:hover {
+    background: var(--rose-pale);
+    border-color: var(--rose);
+    color: var(--wine);
+
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.main-category-button.active {
+    background:
+        linear-gradient(
+            135deg,
+            var(--wine-deep),
+            var(--wine)
+        );
+
+    border-color: var(--wine);
+
+    color: var(--white);
+
+    box-shadow: var(--shadow);
+}
+
+.main-category-icon {
+    font-size: 0.95rem;
+}
+
+/* =========================================================
    CATEGORY NAVIGATION
    ========================================================= */
 
@@ -2528,6 +2603,18 @@ textarea:focus-visible {
 
     }
 
+    .main-category-navigation {
+        justify-content: flex-start;
+        padding: 8px 10px;
+        gap: 7px;
+    }
+
+    .main-category-button {
+        flex: 1;
+        min-width: 0;
+        padding: 9px 10px;
+        font-size: 0.82rem;
+    }
 
     /* NEW TOP NAVIGATION */
 
