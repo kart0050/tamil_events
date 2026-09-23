@@ -28,11 +28,11 @@ const defaultCategories = [
             "Manavarai saree",
             "Koorai saree (Rød)",
             "Vetti sattai",
-            "Sko",
-            "Henne Fest Clothes",
+            "Shoes",
             "Vetti Sattai Grooms Mate",
             "Saree Bridesmaid",
-            "Tøj til preshoot",
+            "Clothes for Henna Fest",
+            "Clothes for preshoot",
             "Amorasareesdk",
             "Ranyasarees"
         ]
@@ -83,6 +83,7 @@ const defaultCategories = [
             "Bridal Corner Setup",
             "Children Sweets",
             "Palaharam (Goodie bag)",
+            "Civil Wedding (Ring)",
             "Yndlingsting"
         ]
     },
@@ -137,8 +138,7 @@ const defaultCategories = [
         icon: "🥁",
         mainCategory: "wedding",
         items: [
-            "Chinna Mams",
-            "Mami ?"
+            "Empty"
         ]
     },
 
@@ -162,8 +162,6 @@ const defaultCategories = [
             "Kammali Randers",
             "Tamil Ondrai Aarhus",
             "Arusuvai",
-            "Dhoni",
-            "Appam",
             "Vaathali og Pako"
         ]
     },
@@ -186,11 +184,12 @@ const defaultCategories = [
         mainCategory: "wedding",
         items: [
             "Digital Pro",
+            "Nomad",
             "Ajeenth Video",
             "Visual Eyes",
-            "Nomad",
             "Vividmemoir.dk",
-            "infocus",
+            "Infocus",
+            "Gradium",
             "Views of Nivi",
             "Sana"
         ]
@@ -223,14 +222,6 @@ const defaultCategories = [
             "Babylon AA",
             "Sociale Palace Silkeborg",
             "Herning Kovil",
-            "Food & Drinks",
-            "Sweets for children",
-            "Bar",
-            "Dessert",
-            "Palaharam",
-            "Tea Can",
-            "Civil Weds (Ring)",
-            "Udlandet"
         ]
     },
 
@@ -240,21 +231,14 @@ const defaultCategories = [
         icon: "🎭",
         mainCategory: "reception",
         items: [
-            "Pardans + Cinema Paattu",
+            "Groom & Bride (Pardans)",
+            "Groom & Bride (Cinema Paattu)",
             "Bollywood Dance",
-            "Gruppedans",
-            "Abi",
-            "Vaishu og Asmi",
-            "Suji Akka solo + Bharatanatyam med os",
-            "Aishani + Aatish",
-            "Thilipa",
-            "Sonja",
-            "Deilany",
-            "Praveena og Nantheya",
+            "Gruppedans",,
+            "Girls Dance",
+            "Boys Dance",
             "Family Dance",
-            "Karthie + Nantheya",
-            "Charmilie",
-            "Aalborg Kootam"
+            "Dance Club",
         ]
     },
 
@@ -264,14 +248,10 @@ const defaultCategories = [
         icon: "🎤",
         mainCategory: "reception",
         items: [
-            "Vinu",
-            "Mams",
-            "Saddi",
-            "Speech",
-            "Games",
-            "Speech planning",
+            "Friends",
+            "Groom / Bride Speech",
+            "Dad & Mum",
             "Speakers",
-            "Order of speeches",
             "Lighting",
             "Projector"
         ]
