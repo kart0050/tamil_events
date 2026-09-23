@@ -302,9 +302,7 @@ function getElement(id) {
    ========================================================= */
 
 function cloneDefaults() {
-    return JSON.parse(
-        JSON.stringify(defaultCategories)
-    );
+    return JSON.parse(JSON.stringify(defaultCategories));
 }
 
 
@@ -332,21 +330,13 @@ function escapeHTML(value) {
 
 
 function formatDate(dateString) {
-
     if (!dateString) {
         return "";
     }
 
-    const date =
-        new Date(
-            `${dateString}T00:00:00`
-        );
+    const date = new Date(`${dateString}T00:00:00`);
 
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
+    if (Number.isNaN(date.getTime())) {
         return dateString;
     }
 
@@ -362,29 +352,20 @@ function formatDate(dateString) {
 
 
 function showToast(message) {
-
-    const toast =
-        getElement("toast");
+    const toast = getElement("toast");
 
     if (!toast) {
         return;
     }
 
-    toast.textContent =
-        message;
-
+    toast.textContent = message;
     toast.classList.add("show");
 
-    clearTimeout(
-        showToast.timeout
-    );
+    clearTimeout(showToast.timeout);
 
-    showToast.timeout =
-        setTimeout(() => {
-            toast.classList.remove(
-                "show"
-            );
-        }, 2500);
+    showToast.timeout = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2500);
 }
 
 
@@ -392,43 +373,29 @@ function showToast(message) {
    RESPONSIBLE INDIVIDUAL/GROUP NORMALISATION
    ========================================================= */
 
-function normaliseResponsibleIndividualsGroups(
-    input
-) {
-
+function normaliseResponsibleIndividualsGroups(input) {
     if (!Array.isArray(input)) {
         return [];
     }
 
-    const seen =
-        new Set();
-
-    const result =
-        [];
+    const seen = new Set();
+    const result = [];
 
     input.forEach(value => {
-
-        const cleanValue =
-            String(
-                value ?? ""
-            ).trim();
+        const cleanValue = String(value ?? "").trim();
 
         if (!cleanValue) {
             return;
         }
 
-        const key =
-            cleanValue.toLowerCase();
+        const key = cleanValue.toLowerCase();
 
         if (seen.has(key)) {
             return;
         }
 
         seen.add(key);
-
-        result.push(
-            cleanValue
-        );
+        result.push(cleanValue);
     });
 
     return result;
@@ -440,40 +407,23 @@ function normaliseResponsibleIndividualsGroups(
    ========================================================= */
 
 function loadData() {
-
-    const raw =
-        localStorage.getItem(
-            STORAGE_KEY
-        );
+    const raw = localStorage.getItem(STORAGE_KEY);
 
     if (!raw) {
-
-        categories =
-            cloneDefaults();
-
+        categories = cloneDefaults();
         savedData = {};
-
-        responsibleIndividualsGroups =
-            [];
-
+        responsibleIndividualsGroups = [];
         return;
     }
 
     try {
+        const parsed = JSON.parse(raw);
 
-        const parsed =
-            JSON.parse(raw);
-
-
-        categories =
-            normaliseCategories(
-                Array.isArray(
-                    parsed.categories
-                )
-                    ? parsed.categories
-                    : cloneDefaults()
-            );
-
+        categories = normaliseCategories(
+            Array.isArray(parsed.categories)
+                ? parsed.categories
+                : cloneDefaults()
+        );
 
         savedData =
             parsed.savedData &&
@@ -481,29 +431,22 @@ function loadData() {
                 ? parsed.savedData
                 : {};
 
-
         responsibleIndividualsGroups =
             normaliseResponsibleIndividualsGroups(
                 parsed.responsibleIndividualsGroups
             );
 
-
         migrateSavedData();
 
     } catch (error) {
-
         console.error(
             "Could not load saved planner data:",
             error
         );
 
-        categories =
-            cloneDefaults();
-
+        categories = cloneDefaults();
         savedData = {};
-
-        responsibleIndividualsGroups =
-            [];
+        responsibleIndividualsGroups = [];
 
         showToast(
             "Saved data could not be loaded. Defaults restored."
@@ -517,25 +460,18 @@ function loadData() {
    ========================================================= */
 
 function saveData() {
-
     const data = {
-
         version: 8,
-
         categories,
-
         savedData,
-
         responsibleIndividualsGroups:
             normaliseResponsibleIndividualsGroups(
                 responsibleIndividualsGroups
             )
     };
 
-
     responsibleIndividualsGroups =
         data.responsibleIndividualsGroups;
-
 
     localStorage.setItem(
         STORAGE_KEY,
@@ -549,71 +485,80 @@ function saveData() {
    ========================================================= */
 
 function normaliseCategories(input) {
-
     if (!Array.isArray(input)) {
         return cloneDefaults();
     }
 
+    return input
+        .map(category => {
 
-    return input.map(category => ({
+            if (!category || typeof category !== "object") {
+                return null;
+            }
 
-        id:
-            category.id ||
-            createId("category"),
+            const name =
+                String(category.name ?? "").trim();
 
-        name:
-            category.name ||
-            "Unnamed Category",
+            if (!name) {
+                return null;
+            }
 
-        icon:
-            category.icon ||
-            "📁",
+            return {
+                id:
+                    String(
+                        category.id ||
+                        createId("category")
+                    ),
 
-        /*
-         * Existing categories without a
-         * mainCategory are treated as Wedding.
-         */
-        mainCategory:
-            category.mainCategory === "reception"
-                ? "reception"
-                : "wedding",
+                name,
 
-        custom:
-            Boolean(
-                category.custom
-            ),
+                icon:
+                    String(
+                        category.icon || "📋"
+                    ),
 
-        items:
-            Array.isArray(
-                category.items
-            )
-                ? category.items.map(
-                    item => {
+                items:
+                    Array.isArray(category.items)
+                        ? category.items
+                            .map(item => {
 
-                        if (
-                            typeof item ===
-                            "string"
-                        ) {
-                            return {
-                                name: item,
-                                custom: false
-                            };
-                        }
+                                if (
+                                    typeof item === "string"
+                                ) {
+                                    return {
+                                        name: item,
+                                        custom: false
+                                    };
+                                }
 
-                        return {
-                            name:
-                                item.name ||
-                                "Unnamed Item",
+                                if (
+                                    item &&
+                                    typeof item === "object"
+                                ) {
+                                    return {
+                                        name:
+                                            String(
+                                                item.name ?? ""
+                                            ).trim(),
 
-                            custom:
-                                Boolean(
-                                    item.custom
-                                )
-                        };
-                    }
-                )
-                : []
-    }));
+                                        custom:
+                                            Boolean(
+                                                item.custom
+                                            )
+                                    };
+                                }
+
+                                return null;
+                            })
+                            .filter(
+                                item =>
+                                    item &&
+                                    item.name
+                            )
+                        : []
+            };
+        })
+        .filter(Boolean);
 }
 
 
@@ -622,125 +567,68 @@ function normaliseCategories(input) {
    ========================================================= */
 
 function migrateSavedData() {
+    Object.keys(savedData).forEach(key => {
 
-    Object.keys(
-        savedData
-    ).forEach(key => {
+        const item = savedData[key];
 
-        const item =
-            savedData[key];
-
-
-        if (
-            !item ||
-            typeof item !== "object"
-        ) {
-
+        if (!item || typeof item !== "object") {
             savedData[key] = {};
-
             return;
         }
-
 
         if (
             !item.responsiblePerson &&
             item.vendor
         ) {
-
             item.responsiblePerson =
-                String(
-                    item.vendor
-                );
+                String(item.vendor);
         }
 
-
         if (
-            item.responsiblePerson ===
-            undefined
+            item.responsiblePerson === undefined
         ) {
             item.responsiblePerson = "";
         }
 
-
-        if (
-            item.deposit ===
-            undefined
-        ) {
+        if (item.deposit === undefined) {
             item.deposit = "";
         }
 
-
-        if (
-            item.mobile ===
-            undefined
-        ) {
+        if (item.mobile === undefined) {
             item.mobile = "";
         }
 
-
-        if (
-            item.email ===
-            undefined
-        ) {
+        if (item.email === undefined) {
             item.email = "";
         }
 
-
-        if (
-            item.contactPerson ===
-            undefined
-        ) {
+        if (item.contactPerson === undefined) {
             item.contactPerson = "";
         }
 
-
-        if (
-            item.status ===
-            undefined
-        ) {
+        if (item.status === undefined) {
             item.status = "not";
         }
 
-
-        if (
-            item.price ===
-            undefined
-        ) {
+        if (item.price === undefined) {
             item.price = "";
         }
 
-
-        if (
-            item.deadline ===
-            undefined
-        ) {
+        if (item.deadline === undefined) {
             item.deadline = "";
         }
 
-
-        if (
-            item.link ===
-            undefined
-        ) {
+        if (item.link === undefined) {
             item.link = "";
         }
 
-
-        if (
-            item.notes ===
-            undefined
-        ) {
+        if (item.notes === undefined) {
             item.notes = "";
         }
 
-
-        if (
-            item.enabled ===
-            undefined
-        ) {
+        if (item.enabled === undefined) {
             item.enabled = true;
         }
-
 
         delete item.vendor;
     });
@@ -751,151 +639,84 @@ function migrateSavedData() {
    ITEM DATA
    ========================================================= */
 
-function getItem(
-    categoryId,
-    item
-) {
-
+function getItem(categoryId, item) {
     const itemName =
         typeof item === "string"
             ? item
             : item.name;
 
-
     const key =
         `${categoryId}::${itemName}`;
-
 
     if (
         !savedData[key] ||
         typeof savedData[key] !== "object"
     ) {
-
         savedData[key] = {
-
             status: "not",
-
             responsiblePerson: "",
-
             deposit: "",
-
             price: "",
-
             mobile: "",
-
             email: "",
-
             contactPerson: "",
-
             deadline: "",
-
             link: "",
-
             notes: "",
-
             enabled: true
         };
     }
 
+    const data = savedData[key];
 
-    const data =
-        savedData[key];
-
-
-    if (
-        data.responsiblePerson ===
-        undefined
-    ) {
+    if (data.responsiblePerson === undefined) {
         data.responsiblePerson = "";
     }
 
-
-    if (
-        data.deposit ===
-        undefined
-    ) {
+    if (data.deposit === undefined) {
         data.deposit = "";
     }
 
-
-    if (
-        data.price ===
-        undefined
-    ) {
+    if (data.price === undefined) {
         data.price = "";
     }
 
-
-    if (
-        data.mobile ===
-        undefined
-    ) {
+    if (data.mobile === undefined) {
         data.mobile = "";
     }
 
-
-    if (
-        data.email ===
-        undefined
-    ) {
+    if (data.email === undefined) {
         data.email = "";
     }
 
-
-    if (
-        data.contactPerson ===
-        undefined
-    ) {
+    if (data.contactPerson === undefined) {
         data.contactPerson = "";
     }
 
-
-    if (
-        data.status ===
-        undefined
-    ) {
+    if (data.status === undefined) {
         data.status = "not";
     }
 
-
-    if (
-        data.deadline ===
-        undefined
-    ) {
+    if (data.deadline === undefined) {
         data.deadline = "";
     }
 
-
-    if (
-        data.link ===
-        undefined
-    ) {
+    if (data.link === undefined) {
         data.link = "";
     }
 
-
-    if (
-        data.notes ===
-        undefined
-    ) {
+    if (data.notes === undefined) {
         data.notes = "";
     }
 
-
-    if (
-        data.enabled ===
-        undefined
-    ) {
+    if (data.enabled === undefined) {
         data.enabled = true;
     }
 
-
     delete data.vendor;
-
 
     return data;
 }
-
 
 /* =========================================================
    MAIN CATEGORY NAVIGATION
@@ -1059,53 +880,33 @@ function buildMainCategoryNavigation() {
 }
 
 
+
 /* =========================================================
    NAVIGATION
    ========================================================= */
 
 function buildNavigation() {
+    const topNavigation = getElement("topNavigation");
+    const navigation = getElement("navigation");
 
-    const topNavigation =
-        getElement(
-            "topNavigation"
-        );
-
-    const navigation =
-        getElement(
-            "navigation"
-        );
-
-
-    if (
-        !topNavigation ||
-        !navigation
-    ) {
+    if (!topNavigation || !navigation) {
         return;
     }
 
-
-    topNavigation.innerHTML =
-        "";
-
-    navigation.innerHTML =
-        "";
+    topNavigation.innerHTML = "";
+    navigation.innerHTML = "";
 
 
     /* =====================================================
        TOP NAVIGATION
+       Dashboard / Tagging / Hidden Items
        ===================================================== */
 
     const dashboardButton =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
-    dashboardButton.type =
-        "button";
-
-    dashboardButton.className =
-        "nav-button";
-
+    dashboardButton.type = "button";
+    dashboardButton.className = "nav-button";
     dashboardButton.textContent =
         "🏠 Dashboard";
 
@@ -1120,16 +921,10 @@ function buildNavigation() {
 
 
     const taggingButton =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
-    taggingButton.type =
-        "button";
-
-    taggingButton.className =
-        "nav-button";
-
+    taggingButton.type = "button";
+    taggingButton.className = "nav-button";
     taggingButton.textContent =
         "🏷️ Tagging";
 
@@ -1144,16 +939,10 @@ function buildNavigation() {
 
 
     const hiddenButton =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
-    hiddenButton.type =
-        "button";
-
-    hiddenButton.className =
-        "nav-button";
-
+    hiddenButton.type = "button";
+    hiddenButton.className = "nav-button";
     hiddenButton.textContent =
         "👁️ Hidden Items";
 
@@ -1166,18 +955,15 @@ function buildNavigation() {
         hiddenButton
     );
 
+    /* =====================================================
+       BUDGET OVERVIEW
+       ===================================================== */
 
     const budgetButton =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
-    budgetButton.type =
-        "button";
-
-    budgetButton.className =
-        "nav-button";
-
+    budgetButton.type = "button";
+    budgetButton.className = "nav-button";
     budgetButton.textContent =
         "💰 Budget Overview";
 
@@ -1190,52 +976,31 @@ function buildNavigation() {
         budgetButton
     );
 
-
     /* =====================================================
        CATEGORY NAVIGATION
-       ONLY CURRENT MAIN CATEGORY
+       Only wedding categories stay in original navigation
        ===================================================== */
 
-    categories
-        .filter(
-            category =>
-                category.mainCategory ===
-                currentMainCategory
-        )
-        .forEach(
-            category => {
+    categories.forEach(category => {
 
-                const button =
-                    document.createElement(
-                        "button"
-                    );
+        const button =
+            document.createElement("button");
 
+        button.type = "button";
+        button.className = "nav-button";
 
-                button.type =
-                    "button";
+        button.textContent =
+            `${category.icon} ${category.name}`;
 
-                button.className =
-                    "nav-button";
-
-
-                button.textContent =
-                    `${category.icon} ${category.name}`;
-
-
-                button.addEventListener(
-                    "click",
-                    () =>
-                        showCategory(
-                            category.id
-                        )
-                );
-
-
-                navigation.appendChild(
-                    button
-                );
-            }
+        button.addEventListener(
+            "click",
+            () => showCategory(category.id)
         );
+
+        navigation.appendChild(
+            button
+        );
+    });
 }
 
 
@@ -1244,53 +1009,33 @@ function buildNavigation() {
    ========================================================= */
 
 function hideAllPages() {
-
     const dashboardPage =
-        getElement(
-            "dashboardPage"
-        );
+        getElement("dashboardPage");
 
     const categoryPage =
-        getElement(
-            "categoryPage"
-        );
+        getElement("categoryPage");
 
     const taggingPage =
-        getElement(
-            "taggingPage"
-        );
+        getElement("taggingPage");
 
     const budgetPage =
-        getElement(
-            "budgetPage"
-        );
+        getElement("budgetPage");
 
 
     if (dashboardPage) {
-        dashboardPage.classList.add(
-            "hidden"
-        );
+        dashboardPage.classList.add("hidden");
     }
-
 
     if (categoryPage) {
-        categoryPage.classList.add(
-            "hidden"
-        );
+        categoryPage.classList.add("hidden");
     }
-
 
     if (taggingPage) {
-        taggingPage.classList.add(
-            "hidden"
-        );
+        taggingPage.classList.add("hidden");
     }
 
-
     if (budgetPage) {
-        budgetPage.classList.add(
-            "hidden"
-        );
+        budgetPage.classList.add("hidden");
     }
 }
 
@@ -1300,33 +1045,19 @@ function hideAllPages() {
    ========================================================= */
 
 function showDashboard() {
-
     hideAllPages();
 
-
     const dashboardPage =
-        getElement(
-            "dashboardPage"
-        );
-
+        getElement("dashboardPage");
 
     if (dashboardPage) {
-
-        dashboardPage.classList.remove(
-            "hidden"
-        );
+        dashboardPage.classList.remove("hidden");
     }
 
-
-    currentCategory =
-        "dashboard";
-
-    currentItem =
-        null;
-
+    currentCategory = "dashboard";
+    currentItem = null;
 
     renderDashboard();
-
 
     window.scrollTo({
         top: 0,
@@ -1336,209 +1067,130 @@ function showDashboard() {
 
 
 function renderDashboard() {
-
     const summaryGrid =
-        getElement(
-            "summaryGrid"
-        );
-
+        getElement("summaryGrid");
 
     if (!summaryGrid) {
         return;
     }
 
+    summaryGrid.innerHTML = "";
 
-    summaryGrid.innerHTML =
-        "";
+    let totalItems = 0;
+    let completedItems = 0;
+    let progressItems = 0;
 
+    categories.forEach(category => {
 
-    let totalItems =
-        0;
+        let categoryTotal = 0;
+        let categoryDone = 0;
 
-    let completedItems =
-        0;
+        category.items.forEach(item => {
 
-    let progressItems =
-        0;
-
-
-    categories
-        .filter(
-            category =>
-                category.mainCategory ===
-                currentMainCategory
-        )
-        .forEach(
-            category => {
-
-                let categoryTotal =
-                    0;
-
-                let categoryDone =
-                    0;
-
-
-                category.items.forEach(
-                    item => {
-
-                        const data =
-                            getItem(
-                                category.id,
-                                item
-                            );
-
-
-                        if (
-                            data.enabled ===
-                            false
-                        ) {
-                            return;
-                        }
-
-
-                        totalItems++;
-
-                        categoryTotal++;
-
-
-                        if (
-                            data.status ===
-                            "done"
-                        ) {
-
-                            completedItems++;
-
-                            categoryDone++;
-                        }
-
-
-                        if (
-                            data.status ===
-                            "progress"
-                        ) {
-
-                            progressItems++;
-                        }
-                    }
+            const data =
+                getItem(
+                    category.id,
+                    item
                 );
 
-
-                const percent =
-                    categoryTotal > 0
-                        ? Math.round(
-                            (
-                                categoryDone /
-                                categoryTotal
-                            ) * 100
-                        )
-                        : 0;
-
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                card.className =
-                    "category-summary-card";
-
-
-                card.innerHTML = `
-
-                    <div class="category-card-top">
-
-                        <span class="category-icon">
-                            ${escapeHTML(
-                                category.icon
-                            )}
-                        </span>
-
-                        <span class="category-percent">
-                            ${percent}%
-                        </span>
-
-                    </div>
-
-                    <h3>
-                        ${escapeHTML(
-                            category.name
-                        )}
-                    </h3>
-
-                    <p>
-                        ${categoryDone} of
-                        ${categoryTotal}
-                        completed
-                    </p>
-
-                    <div class="progress-bar small">
-
-                        <div
-                            class="progress-fill"
-                            style="width: ${percent}%"
-                        ></div>
-
-                    </div>
-                `;
-
-
-                card.addEventListener(
-                    "click",
-                    () =>
-                        showCategory(
-                            category.id
-                        )
-                );
-
-
-                summaryGrid.appendChild(
-                    card
-                );
+            if (data.enabled === false) {
+                return;
             }
+
+            totalItems++;
+            categoryTotal++;
+
+            if (data.status === "done") {
+                completedItems++;
+                categoryDone++;
+            }
+
+            if (data.status === "progress") {
+                progressItems++;
+            }
+        });
+
+        const percent =
+            categoryTotal > 0
+                ? Math.round(
+                    (categoryDone /
+                        categoryTotal) *
+                    100
+                )
+                : 0;
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "category-summary-card";
+
+        card.innerHTML = `
+            <div class="category-card-top">
+
+                <span class="category-icon">
+                    ${escapeHTML(category.icon)}
+                </span>
+
+                <span class="category-percent">
+                    ${percent}%
+                </span>
+
+            </div>
+
+            <h3>
+                ${escapeHTML(category.name)}
+            </h3>
+
+            <p>
+                ${categoryDone} of
+                ${categoryTotal}
+                completed
+            </p>
+
+            <div class="progress-bar small">
+                <div
+                    class="progress-fill"
+                    style="width: ${percent}%"
+                ></div>
+            </div>
+        `;
+
+        card.addEventListener(
+            "click",
+            () => showCategory(category.id)
         );
+
+        summaryGrid.appendChild(card);
+    });
 
 
     const overallPercent =
         totalItems > 0
             ? Math.round(
-                (
-                    completedItems /
-                    totalItems
-                ) * 100
+                (completedItems /
+                    totalItems) *
+                100
             )
             : 0;
 
-
     const totalItemsElement =
-        getElement(
-            "totalItems"
-        );
+        getElement("totalItems");
 
     const completedItemsElement =
-        getElement(
-            "completedItems"
-        );
+        getElement("completedItems");
 
     const progressItemsElement =
-        getElement(
-            "progressItems"
-        );
+        getElement("progressItems");
 
     const responsibleGroupsCount =
-        getElement(
-            "responsibleGroupsCount"
-        );
+        getElement("responsibleGroupsCount");
 
     const overallPercentElement =
-        getElement(
-            "overallPercent"
-        );
+        getElement("overallPercent");
 
     const overallProgressFill =
-        getElement(
-            "overallProgressFill"
-        );
+        getElement("overallProgressFill");
 
 
     if (totalItemsElement) {
@@ -1546,30 +1198,25 @@ function renderDashboard() {
             totalItems;
     }
 
-
     if (completedItemsElement) {
         completedItemsElement.textContent =
             completedItems;
     }
-
 
     if (progressItemsElement) {
         progressItemsElement.textContent =
             progressItems;
     }
 
-
     if (responsibleGroupsCount) {
         responsibleGroupsCount.textContent =
             responsibleIndividualsGroups.length;
     }
 
-
     if (overallPercentElement) {
         overallPercentElement.textContent =
             `${overallPercent}%`;
     }
-
 
     if (overallProgressFill) {
         overallProgressFill.style.width =
@@ -1583,33 +1230,19 @@ function renderDashboard() {
    ========================================================= */
 
 function showTagging() {
-
     hideAllPages();
 
-
     const taggingPage =
-        getElement(
-            "taggingPage"
-        );
-
+        getElement("taggingPage");
 
     if (taggingPage) {
-
-        taggingPage.classList.remove(
-            "hidden"
-        );
+        taggingPage.classList.remove("hidden");
     }
 
-
-    currentCategory =
-        "tagging";
-
-    currentItem =
-        null;
-
+    currentCategory = "tagging";
+    currentItem = null;
 
     renderTagging();
-
 
     window.scrollTo({
         top: 0,
@@ -1619,26 +1252,17 @@ function showTagging() {
 
 
 function renderTagging() {
-
     const taggingGrid =
-        getElement(
-            "taggingGrid"
-        );
+        getElement("taggingGrid");
 
     const emptyMessage =
-        getElement(
-            "taggingEmptyMessage"
-        );
-
+        getElement("taggingEmptyMessage");
 
     if (!taggingGrid) {
         return;
     }
 
-
-    taggingGrid.innerHTML =
-        "";
-
+    taggingGrid.innerHTML = "";
 
     responsibleIndividualsGroups =
         normaliseResponsibleIndividualsGroups(
@@ -1647,12 +1271,9 @@ function renderTagging() {
 
 
     if (
-        responsibleIndividualsGroups.length ===
-        0
+        responsibleIndividualsGroups.length === 0
     ) {
-
         if (emptyMessage) {
-
             emptyMessage.style.display =
                 "block";
         }
@@ -1662,7 +1283,6 @@ function renderTagging() {
 
 
     if (emptyMessage) {
-
         emptyMessage.style.display =
             "none";
     }
@@ -1672,44 +1292,29 @@ function renderTagging() {
         name => {
 
             const card =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             card.className =
                 "tagging-card";
 
-
             const nameElement =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             nameElement.className =
                 "tagging-card-name";
 
-
-            nameElement.textContent =
-                name;
+            nameElement.textContent = name;
 
 
             const deleteButton =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("button");
 
-
-            deleteButton.type =
-                "button";
-
+            deleteButton.type = "button";
             deleteButton.className =
                 "danger-button tagging-delete-button";
 
             deleteButton.textContent =
                 "Delete";
-
 
             deleteButton.addEventListener(
                 "click",
@@ -1728,9 +1333,7 @@ function renderTagging() {
                 deleteButton
             );
 
-            taggingGrid.appendChild(
-                card
-            );
+            taggingGrid.appendChild(card);
         }
     );
 }
@@ -1741,24 +1344,17 @@ function renderTagging() {
    ========================================================= */
 
 function addResponsibleIndividualGroup() {
-
     const input =
-        getElement(
-            "taggingInput"
-        );
-
+        getElement("taggingInput");
 
     if (!input) {
         return;
     }
 
-
     const value =
         input.value.trim();
 
-
     if (!value) {
-
         showToast(
             "Please enter an individual or group."
         );
@@ -1776,9 +1372,7 @@ function addResponsibleIndividualGroup() {
                 value.toLowerCase()
         );
 
-
     if (duplicate) {
-
         showToast(
             "This individual/group already exists."
         );
@@ -1789,23 +1383,16 @@ function addResponsibleIndividualGroup() {
     }
 
 
-    responsibleIndividualsGroups.push(
-        value
-    );
-
+    responsibleIndividualsGroups.push(value);
 
     responsibleIndividualsGroups =
         normaliseResponsibleIndividualsGroups(
             responsibleIndividualsGroups
         );
 
-
     saveData();
 
-
-    input.value =
-        "";
-
+    input.value = "";
 
     renderTagging();
 
@@ -1813,11 +1400,9 @@ function addResponsibleIndividualGroup() {
 
     renderDashboard();
 
-
     showToast(
         `"${value}" added to Tagging.`
     );
-
 
     input.focus();
 }
@@ -1830,12 +1415,10 @@ function addResponsibleIndividualGroup() {
 function deleteResponsibleIndividualGroup(
     name
 ) {
-
     const confirmed =
         window.confirm(
             `Delete "${name}" from the Tagging list?\n\nExisting item assignments will not be removed.`
         );
-
 
     if (!confirmed) {
         return;
@@ -1845,7 +1428,6 @@ function deleteResponsibleIndividualGroup(
     const lowerName =
         name.toLowerCase();
 
-
     responsibleIndividualsGroups =
         responsibleIndividualsGroups.filter(
             existing =>
@@ -1853,16 +1435,13 @@ function deleteResponsibleIndividualGroup(
                 lowerName
         );
 
-
     saveData();
-
 
     renderTagging();
 
     populateResponsibleIndividualSelect();
 
     renderDashboard();
-
 
     showToast(
         `"${name}" removed from Tagging.`
@@ -1877,40 +1456,29 @@ function deleteResponsibleIndividualGroup(
 function populateResponsibleIndividualSelect(
     selectedValue = null
 ) {
-
     const select =
         getElement(
             "responsiblePersonInput"
         );
 
-
     if (!select) {
         return;
     }
-
 
     const currentValue =
         selectedValue !== null
             ? selectedValue
             : select.value;
 
-
-    select.innerHTML =
-        "";
+    select.innerHTML = "";
 
 
     const emptyOption =
-        document.createElement(
-            "option"
-        );
+        document.createElement("option");
 
-
-    emptyOption.value =
-        "";
-
+    emptyOption.value = "";
     emptyOption.textContent =
-        "No assignment";
-
+        "No assignment (use tagging)";
 
     select.appendChild(
         emptyOption
@@ -1925,17 +1493,10 @@ function populateResponsibleIndividualSelect(
                     "option"
                 );
 
+            option.value = name;
+            option.textContent = name;
 
-            option.value =
-                name;
-
-            option.textContent =
-                name;
-
-
-            select.appendChild(
-                option
-            );
+            select.appendChild(option);
         }
     );
 
@@ -1947,20 +1508,16 @@ function populateResponsibleIndividualSelect(
                 name === currentValue
         )
     ) {
-
         const legacyOption =
             document.createElement(
                 "option"
             );
 
-
         legacyOption.value =
             currentValue;
 
-
         legacyOption.textContent =
             `${currentValue} (saved assignment)`;
-
 
         select.appendChild(
             legacyOption
@@ -1977,125 +1534,72 @@ function populateResponsibleIndividualSelect(
    CATEGORY PAGE
    ========================================================= */
 
-function showCategory(
-    categoryId
-) {
-
+function showCategory(categoryId) {
     const category =
         categories.find(
             item =>
-                item.id ===
-                categoryId
+                item.id === categoryId
         );
-
 
     if (!category) {
         return;
     }
 
-
-    /*
-     * Make sure the correct main
-     * navigation section is active.
-     */
-    currentMainCategory =
-        category.mainCategory ===
-        "reception"
-            ? "reception"
-            : "wedding";
-
-
-    buildMainCategoryNavigation();
-    buildNavigation();
-
-
     hideAllPages();
 
-
     const categoryPage =
-        getElement(
-            "categoryPage"
-        );
-
+        getElement("categoryPage");
 
     if (categoryPage) {
-
         categoryPage.classList.remove(
             "hidden"
         );
     }
 
-
-    currentCategory =
-        categoryId;
-
-    currentItem =
-        null;
+    currentCategory = categoryId;
+    currentItem = null;
 
 
     const categoryTitle =
-        getElement(
-            "categoryTitle"
-        );
+        getElement("categoryTitle");
 
     const categoryPageHeading =
-        getElement(
-            "categoryPageHeading"
-        );
+        getElement("categoryPageHeading");
 
     const addItemButton =
-        getElement(
-            "addItemButton"
-        );
+        getElement("addItemButton");
 
     const itemSearch =
-        getElement(
-            "itemSearch"
-        );
+        getElement("itemSearch");
 
     const itemStatusFilter =
-        getElement(
-            "itemStatusFilter"
-        );
+        getElement("itemStatusFilter");
 
 
     if (categoryTitle) {
-
         categoryTitle.textContent =
             category.name;
     }
 
-
     if (categoryPageHeading) {
-
         categoryPageHeading.textContent =
             category.name;
     }
 
-
     if (addItemButton) {
-
         addItemButton.style.display =
             "";
     }
 
-
     if (itemSearch) {
-
-        itemSearch.value =
-            "";
+        itemSearch.value = "";
     }
-
 
     if (itemStatusFilter) {
-
-        itemStatusFilter.value =
-            "all";
+        itemStatusFilter.value = "all";
     }
 
-
     renderCategory();
-
 
     window.scrollTo({
         top: 0,
@@ -2109,49 +1613,34 @@ function showCategory(
    ========================================================= */
 
 function renderCategory() {
-
     const category =
         categories.find(
             item =>
-                item.id ===
-                currentCategory
+                item.id === currentCategory
         );
-
 
     if (!category) {
         return;
     }
 
-
     const itemsGrid =
-        getElement(
-            "itemsGrid"
-        );
+        getElement("itemsGrid");
 
     const emptyMessage =
-        getElement(
-            "emptyMessage"
-        );
-
+        getElement("emptyMessage");
 
     if (!itemsGrid) {
         return;
     }
 
-
-    itemsGrid.innerHTML =
-        "";
+    itemsGrid.innerHTML = "";
 
 
     const searchInput =
-        getElement(
-            "itemSearch"
-        );
+        getElement("itemSearch");
 
     const statusFilter =
-        getElement(
-            "itemStatusFilter"
-        );
+        getElement("itemStatusFilter");
 
 
     const search =
@@ -2161,7 +1650,6 @@ function renderCategory() {
                 .toLowerCase()
             : "";
 
-
     const filter =
         statusFilter
             ? statusFilter.value
@@ -2169,62 +1657,46 @@ function renderCategory() {
 
 
     const visibleItems =
-        category.items.filter(
-            item => {
+        category.items.filter(item => {
 
-                const itemName =
-                    typeof item ===
-                    "string"
-                        ? item
-                        : item.name;
+            const itemName =
+                typeof item === "string"
+                    ? item
+                    : item.name;
 
+            const data =
+                getItem(
+                    category.id,
+                    item
+                );
 
-                const data =
-                    getItem(
-                        category.id,
-                        item
-                    );
-
-
-                if (
-                    data.enabled ===
-                    false
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    search &&
-                    !itemName
-                        .toLowerCase()
-                        .includes(search)
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    filter !== "all" &&
-                    data.status !==
-                        filter
-                ) {
-                    return false;
-                }
-
-
-                return true;
+            if (data.enabled === false) {
+                return false;
             }
-        );
+
+            if (
+                search &&
+                !itemName
+                    .toLowerCase()
+                    .includes(search)
+            ) {
+                return false;
+            }
+
+            if (
+                filter !== "all" &&
+                data.status !== filter
+            ) {
+                return false;
+            }
+
+            return true;
+        });
 
 
-    if (
-        visibleItems.length ===
-        0
-    ) {
+    if (visibleItems.length === 0) {
 
         if (emptyMessage) {
-
             emptyMessage.style.display =
                 "block";
         }
@@ -2232,27 +1704,21 @@ function renderCategory() {
     } else {
 
         if (emptyMessage) {
-
             emptyMessage.style.display =
                 "none";
         }
 
 
-        visibleItems.forEach(
-            item => {
+        visibleItems.forEach(item => {
 
-                const card =
-                    createItemCard(
-                        category,
-                        item
-                    );
-
-
-                itemsGrid.appendChild(
-                    card
+            const card =
+                createItemCard(
+                    category,
+                    item
                 );
-            }
-        );
+
+            itemsGrid.appendChild(card);
+        });
     }
 
 
@@ -2270,12 +1736,10 @@ function createItemCard(
     category,
     item
 ) {
-
     const itemName =
         typeof item === "string"
             ? item
             : item.name;
-
 
     const data =
         getItem(
@@ -2285,10 +1749,7 @@ function createItemCard(
 
 
     const card =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     card.className =
         "item-card";
@@ -2300,137 +1761,95 @@ function createItemCard(
         );
 
 
-    let details =
-        "";
+    let details = "";
 
 
-    if (
-        data.responsiblePerson
-    ) {
-
+    if (data.responsiblePerson) {
         details += `
-
             <div class="item-detail">
-
                 <span>
                     Responsible individual/group
                 </span>
-
                 <strong>
                     ${escapeHTML(
                         data.responsiblePerson
                     )}
                 </strong>
-
             </div>
         `;
     }
 
 
-    if (
-        data.price !== ""
-    ) {
-
+    if (data.price !== "") {
         details += `
-
             <div class="item-detail">
-
                 <span>
                     Price
                 </span>
-
                 <strong>
                     ${escapeHTML(
                         data.price
                     )} kr.
                 </strong>
-
             </div>
         `;
     }
 
 
-    if (
-        data.deposit !== ""
-    ) {
-
+    if (data.deposit !== "") {
         details += `
-
             <div class="item-detail">
-
                 <span>
                     Depositum
                 </span>
-
                 <strong>
                     ${escapeHTML(
                         data.deposit
                     )} kr.
                 </strong>
-
             </div>
         `;
     }
 
 
-    if (
-        data.contactPerson
-    ) {
-
+    if (data.contactPerson) {
         details += `
-
             <div class="item-detail">
-
                 <span>
                     Contact
                 </span>
-
                 <strong>
                     ${escapeHTML(
                         data.contactPerson
                     )}
                 </strong>
-
             </div>
         `;
     }
 
 
-    if (
-        data.mobile
-    ) {
-
+    if (data.mobile) {
         details += `
-
             <div class="item-detail">
-
                 <span>
                     Mobile
                 </span>
-
                 <strong>
                     ${escapeHTML(
                         data.mobile
                     )}
                 </strong>
-
             </div>
         `;
     }
 
 
-    if (
-        data.deadline
-    ) {
-
+    if (data.deadline) {
         details += `
-
             <div class="item-detail">
-
                 <span>
                     Deadline
                 </span>
-
                 <strong>
                     ${escapeHTML(
                         formatDate(
@@ -2438,14 +1857,12 @@ function createItemCard(
                         )
                     )}
                 </strong>
-
             </div>
         `;
     }
 
 
     card.innerHTML = `
-
         <div class="item-card-header">
 
             <span
@@ -2460,13 +1877,9 @@ function createItemCard(
 
         </div>
 
-
         <h3>
-            ${escapeHTML(
-                itemName
-            )}
+            ${escapeHTML(itemName)}
         </h3>
-
 
         ${
             details
@@ -2498,10 +1911,7 @@ function createItemCard(
    STATUS
    ========================================================= */
 
-function getStatusLabel(
-    status
-) {
-
+function getStatusLabel(status) {
     switch (status) {
 
         case "done":
@@ -2517,40 +1927,22 @@ function getStatusLabel(
 
 
 function updateStatusButtons() {
-
     const buttons = {
-
-        not:
-            getElement(
-                "notButton"
-            ),
-
-        progress:
-            getElement(
-                "progressButton"
-            ),
-
-        done:
-            getElement(
-                "doneButton"
-            )
+        not: getElement("notButton"),
+        progress: getElement("progressButton"),
+        done: getElement("doneButton")
     };
 
-
-    Object.entries(
-        buttons
-    ).forEach(
+    Object.entries(buttons).forEach(
         ([status, button]) => {
 
             if (!button) {
                 return;
             }
 
-
             button.classList.toggle(
                 "active",
-                modalStatus ===
-                    status
+                modalStatus === status
             );
         }
     );
@@ -2565,14 +1957,11 @@ function openModal(
     categoryId,
     item
 ) {
-
     const category =
         categories.find(
             category =>
-                category.id ===
-                categoryId
+                category.id === categoryId
         );
-
 
     if (!category) {
         return;
@@ -2580,8 +1969,7 @@ function openModal(
 
 
     const itemName =
-        typeof item ===
-        "string"
+        typeof item === "string"
             ? item
             : item.name;
 
@@ -2593,17 +1981,6 @@ function openModal(
         itemName;
 
 
-    /*
-     * Make sure the main category
-     * matches this category.
-     */
-    currentMainCategory =
-        category.mainCategory ===
-        "reception"
-            ? "reception"
-            : "wedding";
-
-
     const data =
         getItem(
             categoryId,
@@ -2612,43 +1989,32 @@ function openModal(
 
 
     modalStatus =
-        data.status ||
-        "not";
+        data.status || "not";
 
 
     const overlay =
-        getElement(
-            "overlay"
-        );
+        getElement("overlay");
 
     const modalCategory =
-        getElement(
-            "modalCategory"
-        );
+        getElement("modalCategory");
 
     const modalTitle =
-        getElement(
-            "modalTitle"
-        );
+        getElement("modalTitle");
 
 
     if (modalCategory) {
-
         modalCategory.textContent =
             category.name;
     }
 
-
     if (modalTitle) {
-
         modalTitle.textContent =
             itemName;
     }
 
 
     populateResponsibleIndividualSelect(
-        data.responsiblePerson ||
-            ""
+        data.responsiblePerson || ""
     );
 
 
@@ -2695,12 +2061,9 @@ function openModal(
 
     updateStatusButtons();
 
-
     updateItemVisibilityButton(
-        data.enabled !==
-            false
+        data.enabled !== false
     );
-
 
     updateCustomDeleteVisibility(
         categoryId,
@@ -2710,9 +2073,7 @@ function openModal(
 
     if (overlay) {
 
-        overlay.classList.add(
-            "open"
-        );
+        overlay.classList.add("open");
 
         overlay.setAttribute(
             "aria-hidden",
@@ -2734,13 +2095,10 @@ function setInputValue(
     id,
     value
 ) {
-
     const element =
         getElement(id);
 
-
     if (element) {
-
         element.value =
             value ?? "";
     }
@@ -2752,15 +2110,10 @@ function setInputValue(
    ========================================================= */
 
 function closeModal() {
-
     const overlay =
-        getElement(
-            "overlay"
-        );
-
+        getElement("overlay");
 
     if (overlay) {
-
         overlay.classList.remove(
             "open"
         );
@@ -2771,10 +2124,7 @@ function closeModal() {
         );
     }
 
-
-    currentItem =
-        null;
-
+    currentItem = null;
 
     document.body.style.overflow =
         "";
@@ -2788,17 +2138,14 @@ function closeModal() {
 function updateItemVisibilityButton(
     enabled
 ) {
-
     const button =
         getElement(
             "disableItemButton"
         );
 
-
     if (!button) {
         return;
     }
-
 
     button.textContent =
         enabled
@@ -2808,48 +2155,30 @@ function updateItemVisibilityButton(
 
 
 function toggleCurrentItemVisibility() {
-
     if (
         !currentCategory ||
-        currentCategory ===
-            "dashboard" ||
-        currentCategory ===
-            "tagging" ||
-        currentCategory ===
-            "budget" ||
-        currentCategory ===
-            "hidden" ||
+        currentCategory === "dashboard" ||
+        currentCategory === "tagging" ||
+        currentCategory === "budget" ||
+        currentCategory === "hidden" ||
         !currentItem
     ) {
         return;
     }
 
 
-    /*
-     * Save the category before
-     * closeModal() clears currentItem.
-     */
-    const categoryId =
-        currentCategory;
-
-    const itemName =
-        currentItem;
-
-
     const data =
         getItem(
-            categoryId,
-            itemName
+            currentCategory,
+            currentItem
         );
 
 
     data.enabled =
-        data.enabled ===
-        false;
+        data.enabled === false;
 
 
     saveData();
-
 
     updateItemVisibilityButton(
         data.enabled
@@ -2857,13 +2186,10 @@ function toggleCurrentItemVisibility() {
 
 
     if (data.enabled) {
-
         showToast(
             "Item restored."
         );
-
     } else {
-
         showToast(
             "Item hidden."
         );
@@ -2873,43 +2199,11 @@ function toggleCurrentItemVisibility() {
     closeModal();
 
 
-    /*
-     * The current page may be
-     * the hidden-items page or
-     * a normal category.
-     */
-    if (
-        currentCategory ===
-        "hidden"
-    ) {
-
+    if (currentCategory === "hidden") {
         renderHiddenItems();
-
     } else {
-
-        /*
-         * currentCategory becomes
-         * null only because closeModal
-         * clears currentItem, not
-         * currentCategory.
-         */
-        const category =
-            categories.find(
-                item =>
-                    item.id ===
-                    categoryId
-            );
-
-
-        if (category) {
-
-            currentCategory =
-                categoryId;
-
-            renderCategory();
-        }
+        renderCategory();
     }
-
 
     renderDashboard();
 }
@@ -2923,66 +2217,47 @@ function updateCustomDeleteVisibility(
     categoryId,
     itemName
 ) {
-
     const area =
         getElement(
             "customItemDeleteArea"
         );
 
-
     if (!area) {
         return;
     }
 
-
     const category =
         categories.find(
             item =>
-                item.id ===
-                categoryId
+                item.id === categoryId
         );
-
 
     if (!category) {
-
-        area.classList.add(
-            "hidden"
-        );
-
+        area.classList.add("hidden");
         return;
     }
 
-
     const categoryItem =
-        category.items.find(
-            item => {
+        category.items.find(item => {
 
-                const name =
-                    typeof item ===
-                    "string"
-                        ? item
-                        : item.name;
+            const name =
+                typeof item === "string"
+                    ? item
+                    : item.name;
 
-
-                return name ===
-                    itemName;
-            }
-        );
+            return name === itemName;
+        });
 
 
     if (
         categoryItem &&
-        typeof categoryItem ===
-            "object" &&
+        typeof categoryItem === "object" &&
         categoryItem.custom
     ) {
-
         area.classList.remove(
             "hidden"
         );
-
     } else {
-
         area.classList.add(
             "hidden"
         );
@@ -2991,17 +2266,12 @@ function updateCustomDeleteVisibility(
 
 
 function deleteCurrentCustomItem() {
-
     if (
         !currentCategory ||
-        currentCategory ===
-            "dashboard" ||
-        currentCategory ===
-            "tagging" ||
-        currentCategory ===
-            "budget" ||
-        currentCategory ===
-            "hidden" ||
+        currentCategory === "dashboard" ||
+        currentCategory === "tagging" ||
+        currentCategory === "budget" ||
+        currentCategory === "hidden" ||
         !currentItem
     ) {
         return;
@@ -3011,10 +2281,8 @@ function deleteCurrentCustomItem() {
     const category =
         categories.find(
             item =>
-                item.id ===
-                currentCategory
+                item.id === currentCategory
         );
-
 
     if (!category) {
         return;
@@ -3026,27 +2294,22 @@ function deleteCurrentCustomItem() {
             current => {
 
                 const name =
-                    typeof current ===
-                    "string"
+                    typeof current === "string"
                         ? current
                         : current.name;
 
-
-                return name ===
-                    currentItem;
+                return name === currentItem;
             }
         );
 
 
     const isCustom =
         item &&
-        typeof item ===
-            "object" &&
+        typeof item === "object" &&
         item.custom;
 
 
     if (!isCustom) {
-
         showToast(
             "Default items cannot be deleted."
         );
@@ -3055,15 +2318,10 @@ function deleteCurrentCustomItem() {
     }
 
 
-    const itemName =
-        currentItem;
-
-
     const confirmed =
         window.confirm(
-            `Delete "${itemName}" permanently?`
+            `Delete "${currentItem}" permanently?`
         );
-
 
     if (!confirmed) {
         return;
@@ -3071,7 +2329,7 @@ function deleteCurrentCustomItem() {
 
 
     const key =
-        `${currentCategory}::${itemName}`;
+        `${currentCategory}::${currentItem}`;
 
 
     delete savedData[key];
@@ -3082,28 +2340,22 @@ function deleteCurrentCustomItem() {
             current => {
 
                 const name =
-                    typeof current ===
-                    "string"
+                    typeof current === "string"
                         ? current
                         : current.name;
 
-
-                return name !==
-                    itemName;
+                return name !== currentItem;
             }
         );
 
 
     saveData();
 
-
     closeModal();
-
 
     renderCategory();
 
     renderDashboard();
-
 
     showToast(
         "Custom item deleted."
@@ -3116,34 +2368,22 @@ function deleteCurrentCustomItem() {
    ========================================================= */
 
 function saveItem() {
-
     if (
         !currentCategory ||
-        currentCategory ===
-            "dashboard" ||
-        currentCategory ===
-            "tagging" ||
-        currentCategory ===
-            "budget" ||
-        currentCategory ===
-            "hidden" ||
+        currentCategory === "dashboard" ||
+        currentCategory === "tagging" ||
+        currentCategory === "budget" ||
+        currentCategory === "hidden" ||
         !currentItem
     ) {
         return;
     }
 
 
-    const categoryId =
-        currentCategory;
-
-    const itemName =
-        currentItem;
-
-
     const data =
         getItem(
-            categoryId,
-            itemName
+            currentCategory,
+            currentItem
         );
 
 
@@ -3168,42 +2408,35 @@ function saveItem() {
             "depositInput"
         );
 
-
     data.price =
         getInputValue(
             "priceInput"
         );
-
 
     data.mobile =
         getInputValue(
             "mobileInput"
         );
 
-
     data.email =
         getInputValue(
             "emailInput"
         );
-
 
     data.contactPerson =
         getInputValue(
             "contactPersonInput"
         );
 
-
     data.deadline =
         getInputValue(
             "deadlineInput"
         );
 
-
     data.link =
         getInputValue(
             "linkInput"
         );
-
 
     data.notes =
         getInputValue(
@@ -3213,49 +2446,21 @@ function saveItem() {
 
     saveData();
 
-
     const categoryBeforeClose =
-        categoryId;
-
+        currentCategory;
 
     closeModal();
 
 
-    /*
-     * If the saved item is hidden,
-     * update hidden items instead.
-     */
-    const savedItem =
-        getItem(
-            categoryBeforeClose,
-            itemName
-        );
-
-
     if (
-        savedItem.enabled ===
-        false
+        categoryBeforeClose === "hidden"
     ) {
-
-        if (
-            currentCategory ===
-            "hidden"
-        ) {
-
-            renderHiddenItems();
-        }
-
+        renderHiddenItems();
     } else {
-
-        currentCategory =
-            categoryBeforeClose;
-
         renderCategory();
     }
 
-
     renderDashboard();
-
 
     showToast(
         "Item saved."
@@ -3263,13 +2468,9 @@ function saveItem() {
 }
 
 
-function getInputValue(
-    id
-) {
-
+function getInputValue(id) {
     const element =
         getElement(id);
-
 
     return element
         ? element.value.trim()
@@ -3282,18 +2483,13 @@ function getInputValue(
    ========================================================= */
 
 function clearItem() {
-
-    modalStatus =
-        "not";
-
+    modalStatus = "not";
 
     updateStatusButtons();
-
 
     populateResponsibleIndividualSelect(
         ""
     );
-
 
     setInputValue(
         "depositInput",
@@ -3335,7 +2531,6 @@ function clearItem() {
         ""
     );
 
-
     showToast(
         "Fields cleared."
     );
@@ -3347,94 +2542,62 @@ function clearItem() {
    ========================================================= */
 
 function showHiddenItems() {
-
     hideAllPages();
 
-
     const categoryPage =
-        getElement(
-            "categoryPage"
-        );
-
+        getElement("categoryPage");
 
     if (categoryPage) {
-
         categoryPage.classList.remove(
             "hidden"
         );
     }
 
-
-    currentCategory =
-        "hidden";
-
-    currentItem =
-        null;
+    currentCategory = "hidden";
+    currentItem = null;
 
 
     const categoryTitle =
-        getElement(
-            "categoryTitle"
-        );
+        getElement("categoryTitle");
 
     const categoryPageHeading =
-        getElement(
-            "categoryPageHeading"
-        );
+        getElement("categoryPageHeading");
 
     const addItemButton =
-        getElement(
-            "addItemButton"
-        );
+        getElement("addItemButton");
 
     const itemSearch =
-        getElement(
-            "itemSearch"
-        );
+        getElement("itemSearch");
 
     const itemStatusFilter =
-        getElement(
-            "itemStatusFilter"
-        );
+        getElement("itemStatusFilter");
 
 
     if (categoryTitle) {
-
         categoryTitle.textContent =
             "Hidden Items";
     }
 
-
     if (categoryPageHeading) {
-
         categoryPageHeading.textContent =
             "Hidden Items";
     }
 
-
     if (addItemButton) {
-
         addItemButton.style.display =
             "none";
     }
 
-
     if (itemSearch) {
-
-        itemSearch.value =
-            "";
+        itemSearch.value = "";
     }
 
-
     if (itemStatusFilter) {
-
-        itemStatusFilter.value =
-            "all";
+        itemStatusFilter.value = "all";
     }
 
 
     renderHiddenItems();
-
 
     window.scrollTo({
         top: 0,
@@ -3444,82 +2607,58 @@ function showHiddenItems() {
 
 
 function renderHiddenItems() {
-
     const itemsGrid =
-        getElement(
-            "itemsGrid"
-        );
+        getElement("itemsGrid");
 
     const emptyMessage =
-        getElement(
-            "emptyMessage"
-        );
-
+        getElement("emptyMessage");
 
     if (!itemsGrid) {
         return;
     }
 
-
-    itemsGrid.innerHTML =
-        "";
+    itemsGrid.innerHTML = "";
 
 
-    const hiddenItems =
-        [];
+    const hiddenItems = [];
 
 
-    categories.forEach(
-        category => {
+    categories.forEach(category => {
 
-            category.items.forEach(
-                item => {
+        category.items.forEach(item => {
 
-                    const itemName =
-                        typeof item ===
-                        "string"
-                            ? item
-                            : item.name;
+            const itemName =
+                typeof item === "string"
+                    ? item
+                    : item.name;
 
-
-                    const data =
-                        getItem(
-                            category.id,
-                            item
-                        );
+            const data =
+                getItem(
+                    category.id,
+                    item
+                );
 
 
-                    if (
-                        data.enabled ===
-                        false
-                    ) {
+            if (data.enabled === false) {
 
-                        hiddenItems.push({
-                            category,
-                            item,
-                            itemName,
-                            data
-                        });
-                    }
-                }
-            );
-        }
-    );
+                hiddenItems.push({
+                    category,
+                    item,
+                    itemName,
+                    data
+                });
+            }
+        });
+    });
 
 
-    if (
-        hiddenItems.length ===
-        0
-    ) {
+    if (hiddenItems.length === 0) {
 
         if (emptyMessage) {
-
             emptyMessage.style.display =
                 "block";
 
-
             emptyMessage.innerHTML = `
-
                 <div
                     class="empty-icon"
                     aria-hidden="true"
@@ -3537,7 +2676,6 @@ function renderHiddenItems() {
             `;
         }
 
-
         updateHiddenProgress();
 
         return;
@@ -3545,7 +2683,6 @@ function renderHiddenItems() {
 
 
     if (emptyMessage) {
-
         emptyMessage.style.display =
             "none";
     }
@@ -3564,7 +2701,6 @@ function renderHiddenItems() {
                     "div"
                 );
 
-
             card.className =
                 "item-card hidden-item-card";
 
@@ -3572,9 +2708,7 @@ function renderHiddenItems() {
             const responsible =
                 data.responsiblePerson
                     ? `
-
                         <div class="item-detail">
-
                             <span>
                                 Responsible individual/group
                             </span>
@@ -3584,14 +2718,12 @@ function renderHiddenItems() {
                                     data.responsiblePerson
                                 )}
                             </strong>
-
                         </div>
                     `
                     : "";
 
 
             card.innerHTML = `
-
                 <div class="item-card-header">
 
                     <span class="item-status status-not">
@@ -3600,31 +2732,22 @@ function renderHiddenItems() {
 
                 </div>
 
-
                 <h3>
-                    ${escapeHTML(
-                        itemName
-                    )}
+                    ${escapeHTML(itemName)}
                 </h3>
 
-
                 <p class="hidden-item-label">
-
                     ${escapeHTML(
                         category.icon
                     )}
-
                     ${escapeHTML(
                         category.name
                     )}
-
                 </p>
-
 
                 ${
                     responsible
                         ? `
-
                             <div class="item-details">
                                 ${responsible}
                             </div>
@@ -3632,9 +2755,7 @@ function renderHiddenItems() {
                         : ""
                 }
 
-
                 <br>
-
 
                 <button
                     type="button"
@@ -3651,33 +2772,25 @@ function renderHiddenItems() {
                 );
 
 
-            if (enableButton) {
+            enableButton.addEventListener(
+                "click",
+                event => {
 
-                enableButton.addEventListener(
-                    "click",
-                    event => {
+                    event.stopPropagation();
 
-                        event.stopPropagation();
+                    data.enabled = true;
 
+                    saveData();
 
-                        data.enabled =
-                            true;
+                    renderHiddenItems();
 
+                    renderDashboard();
 
-                        saveData();
-
-
-                        renderHiddenItems();
-
-                        renderDashboard();
-
-
-                        showToast(
-                            `"${itemName}" is visible again.`
-                        );
-                    }
-                );
-            }
+                    showToast(
+                        `"${itemName}" is visible again.`
+                    );
+                }
+            );
 
 
             card.addEventListener(
@@ -3690,9 +2803,7 @@ function renderHiddenItems() {
             );
 
 
-            itemsGrid.appendChild(
-                card
-            );
+            itemsGrid.appendChild(card);
         }
     );
 
@@ -3702,7 +2813,6 @@ function renderHiddenItems() {
 
 
 function updateHiddenProgress() {
-
     const progressText =
         getElement(
             "categoryProgressText"
@@ -3720,59 +2830,39 @@ function updateHiddenProgress() {
 
 
     if (progressText) {
-
         progressText.textContent =
             "Hidden items";
     }
 
-
     if (categoryPercent) {
-
         categoryPercent.textContent =
             "";
     }
 
-
     if (progressFill) {
-
         progressFill.style.width =
             "0%";
     }
 }
-
 
 /* =========================================================
    BUDGET OVERVIEW
    ========================================================= */
 
 function showBudgetOverview() {
-
     hideAllPages();
 
-
     const budgetPage =
-        getElement(
-            "budgetPage"
-        );
-
+        getElement("budgetPage");
 
     if (budgetPage) {
-
-        budgetPage.classList.remove(
-            "hidden"
-        );
+        budgetPage.classList.remove("hidden");
     }
 
-
-    currentCategory =
-        "budget";
-
-    currentItem =
-        null;
-
+    currentCategory = "budget";
+    currentItem = null;
 
     renderBudgetOverview();
-
 
     window.scrollTo({
         top: 0,
@@ -3785,10 +2875,7 @@ function showBudgetOverview() {
    BUDGET HELPERS
    ========================================================= */
 
-function parseBudgetNumber(
-    value
-) {
-
+function parseBudgetNumber(value) {
     if (
         value === null ||
         value === undefined ||
@@ -3797,7 +2884,6 @@ function parseBudgetNumber(
         return 0;
     }
 
-
     const number =
         Number(
             String(value)
@@ -3805,19 +2891,13 @@ function parseBudgetNumber(
                 .trim()
         );
 
-
-    return Number.isFinite(
-        number
-    )
+    return Number.isFinite(number)
         ? number
         : 0;
 }
 
 
-function formatBudgetCurrency(
-    value
-) {
-
+function formatBudgetCurrency(value) {
     return (
         new Intl.NumberFormat(
             "da-DK",
@@ -3836,90 +2916,72 @@ function formatBudgetCurrency(
    ========================================================= */
 
 function getBudgetItems() {
+    const result = [];
 
-    const result =
-        [];
+    categories.forEach(category => {
 
+        category.items.forEach(item => {
 
-    categories.forEach(
-        category => {
+            const itemName =
+                typeof item === "string"
+                    ? item
+                    : item.name;
 
-            category.items.forEach(
-                item => {
-
-                    const itemName =
-                        typeof item ===
-                        "string"
-                            ? item
-                            : item.name;
-
-
-                    const data =
-                        getItem(
-                            category.id,
-                            item
-                        );
+            const data =
+                getItem(
+                    category.id,
+                    item
+                );
 
 
-                    if (
-                        data.enabled ===
-                        false
-                    ) {
-                        return;
-                    }
+            /*
+             * Hidden items are intentionally excluded
+             * from the active Budget Overview.
+             */
+            if (data.enabled === false) {
+                return;
+            }
 
 
-                    const deposit =
-                        parseBudgetNumber(
-                            data.deposit
-                        );
+            const deposit =
+                parseBudgetNumber(
+                    data.deposit
+                );
+
+            const price =
+                parseBudgetNumber(
+                    data.price
+                );
 
 
-                    const price =
-                        parseBudgetNumber(
-                            data.price
-                        );
+            /*
+             * Only include items that actually
+             * contain financial information.
+             */
+            if (
+                deposit === 0 &&
+                price === 0
+            ) {
+                return;
+            }
 
 
-                    if (
-                        deposit === 0 &&
-                        price === 0
-                    ) {
-                        return;
-                    }
-
-
-                    result.push({
-
-                        categoryId:
-                            category.id,
-
-                        categoryName:
-                            category.name,
-
-                        categoryIcon:
-                            category.icon,
-
-                        itemName,
-
-                        responsible:
-                            data.responsiblePerson
-                                ? data.responsiblePerson.trim()
-                                : "",
-
-                        deposit,
-
-                        price,
-
-                        total:
-                            deposit +
-                            price
-                    });
-                }
-            );
-        }
-    );
-
+            result.push({
+                categoryId: category.id,
+                categoryName: category.name,
+                categoryIcon: category.icon,
+                itemName,
+                responsible:
+                    data.responsiblePerson
+                        ? data.responsiblePerson.trim()
+                        : "",
+                deposit,
+                price,
+                total:
+                    deposit + price
+            });
+        });
+    });
 
     return result;
 }
@@ -3929,95 +2991,69 @@ function getBudgetItems() {
    GROUP BUDGET ITEMS
    ========================================================= */
 
-function groupBudgetItems(
-    items
-) {
-
-    const groups =
-        new Map();
+function groupBudgetItems(items) {
+    const groups = new Map();
 
 
-    items.forEach(
-        item => {
+    items.forEach(item => {
 
-            const responsible =
-                item.responsible ||
-                "Unassigned";
-
-
-            if (
-                !groups.has(
-                    responsible
-                )
-            ) {
-
-                groups.set(
-                    responsible,
-                    {
-                        name:
-                            responsible,
-
-                        items:
-                            [],
-
-                        deposit:
-                            0,
-
-                        price:
-                            0,
-
-                        total:
-                            0
-                    }
-                );
-            }
+        const responsible =
+            item.responsible ||
+            "Unassigned";
 
 
-            const group =
-                groups.get(
-                    responsible
-                );
+        if (!groups.has(responsible)) {
 
-
-            group.items.push(
-                item
+            groups.set(
+                responsible,
+                {
+                    name: responsible,
+                    items: [],
+                    deposit: 0,
+                    price: 0,
+                    total: 0
+                }
             );
-
-
-            group.deposit +=
-                item.deposit;
-
-
-            group.price +=
-                item.price;
-
-
-            group.total +=
-                item.total;
         }
-    );
 
 
+        const group =
+            groups.get(responsible);
+
+
+        group.items.push(item);
+
+        group.deposit +=
+            item.deposit;
+
+        group.price +=
+            item.price;
+
+        group.total +=
+            item.total;
+    });
+
+
+    /*
+     * Put named responsible people/groups first
+     * and Unassigned last.
+     */
     return Array.from(
         groups.values()
     ).sort(
         (a, b) => {
 
             if (
-                a.name ===
-                "Unassigned"
+                a.name === "Unassigned"
             ) {
                 return 1;
             }
 
-
             if (
-                b.name ===
-                "Unassigned"
+                b.name === "Unassigned"
             ) {
                 return -1;
             }
-
 
             return a.name.localeCompare(
                 b.name
@@ -4032,7 +3068,6 @@ function groupBudgetItems(
    ========================================================= */
 
 function renderBudgetOverview() {
-
     const grid =
         getElement(
             "budgetResponsibleGrid"
@@ -4049,37 +3084,35 @@ function renderBudgetOverview() {
     }
 
 
-    grid.innerHTML =
-        "";
+    grid.innerHTML = "";
 
 
     const items =
         getBudgetItems();
 
 
-    let totalDeposit =
-        0;
-
-    let totalPrice =
-        0;
+    let totalDeposit = 0;
+    let totalPrice = 0;
 
 
-    items.forEach(
-        item => {
+    items.forEach(item => {
 
-            totalDeposit +=
-                item.deposit;
+        totalDeposit +=
+            item.deposit;
 
-            totalPrice +=
-                item.price;
-        }
-    );
+        totalPrice +=
+            item.price;
+    });
 
 
     const grandTotal =
         totalDeposit +
         totalPrice;
 
+
+    /* =====================================================
+       OVERALL TOTALS
+       ===================================================== */
 
     const totalDepositElement =
         getElement(
@@ -4098,7 +3131,6 @@ function renderBudgetOverview() {
 
 
     if (totalDepositElement) {
-
         totalDepositElement.textContent =
             formatBudgetCurrency(
                 totalDeposit
@@ -4107,7 +3139,6 @@ function renderBudgetOverview() {
 
 
     if (totalPriceElement) {
-
         totalPriceElement.textContent =
             formatBudgetCurrency(
                 totalPrice
@@ -4116,7 +3147,6 @@ function renderBudgetOverview() {
 
 
     if (grandTotalElement) {
-
         grandTotalElement.textContent =
             formatBudgetCurrency(
                 grandTotal
@@ -4124,13 +3154,13 @@ function renderBudgetOverview() {
     }
 
 
-    if (
-        items.length ===
-        0
-    ) {
+    /* =====================================================
+       EMPTY STATE
+       ===================================================== */
+
+    if (items.length === 0) {
 
         if (emptyMessage) {
-
             emptyMessage.style.display =
                 "block";
         }
@@ -4140,259 +3170,245 @@ function renderBudgetOverview() {
 
 
     if (emptyMessage) {
-
         emptyMessage.style.display =
             "none";
     }
 
 
+    /* =====================================================
+       GROUP ITEMS
+       ===================================================== */
+
     const groups =
-        groupBudgetItems(
-            items
-        );
+        groupBudgetItems(items);
 
 
-    groups.forEach(
-        group => {
+    groups.forEach(group => {
 
-            const card =
-                document.createElement(
-                    "div"
-                );
+        const card =
+            document.createElement("div");
 
-
-            card.className =
-                "budget-responsible-card";
+        card.className =
+            "budget-responsible-card";
 
 
-            const isUnassigned =
-                group.name ===
-                "Unassigned";
+        const isUnassigned =
+            group.name === "Unassigned";
 
 
-            const itemsHTML =
-                group.items
-                    .map(
-                        item => {
+        const itemsHTML =
+            group.items
+                .map(item => {
 
-                            return `
+                    return `
+                        <div class="budget-item-row">
 
-                                <div class="budget-item-row">
+                            <div class="budget-item-info">
 
-                                    <div class="budget-item-info">
+                                <span class="budget-item-category">
+                                    ${escapeHTML(
+                                        item.categoryIcon
+                                    )}
+                                    ${escapeHTML(
+                                        item.categoryName
+                                    )}
+                                </span>
 
-                                        <span class="budget-item-category">
-                                            ${escapeHTML(
-                                                item.categoryIcon
-                                            )}
-                                            ${escapeHTML(
-                                                item.categoryName
-                                            )}
-                                        </span>
+                                <strong class="budget-item-name">
+                                    ${escapeHTML(
+                                        item.itemName
+                                    )}
+                                </strong>
 
-                                        <strong class="budget-item-name">
-                                            ${escapeHTML(
-                                                item.itemName
-                                            )}
-                                        </strong>
-
-                                    </div>
+                            </div>
 
 
-                                    <div class="budget-item-money">
+                            <div class="budget-item-money">
 
-                                        <div class="budget-money-column">
+                                <div class="budget-money-column">
 
-                                            <span>
-                                                Depositum
-                                            </span>
+                                    <span>
+                                        Depositum
+                                    </span>
 
-                                            <strong>
-                                                ${formatBudgetCurrency(
-                                                    item.deposit
-                                                )}
-                                            </strong>
-
-                                        </div>
-
-
-                                        <div class="budget-money-column">
-
-                                            <span>
-                                                Price
-                                            </span>
-
-                                            <strong>
-                                                ${formatBudgetCurrency(
-                                                    item.price
-                                                )}
-                                            </strong>
-
-                                        </div>
-
-
-                                        <div class="budget-money-column budget-item-total">
-
-                                            <span>
-                                                Total
-                                            </span>
-
-                                            <strong>
-                                                ${formatBudgetCurrency(
-                                                    item.total
-                                                )}
-                                            </strong>
-
-                                        </div>
-
-                                    </div>
+                                    <strong>
+                                        ${formatBudgetCurrency(
+                                            item.deposit
+                                        )}
+                                    </strong>
 
                                 </div>
-                            `;
+
+
+                                <div class="budget-money-column">
+
+                                    <span>
+                                        Price
+                                    </span>
+
+                                    <strong>
+                                        ${formatBudgetCurrency(
+                                            item.price
+                                        )}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="budget-money-column budget-item-total">
+
+                                    <span>
+                                        Total
+                                    </span>
+
+                                    <strong>
+                                        ${formatBudgetCurrency(
+                                            item.total
+                                        )}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    `;
+                })
+                .join("");
+
+
+        card.innerHTML = `
+
+            <div class="budget-responsible-header">
+
+                <div>
+
+                    <span class="budget-responsible-icon">
+                        ${
+                            isUnassigned
+                                ? "❓"
+                                : "👤"
                         }
-                    )
-                    .join("");
+                    </span>
 
+                    <div class="budget-responsible-title">
 
-            card.innerHTML = `
-
-                <div class="budget-responsible-header">
-
-                    <div>
-
-                        <span class="budget-responsible-icon">
+                        <span>
                             ${
                                 isUnassigned
-                                    ? "❓"
-                                    : "👤"
+                                    ? "Items without assignment"
+                                    : "Responsible individual/group"
                             }
                         </span>
 
-
-                        <div class="budget-responsible-title">
-
-                            <span>
-                                ${
-                                    isUnassigned
-                                        ? "Items without assignment"
-                                        : "Responsible individual/group"
-                                }
-                            </span>
-
-
-                            <h3>
-                                ${escapeHTML(
-                                    group.name
-                                )}
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="budget-responsible-total">
-
-                        <span>
-                            Total
-                        </span>
-
-                        <strong>
-                            ${formatBudgetCurrency(
-                                group.total
+                        <h3>
+                            ${escapeHTML(
+                                group.name
                             )}
-                        </strong>
+                        </h3>
 
                     </div>
 
                 </div>
 
 
-                <div class="budget-items-list">
+                <div class="budget-responsible-total">
 
-                    <div class="budget-table-header">
+                    <span>
+                        Total
+                    </span>
 
-                        <span>
-                            Item
-                        </span>
+                    <strong>
+                        ${formatBudgetCurrency(
+                            group.total
+                        )}
+                    </strong>
 
-                        <span>
-                            Depositum
-                        </span>
+                </div>
 
-                        <span>
-                            Price
-                        </span>
-
-                        <span>
-                            Total
-                        </span>
-
-                    </div>
+            </div>
 
 
-                    ${itemsHTML}
+            <div class="budget-items-list">
+
+                <div class="budget-table-header">
+
+                    <span>
+                        Item
+                    </span>
+
+                    <span>
+                        Depositum
+                    </span>
+
+                    <span>
+                        Price
+                    </span>
+
+                    <span>
+                        Total
+                    </span>
+
+                </div>
+
+                ${itemsHTML}
+
+            </div>
+
+
+            <div class="budget-responsible-footer">
+
+                <div>
+
+                    <span>
+                        Depositum
+                    </span>
+
+                    <strong>
+                        ${formatBudgetCurrency(
+                            group.deposit
+                        )}
+                    </strong>
 
                 </div>
 
 
-                <div class="budget-responsible-footer">
+                <div>
 
-                    <div>
+                    <span>
+                        Price
+                    </span>
 
-                        <span>
-                            Depositum
-                        </span>
-
-                        <strong>
-                            ${formatBudgetCurrency(
-                                group.deposit
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span>
-                            Price
-                        </span>
-
-                        <strong>
-                            ${formatBudgetCurrency(
-                                group.price
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span>
-                            Total
-                        </span>
-
-                        <strong>
-                            ${formatBudgetCurrency(
-                                group.total
-                            )}
-                        </strong>
-
-                    </div>
+                    <strong>
+                        ${formatBudgetCurrency(
+                            group.price
+                        )}
+                    </strong>
 
                 </div>
-            `;
 
 
-            grid.appendChild(
-                card
-            );
-        }
-    );
+                <div>
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong>
+                        ${formatBudgetCurrency(
+                            group.total
+                        )}
+                    </strong>
+
+                </div>
+
+            </div>
+        `;
+
+
+        grid.appendChild(card);
+    });
 }
-
 
 /* =========================================================
    CATEGORY PROGRESS
@@ -4401,53 +3417,36 @@ function renderBudgetOverview() {
 function updateCategoryProgress(
     category
 ) {
-
-    let total =
-        0;
-
-    let completed =
-        0;
+    let total = 0;
+    let completed = 0;
 
 
-    category.items.forEach(
-        item => {
+    category.items.forEach(item => {
 
-            const data =
-                getItem(
-                    category.id,
-                    item
-                );
+        const data =
+            getItem(
+                category.id,
+                item
+            );
 
-
-            if (
-                data.enabled ===
-                false
-            ) {
-                return;
-            }
-
-
-            total++;
-
-
-            if (
-                data.status ===
-                "done"
-            ) {
-
-                completed++;
-            }
+        if (data.enabled === false) {
+            return;
         }
-    );
+
+        total++;
+
+        if (data.status === "done") {
+            completed++;
+        }
+    });
 
 
     const percent =
         total > 0
             ? Math.round(
-                (
-                    completed /
-                    total
-                ) * 100
+                (completed /
+                    total) *
+                100
             )
             : 0;
 
@@ -4469,21 +3468,16 @@ function updateCategoryProgress(
 
 
     if (progressText) {
-
         progressText.textContent =
             `${completed} of ${total} completed`;
     }
 
-
     if (categoryPercent) {
-
         categoryPercent.textContent =
             `${percent}%`;
     }
 
-
     if (progressFill) {
-
         progressFill.style.width =
             `${percent}%`;
     }
@@ -4497,21 +3491,7 @@ function updateCategoryProgress(
 function openManagementModal(
     mode
 ) {
-
-    managementMode =
-        mode;
-
-
-    const mainCategoryField =
-        getElement(
-            "managementMainCategory"
-        );
-
-    const mainCategoryGroup =
-        getElement(
-            "managementMainCategoryGroup"
-        );
-
+    managementMode = mode;
 
     const overlay =
         getElement(
@@ -4549,63 +3529,29 @@ function openManagementModal(
         );
 
 
-    /*
-     * Main category selector may exist
-     * in the HTML. If it does, keep it
-     * synchronized with the current
-     * main category.
-     */
-    if (mainCategoryField) {
-
-        mainCategoryField.value =
-            currentMainCategory;
-    }
-
-
-    if (mainCategoryGroup) {
-
-        mainCategoryGroup.style.display =
-            mode === "category"
-                ? ""
-                : "none";
-    }
-
-
-    if (
-        mode ===
-        "category"
-    ) {
+    if (mode === "category") {
 
         if (categoryLabel) {
-
             categoryLabel.textContent =
                 "Management";
         }
 
-
         if (title) {
-
             title.textContent =
                 "Add Category";
         }
 
-
         if (nameInput) {
-
             nameInput.placeholder =
                 "Enter category name";
         }
 
-
         if (iconGroup) {
-
             iconGroup.style.display =
                 "";
         }
 
-
         if (help) {
-
             help.textContent =
                 "Add a new category to your wedding planner.";
         }
@@ -4613,35 +3559,26 @@ function openManagementModal(
     } else {
 
         if (categoryLabel) {
-
             categoryLabel.textContent =
                 "Management";
         }
 
-
         if (title) {
-
             title.textContent =
                 "Add Item";
         }
 
-
         if (nameInput) {
-
             nameInput.placeholder =
                 "Enter item name";
         }
 
-
         if (iconGroup) {
-
             iconGroup.style.display =
                 "none";
         }
 
-
         if (help) {
-
             help.textContent =
                 "Add a custom item to the current category.";
         }
@@ -4649,24 +3586,16 @@ function openManagementModal(
 
 
     if (nameInput) {
-
-        nameInput.value =
-            "";
+        nameInput.value = "";
     }
 
-
     if (iconInput) {
-
-        iconInput.value =
-            "";
+        iconInput.value = "";
     }
 
 
     if (overlay) {
-
-        overlay.classList.add(
-            "open"
-        );
+        overlay.classList.add("open");
 
         overlay.setAttribute(
             "aria-hidden",
@@ -4679,30 +3608,23 @@ function openManagementModal(
         "hidden";
 
 
-    setTimeout(
-        () => {
+    setTimeout(() => {
 
-            if (nameInput) {
+        if (nameInput) {
+            nameInput.focus();
+        }
 
-                nameInput.focus();
-            }
-
-        },
-        100
-    );
+    }, 100);
 }
 
 
 function closeManagementModal() {
-
     const overlay =
         getElement(
             "managementOverlay"
         );
 
-
     if (overlay) {
-
         overlay.classList.remove(
             "open"
         );
@@ -4712,7 +3634,6 @@ function closeManagementModal() {
             "true"
         );
     }
-
 
     document.body.style.overflow =
         "";
@@ -4724,7 +3645,6 @@ function closeManagementModal() {
    ========================================================= */
 
 function saveManagement() {
-
     const nameInput =
         getElement(
             "managementNameInput"
@@ -4741,7 +3661,6 @@ function saveManagement() {
             ? nameInput.value.trim()
             : "";
 
-
     const icon =
         iconInput
             ? iconInput.value.trim()
@@ -4749,30 +3668,19 @@ function saveManagement() {
 
 
     if (!name) {
-
         showToast(
             "Please enter a name."
         );
 
-
         if (nameInput) {
-
             nameInput.focus();
         }
-
 
         return;
     }
 
 
-    /* =====================================================
-       ADD CATEGORY
-       ===================================================== */
-
-    if (
-        managementMode ===
-        "category"
-    ) {
+    if (managementMode === "category") {
 
         const duplicate =
             categories.some(
@@ -4784,7 +3692,6 @@ function saveManagement() {
 
 
         if (duplicate) {
-
             showToast(
                 "This category already exists."
             );
@@ -4793,76 +3700,36 @@ function saveManagement() {
         }
 
 
-        /*
-         * New category belongs to
-         * the currently selected
-         * Wedding / Reception section.
-         */
         categories.push({
-
-            id:
-                createId(
-                    "category"
-                ),
-
+            id: createId("category"),
             name,
-
-            icon:
-                icon ||
-                "📋",
-
-            mainCategory:
-                currentMainCategory,
-
-            custom:
-                true,
-
-            items:
-                []
+            icon: icon || "📋",
+            items: []
         });
 
 
         saveData();
 
-
-        buildMainCategoryNavigation();
-
         buildNavigation();
-
 
         closeManagementModal();
 
-
         renderDashboard();
 
-
         showToast(
-            `${getMainCategoryLabel(
-                currentMainCategory
-            )} category added.`
+            "Category added."
         );
-
 
         return;
     }
 
 
-    /* =====================================================
-       ADD CUSTOM ITEM
-       ===================================================== */
-
     if (
-        currentCategory ===
-            "dashboard" ||
-        currentCategory ===
-            "tagging" ||
-        currentCategory ===
-            "budget" ||
-        currentCategory ===
-            "hidden" ||
-        !currentCategory
+        currentCategory === "dashboard" ||
+        currentCategory === "tagging" ||
+        currentCategory === "budget" ||
+        currentCategory === "hidden"
     ) {
-
         showToast(
             "Please open a category first."
         );
@@ -4874,8 +3741,7 @@ function saveManagement() {
     const category =
         categories.find(
             item =>
-                item.id ===
-                currentCategory
+                item.id === currentCategory
         );
 
 
@@ -4885,26 +3751,21 @@ function saveManagement() {
 
 
     const duplicate =
-        category.items.some(
-            item => {
+        category.items.some(item => {
 
-                const itemName =
-                    typeof item ===
-                    "string"
-                        ? item
-                        : item.name;
+            const itemName =
+                typeof item === "string"
+                    ? item
+                    : item.name;
 
-
-                return (
-                    itemName.toLowerCase() ===
-                    name.toLowerCase()
-                );
-            }
-        );
+            return (
+                itemName.toLowerCase() ===
+                name.toLowerCase()
+            );
+        });
 
 
     if (duplicate) {
-
         showToast(
             "This item already exists."
         );
@@ -4914,24 +3775,18 @@ function saveManagement() {
 
 
     category.items.push({
-
         name,
-
-        custom:
-            true
+        custom: true
     });
 
 
     saveData();
 
-
     closeManagementModal();
-
 
     renderCategory();
 
     renderDashboard();
-
 
     showToast(
         "Item added."
@@ -4944,25 +3799,17 @@ function saveManagement() {
    ========================================================= */
 
 function addItemToCurrentCategory() {
-
     if (
         !currentCategory ||
-        currentCategory ===
-            "dashboard" ||
-        currentCategory ===
-            "tagging" ||
-        currentCategory ===
-            "budget" ||
-        currentCategory ===
-            "hidden"
+        currentCategory === "dashboard" ||
+        currentCategory === "tagging" ||
+        currentCategory === "budget" ||
+        currentCategory === "hidden"
     ) {
         return;
     }
 
-
-    openManagementModal(
-        "item"
-    );
+    openManagementModal("item");
 }
 
 
@@ -4971,19 +3818,12 @@ function addItemToCurrentCategory() {
    ========================================================= */
 
 function exportData() {
-
     const data = {
-
-        version:
-            8,
-
+        version: 8,
         exportedAt:
             new Date().toISOString(),
-
         categories,
-
         savedData,
-
         responsibleIndividualsGroups:
             normaliseResponsibleIndividualsGroups(
                 responsibleIndividualsGroups
@@ -5008,39 +3848,24 @@ function exportData() {
 
 
     const url =
-        URL.createObjectURL(
-            blob
-        );
+        URL.createObjectURL(blob);
 
 
     const link =
-        document.createElement(
-            "a"
-        );
+        document.createElement("a");
 
-
-    link.href =
-        url;
-
+    link.href = url;
 
     link.download =
         "tamil-wedding-planner.json";
 
-
-    document.body.appendChild(
-        link
-    );
-
+    document.body.appendChild(link);
 
     link.click();
 
-
     link.remove();
 
-
-    URL.revokeObjectURL(
-        url
-    );
+    URL.revokeObjectURL(url);
 
 
     showToast(
@@ -5053,10 +3878,7 @@ function exportData() {
    IMPORT
    ========================================================= */
 
-function importData(
-    file
-) {
-
+function importData(file) {
     if (!file) {
         return;
     }
@@ -5066,107 +3888,74 @@ function importData(
         new FileReader();
 
 
-    reader.onload =
-        event => {
+    reader.onload = event => {
 
-            try {
+        try {
 
-                const parsed =
-                    JSON.parse(
-                        event.target.result
-                    );
-
-
-                if (
-                    !parsed ||
-                    !Array.isArray(
-                        parsed.categories
-                    )
-                ) {
-
-                    throw new Error(
-                        "Invalid planner file."
-                    );
-                }
-
-
-                categories =
-                    normaliseCategories(
-                        parsed.categories
-                    );
-
-
-                savedData =
-                    parsed.savedData &&
-                    typeof parsed.savedData ===
-                        "object"
-                        ? parsed.savedData
-                        : {};
-
-
-                responsibleIndividualsGroups =
-                    normaliseResponsibleIndividualsGroups(
-                        parsed.responsibleIndividualsGroups
-                    );
-
-
-                migrateSavedData();
-
-
-                saveData();
-
-
-                /*
-                 * Make sure the selected
-                 * main category remains valid.
-                 */
-                const hasCurrentMainCategory =
-                    categories.some(
-                        category =>
-                            category.mainCategory ===
-                            currentMainCategory
-                    );
-
-
-                if (
-                    !hasCurrentMainCategory
-                ) {
-
-                    currentMainCategory =
-                        "wedding";
-                }
-
-
-                buildMainCategoryNavigation();
-
-                buildNavigation();
-
-
-                showDashboard();
-
-
-                showToast(
-                    "Planner imported successfully."
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Import failed:",
-                    error
+            const parsed =
+                JSON.parse(
+                    event.target.result
                 );
 
 
-                showToast(
-                    "Import failed. Please select a valid planner file."
+            if (
+                !parsed ||
+                !Array.isArray(
+                    parsed.categories
+                )
+            ) {
+                throw new Error(
+                    "Invalid planner file."
                 );
             }
-        };
 
 
-    reader.readAsText(
-        file
-    );
+            categories =
+                normaliseCategories(
+                    parsed.categories
+                );
+
+
+            savedData =
+                parsed.savedData &&
+                typeof parsed.savedData === "object"
+                    ? parsed.savedData
+                    : {};
+
+
+            responsibleIndividualsGroups =
+                normaliseResponsibleIndividualsGroups(
+                    parsed.responsibleIndividualsGroups
+                );
+
+
+            migrateSavedData();
+
+            saveData();
+
+            buildNavigation();
+
+            showDashboard();
+
+            showToast(
+                "Planner imported successfully."
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Import failed:",
+                error
+            );
+
+            showToast(
+                "Import failed. Please select a valid planner file."
+            );
+        }
+    };
+
+
+    reader.readAsText(file);
 }
 
 
@@ -5175,7 +3964,6 @@ function importData(
    ========================================================= */
 
 function resetPlanner() {
-
     const confirmed =
         window.confirm(
             "Reset the entire wedding planner?\n\nThis will delete all saved progress, custom categories, custom items and Tagging entries."
@@ -5190,25 +3978,9 @@ function resetPlanner() {
     categories =
         cloneDefaults();
 
+    savedData = {};
 
-    savedData =
-        {};
-
-
-    responsibleIndividualsGroups =
-        [];
-
-
-    currentMainCategory =
-        "wedding";
-
-
-    currentCategory =
-        "dashboard";
-
-
-    currentItem =
-        null;
+    responsibleIndividualsGroups = [];
 
 
     localStorage.removeItem(
@@ -5218,14 +3990,9 @@ function resetPlanner() {
 
     saveData();
 
-
-    buildMainCategoryNavigation();
-
     buildNavigation();
 
-
     showDashboard();
-
 
     populateResponsibleIndividualSelect();
 
@@ -5242,18 +4009,13 @@ function resetPlanner() {
 
 function setupEvents() {
 
-    /* =====================================================
-       DASHBOARD
-       ===================================================== */
-
+    /* Dashboard */
     const addCategoryButton =
         getElement(
             "addCategoryButton"
         );
 
-
     if (addCategoryButton) {
-
         addCategoryButton.addEventListener(
             "click",
             () =>
@@ -5269,9 +4031,7 @@ function setupEvents() {
             "exportButton"
         );
 
-
     if (exportButton) {
-
         exportButton.addEventListener(
             "click",
             exportData
@@ -5283,7 +4043,6 @@ function setupEvents() {
         getElement(
             "importButton"
         );
-
 
     const importFileInput =
         getElement(
@@ -5310,17 +4069,11 @@ function setupEvents() {
                 const file =
                     event.target.files[0];
 
-
                 if (file) {
-
-                    importData(
-                        file
-                    );
+                    importData(file);
                 }
 
-
-                event.target.value =
-                    "";
+                event.target.value = "";
             }
         );
     }
@@ -5331,9 +4084,7 @@ function setupEvents() {
             "resetButton"
         );
 
-
     if (resetButton) {
-
         resetButton.addEventListener(
             "click",
             resetPlanner
@@ -5341,18 +4092,13 @@ function setupEvents() {
     }
 
 
-    /* =====================================================
-       TAGGING
-       ===================================================== */
-
+    /* Tagging */
     const addTaggingButton =
         getElement(
             "addTaggingButton"
         );
 
-
     if (addTaggingButton) {
-
         addTaggingButton.addEventListener(
             "click",
             addResponsibleIndividualGroup
@@ -5365,7 +4111,6 @@ function setupEvents() {
             "taggingInput"
         );
 
-
     if (taggingInput) {
 
         taggingInput.addEventListener(
@@ -5373,8 +4118,7 @@ function setupEvents() {
             event => {
 
                 if (
-                    event.key ===
-                    "Enter"
+                    event.key === "Enter"
                 ) {
 
                     event.preventDefault();
@@ -5386,18 +4130,13 @@ function setupEvents() {
     }
 
 
-    /* =====================================================
-       CATEGORY PAGE
-       ===================================================== */
-
+    /* Category page */
     const backButton =
         getElement(
             "backToDashboardButton"
         );
 
-
     if (backButton) {
-
         backButton.addEventListener(
             "click",
             showDashboard
@@ -5410,9 +4149,7 @@ function setupEvents() {
             "addItemButton"
         );
 
-
     if (addItemButton) {
-
         addItemButton.addEventListener(
             "click",
             addItemToCurrentCategory
@@ -5425,9 +4162,7 @@ function setupEvents() {
             "itemSearch"
         );
 
-
     if (itemSearch) {
-
         itemSearch.addEventListener(
             "input",
             () => {
@@ -5436,18 +4171,13 @@ function setupEvents() {
                     currentCategory ===
                     "hidden"
                 ) {
-
                     renderHiddenItems();
-
                 } else if (
                     currentCategory !==
-                        "dashboard" &&
+                    "dashboard" &&
                     currentCategory !==
-                        "tagging" &&
-                    currentCategory !==
-                        "budget"
+                    "tagging"
                 ) {
-
                     renderCategory();
                 }
             }
@@ -5460,24 +4190,19 @@ function setupEvents() {
             "itemStatusFilter"
         );
 
-
     if (itemStatusFilter) {
-
         itemStatusFilter.addEventListener(
             "change",
             () => {
 
                 if (
                     currentCategory !==
-                        "dashboard" &&
+                    "dashboard" &&
                     currentCategory !==
-                        "tagging" &&
+                    "tagging" &&
                     currentCategory !==
-                        "hidden" &&
-                    currentCategory !==
-                        "budget"
+                    "hidden"
                 ) {
-
                     renderCategory();
                 }
             }
@@ -5485,34 +4210,23 @@ function setupEvents() {
     }
 
 
-    /* =====================================================
-       ITEM MODAL
-       ===================================================== */
-
+    /* Item modal */
     const notButton =
-        getElement(
-            "notButton"
-        );
+        getElement("notButton");
 
     const progressButton =
-        getElement(
-            "progressButton"
-        );
+        getElement("progressButton");
 
     const doneButton =
-        getElement(
-            "doneButton"
-        );
+        getElement("doneButton");
 
 
     if (notButton) {
-
         notButton.addEventListener(
             "click",
             () => {
 
-                modalStatus =
-                    "not";
+                modalStatus = "not";
 
                 updateStatusButtons();
             }
@@ -5521,13 +4235,11 @@ function setupEvents() {
 
 
     if (progressButton) {
-
         progressButton.addEventListener(
             "click",
             () => {
 
-                modalStatus =
-                    "progress";
+                modalStatus = "progress";
 
                 updateStatusButtons();
             }
@@ -5536,13 +4248,11 @@ function setupEvents() {
 
 
     if (doneButton) {
-
         doneButton.addEventListener(
             "click",
             () => {
 
-                modalStatus =
-                    "done";
+                modalStatus = "done";
 
                 updateStatusButtons();
             }
@@ -5555,7 +4265,6 @@ function setupEvents() {
             "closeModalButton"
         );
 
-
     const closeModalButtonTop =
         getElement(
             "closeModalButtonTop"
@@ -5563,7 +4272,6 @@ function setupEvents() {
 
 
     if (closeModalButton) {
-
         closeModalButton.addEventListener(
             "click",
             closeModal
@@ -5572,7 +4280,6 @@ function setupEvents() {
 
 
     if (closeModalButtonTop) {
-
         closeModalButtonTop.addEventListener(
             "click",
             closeModal
@@ -5585,9 +4292,7 @@ function setupEvents() {
             "clearButton"
         );
 
-
     if (clearButton) {
-
         clearButton.addEventListener(
             "click",
             clearItem
@@ -5600,9 +4305,7 @@ function setupEvents() {
             "saveButton"
         );
 
-
     if (saveButton) {
-
         saveButton.addEventListener(
             "click",
             saveItem
@@ -5615,9 +4318,7 @@ function setupEvents() {
             "disableItemButton"
         );
 
-
     if (disableItemButton) {
-
         disableItemButton.addEventListener(
             "click",
             toggleCurrentItemVisibility
@@ -5630,9 +4331,7 @@ function setupEvents() {
             "deleteCustomItemButton"
         );
 
-
     if (deleteCustomItemButton) {
-
         deleteCustomItemButton.addEventListener(
             "click",
             deleteCurrentCustomItem
@@ -5641,19 +4340,18 @@ function setupEvents() {
 
 
     /*
-     * Deliberately NO backdrop click handler.
+     * Important:
+     * There is deliberately NO backdrop click
+     * handler. Clicking outside the modal will
+     * therefore not close it.
      */
 
 
-    /* =====================================================
-       MANAGEMENT MODAL
-       ===================================================== */
-
+    /* Management modal */
     const managementCloseButton =
         getElement(
             "managementCloseButton"
         );
-
 
     const managementCancelButton =
         getElement(
@@ -5662,7 +4360,6 @@ function setupEvents() {
 
 
     if (managementCloseButton) {
-
         managementCloseButton.addEventListener(
             "click",
             closeManagementModal
@@ -5671,7 +4368,6 @@ function setupEvents() {
 
 
     if (managementCancelButton) {
-
         managementCancelButton.addEventListener(
             "click",
             closeManagementModal
@@ -5684,9 +4380,7 @@ function setupEvents() {
             "managementSaveButton"
         );
 
-
     if (managementSaveButton) {
-
         managementSaveButton.addEventListener(
             "click",
             saveManagement
@@ -5699,7 +4393,6 @@ function setupEvents() {
             "managementNameInput"
         );
 
-
     if (managementNameInput) {
 
         managementNameInput.addEventListener(
@@ -5707,8 +4400,7 @@ function setupEvents() {
             event => {
 
                 if (
-                    event.key ===
-                    "Enter"
+                    event.key === "Enter"
                 ) {
 
                     event.preventDefault();
@@ -5720,27 +4412,20 @@ function setupEvents() {
     }
 
 
-    /* =====================================================
-       ESCAPE CLOSES MODALS
-       ===================================================== */
-
+    /* Escape closes modals */
     document.addEventListener(
         "keydown",
         event => {
 
             if (
-                event.key !==
-                "Escape"
+                event.key !== "Escape"
             ) {
                 return;
             }
 
 
             const overlay =
-                getElement(
-                    "overlay"
-                );
-
+                getElement("overlay");
 
             const managementOverlay =
                 getElement(
@@ -5754,7 +4439,6 @@ function setupEvents() {
                     "open"
                 )
             ) {
-
                 closeModal();
 
                 return;
@@ -5767,7 +4451,6 @@ function setupEvents() {
                     "open"
                 )
             ) {
-
                 closeManagementModal();
             }
         }
@@ -5787,12 +4470,20 @@ document.addEventListener(
 
         setupEvents();
 
-        buildMainCategoryNavigation();
-
         buildNavigation();
 
         populateResponsibleIndividualSelect();
 
         showDashboard();
+
+        toggleCurrentItemVisibility()
+        
+        deleteCurrentCustomItem()
+        
+        saveItem()
+        
+        saveManagement()
+        
+        addItemToCurrentCategory()
     }
 );
