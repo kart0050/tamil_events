@@ -18,25 +18,18 @@ const STORAGE_KEY = "TamilWeddingPlanner_v1";
    ========================================================= */
 
 const defaultCategories = [
-    {
-        id: "guests",
-        name: "Guests",
-        icon: "👥",
-        items: [
-            "Palaharam (Goodie bag)",
-            "Hotels"
-        ]
-    },
 
     {
         id: "clothes",
         name: "Clothes",
         icon: "👗",
+        mainCategory: "wedding",
         items: [
             "Manavarai saree",
             "Koorai saree (Rød)",
             "Vetti sattai",
             "Sko",
+            "Henne Fest Clothes",
             "Vetti Sattai Grooms Mate",
             "Saree Bridesmaid",
             "Tøj til preshoot",
@@ -49,6 +42,7 @@ const defaultCategories = [
         id: "reception-songs",
         name: "Reception Songs",
         icon: "🎵",
+        mainCategory: "reception",
         items: [
             "Entrance",
             "Pardans",
@@ -62,10 +56,10 @@ const defaultCategories = [
         id: "wedding-sign-card",
         name: "Wedding Sign + Card",
         icon: "💌",
+        mainCategory: "wedding",
         items: [
             "Aviraa Creations",
             "Ponthayadesigns",
-            "Kopuramevents.fr"
         ]
     },
 
@@ -73,6 +67,7 @@ const defaultCategories = [
         id: "decoration",
         name: "Decoration",
         icon: "🌸",
+        mainCategory: "wedding",
         items: [
             "Kopuramevents.fr"
         ]
@@ -82,6 +77,7 @@ const defaultCategories = [
         id: "accessories-gifts",
         name: "Accessories + Gifts",
         icon: "🎁",
+        mainCategory: "reception",
         items: [
             "360 Booth",
             "Bridal Corner Setup",
@@ -95,8 +91,8 @@ const defaultCategories = [
         id: "henna-fest",
         name: "Henna Fest",
         icon: "🌿",
+        mainCategory: "wedding",
         items: [
-            "Uduupu ?",
             "Mehendi (rosedecoration.dk)",
             "Tamilhennecreation",
             "Tent",
@@ -108,6 +104,7 @@ const defaultCategories = [
         id: "makeup-hair",
         name: "Makeup + Hair",
         icon: "💄",
+        mainCategory: "wedding",
         items: [
             "Janani",
             "abinii_makeupartist",
@@ -119,8 +116,9 @@ const defaultCategories = [
         id: "jewellery",
         name: "Jewellery",
         icon: "💎",
+        mainCategory: "wedding",
         items: [
-            "Thaali (15 Pound)",
+            "Thaali",
             "Øreringe",
             "Necklace",
             "Kappu",
@@ -137,6 +135,7 @@ const defaultCategories = [
         id: "melam",
         name: "Melam",
         icon: "🥁",
+        mainCategory: "wedding",
         items: [
             "Chinna Mams",
             "Mami ?"
@@ -147,6 +146,7 @@ const defaultCategories = [
         id: "maalai",
         name: "Maalai",
         icon: "🌺",
+        mainCategory: "wedding",
         items: [
             "Herning Maalai"
         ]
@@ -156,6 +156,7 @@ const defaultCategories = [
         id: "catering",
         name: "Catering (Food)",
         icon: "🍛",
+        mainCategory: "wedding",
         items: [
             "Poovi Mama Horsens",
             "Kammali Randers",
@@ -171,6 +172,7 @@ const defaultCategories = [
         id: "wedding-cake",
         name: "Wedding Cake",
         icon: "🎂",
+        mainCategory: "reception",
         items: [
             "Wedding Cake",
             "Lighter + Knife"
@@ -181,6 +183,7 @@ const defaultCategories = [
         id: "photo-video",
         name: "Photo + Video + Preshoot",
         icon: "📸",
+        mainCategory: "wedding",
         items: [
             "Digital Pro",
             "Ajeenth Video",
@@ -197,6 +200,7 @@ const defaultCategories = [
         id: "dj",
         name: "DJ",
         icon: "🎧",
+        mainCategory: "reception",
         items: [
             "Playloud",
             "Keeth Entertainment",
@@ -208,8 +212,9 @@ const defaultCategories = [
 
     {
         id: "hall-kovil",
-        name: "Hall + Kovil",
+        name: "Hall / Kovil",
         icon: "🏛️",
+        mainCategory: "wedding",
         items: [
             "Sana Palace RA",
             "Uranus Partyhouse",
@@ -233,6 +238,7 @@ const defaultCategories = [
         id: "entertainment",
         name: "Entertainment",
         icon: "🎭",
+        mainCategory: "reception",
         items: [
             "Pardans + Cinema Paattu",
             "Bollywood Dance",
@@ -256,6 +262,7 @@ const defaultCategories = [
         id: "speech-host-operator",
         name: "Speech + Host + Operator",
         icon: "🎤",
+        mainCategory: "reception",
         items: [
             "Vinu",
             "Mams",
@@ -269,15 +276,6 @@ const defaultCategories = [
             "Projector"
         ]
     },
-
-    {
-        id: "games",
-        name: "Games",
-        icon: "🎲",
-        items: [
-            "Bingo"
-        ]
-    }
 ];
 
 
@@ -291,11 +289,23 @@ let savedData = {};
 let responsibleIndividualsGroups = [];
 
 let currentCategory = "dashboard";
+let currentMainCategory = "wedding";
 let currentItem = null;
 
 let modalStatus = "not";
 
 let managementMode = "category";
+
+
+/* =========================================================
+   MAIN CATEGORY LABEL
+   ========================================================= */
+
+function getMainCategoryLabel(mainCategory) {
+    return mainCategory === "reception"
+        ? "Reception"
+        : "Wedding";
+}
 
 
 /* =========================================================
@@ -312,7 +322,9 @@ function getElement(id) {
    ========================================================= */
 
 function cloneDefaults() {
-    return JSON.parse(JSON.stringify(defaultCategories));
+    return JSON.parse(
+        JSON.stringify(defaultCategories)
+    );
 }
 
 
@@ -340,13 +352,21 @@ function escapeHTML(value) {
 
 
 function formatDate(dateString) {
+
     if (!dateString) {
         return "";
     }
 
-    const date = new Date(`${dateString}T00:00:00`);
+    const date =
+        new Date(
+            `${dateString}T00:00:00`
+        );
 
-    if (Number.isNaN(date.getTime())) {
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
         return dateString;
     }
 
@@ -362,20 +382,29 @@ function formatDate(dateString) {
 
 
 function showToast(message) {
-    const toast = getElement("toast");
+
+    const toast =
+        getElement("toast");
 
     if (!toast) {
         return;
     }
 
-    toast.textContent = message;
+    toast.textContent =
+        message;
+
     toast.classList.add("show");
 
-    clearTimeout(showToast.timeout);
+    clearTimeout(
+        showToast.timeout
+    );
 
-    showToast.timeout = setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2500);
+    showToast.timeout =
+        setTimeout(() => {
+            toast.classList.remove(
+                "show"
+            );
+        }, 2500);
 }
 
 
@@ -383,29 +412,43 @@ function showToast(message) {
    RESPONSIBLE INDIVIDUAL/GROUP NORMALISATION
    ========================================================= */
 
-function normaliseResponsibleIndividualsGroups(input) {
+function normaliseResponsibleIndividualsGroups(
+    input
+) {
+
     if (!Array.isArray(input)) {
         return [];
     }
 
-    const seen = new Set();
-    const result = [];
+    const seen =
+        new Set();
+
+    const result =
+        [];
 
     input.forEach(value => {
-        const cleanValue = String(value ?? "").trim();
+
+        const cleanValue =
+            String(
+                value ?? ""
+            ).trim();
 
         if (!cleanValue) {
             return;
         }
 
-        const key = cleanValue.toLowerCase();
+        const key =
+            cleanValue.toLowerCase();
 
         if (seen.has(key)) {
             return;
         }
 
         seen.add(key);
-        result.push(cleanValue);
+
+        result.push(
+            cleanValue
+        );
     });
 
     return result;
@@ -417,23 +460,40 @@ function normaliseResponsibleIndividualsGroups(input) {
    ========================================================= */
 
 function loadData() {
-    const raw = localStorage.getItem(STORAGE_KEY);
+
+    const raw =
+        localStorage.getItem(
+            STORAGE_KEY
+        );
 
     if (!raw) {
-        categories = cloneDefaults();
+
+        categories =
+            cloneDefaults();
+
         savedData = {};
-        responsibleIndividualsGroups = [];
+
+        responsibleIndividualsGroups =
+            [];
+
         return;
     }
 
     try {
-        const parsed = JSON.parse(raw);
 
-        categories = normaliseCategories(
-            Array.isArray(parsed.categories)
-                ? parsed.categories
-                : cloneDefaults()
-        );
+        const parsed =
+            JSON.parse(raw);
+
+
+        categories =
+            normaliseCategories(
+                Array.isArray(
+                    parsed.categories
+                )
+                    ? parsed.categories
+                    : cloneDefaults()
+            );
+
 
         savedData =
             parsed.savedData &&
@@ -441,22 +501,29 @@ function loadData() {
                 ? parsed.savedData
                 : {};
 
+
         responsibleIndividualsGroups =
             normaliseResponsibleIndividualsGroups(
                 parsed.responsibleIndividualsGroups
             );
 
+
         migrateSavedData();
 
     } catch (error) {
+
         console.error(
             "Could not load saved planner data:",
             error
         );
 
-        categories = cloneDefaults();
+        categories =
+            cloneDefaults();
+
         savedData = {};
-        responsibleIndividualsGroups = [];
+
+        responsibleIndividualsGroups =
+            [];
 
         showToast(
             "Saved data could not be loaded. Defaults restored."
@@ -470,18 +537,25 @@ function loadData() {
    ========================================================= */
 
 function saveData() {
+
     const data = {
+
         version: 8,
+
         categories,
+
         savedData,
+
         responsibleIndividualsGroups:
             normaliseResponsibleIndividualsGroups(
                 responsibleIndividualsGroups
             )
     };
 
+
     responsibleIndividualsGroups =
         data.responsibleIndividualsGroups;
+
 
     localStorage.setItem(
         STORAGE_KEY,
@@ -495,80 +569,71 @@ function saveData() {
    ========================================================= */
 
 function normaliseCategories(input) {
+
     if (!Array.isArray(input)) {
         return cloneDefaults();
     }
 
-    return input
-        .map(category => {
 
-            if (!category || typeof category !== "object") {
-                return null;
-            }
+    return input.map(category => ({
 
-            const name =
-                String(category.name ?? "").trim();
+        id:
+            category.id ||
+            createId("category"),
 
-            if (!name) {
-                return null;
-            }
+        name:
+            category.name ||
+            "Unnamed Category",
 
-            return {
-                id:
-                    String(
-                        category.id ||
-                        createId("category")
-                    ),
+        icon:
+            category.icon ||
+            "📁",
 
-                name,
+        /*
+         * Existing categories without a
+         * mainCategory are treated as Wedding.
+         */
+        mainCategory:
+            category.mainCategory === "reception"
+                ? "reception"
+                : "wedding",
 
-                icon:
-                    String(
-                        category.icon || "📋"
-                    ),
+        custom:
+            Boolean(
+                category.custom
+            ),
 
-                items:
-                    Array.isArray(category.items)
-                        ? category.items
-                            .map(item => {
+        items:
+            Array.isArray(
+                category.items
+            )
+                ? category.items.map(
+                    item => {
 
-                                if (
-                                    typeof item === "string"
-                                ) {
-                                    return {
-                                        name: item,
-                                        custom: false
-                                    };
-                                }
+                        if (
+                            typeof item ===
+                            "string"
+                        ) {
+                            return {
+                                name: item,
+                                custom: false
+                            };
+                        }
 
-                                if (
-                                    item &&
-                                    typeof item === "object"
-                                ) {
-                                    return {
-                                        name:
-                                            String(
-                                                item.name ?? ""
-                                            ).trim(),
+                        return {
+                            name:
+                                item.name ||
+                                "Unnamed Item",
 
-                                        custom:
-                                            Boolean(
-                                                item.custom
-                                            )
-                                    };
-                                }
-
-                                return null;
-                            })
-                            .filter(
-                                item =>
-                                    item &&
-                                    item.name
-                            )
-                        : []
-            };
-        })
-        .filter(Boolean);
+                            custom:
+                                Boolean(
+                                    item.custom
+                                )
+                        };
+                    }
+                )
+                : []
+    }));
 }
 
 
@@ -577,68 +642,125 @@ function normaliseCategories(input) {
    ========================================================= */
 
 function migrateSavedData() {
-    Object.keys(savedData).forEach(key => {
 
-        const item = savedData[key];
+    Object.keys(
+        savedData
+    ).forEach(key => {
 
-        if (!item || typeof item !== "object") {
+        const item =
+            savedData[key];
+
+
+        if (
+            !item ||
+            typeof item !== "object"
+        ) {
+
             savedData[key] = {};
+
             return;
         }
+
 
         if (
             !item.responsiblePerson &&
             item.vendor
         ) {
+
             item.responsiblePerson =
-                String(item.vendor);
+                String(
+                    item.vendor
+                );
         }
 
+
         if (
-            item.responsiblePerson === undefined
+            item.responsiblePerson ===
+            undefined
         ) {
             item.responsiblePerson = "";
         }
 
-        if (item.deposit === undefined) {
+
+        if (
+            item.deposit ===
+            undefined
+        ) {
             item.deposit = "";
         }
 
-        if (item.mobile === undefined) {
+
+        if (
+            item.mobile ===
+            undefined
+        ) {
             item.mobile = "";
         }
 
-        if (item.email === undefined) {
+
+        if (
+            item.email ===
+            undefined
+        ) {
             item.email = "";
         }
 
-        if (item.contactPerson === undefined) {
+
+        if (
+            item.contactPerson ===
+            undefined
+        ) {
             item.contactPerson = "";
         }
 
-        if (item.status === undefined) {
+
+        if (
+            item.status ===
+            undefined
+        ) {
             item.status = "not";
         }
 
-        if (item.price === undefined) {
+
+        if (
+            item.price ===
+            undefined
+        ) {
             item.price = "";
         }
 
-        if (item.deadline === undefined) {
+
+        if (
+            item.deadline ===
+            undefined
+        ) {
             item.deadline = "";
         }
 
-        if (item.link === undefined) {
+
+        if (
+            item.link ===
+            undefined
+        ) {
             item.link = "";
         }
 
-        if (item.notes === undefined) {
+
+        if (
+            item.notes ===
+            undefined
+        ) {
             item.notes = "";
         }
 
-        if (item.enabled === undefined) {
+
+        if (
+            item.enabled ===
+            undefined
+        ) {
             item.enabled = true;
         }
+
 
         delete item.vendor;
     });
@@ -649,83 +771,311 @@ function migrateSavedData() {
    ITEM DATA
    ========================================================= */
 
-function getItem(categoryId, item) {
+function getItem(
+    categoryId,
+    item
+) {
+
     const itemName =
         typeof item === "string"
             ? item
             : item.name;
 
+
     const key =
         `${categoryId}::${itemName}`;
+
 
     if (
         !savedData[key] ||
         typeof savedData[key] !== "object"
     ) {
+
         savedData[key] = {
+
             status: "not",
+
             responsiblePerson: "",
+
             deposit: "",
+
             price: "",
+
             mobile: "",
+
             email: "",
+
             contactPerson: "",
+
             deadline: "",
+
             link: "",
+
             notes: "",
+
             enabled: true
         };
     }
 
-    const data = savedData[key];
 
-    if (data.responsiblePerson === undefined) {
+    const data =
+        savedData[key];
+
+
+    if (
+        data.responsiblePerson ===
+        undefined
+    ) {
         data.responsiblePerson = "";
     }
 
-    if (data.deposit === undefined) {
+
+    if (
+        data.deposit ===
+        undefined
+    ) {
         data.deposit = "";
     }
 
-    if (data.price === undefined) {
+
+    if (
+        data.price ===
+        undefined
+    ) {
         data.price = "";
     }
 
-    if (data.mobile === undefined) {
+
+    if (
+        data.mobile ===
+        undefined
+    ) {
         data.mobile = "";
     }
 
-    if (data.email === undefined) {
+
+    if (
+        data.email ===
+        undefined
+    ) {
         data.email = "";
     }
 
-    if (data.contactPerson === undefined) {
+
+    if (
+        data.contactPerson ===
+        undefined
+    ) {
         data.contactPerson = "";
     }
 
-    if (data.status === undefined) {
+
+    if (
+        data.status ===
+        undefined
+    ) {
         data.status = "not";
     }
 
-    if (data.deadline === undefined) {
+
+    if (
+        data.deadline ===
+        undefined
+    ) {
         data.deadline = "";
     }
 
-    if (data.link === undefined) {
+
+    if (
+        data.link ===
+        undefined
+    ) {
         data.link = "";
     }
 
-    if (data.notes === undefined) {
+
+    if (
+        data.notes ===
+        undefined
+    ) {
         data.notes = "";
     }
 
-    if (data.enabled === undefined) {
+
+    if (
+        data.enabled ===
+        undefined
+    ) {
         data.enabled = true;
     }
 
+
     delete data.vendor;
 
+
     return data;
+}
+
+
+/* =========================================================
+   MAIN CATEGORY NAVIGATION
+   ========================================================= */
+
+function buildMainCategoryNavigation() {
+
+    const navigation =
+        getElement(
+            "mainCategoryNavigation"
+        );
+
+    if (!navigation) {
+        return;
+    }
+
+
+    navigation.innerHTML = "";
+
+
+    const mainCategories = [
+
+        {
+            id: "wedding",
+            name: "Wedding",
+            icon: "💍"
+        },
+
+        {
+            id: "reception",
+            name: "Reception",
+            icon: "🎉"
+        }
+    ];
+
+
+    mainCategories.forEach(
+        mainCategory => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type =
+                "button";
+
+            button.className =
+                "main-category-button";
+
+
+            if (
+                currentMainCategory ===
+                mainCategory.id
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+            }
+
+
+            button.innerHTML = `
+
+                <span class="main-category-icon">
+                    ${mainCategory.icon}
+                </span>
+
+                <span>
+                    ${escapeHTML(
+                        mainCategory.name
+                    )}
+                </span>
+            `;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    /*
+                     * Change the selected
+                     * main category.
+                     */
+                    currentMainCategory =
+                        mainCategory.id;
+
+
+                    /*
+                     * Rebuild both navigation
+                     * areas so the correct
+                     * categories appear.
+                     */
+                    buildMainCategoryNavigation();
+                    buildNavigation();
+
+
+                    /*
+                     * If the user is currently
+                     * looking at a category
+                     * belonging to the other
+                     * section, return to dashboard.
+                     */
+                    if (
+                        currentCategory !==
+                            "dashboard" &&
+
+                        currentCategory !==
+                            "tagging" &&
+
+                        currentCategory !==
+                            "hidden" &&
+
+                        currentCategory !==
+                            "budget"
+                    ) {
+
+                        const selectedCategory =
+                            categories.find(
+                                category =>
+                                    category.id ===
+                                    currentCategory
+                            );
+
+
+                        if (
+                            !selectedCategory ||
+                            selectedCategory.mainCategory !==
+                                currentMainCategory
+                        ) {
+
+                            showDashboard();
+
+                            return;
+                        }
+                    }
+
+
+                    /*
+                     * If already on dashboard,
+                     * refresh the dashboard.
+                     */
+                    if (
+                        currentCategory ===
+                        "dashboard"
+                    ) {
+
+                        renderDashboard();
+                    }
+
+                }
+            );
+
+
+            navigation.appendChild(
+                button
+            );
+        }
+    );
 }
 
 
@@ -734,27 +1084,48 @@ function getItem(categoryId, item) {
    ========================================================= */
 
 function buildNavigation() {
-    const topNavigation = getElement("topNavigation");
-    const navigation = getElement("navigation");
 
-    if (!topNavigation || !navigation) {
+    const topNavigation =
+        getElement(
+            "topNavigation"
+        );
+
+    const navigation =
+        getElement(
+            "navigation"
+        );
+
+
+    if (
+        !topNavigation ||
+        !navigation
+    ) {
         return;
     }
 
-    topNavigation.innerHTML = "";
-    navigation.innerHTML = "";
+
+    topNavigation.innerHTML =
+        "";
+
+    navigation.innerHTML =
+        "";
 
 
     /* =====================================================
        TOP NAVIGATION
-       Dashboard / Tagging / Hidden Items
        ===================================================== */
 
     const dashboardButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    dashboardButton.type = "button";
-    dashboardButton.className = "nav-button";
+    dashboardButton.type =
+        "button";
+
+    dashboardButton.className =
+        "nav-button";
+
     dashboardButton.textContent =
         "🏠 Dashboard";
 
@@ -769,10 +1140,16 @@ function buildNavigation() {
 
 
     const taggingButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    taggingButton.type = "button";
-    taggingButton.className = "nav-button";
+    taggingButton.type =
+        "button";
+
+    taggingButton.className =
+        "nav-button";
+
     taggingButton.textContent =
         "🏷️ Tagging";
 
@@ -787,10 +1164,16 @@ function buildNavigation() {
 
 
     const hiddenButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    hiddenButton.type = "button";
-    hiddenButton.className = "nav-button";
+    hiddenButton.type =
+        "button";
+
+    hiddenButton.className =
+        "nav-button";
+
     hiddenButton.textContent =
         "👁️ Hidden Items";
 
@@ -803,15 +1186,18 @@ function buildNavigation() {
         hiddenButton
     );
 
-    /* =====================================================
-       BUDGET OVERVIEW
-       ===================================================== */
 
     const budgetButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    budgetButton.type = "button";
-    budgetButton.className = "nav-button";
+    budgetButton.type =
+        "button";
+
+    budgetButton.className =
+        "nav-button";
+
     budgetButton.textContent =
         "💰 Budget Overview";
 
@@ -824,31 +1210,52 @@ function buildNavigation() {
         budgetButton
     );
 
+
     /* =====================================================
        CATEGORY NAVIGATION
-       Only wedding categories stay in original navigation
+       ONLY CURRENT MAIN CATEGORY
        ===================================================== */
 
-    categories.forEach(category => {
+    categories
+        .filter(
+            category =>
+                category.mainCategory ===
+                currentMainCategory
+        )
+        .forEach(
+            category => {
 
-        const button =
-            document.createElement("button");
+                const button =
+                    document.createElement(
+                        "button"
+                    );
 
-        button.type = "button";
-        button.className = "nav-button";
 
-        button.textContent =
-            `${category.icon} ${category.name}`;
+                button.type =
+                    "button";
 
-        button.addEventListener(
-            "click",
-            () => showCategory(category.id)
+                button.className =
+                    "nav-button";
+
+
+                button.textContent =
+                    `${category.icon} ${category.name}`;
+
+
+                button.addEventListener(
+                    "click",
+                    () =>
+                        showCategory(
+                            category.id
+                        )
+                );
+
+
+                navigation.appendChild(
+                    button
+                );
+            }
         );
-
-        navigation.appendChild(
-            button
-        );
-    });
 }
 
 
@@ -857,33 +1264,53 @@ function buildNavigation() {
    ========================================================= */
 
 function hideAllPages() {
+
     const dashboardPage =
-        getElement("dashboardPage");
+        getElement(
+            "dashboardPage"
+        );
 
     const categoryPage =
-        getElement("categoryPage");
+        getElement(
+            "categoryPage"
+        );
 
     const taggingPage =
-        getElement("taggingPage");
+        getElement(
+            "taggingPage"
+        );
 
     const budgetPage =
-        getElement("budgetPage");
+        getElement(
+            "budgetPage"
+        );
 
 
     if (dashboardPage) {
-        dashboardPage.classList.add("hidden");
+        dashboardPage.classList.add(
+            "hidden"
+        );
     }
+
 
     if (categoryPage) {
-        categoryPage.classList.add("hidden");
+        categoryPage.classList.add(
+            "hidden"
+        );
     }
+
 
     if (taggingPage) {
-        taggingPage.classList.add("hidden");
+        taggingPage.classList.add(
+            "hidden"
+        );
     }
 
+
     if (budgetPage) {
-        budgetPage.classList.add("hidden");
+        budgetPage.classList.add(
+            "hidden"
+        );
     }
 }
 
@@ -893,19 +1320,33 @@ function hideAllPages() {
    ========================================================= */
 
 function showDashboard() {
+
     hideAllPages();
 
+
     const dashboardPage =
-        getElement("dashboardPage");
+        getElement(
+            "dashboardPage"
+        );
+
 
     if (dashboardPage) {
-        dashboardPage.classList.remove("hidden");
+
+        dashboardPage.classList.remove(
+            "hidden"
+        );
     }
 
-    currentCategory = "dashboard";
-    currentItem = null;
+
+    currentCategory =
+        "dashboard";
+
+    currentItem =
+        null;
+
 
     renderDashboard();
+
 
     window.scrollTo({
         top: 0,
@@ -915,130 +1356,209 @@ function showDashboard() {
 
 
 function renderDashboard() {
+
     const summaryGrid =
-        getElement("summaryGrid");
+        getElement(
+            "summaryGrid"
+        );
+
 
     if (!summaryGrid) {
         return;
     }
 
-    summaryGrid.innerHTML = "";
 
-    let totalItems = 0;
-    let completedItems = 0;
-    let progressItems = 0;
+    summaryGrid.innerHTML =
+        "";
 
-    categories.forEach(category => {
 
-        let categoryTotal = 0;
-        let categoryDone = 0;
+    let totalItems =
+        0;
 
-        category.items.forEach(item => {
+    let completedItems =
+        0;
 
-            const data =
-                getItem(
-                    category.id,
-                    item
+    let progressItems =
+        0;
+
+
+    categories
+        .filter(
+            category =>
+                category.mainCategory ===
+                currentMainCategory
+        )
+        .forEach(
+            category => {
+
+                let categoryTotal =
+                    0;
+
+                let categoryDone =
+                    0;
+
+
+                category.items.forEach(
+                    item => {
+
+                        const data =
+                            getItem(
+                                category.id,
+                                item
+                            );
+
+
+                        if (
+                            data.enabled ===
+                            false
+                        ) {
+                            return;
+                        }
+
+
+                        totalItems++;
+
+                        categoryTotal++;
+
+
+                        if (
+                            data.status ===
+                            "done"
+                        ) {
+
+                            completedItems++;
+
+                            categoryDone++;
+                        }
+
+
+                        if (
+                            data.status ===
+                            "progress"
+                        ) {
+
+                            progressItems++;
+                        }
+                    }
                 );
 
-            if (data.enabled === false) {
-                return;
+
+                const percent =
+                    categoryTotal > 0
+                        ? Math.round(
+                            (
+                                categoryDone /
+                                categoryTotal
+                            ) * 100
+                        )
+                        : 0;
+
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "category-summary-card";
+
+
+                card.innerHTML = `
+
+                    <div class="category-card-top">
+
+                        <span class="category-icon">
+                            ${escapeHTML(
+                                category.icon
+                            )}
+                        </span>
+
+                        <span class="category-percent">
+                            ${percent}%
+                        </span>
+
+                    </div>
+
+                    <h3>
+                        ${escapeHTML(
+                            category.name
+                        )}
+                    </h3>
+
+                    <p>
+                        ${categoryDone} of
+                        ${categoryTotal}
+                        completed
+                    </p>
+
+                    <div class="progress-bar small">
+
+                        <div
+                            class="progress-fill"
+                            style="width: ${percent}%"
+                        ></div>
+
+                    </div>
+                `;
+
+
+                card.addEventListener(
+                    "click",
+                    () =>
+                        showCategory(
+                            category.id
+                        )
+                );
+
+
+                summaryGrid.appendChild(
+                    card
+                );
             }
-
-            totalItems++;
-            categoryTotal++;
-
-            if (data.status === "done") {
-                completedItems++;
-                categoryDone++;
-            }
-
-            if (data.status === "progress") {
-                progressItems++;
-            }
-        });
-
-        const percent =
-            categoryTotal > 0
-                ? Math.round(
-                    (categoryDone /
-                        categoryTotal) *
-                    100
-                )
-                : 0;
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "category-summary-card";
-
-        card.innerHTML = `
-            <div class="category-card-top">
-
-                <span class="category-icon">
-                    ${escapeHTML(category.icon)}
-                </span>
-
-                <span class="category-percent">
-                    ${percent}%
-                </span>
-
-            </div>
-
-            <h3>
-                ${escapeHTML(category.name)}
-            </h3>
-
-            <p>
-                ${categoryDone} of
-                ${categoryTotal}
-                completed
-            </p>
-
-            <div class="progress-bar small">
-                <div
-                    class="progress-fill"
-                    style="width: ${percent}%"
-                ></div>
-            </div>
-        `;
-
-        card.addEventListener(
-            "click",
-            () => showCategory(category.id)
         );
-
-        summaryGrid.appendChild(card);
-    });
 
 
     const overallPercent =
         totalItems > 0
             ? Math.round(
-                (completedItems /
-                    totalItems) *
-                100
+                (
+                    completedItems /
+                    totalItems
+                ) * 100
             )
             : 0;
 
+
     const totalItemsElement =
-        getElement("totalItems");
+        getElement(
+            "totalItems"
+        );
 
     const completedItemsElement =
-        getElement("completedItems");
+        getElement(
+            "completedItems"
+        );
 
     const progressItemsElement =
-        getElement("progressItems");
+        getElement(
+            "progressItems"
+        );
 
     const responsibleGroupsCount =
-        getElement("responsibleGroupsCount");
+        getElement(
+            "responsibleGroupsCount"
+        );
 
     const overallPercentElement =
-        getElement("overallPercent");
+        getElement(
+            "overallPercent"
+        );
 
     const overallProgressFill =
-        getElement("overallProgressFill");
+        getElement(
+            "overallProgressFill"
+        );
 
 
     if (totalItemsElement) {
@@ -1046,25 +1566,30 @@ function renderDashboard() {
             totalItems;
     }
 
+
     if (completedItemsElement) {
         completedItemsElement.textContent =
             completedItems;
     }
+
 
     if (progressItemsElement) {
         progressItemsElement.textContent =
             progressItems;
     }
 
+
     if (responsibleGroupsCount) {
         responsibleGroupsCount.textContent =
             responsibleIndividualsGroups.length;
     }
 
+
     if (overallPercentElement) {
         overallPercentElement.textContent =
             `${overallPercent}%`;
     }
+
 
     if (overallProgressFill) {
         overallProgressFill.style.width =
@@ -1078,19 +1603,33 @@ function renderDashboard() {
    ========================================================= */
 
 function showTagging() {
+
     hideAllPages();
 
+
     const taggingPage =
-        getElement("taggingPage");
+        getElement(
+            "taggingPage"
+        );
+
 
     if (taggingPage) {
-        taggingPage.classList.remove("hidden");
+
+        taggingPage.classList.remove(
+            "hidden"
+        );
     }
 
-    currentCategory = "tagging";
-    currentItem = null;
+
+    currentCategory =
+        "tagging";
+
+    currentItem =
+        null;
+
 
     renderTagging();
+
 
     window.scrollTo({
         top: 0,
@@ -1100,17 +1639,26 @@ function showTagging() {
 
 
 function renderTagging() {
+
     const taggingGrid =
-        getElement("taggingGrid");
+        getElement(
+            "taggingGrid"
+        );
 
     const emptyMessage =
-        getElement("taggingEmptyMessage");
+        getElement(
+            "taggingEmptyMessage"
+        );
+
 
     if (!taggingGrid) {
         return;
     }
 
-    taggingGrid.innerHTML = "";
+
+    taggingGrid.innerHTML =
+        "";
+
 
     responsibleIndividualsGroups =
         normaliseResponsibleIndividualsGroups(
@@ -1119,9 +1667,12 @@ function renderTagging() {
 
 
     if (
-        responsibleIndividualsGroups.length === 0
+        responsibleIndividualsGroups.length ===
+        0
     ) {
+
         if (emptyMessage) {
+
             emptyMessage.style.display =
                 "block";
         }
@@ -1131,6 +1682,7 @@ function renderTagging() {
 
 
     if (emptyMessage) {
+
         emptyMessage.style.display =
             "none";
     }
@@ -1140,29 +1692,44 @@ function renderTagging() {
         name => {
 
             const card =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             card.className =
                 "tagging-card";
 
+
             const nameElement =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             nameElement.className =
                 "tagging-card-name";
 
-            nameElement.textContent = name;
+
+            nameElement.textContent =
+                name;
 
 
             const deleteButton =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
-            deleteButton.type = "button";
+
+            deleteButton.type =
+                "button";
+
             deleteButton.className =
                 "danger-button tagging-delete-button";
 
             deleteButton.textContent =
                 "Delete";
+
 
             deleteButton.addEventListener(
                 "click",
@@ -1181,7 +1748,9 @@ function renderTagging() {
                 deleteButton
             );
 
-            taggingGrid.appendChild(card);
+            taggingGrid.appendChild(
+                card
+            );
         }
     );
 }
@@ -1192,17 +1761,24 @@ function renderTagging() {
    ========================================================= */
 
 function addResponsibleIndividualGroup() {
+
     const input =
-        getElement("taggingInput");
+        getElement(
+            "taggingInput"
+        );
+
 
     if (!input) {
         return;
     }
 
+
     const value =
         input.value.trim();
 
+
     if (!value) {
+
         showToast(
             "Please enter an individual or group."
         );
@@ -1220,7 +1796,9 @@ function addResponsibleIndividualGroup() {
                 value.toLowerCase()
         );
 
+
     if (duplicate) {
+
         showToast(
             "This individual/group already exists."
         );
@@ -1231,16 +1809,23 @@ function addResponsibleIndividualGroup() {
     }
 
 
-    responsibleIndividualsGroups.push(value);
+    responsibleIndividualsGroups.push(
+        value
+    );
+
 
     responsibleIndividualsGroups =
         normaliseResponsibleIndividualsGroups(
             responsibleIndividualsGroups
         );
 
+
     saveData();
 
-    input.value = "";
+
+    input.value =
+        "";
+
 
     renderTagging();
 
@@ -1248,9 +1833,11 @@ function addResponsibleIndividualGroup() {
 
     renderDashboard();
 
+
     showToast(
         `"${value}" added to Tagging.`
     );
+
 
     input.focus();
 }
@@ -1263,10 +1850,12 @@ function addResponsibleIndividualGroup() {
 function deleteResponsibleIndividualGroup(
     name
 ) {
+
     const confirmed =
         window.confirm(
             `Delete "${name}" from the Tagging list?\n\nExisting item assignments will not be removed.`
         );
+
 
     if (!confirmed) {
         return;
@@ -1276,6 +1865,7 @@ function deleteResponsibleIndividualGroup(
     const lowerName =
         name.toLowerCase();
 
+
     responsibleIndividualsGroups =
         responsibleIndividualsGroups.filter(
             existing =>
@@ -1283,13 +1873,16 @@ function deleteResponsibleIndividualGroup(
                 lowerName
         );
 
+
     saveData();
+
 
     renderTagging();
 
     populateResponsibleIndividualSelect();
 
     renderDashboard();
+
 
     showToast(
         `"${name}" removed from Tagging.`
@@ -1304,29 +1897,40 @@ function deleteResponsibleIndividualGroup(
 function populateResponsibleIndividualSelect(
     selectedValue = null
 ) {
+
     const select =
         getElement(
             "responsiblePersonInput"
         );
 
+
     if (!select) {
         return;
     }
+
 
     const currentValue =
         selectedValue !== null
             ? selectedValue
             : select.value;
 
-    select.innerHTML = "";
+
+    select.innerHTML =
+        "";
 
 
     const emptyOption =
-        document.createElement("option");
+        document.createElement(
+            "option"
+        );
 
-    emptyOption.value = "";
+
+    emptyOption.value =
+        "";
+
     emptyOption.textContent =
-        "No assignment (use tagging)";
+        "No assignment";
+
 
     select.appendChild(
         emptyOption
@@ -1341,10 +1945,17 @@ function populateResponsibleIndividualSelect(
                     "option"
                 );
 
-            option.value = name;
-            option.textContent = name;
 
-            select.appendChild(option);
+            option.value =
+                name;
+
+            option.textContent =
+                name;
+
+
+            select.appendChild(
+                option
+            );
         }
     );
 
@@ -1356,16 +1967,20 @@ function populateResponsibleIndividualSelect(
                 name === currentValue
         )
     ) {
+
         const legacyOption =
             document.createElement(
                 "option"
             );
 
+
         legacyOption.value =
             currentValue;
 
+
         legacyOption.textContent =
             `${currentValue} (saved assignment)`;
+
 
         select.appendChild(
             legacyOption
@@ -1382,72 +1997,125 @@ function populateResponsibleIndividualSelect(
    CATEGORY PAGE
    ========================================================= */
 
-function showCategory(categoryId) {
+function showCategory(
+    categoryId
+) {
+
     const category =
         categories.find(
             item =>
-                item.id === categoryId
+                item.id ===
+                categoryId
         );
+
 
     if (!category) {
         return;
     }
 
+
+    /*
+     * Make sure the correct main
+     * navigation section is active.
+     */
+    currentMainCategory =
+        category.mainCategory ===
+        "reception"
+            ? "reception"
+            : "wedding";
+
+
+    buildMainCategoryNavigation();
+    buildNavigation();
+
+
     hideAllPages();
 
+
     const categoryPage =
-        getElement("categoryPage");
+        getElement(
+            "categoryPage"
+        );
+
 
     if (categoryPage) {
+
         categoryPage.classList.remove(
             "hidden"
         );
     }
 
-    currentCategory = categoryId;
-    currentItem = null;
+
+    currentCategory =
+        categoryId;
+
+    currentItem =
+        null;
 
 
     const categoryTitle =
-        getElement("categoryTitle");
+        getElement(
+            "categoryTitle"
+        );
 
     const categoryPageHeading =
-        getElement("categoryPageHeading");
+        getElement(
+            "categoryPageHeading"
+        );
 
     const addItemButton =
-        getElement("addItemButton");
+        getElement(
+            "addItemButton"
+        );
 
     const itemSearch =
-        getElement("itemSearch");
+        getElement(
+            "itemSearch"
+        );
 
     const itemStatusFilter =
-        getElement("itemStatusFilter");
+        getElement(
+            "itemStatusFilter"
+        );
 
 
     if (categoryTitle) {
+
         categoryTitle.textContent =
             category.name;
     }
 
+
     if (categoryPageHeading) {
+
         categoryPageHeading.textContent =
             category.name;
     }
 
+
     if (addItemButton) {
+
         addItemButton.style.display =
             "";
     }
 
+
     if (itemSearch) {
-        itemSearch.value = "";
+
+        itemSearch.value =
+            "";
     }
+
 
     if (itemStatusFilter) {
-        itemStatusFilter.value = "all";
+
+        itemStatusFilter.value =
+            "all";
     }
 
+
     renderCategory();
+
 
     window.scrollTo({
         top: 0,
@@ -1461,34 +2129,49 @@ function showCategory(categoryId) {
    ========================================================= */
 
 function renderCategory() {
+
     const category =
         categories.find(
             item =>
-                item.id === currentCategory
+                item.id ===
+                currentCategory
         );
+
 
     if (!category) {
         return;
     }
 
+
     const itemsGrid =
-        getElement("itemsGrid");
+        getElement(
+            "itemsGrid"
+        );
 
     const emptyMessage =
-        getElement("emptyMessage");
+        getElement(
+            "emptyMessage"
+        );
+
 
     if (!itemsGrid) {
         return;
     }
 
-    itemsGrid.innerHTML = "";
+
+    itemsGrid.innerHTML =
+        "";
 
 
     const searchInput =
-        getElement("itemSearch");
+        getElement(
+            "itemSearch"
+        );
 
     const statusFilter =
-        getElement("itemStatusFilter");
+        getElement(
+            "itemStatusFilter"
+        );
 
 
     const search =
@@ -1498,6 +2181,7 @@ function renderCategory() {
                 .toLowerCase()
             : "";
 
+
     const filter =
         statusFilter
             ? statusFilter.value
@@ -1505,46 +2189,62 @@ function renderCategory() {
 
 
     const visibleItems =
-        category.items.filter(item => {
+        category.items.filter(
+            item => {
 
-            const itemName =
-                typeof item === "string"
-                    ? item
-                    : item.name;
+                const itemName =
+                    typeof item ===
+                    "string"
+                        ? item
+                        : item.name;
 
-            const data =
-                getItem(
-                    category.id,
-                    item
-                );
 
-            if (data.enabled === false) {
-                return false;
+                const data =
+                    getItem(
+                        category.id,
+                        item
+                    );
+
+
+                if (
+                    data.enabled ===
+                    false
+                ) {
+                    return false;
+                }
+
+
+                if (
+                    search &&
+                    !itemName
+                        .toLowerCase()
+                        .includes(search)
+                ) {
+                    return false;
+                }
+
+
+                if (
+                    filter !== "all" &&
+                    data.status !==
+                        filter
+                ) {
+                    return false;
+                }
+
+
+                return true;
             }
-
-            if (
-                search &&
-                !itemName
-                    .toLowerCase()
-                    .includes(search)
-            ) {
-                return false;
-            }
-
-            if (
-                filter !== "all" &&
-                data.status !== filter
-            ) {
-                return false;
-            }
-
-            return true;
-        });
+        );
 
 
-    if (visibleItems.length === 0) {
+    if (
+        visibleItems.length ===
+        0
+    ) {
 
         if (emptyMessage) {
+
             emptyMessage.style.display =
                 "block";
         }
@@ -1552,21 +2252,27 @@ function renderCategory() {
     } else {
 
         if (emptyMessage) {
+
             emptyMessage.style.display =
                 "none";
         }
 
 
-        visibleItems.forEach(item => {
+        visibleItems.forEach(
+            item => {
 
-            const card =
-                createItemCard(
-                    category,
-                    item
+                const card =
+                    createItemCard(
+                        category,
+                        item
+                    );
+
+
+                itemsGrid.appendChild(
+                    card
                 );
-
-            itemsGrid.appendChild(card);
-        });
+            }
+        );
     }
 
 
@@ -1584,10 +2290,12 @@ function createItemCard(
     category,
     item
 ) {
+
     const itemName =
         typeof item === "string"
             ? item
             : item.name;
+
 
     const data =
         getItem(
@@ -1597,7 +2305,10 @@ function createItemCard(
 
 
     const card =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     card.className =
         "item-card";
@@ -1609,95 +2320,137 @@ function createItemCard(
         );
 
 
-    let details = "";
+    let details =
+        "";
 
 
-    if (data.responsiblePerson) {
+    if (
+        data.responsiblePerson
+    ) {
+
         details += `
+
             <div class="item-detail">
+
                 <span>
                     Responsible individual/group
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.responsiblePerson
                     )}
                 </strong>
+
             </div>
         `;
     }
 
 
-    if (data.price !== "") {
+    if (
+        data.price !== ""
+    ) {
+
         details += `
+
             <div class="item-detail">
+
                 <span>
                     Price
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.price
                     )} kr.
                 </strong>
+
             </div>
         `;
     }
 
 
-    if (data.deposit !== "") {
+    if (
+        data.deposit !== ""
+    ) {
+
         details += `
+
             <div class="item-detail">
+
                 <span>
                     Depositum
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.deposit
                     )} kr.
                 </strong>
+
             </div>
         `;
     }
 
 
-    if (data.contactPerson) {
+    if (
+        data.contactPerson
+    ) {
+
         details += `
+
             <div class="item-detail">
+
                 <span>
                     Contact
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.contactPerson
                     )}
                 </strong>
+
             </div>
         `;
     }
 
 
-    if (data.mobile) {
+    if (
+        data.mobile
+    ) {
+
         details += `
+
             <div class="item-detail">
+
                 <span>
                     Mobile
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         data.mobile
                     )}
                 </strong>
+
             </div>
         `;
     }
 
 
-    if (data.deadline) {
+    if (
+        data.deadline
+    ) {
+
         details += `
+
             <div class="item-detail">
+
                 <span>
                     Deadline
                 </span>
+
                 <strong>
                     ${escapeHTML(
                         formatDate(
@@ -1705,12 +2458,14 @@ function createItemCard(
                         )
                     )}
                 </strong>
+
             </div>
         `;
     }
 
 
     card.innerHTML = `
+
         <div class="item-card-header">
 
             <span
@@ -1725,9 +2480,13 @@ function createItemCard(
 
         </div>
 
+
         <h3>
-            ${escapeHTML(itemName)}
+            ${escapeHTML(
+                itemName
+            )}
         </h3>
+
 
         ${
             details
@@ -1759,7 +2518,10 @@ function createItemCard(
    STATUS
    ========================================================= */
 
-function getStatusLabel(status) {
+function getStatusLabel(
+    status
+) {
+
     switch (status) {
 
         case "done":
@@ -1775,22 +2537,40 @@ function getStatusLabel(status) {
 
 
 function updateStatusButtons() {
+
     const buttons = {
-        not: getElement("notButton"),
-        progress: getElement("progressButton"),
-        done: getElement("doneButton")
+
+        not:
+            getElement(
+                "notButton"
+            ),
+
+        progress:
+            getElement(
+                "progressButton"
+            ),
+
+        done:
+            getElement(
+                "doneButton"
+            )
     };
 
-    Object.entries(buttons).forEach(
+
+    Object.entries(
+        buttons
+    ).forEach(
         ([status, button]) => {
 
             if (!button) {
                 return;
             }
 
+
             button.classList.toggle(
                 "active",
-                modalStatus === status
+                modalStatus ===
+                    status
             );
         }
     );
@@ -1805,11 +2585,14 @@ function openModal(
     categoryId,
     item
 ) {
+
     const category =
         categories.find(
             category =>
-                category.id === categoryId
+                category.id ===
+                categoryId
         );
+
 
     if (!category) {
         return;
@@ -1817,7 +2600,8 @@ function openModal(
 
 
     const itemName =
-        typeof item === "string"
+        typeof item ===
+        "string"
             ? item
             : item.name;
 
@@ -1829,6 +2613,17 @@ function openModal(
         itemName;
 
 
+    /*
+     * Make sure the main category
+     * matches this category.
+     */
+    currentMainCategory =
+        category.mainCategory ===
+        "reception"
+            ? "reception"
+            : "wedding";
+
+
     const data =
         getItem(
             categoryId,
@@ -1837,32 +2632,43 @@ function openModal(
 
 
     modalStatus =
-        data.status || "not";
+        data.status ||
+        "not";
 
 
     const overlay =
-        getElement("overlay");
+        getElement(
+            "overlay"
+        );
 
     const modalCategory =
-        getElement("modalCategory");
+        getElement(
+            "modalCategory"
+        );
 
     const modalTitle =
-        getElement("modalTitle");
+        getElement(
+            "modalTitle"
+        );
 
 
     if (modalCategory) {
+
         modalCategory.textContent =
             category.name;
     }
 
+
     if (modalTitle) {
+
         modalTitle.textContent =
             itemName;
     }
 
 
     populateResponsibleIndividualSelect(
-        data.responsiblePerson || ""
+        data.responsiblePerson ||
+            ""
     );
 
 
@@ -1909,9 +2715,12 @@ function openModal(
 
     updateStatusButtons();
 
+
     updateItemVisibilityButton(
-        data.enabled !== false
+        data.enabled !==
+            false
     );
+
 
     updateCustomDeleteVisibility(
         categoryId,
@@ -1921,7 +2730,9 @@ function openModal(
 
     if (overlay) {
 
-        overlay.classList.add("open");
+        overlay.classList.add(
+            "open"
+        );
 
         overlay.setAttribute(
             "aria-hidden",
@@ -1943,10 +2754,13 @@ function setInputValue(
     id,
     value
 ) {
+
     const element =
         getElement(id);
 
+
     if (element) {
+
         element.value =
             value ?? "";
     }
@@ -1958,10 +2772,15 @@ function setInputValue(
    ========================================================= */
 
 function closeModal() {
+
     const overlay =
-        getElement("overlay");
+        getElement(
+            "overlay"
+        );
+
 
     if (overlay) {
+
         overlay.classList.remove(
             "open"
         );
@@ -1972,7 +2791,10 @@ function closeModal() {
         );
     }
 
-    currentItem = null;
+
+    currentItem =
+        null;
+
 
     document.body.style.overflow =
         "";
@@ -1986,14 +2808,17 @@ function closeModal() {
 function updateItemVisibilityButton(
     enabled
 ) {
+
     const button =
         getElement(
             "disableItemButton"
         );
 
+
     if (!button) {
         return;
     }
+
 
     button.textContent =
         enabled
@@ -2003,30 +2828,48 @@ function updateItemVisibilityButton(
 
 
 function toggleCurrentItemVisibility() {
+
     if (
         !currentCategory ||
-        currentCategory === "dashboard" ||
-        currentCategory === "tagging" ||
-        currentCategory === "budget" ||
-        currentCategory === "hidden" ||
+        currentCategory ===
+            "dashboard" ||
+        currentCategory ===
+            "tagging" ||
+        currentCategory ===
+            "budget" ||
+        currentCategory ===
+            "hidden" ||
         !currentItem
     ) {
         return;
     }
 
 
+    /*
+     * Save the category before
+     * closeModal() clears currentItem.
+     */
+    const categoryId =
+        currentCategory;
+
+    const itemName =
+        currentItem;
+
+
     const data =
         getItem(
-            currentCategory,
-            currentItem
+            categoryId,
+            itemName
         );
 
 
     data.enabled =
-        data.enabled === false;
+        data.enabled ===
+        false;
 
 
     saveData();
+
 
     updateItemVisibilityButton(
         data.enabled
@@ -2034,10 +2877,13 @@ function toggleCurrentItemVisibility() {
 
 
     if (data.enabled) {
+
         showToast(
             "Item restored."
         );
+
     } else {
+
         showToast(
             "Item hidden."
         );
@@ -2047,11 +2893,43 @@ function toggleCurrentItemVisibility() {
     closeModal();
 
 
-    if (currentCategory === "hidden") {
+    /*
+     * The current page may be
+     * the hidden-items page or
+     * a normal category.
+     */
+    if (
+        currentCategory ===
+        "hidden"
+    ) {
+
         renderHiddenItems();
+
     } else {
-        renderCategory();
+
+        /*
+         * currentCategory becomes
+         * null only because closeModal
+         * clears currentItem, not
+         * currentCategory.
+         */
+        const category =
+            categories.find(
+                item =>
+                    item.id ===
+                    categoryId
+            );
+
+
+        if (category) {
+
+            currentCategory =
+                categoryId;
+
+            renderCategory();
+        }
     }
+
 
     renderDashboard();
 }
@@ -2065,47 +2943,66 @@ function updateCustomDeleteVisibility(
     categoryId,
     itemName
 ) {
+
     const area =
         getElement(
             "customItemDeleteArea"
         );
 
+
     if (!area) {
         return;
     }
 
+
     const category =
         categories.find(
             item =>
-                item.id === categoryId
+                item.id ===
+                categoryId
         );
 
+
     if (!category) {
-        area.classList.add("hidden");
+
+        area.classList.add(
+            "hidden"
+        );
+
         return;
     }
 
+
     const categoryItem =
-        category.items.find(item => {
+        category.items.find(
+            item => {
 
-            const name =
-                typeof item === "string"
-                    ? item
-                    : item.name;
+                const name =
+                    typeof item ===
+                    "string"
+                        ? item
+                        : item.name;
 
-            return name === itemName;
-        });
+
+                return name ===
+                    itemName;
+            }
+        );
 
 
     if (
         categoryItem &&
-        typeof categoryItem === "object" &&
+        typeof categoryItem ===
+            "object" &&
         categoryItem.custom
     ) {
+
         area.classList.remove(
             "hidden"
         );
+
     } else {
+
         area.classList.add(
             "hidden"
         );
@@ -2114,12 +3011,17 @@ function updateCustomDeleteVisibility(
 
 
 function deleteCurrentCustomItem() {
+
     if (
         !currentCategory ||
-        currentCategory === "dashboard" ||
-        currentCategory === "tagging" ||
-        currentCategory === "budget" ||
-        currentCategory === "hidden" ||
+        currentCategory ===
+            "dashboard" ||
+        currentCategory ===
+            "tagging" ||
+        currentCategory ===
+            "budget" ||
+        currentCategory ===
+            "hidden" ||
         !currentItem
     ) {
         return;
@@ -2129,8 +3031,10 @@ function deleteCurrentCustomItem() {
     const category =
         categories.find(
             item =>
-                item.id === currentCategory
+                item.id ===
+                currentCategory
         );
+
 
     if (!category) {
         return;
@@ -2142,22 +3046,27 @@ function deleteCurrentCustomItem() {
             current => {
 
                 const name =
-                    typeof current === "string"
+                    typeof current ===
+                    "string"
                         ? current
                         : current.name;
 
-                return name === currentItem;
+
+                return name ===
+                    currentItem;
             }
         );
 
 
     const isCustom =
         item &&
-        typeof item === "object" &&
+        typeof item ===
+            "object" &&
         item.custom;
 
 
     if (!isCustom) {
+
         showToast(
             "Default items cannot be deleted."
         );
@@ -2166,10 +3075,15 @@ function deleteCurrentCustomItem() {
     }
 
 
+    const itemName =
+        currentItem;
+
+
     const confirmed =
         window.confirm(
-            `Delete "${currentItem}" permanently?`
+            `Delete "${itemName}" permanently?`
         );
+
 
     if (!confirmed) {
         return;
@@ -2177,7 +3091,7 @@ function deleteCurrentCustomItem() {
 
 
     const key =
-        `${currentCategory}::${currentItem}`;
+        `${currentCategory}::${itemName}`;
 
 
     delete savedData[key];
@@ -2188,22 +3102,28 @@ function deleteCurrentCustomItem() {
             current => {
 
                 const name =
-                    typeof current === "string"
+                    typeof current ===
+                    "string"
                         ? current
                         : current.name;
 
-                return name !== currentItem;
+
+                return name !==
+                    itemName;
             }
         );
 
 
     saveData();
 
+
     closeModal();
+
 
     renderCategory();
 
     renderDashboard();
+
 
     showToast(
         "Custom item deleted."
@@ -2216,22 +3136,34 @@ function deleteCurrentCustomItem() {
    ========================================================= */
 
 function saveItem() {
+
     if (
         !currentCategory ||
-        currentCategory === "dashboard" ||
-        currentCategory === "tagging" ||
-        currentCategory === "budget" ||
-        currentCategory === "hidden" ||
+        currentCategory ===
+            "dashboard" ||
+        currentCategory ===
+            "tagging" ||
+        currentCategory ===
+            "budget" ||
+        currentCategory ===
+            "hidden" ||
         !currentItem
     ) {
         return;
     }
 
 
+    const categoryId =
+        currentCategory;
+
+    const itemName =
+        currentItem;
+
+
     const data =
         getItem(
-            currentCategory,
-            currentItem
+            categoryId,
+            itemName
         );
 
 
@@ -2256,35 +3188,42 @@ function saveItem() {
             "depositInput"
         );
 
+
     data.price =
         getInputValue(
             "priceInput"
         );
+
 
     data.mobile =
         getInputValue(
             "mobileInput"
         );
 
+
     data.email =
         getInputValue(
             "emailInput"
         );
+
 
     data.contactPerson =
         getInputValue(
             "contactPersonInput"
         );
 
+
     data.deadline =
         getInputValue(
             "deadlineInput"
         );
 
+
     data.link =
         getInputValue(
             "linkInput"
         );
+
 
     data.notes =
         getInputValue(
@@ -2294,21 +3233,49 @@ function saveItem() {
 
     saveData();
 
+
     const categoryBeforeClose =
-        currentCategory;
+        categoryId;
+
 
     closeModal();
 
 
+    /*
+     * If the saved item is hidden,
+     * update hidden items instead.
+     */
+    const savedItem =
+        getItem(
+            categoryBeforeClose,
+            itemName
+        );
+
+
     if (
-        categoryBeforeClose === "hidden"
+        savedItem.enabled ===
+        false
     ) {
-        renderHiddenItems();
+
+        if (
+            currentCategory ===
+            "hidden"
+        ) {
+
+            renderHiddenItems();
+        }
+
     } else {
+
+        currentCategory =
+            categoryBeforeClose;
+
         renderCategory();
     }
 
+
     renderDashboard();
+
 
     showToast(
         "Item saved."
@@ -2316,9 +3283,13 @@ function saveItem() {
 }
 
 
-function getInputValue(id) {
+function getInputValue(
+    id
+) {
+
     const element =
         getElement(id);
+
 
     return element
         ? element.value.trim()
@@ -2331,13 +3302,18 @@ function getInputValue(id) {
    ========================================================= */
 
 function clearItem() {
-    modalStatus = "not";
+
+    modalStatus =
+        "not";
+
 
     updateStatusButtons();
+
 
     populateResponsibleIndividualSelect(
         ""
     );
+
 
     setInputValue(
         "depositInput",
@@ -2379,6 +3355,7 @@ function clearItem() {
         ""
     );
 
+
     showToast(
         "Fields cleared."
     );
@@ -2390,62 +3367,94 @@ function clearItem() {
    ========================================================= */
 
 function showHiddenItems() {
+
     hideAllPages();
 
+
     const categoryPage =
-        getElement("categoryPage");
+        getElement(
+            "categoryPage"
+        );
+
 
     if (categoryPage) {
+
         categoryPage.classList.remove(
             "hidden"
         );
     }
 
-    currentCategory = "hidden";
-    currentItem = null;
+
+    currentCategory =
+        "hidden";
+
+    currentItem =
+        null;
 
 
     const categoryTitle =
-        getElement("categoryTitle");
+        getElement(
+            "categoryTitle"
+        );
 
     const categoryPageHeading =
-        getElement("categoryPageHeading");
+        getElement(
+            "categoryPageHeading"
+        );
 
     const addItemButton =
-        getElement("addItemButton");
+        getElement(
+            "addItemButton"
+        );
 
     const itemSearch =
-        getElement("itemSearch");
+        getElement(
+            "itemSearch"
+        );
 
     const itemStatusFilter =
-        getElement("itemStatusFilter");
+        getElement(
+            "itemStatusFilter"
+        );
 
 
     if (categoryTitle) {
+
         categoryTitle.textContent =
             "Hidden Items";
     }
 
+
     if (categoryPageHeading) {
+
         categoryPageHeading.textContent =
             "Hidden Items";
     }
 
+
     if (addItemButton) {
+
         addItemButton.style.display =
             "none";
     }
 
+
     if (itemSearch) {
-        itemSearch.value = "";
+
+        itemSearch.value =
+            "";
     }
 
+
     if (itemStatusFilter) {
-        itemStatusFilter.value = "all";
+
+        itemStatusFilter.value =
+            "all";
     }
 
 
     renderHiddenItems();
+
 
     window.scrollTo({
         top: 0,
@@ -2455,58 +3464,82 @@ function showHiddenItems() {
 
 
 function renderHiddenItems() {
+
     const itemsGrid =
-        getElement("itemsGrid");
+        getElement(
+            "itemsGrid"
+        );
 
     const emptyMessage =
-        getElement("emptyMessage");
+        getElement(
+            "emptyMessage"
+        );
+
 
     if (!itemsGrid) {
         return;
     }
 
-    itemsGrid.innerHTML = "";
+
+    itemsGrid.innerHTML =
+        "";
 
 
-    const hiddenItems = [];
+    const hiddenItems =
+        [];
 
 
-    categories.forEach(category => {
+    categories.forEach(
+        category => {
 
-        category.items.forEach(item => {
+            category.items.forEach(
+                item => {
 
-            const itemName =
-                typeof item === "string"
-                    ? item
-                    : item.name;
-
-            const data =
-                getItem(
-                    category.id,
-                    item
-                );
+                    const itemName =
+                        typeof item ===
+                        "string"
+                            ? item
+                            : item.name;
 
 
-            if (data.enabled === false) {
-
-                hiddenItems.push({
-                    category,
-                    item,
-                    itemName,
-                    data
-                });
-            }
-        });
-    });
+                    const data =
+                        getItem(
+                            category.id,
+                            item
+                        );
 
 
-    if (hiddenItems.length === 0) {
+                    if (
+                        data.enabled ===
+                        false
+                    ) {
+
+                        hiddenItems.push({
+                            category,
+                            item,
+                            itemName,
+                            data
+                        });
+                    }
+                }
+            );
+        }
+    );
+
+
+    if (
+        hiddenItems.length ===
+        0
+    ) {
 
         if (emptyMessage) {
+
             emptyMessage.style.display =
                 "block";
 
+
             emptyMessage.innerHTML = `
+
                 <div
                     class="empty-icon"
                     aria-hidden="true"
@@ -2524,6 +3557,7 @@ function renderHiddenItems() {
             `;
         }
 
+
         updateHiddenProgress();
 
         return;
@@ -2531,6 +3565,7 @@ function renderHiddenItems() {
 
 
     if (emptyMessage) {
+
         emptyMessage.style.display =
             "none";
     }
@@ -2549,6 +3584,7 @@ function renderHiddenItems() {
                     "div"
                 );
 
+
             card.className =
                 "item-card hidden-item-card";
 
@@ -2556,7 +3592,9 @@ function renderHiddenItems() {
             const responsible =
                 data.responsiblePerson
                     ? `
+
                         <div class="item-detail">
+
                             <span>
                                 Responsible individual/group
                             </span>
@@ -2566,12 +3604,14 @@ function renderHiddenItems() {
                                     data.responsiblePerson
                                 )}
                             </strong>
+
                         </div>
                     `
                     : "";
 
 
             card.innerHTML = `
+
                 <div class="item-card-header">
 
                     <span class="item-status status-not">
@@ -2580,22 +3620,31 @@ function renderHiddenItems() {
 
                 </div>
 
+
                 <h3>
-                    ${escapeHTML(itemName)}
+                    ${escapeHTML(
+                        itemName
+                    )}
                 </h3>
 
+
                 <p class="hidden-item-label">
+
                     ${escapeHTML(
                         category.icon
                     )}
+
                     ${escapeHTML(
                         category.name
                     )}
+
                 </p>
+
 
                 ${
                     responsible
                         ? `
+
                             <div class="item-details">
                                 ${responsible}
                             </div>
@@ -2603,7 +3652,9 @@ function renderHiddenItems() {
                         : ""
                 }
 
+
                 <br>
+
 
                 <button
                     type="button"
@@ -2620,25 +3671,33 @@ function renderHiddenItems() {
                 );
 
 
-            enableButton.addEventListener(
-                "click",
-                event => {
+            if (enableButton) {
 
-                    event.stopPropagation();
+                enableButton.addEventListener(
+                    "click",
+                    event => {
 
-                    data.enabled = true;
+                        event.stopPropagation();
 
-                    saveData();
 
-                    renderHiddenItems();
+                        data.enabled =
+                            true;
 
-                    renderDashboard();
 
-                    showToast(
-                        `"${itemName}" is visible again.`
-                    );
-                }
-            );
+                        saveData();
+
+
+                        renderHiddenItems();
+
+                        renderDashboard();
+
+
+                        showToast(
+                            `"${itemName}" is visible again.`
+                        );
+                    }
+                );
+            }
 
 
             card.addEventListener(
@@ -2651,7 +3710,9 @@ function renderHiddenItems() {
             );
 
 
-            itemsGrid.appendChild(card);
+            itemsGrid.appendChild(
+                card
+            );
         }
     );
 
@@ -2661,6 +3722,7 @@ function renderHiddenItems() {
 
 
 function updateHiddenProgress() {
+
     const progressText =
         getElement(
             "categoryProgressText"
@@ -2678,39 +3740,59 @@ function updateHiddenProgress() {
 
 
     if (progressText) {
+
         progressText.textContent =
             "Hidden items";
     }
 
+
     if (categoryPercent) {
+
         categoryPercent.textContent =
             "";
     }
 
+
     if (progressFill) {
+
         progressFill.style.width =
             "0%";
     }
 }
+
 
 /* =========================================================
    BUDGET OVERVIEW
    ========================================================= */
 
 function showBudgetOverview() {
+
     hideAllPages();
 
+
     const budgetPage =
-        getElement("budgetPage");
+        getElement(
+            "budgetPage"
+        );
+
 
     if (budgetPage) {
-        budgetPage.classList.remove("hidden");
+
+        budgetPage.classList.remove(
+            "hidden"
+        );
     }
 
-    currentCategory = "budget";
-    currentItem = null;
+
+    currentCategory =
+        "budget";
+
+    currentItem =
+        null;
+
 
     renderBudgetOverview();
+
 
     window.scrollTo({
         top: 0,
@@ -2723,7 +3805,10 @@ function showBudgetOverview() {
    BUDGET HELPERS
    ========================================================= */
 
-function parseBudgetNumber(value) {
+function parseBudgetNumber(
+    value
+) {
+
     if (
         value === null ||
         value === undefined ||
@@ -2732,6 +3817,7 @@ function parseBudgetNumber(value) {
         return 0;
     }
 
+
     const number =
         Number(
             String(value)
@@ -2739,13 +3825,19 @@ function parseBudgetNumber(value) {
                 .trim()
         );
 
-    return Number.isFinite(number)
+
+    return Number.isFinite(
+        number
+    )
         ? number
         : 0;
 }
 
 
-function formatBudgetCurrency(value) {
+function formatBudgetCurrency(
+    value
+) {
+
     return (
         new Intl.NumberFormat(
             "da-DK",
@@ -2764,72 +3856,90 @@ function formatBudgetCurrency(value) {
    ========================================================= */
 
 function getBudgetItems() {
-    const result = [];
 
-    categories.forEach(category => {
-
-        category.items.forEach(item => {
-
-            const itemName =
-                typeof item === "string"
-                    ? item
-                    : item.name;
-
-            const data =
-                getItem(
-                    category.id,
-                    item
-                );
+    const result =
+        [];
 
 
-            /*
-             * Hidden items are intentionally excluded
-             * from the active Budget Overview.
-             */
-            if (data.enabled === false) {
-                return;
-            }
+    categories.forEach(
+        category => {
+
+            category.items.forEach(
+                item => {
+
+                    const itemName =
+                        typeof item ===
+                        "string"
+                            ? item
+                            : item.name;
 
 
-            const deposit =
-                parseBudgetNumber(
-                    data.deposit
-                );
-
-            const price =
-                parseBudgetNumber(
-                    data.price
-                );
+                    const data =
+                        getItem(
+                            category.id,
+                            item
+                        );
 
 
-            /*
-             * Only include items that actually
-             * contain financial information.
-             */
-            if (
-                deposit === 0 &&
-                price === 0
-            ) {
-                return;
-            }
+                    if (
+                        data.enabled ===
+                        false
+                    ) {
+                        return;
+                    }
 
 
-            result.push({
-                categoryId: category.id,
-                categoryName: category.name,
-                categoryIcon: category.icon,
-                itemName,
-                responsible:
-                    data.responsiblePerson
-                        ? data.responsiblePerson.trim()
-                        : "",
-                deposit,
-                price,
-                total:
-                    deposit + price
-            });
-        });
-    });
+                    const deposit =
+                        parseBudgetNumber(
+                            data.deposit
+                        );
+
+
+                    const price =
+                        parseBudgetNumber(
+                            data.price
+                        );
+
+
+                    if (
+                        deposit === 0 &&
+                        price === 0
+                    ) {
+                        return;
+                    }
+
+
+                    result.push({
+
+                        categoryId:
+                            category.id,
+
+                        categoryName:
+                            category.name,
+
+                        categoryIcon:
+                            category.icon,
+
+                        itemName,
+
+                        responsible:
+                            data.responsiblePerson
+                                ? data.responsiblePerson.trim()
+                                : "",
+
+                        deposit,
+
+                        price,
+
+                        total:
+                            deposit +
+                            price
+                    });
+                }
+            );
+        }
+    );
+
 
     return result;
 }
@@ -2839,69 +3949,95 @@ function getBudgetItems() {
    GROUP BUDGET ITEMS
    ========================================================= */
 
-function groupBudgetItems(items) {
-    const groups = new Map();
+function groupBudgetItems(
+    items
+) {
+
+    const groups =
+        new Map();
 
 
-    items.forEach(item => {
+    items.forEach(
+        item => {
 
-        const responsible =
-            item.responsible ||
-            "Unassigned";
+            const responsible =
+                item.responsible ||
+                "Unassigned";
 
 
-        if (!groups.has(responsible)) {
+            if (
+                !groups.has(
+                    responsible
+                )
+            ) {
 
-            groups.set(
-                responsible,
-                {
-                    name: responsible,
-                    items: [],
-                    deposit: 0,
-                    price: 0,
-                    total: 0
-                }
+                groups.set(
+                    responsible,
+                    {
+                        name:
+                            responsible,
+
+                        items:
+                            [],
+
+                        deposit:
+                            0,
+
+                        price:
+                            0,
+
+                        total:
+                            0
+                    }
+                );
+            }
+
+
+            const group =
+                groups.get(
+                    responsible
+                );
+
+
+            group.items.push(
+                item
             );
+
+
+            group.deposit +=
+                item.deposit;
+
+
+            group.price +=
+                item.price;
+
+
+            group.total +=
+                item.total;
         }
+    );
 
 
-        const group =
-            groups.get(responsible);
-
-
-        group.items.push(item);
-
-        group.deposit +=
-            item.deposit;
-
-        group.price +=
-            item.price;
-
-        group.total +=
-            item.total;
-    });
-
-
-    /*
-     * Put named responsible people/groups first
-     * and Unassigned last.
-     */
     return Array.from(
         groups.values()
     ).sort(
         (a, b) => {
 
             if (
-                a.name === "Unassigned"
+                a.name ===
+                "Unassigned"
             ) {
                 return 1;
             }
 
+
             if (
-                b.name === "Unassigned"
+                b.name ===
+                "Unassigned"
             ) {
                 return -1;
             }
+
 
             return a.name.localeCompare(
                 b.name
@@ -2916,6 +4052,7 @@ function groupBudgetItems(items) {
    ========================================================= */
 
 function renderBudgetOverview() {
+
     const grid =
         getElement(
             "budgetResponsibleGrid"
@@ -2932,35 +4069,37 @@ function renderBudgetOverview() {
     }
 
 
-    grid.innerHTML = "";
+    grid.innerHTML =
+        "";
 
 
     const items =
         getBudgetItems();
 
 
-    let totalDeposit = 0;
-    let totalPrice = 0;
+    let totalDeposit =
+        0;
+
+    let totalPrice =
+        0;
 
 
-    items.forEach(item => {
+    items.forEach(
+        item => {
 
-        totalDeposit +=
-            item.deposit;
+            totalDeposit +=
+                item.deposit;
 
-        totalPrice +=
-            item.price;
-    });
+            totalPrice +=
+                item.price;
+        }
+    );
 
 
     const grandTotal =
         totalDeposit +
         totalPrice;
 
-
-    /* =====================================================
-       OVERALL TOTALS
-       ===================================================== */
 
     const totalDepositElement =
         getElement(
@@ -2979,6 +4118,7 @@ function renderBudgetOverview() {
 
 
     if (totalDepositElement) {
+
         totalDepositElement.textContent =
             formatBudgetCurrency(
                 totalDeposit
@@ -2987,6 +4127,7 @@ function renderBudgetOverview() {
 
 
     if (totalPriceElement) {
+
         totalPriceElement.textContent =
             formatBudgetCurrency(
                 totalPrice
@@ -2995,6 +4136,7 @@ function renderBudgetOverview() {
 
 
     if (grandTotalElement) {
+
         grandTotalElement.textContent =
             formatBudgetCurrency(
                 grandTotal
@@ -3002,13 +4144,13 @@ function renderBudgetOverview() {
     }
 
 
-    /* =====================================================
-       EMPTY STATE
-       ===================================================== */
-
-    if (items.length === 0) {
+    if (
+        items.length ===
+        0
+    ) {
 
         if (emptyMessage) {
+
             emptyMessage.style.display =
                 "block";
         }
@@ -3018,245 +4160,259 @@ function renderBudgetOverview() {
 
 
     if (emptyMessage) {
+
         emptyMessage.style.display =
             "none";
     }
 
 
-    /* =====================================================
-       GROUP ITEMS
-       ===================================================== */
-
     const groups =
-        groupBudgetItems(items);
+        groupBudgetItems(
+            items
+        );
 
 
-    groups.forEach(group => {
+    groups.forEach(
+        group => {
 
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "budget-responsible-card";
-
-
-        const isUnassigned =
-            group.name === "Unassigned";
+            const card =
+                document.createElement(
+                    "div"
+                );
 
 
-        const itemsHTML =
-            group.items
-                .map(item => {
-
-                    return `
-                        <div class="budget-item-row">
-
-                            <div class="budget-item-info">
-
-                                <span class="budget-item-category">
-                                    ${escapeHTML(
-                                        item.categoryIcon
-                                    )}
-                                    ${escapeHTML(
-                                        item.categoryName
-                                    )}
-                                </span>
-
-                                <strong class="budget-item-name">
-                                    ${escapeHTML(
-                                        item.itemName
-                                    )}
-                                </strong>
-
-                            </div>
+            card.className =
+                "budget-responsible-card";
 
 
-                            <div class="budget-item-money">
+            const isUnassigned =
+                group.name ===
+                "Unassigned";
 
-                                <div class="budget-money-column">
 
-                                    <span>
-                                        Depositum
-                                    </span>
+            const itemsHTML =
+                group.items
+                    .map(
+                        item => {
 
-                                    <strong>
-                                        ${formatBudgetCurrency(
-                                            item.deposit
-                                        )}
-                                    </strong>
+                            return `
+
+                                <div class="budget-item-row">
+
+                                    <div class="budget-item-info">
+
+                                        <span class="budget-item-category">
+                                            ${escapeHTML(
+                                                item.categoryIcon
+                                            )}
+                                            ${escapeHTML(
+                                                item.categoryName
+                                            )}
+                                        </span>
+
+                                        <strong class="budget-item-name">
+                                            ${escapeHTML(
+                                                item.itemName
+                                            )}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="budget-item-money">
+
+                                        <div class="budget-money-column">
+
+                                            <span>
+                                                Depositum
+                                            </span>
+
+                                            <strong>
+                                                ${formatBudgetCurrency(
+                                                    item.deposit
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="budget-money-column">
+
+                                            <span>
+                                                Price
+                                            </span>
+
+                                            <strong>
+                                                ${formatBudgetCurrency(
+                                                    item.price
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="budget-money-column budget-item-total">
+
+                                            <span>
+                                                Total
+                                            </span>
+
+                                            <strong>
+                                                ${formatBudgetCurrency(
+                                                    item.total
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
 
                                 </div>
-
-
-                                <div class="budget-money-column">
-
-                                    <span>
-                                        Price
-                                    </span>
-
-                                    <strong>
-                                        ${formatBudgetCurrency(
-                                            item.price
-                                        )}
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="budget-money-column budget-item-total">
-
-                                    <span>
-                                        Total
-                                    </span>
-
-                                    <strong>
-                                        ${formatBudgetCurrency(
-                                            item.total
-                                        )}
-                                    </strong>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    `;
-                })
-                .join("");
-
-
-        card.innerHTML = `
-
-            <div class="budget-responsible-header">
-
-                <div>
-
-                    <span class="budget-responsible-icon">
-                        ${
-                            isUnassigned
-                                ? "❓"
-                                : "👤"
+                            `;
                         }
-                    </span>
+                    )
+                    .join("");
 
-                    <div class="budget-responsible-title">
 
-                        <span>
+            card.innerHTML = `
+
+                <div class="budget-responsible-header">
+
+                    <div>
+
+                        <span class="budget-responsible-icon">
                             ${
                                 isUnassigned
-                                    ? "Items without assignment"
-                                    : "Responsible individual/group"
+                                    ? "❓"
+                                    : "👤"
                             }
                         </span>
 
-                        <h3>
-                            ${escapeHTML(
-                                group.name
+
+                        <div class="budget-responsible-title">
+
+                            <span>
+                                ${
+                                    isUnassigned
+                                        ? "Items without assignment"
+                                        : "Responsible individual/group"
+                                }
+                            </span>
+
+
+                            <h3>
+                                ${escapeHTML(
+                                    group.name
+                                )}
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="budget-responsible-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            ${formatBudgetCurrency(
+                                group.total
                             )}
-                        </h3>
+                        </strong>
 
                     </div>
 
                 </div>
 
 
-                <div class="budget-responsible-total">
+                <div class="budget-items-list">
 
-                    <span>
-                        Total
-                    </span>
+                    <div class="budget-table-header">
 
-                    <strong>
-                        ${formatBudgetCurrency(
-                            group.total
-                        )}
-                    </strong>
+                        <span>
+                            Item
+                        </span>
 
-                </div>
+                        <span>
+                            Depositum
+                        </span>
 
-            </div>
+                        <span>
+                            Price
+                        </span>
 
+                        <span>
+                            Total
+                        </span>
 
-            <div class="budget-items-list">
-
-                <div class="budget-table-header">
-
-                    <span>
-                        Item
-                    </span>
-
-                    <span>
-                        Depositum
-                    </span>
-
-                    <span>
-                        Price
-                    </span>
-
-                    <span>
-                        Total
-                    </span>
-
-                </div>
-
-                ${itemsHTML}
-
-            </div>
+                    </div>
 
 
-            <div class="budget-responsible-footer">
-
-                <div>
-
-                    <span>
-                        Depositum
-                    </span>
-
-                    <strong>
-                        ${formatBudgetCurrency(
-                            group.deposit
-                        )}
-                    </strong>
+                    ${itemsHTML}
 
                 </div>
 
 
-                <div>
+                <div class="budget-responsible-footer">
 
-                    <span>
-                        Price
-                    </span>
+                    <div>
 
-                    <strong>
-                        ${formatBudgetCurrency(
-                            group.price
-                        )}
-                    </strong>
+                        <span>
+                            Depositum
+                        </span>
+
+                        <strong>
+                            ${formatBudgetCurrency(
+                                group.deposit
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Price
+                        </span>
+
+                        <strong>
+                            ${formatBudgetCurrency(
+                                group.price
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            ${formatBudgetCurrency(
+                                group.total
+                            )}
+                        </strong>
+
+                    </div>
 
                 </div>
+            `;
 
 
-                <div>
-
-                    <span>
-                        Total
-                    </span>
-
-                    <strong>
-                        ${formatBudgetCurrency(
-                            group.total
-                        )}
-                    </strong>
-
-                </div>
-
-            </div>
-        `;
-
-
-        grid.appendChild(card);
-    });
+            grid.appendChild(
+                card
+            );
+        }
+    );
 }
+
 
 /* =========================================================
    CATEGORY PROGRESS
@@ -3265,36 +4421,53 @@ function renderBudgetOverview() {
 function updateCategoryProgress(
     category
 ) {
-    let total = 0;
-    let completed = 0;
+
+    let total =
+        0;
+
+    let completed =
+        0;
 
 
-    category.items.forEach(item => {
+    category.items.forEach(
+        item => {
 
-        const data =
-            getItem(
-                category.id,
-                item
-            );
+            const data =
+                getItem(
+                    category.id,
+                    item
+                );
 
-        if (data.enabled === false) {
-            return;
+
+            if (
+                data.enabled ===
+                false
+            ) {
+                return;
+            }
+
+
+            total++;
+
+
+            if (
+                data.status ===
+                "done"
+            ) {
+
+                completed++;
+            }
         }
-
-        total++;
-
-        if (data.status === "done") {
-            completed++;
-        }
-    });
+    );
 
 
     const percent =
         total > 0
             ? Math.round(
-                (completed /
-                    total) *
-                100
+                (
+                    completed /
+                    total
+                ) * 100
             )
             : 0;
 
@@ -3316,16 +4489,21 @@ function updateCategoryProgress(
 
 
     if (progressText) {
+
         progressText.textContent =
             `${completed} of ${total} completed`;
     }
 
+
     if (categoryPercent) {
+
         categoryPercent.textContent =
             `${percent}%`;
     }
 
+
     if (progressFill) {
+
         progressFill.style.width =
             `${percent}%`;
     }
@@ -3339,7 +4517,21 @@ function updateCategoryProgress(
 function openManagementModal(
     mode
 ) {
-    managementMode = mode;
+
+    managementMode =
+        mode;
+
+
+    const mainCategoryField =
+        getElement(
+            "managementMainCategory"
+        );
+
+    const mainCategoryGroup =
+        getElement(
+            "managementMainCategoryGroup"
+        );
+
 
     const overlay =
         getElement(
@@ -3377,29 +4569,63 @@ function openManagementModal(
         );
 
 
-    if (mode === "category") {
+    /*
+     * Main category selector may exist
+     * in the HTML. If it does, keep it
+     * synchronized with the current
+     * main category.
+     */
+    if (mainCategoryField) {
+
+        mainCategoryField.value =
+            currentMainCategory;
+    }
+
+
+    if (mainCategoryGroup) {
+
+        mainCategoryGroup.style.display =
+            mode === "category"
+                ? ""
+                : "none";
+    }
+
+
+    if (
+        mode ===
+        "category"
+    ) {
 
         if (categoryLabel) {
+
             categoryLabel.textContent =
                 "Management";
         }
 
+
         if (title) {
+
             title.textContent =
                 "Add Category";
         }
 
+
         if (nameInput) {
+
             nameInput.placeholder =
                 "Enter category name";
         }
 
+
         if (iconGroup) {
+
             iconGroup.style.display =
                 "";
         }
 
+
         if (help) {
+
             help.textContent =
                 "Add a new category to your wedding planner.";
         }
@@ -3407,26 +4633,35 @@ function openManagementModal(
     } else {
 
         if (categoryLabel) {
+
             categoryLabel.textContent =
                 "Management";
         }
 
+
         if (title) {
+
             title.textContent =
                 "Add Item";
         }
 
+
         if (nameInput) {
+
             nameInput.placeholder =
                 "Enter item name";
         }
 
+
         if (iconGroup) {
+
             iconGroup.style.display =
                 "none";
         }
 
+
         if (help) {
+
             help.textContent =
                 "Add a custom item to the current category.";
         }
@@ -3434,16 +4669,24 @@ function openManagementModal(
 
 
     if (nameInput) {
-        nameInput.value = "";
+
+        nameInput.value =
+            "";
     }
 
+
     if (iconInput) {
-        iconInput.value = "";
+
+        iconInput.value =
+            "";
     }
 
 
     if (overlay) {
-        overlay.classList.add("open");
+
+        overlay.classList.add(
+            "open"
+        );
 
         overlay.setAttribute(
             "aria-hidden",
@@ -3456,23 +4699,30 @@ function openManagementModal(
         "hidden";
 
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        if (nameInput) {
-            nameInput.focus();
-        }
+            if (nameInput) {
 
-    }, 100);
+                nameInput.focus();
+            }
+
+        },
+        100
+    );
 }
 
 
 function closeManagementModal() {
+
     const overlay =
         getElement(
             "managementOverlay"
         );
 
+
     if (overlay) {
+
         overlay.classList.remove(
             "open"
         );
@@ -3482,6 +4732,7 @@ function closeManagementModal() {
             "true"
         );
     }
+
 
     document.body.style.overflow =
         "";
@@ -3493,6 +4744,7 @@ function closeManagementModal() {
    ========================================================= */
 
 function saveManagement() {
+
     const nameInput =
         getElement(
             "managementNameInput"
@@ -3509,6 +4761,7 @@ function saveManagement() {
             ? nameInput.value.trim()
             : "";
 
+
     const icon =
         iconInput
             ? iconInput.value.trim()
@@ -3516,19 +4769,30 @@ function saveManagement() {
 
 
     if (!name) {
+
         showToast(
             "Please enter a name."
         );
 
+
         if (nameInput) {
+
             nameInput.focus();
         }
+
 
         return;
     }
 
 
-    if (managementMode === "category") {
+    /* =====================================================
+       ADD CATEGORY
+       ===================================================== */
+
+    if (
+        managementMode ===
+        "category"
+    ) {
 
         const duplicate =
             categories.some(
@@ -3540,6 +4804,7 @@ function saveManagement() {
 
 
         if (duplicate) {
+
             showToast(
                 "This category already exists."
             );
@@ -3548,36 +4813,76 @@ function saveManagement() {
         }
 
 
+        /*
+         * New category belongs to
+         * the currently selected
+         * Wedding / Reception section.
+         */
         categories.push({
-            id: createId("category"),
+
+            id:
+                createId(
+                    "category"
+                ),
+
             name,
-            icon: icon || "📋",
-            items: []
+
+            icon:
+                icon ||
+                "📋",
+
+            mainCategory:
+                currentMainCategory,
+
+            custom:
+                true,
+
+            items:
+                []
         });
 
 
         saveData();
 
+
+        buildMainCategoryNavigation();
+
         buildNavigation();
+
 
         closeManagementModal();
 
+
         renderDashboard();
 
+
         showToast(
-            "Category added."
+            `${getMainCategoryLabel(
+                currentMainCategory
+            )} category added.`
         );
+
 
         return;
     }
 
 
+    /* =====================================================
+       ADD CUSTOM ITEM
+       ===================================================== */
+
     if (
-        currentCategory === "dashboard" ||
-        currentCategory === "tagging" ||
-        currentCategory === "budget" ||
-        currentCategory === "hidden"
+        currentCategory ===
+            "dashboard" ||
+        currentCategory ===
+            "tagging" ||
+        currentCategory ===
+            "budget" ||
+        currentCategory ===
+            "hidden" ||
+        !currentCategory
     ) {
+
         showToast(
             "Please open a category first."
         );
@@ -3589,7 +4894,8 @@ function saveManagement() {
     const category =
         categories.find(
             item =>
-                item.id === currentCategory
+                item.id ===
+                currentCategory
         );
 
 
@@ -3599,21 +4905,26 @@ function saveManagement() {
 
 
     const duplicate =
-        category.items.some(item => {
+        category.items.some(
+            item => {
 
-            const itemName =
-                typeof item === "string"
-                    ? item
-                    : item.name;
+                const itemName =
+                    typeof item ===
+                    "string"
+                        ? item
+                        : item.name;
 
-            return (
-                itemName.toLowerCase() ===
-                name.toLowerCase()
-            );
-        });
+
+                return (
+                    itemName.toLowerCase() ===
+                    name.toLowerCase()
+                );
+            }
+        );
 
 
     if (duplicate) {
+
         showToast(
             "This item already exists."
         );
@@ -3623,18 +4934,24 @@ function saveManagement() {
 
 
     category.items.push({
+
         name,
-        custom: true
+
+        custom:
+            true
     });
 
 
     saveData();
 
+
     closeManagementModal();
+
 
     renderCategory();
 
     renderDashboard();
+
 
     showToast(
         "Item added."
@@ -3647,17 +4964,25 @@ function saveManagement() {
    ========================================================= */
 
 function addItemToCurrentCategory() {
+
     if (
         !currentCategory ||
-        currentCategory === "dashboard" ||
-        currentCategory === "tagging" ||
-        currentCategory === "budget" ||
-        currentCategory === "hidden"
+        currentCategory ===
+            "dashboard" ||
+        currentCategory ===
+            "tagging" ||
+        currentCategory ===
+            "budget" ||
+        currentCategory ===
+            "hidden"
     ) {
         return;
     }
 
-    openManagementModal("item");
+
+    openManagementModal(
+        "item"
+    );
 }
 
 
@@ -3666,12 +4991,19 @@ function addItemToCurrentCategory() {
    ========================================================= */
 
 function exportData() {
+
     const data = {
-        version: 8,
+
+        version:
+            8,
+
         exportedAt:
             new Date().toISOString(),
+
         categories,
+
         savedData,
+
         responsibleIndividualsGroups:
             normaliseResponsibleIndividualsGroups(
                 responsibleIndividualsGroups
@@ -3696,24 +5028,39 @@ function exportData() {
 
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
 
 
     const link =
-        document.createElement("a");
+        document.createElement(
+            "a"
+        );
 
-    link.href = url;
+
+    link.href =
+        url;
+
 
     link.download =
         "tamil-wedding-planner.json";
 
-    document.body.appendChild(link);
+
+    document.body.appendChild(
+        link
+    );
+
 
     link.click();
 
+
     link.remove();
 
-    URL.revokeObjectURL(url);
+
+    URL.revokeObjectURL(
+        url
+    );
 
 
     showToast(
@@ -3726,7 +5073,10 @@ function exportData() {
    IMPORT
    ========================================================= */
 
-function importData(file) {
+function importData(
+    file
+) {
+
     if (!file) {
         return;
     }
@@ -3736,74 +5086,107 @@ function importData(file) {
         new FileReader();
 
 
-    reader.onload = event => {
+    reader.onload =
+        event => {
 
-        try {
+            try {
 
-            const parsed =
-                JSON.parse(
-                    event.target.result
+                const parsed =
+                    JSON.parse(
+                        event.target.result
+                    );
+
+
+                if (
+                    !parsed ||
+                    !Array.isArray(
+                        parsed.categories
+                    )
+                ) {
+
+                    throw new Error(
+                        "Invalid planner file."
+                    );
+                }
+
+
+                categories =
+                    normaliseCategories(
+                        parsed.categories
+                    );
+
+
+                savedData =
+                    parsed.savedData &&
+                    typeof parsed.savedData ===
+                        "object"
+                        ? parsed.savedData
+                        : {};
+
+
+                responsibleIndividualsGroups =
+                    normaliseResponsibleIndividualsGroups(
+                        parsed.responsibleIndividualsGroups
+                    );
+
+
+                migrateSavedData();
+
+
+                saveData();
+
+
+                /*
+                 * Make sure the selected
+                 * main category remains valid.
+                 */
+                const hasCurrentMainCategory =
+                    categories.some(
+                        category =>
+                            category.mainCategory ===
+                            currentMainCategory
+                    );
+
+
+                if (
+                    !hasCurrentMainCategory
+                ) {
+
+                    currentMainCategory =
+                        "wedding";
+                }
+
+
+                buildMainCategoryNavigation();
+
+                buildNavigation();
+
+
+                showDashboard();
+
+
+                showToast(
+                    "Planner imported successfully."
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Import failed:",
+                    error
                 );
 
 
-            if (
-                !parsed ||
-                !Array.isArray(
-                    parsed.categories
-                )
-            ) {
-                throw new Error(
-                    "Invalid planner file."
+                showToast(
+                    "Import failed. Please select a valid planner file."
                 );
             }
+        };
 
 
-            categories =
-                normaliseCategories(
-                    parsed.categories
-                );
-
-
-            savedData =
-                parsed.savedData &&
-                typeof parsed.savedData === "object"
-                    ? parsed.savedData
-                    : {};
-
-
-            responsibleIndividualsGroups =
-                normaliseResponsibleIndividualsGroups(
-                    parsed.responsibleIndividualsGroups
-                );
-
-
-            migrateSavedData();
-
-            saveData();
-
-            buildNavigation();
-
-            showDashboard();
-
-            showToast(
-                "Planner imported successfully."
-            );
-
-        } catch (error) {
-
-            console.error(
-                "Import failed:",
-                error
-            );
-
-            showToast(
-                "Import failed. Please select a valid planner file."
-            );
-        }
-    };
-
-
-    reader.readAsText(file);
+    reader.readAsText(
+        file
+    );
 }
 
 
@@ -3812,6 +5195,7 @@ function importData(file) {
    ========================================================= */
 
 function resetPlanner() {
+
     const confirmed =
         window.confirm(
             "Reset the entire wedding planner?\n\nThis will delete all saved progress, custom categories, custom items and Tagging entries."
@@ -3826,9 +5210,25 @@ function resetPlanner() {
     categories =
         cloneDefaults();
 
-    savedData = {};
 
-    responsibleIndividualsGroups = [];
+    savedData =
+        {};
+
+
+    responsibleIndividualsGroups =
+        [];
+
+
+    currentMainCategory =
+        "wedding";
+
+
+    currentCategory =
+        "dashboard";
+
+
+    currentItem =
+        null;
 
 
     localStorage.removeItem(
@@ -3838,9 +5238,14 @@ function resetPlanner() {
 
     saveData();
 
+
+    buildMainCategoryNavigation();
+
     buildNavigation();
 
+
     showDashboard();
+
 
     populateResponsibleIndividualSelect();
 
@@ -3857,13 +5262,18 @@ function resetPlanner() {
 
 function setupEvents() {
 
-    /* Dashboard */
+    /* =====================================================
+       DASHBOARD
+       ===================================================== */
+
     const addCategoryButton =
         getElement(
             "addCategoryButton"
         );
 
+
     if (addCategoryButton) {
+
         addCategoryButton.addEventListener(
             "click",
             () =>
@@ -3879,7 +5289,9 @@ function setupEvents() {
             "exportButton"
         );
 
+
     if (exportButton) {
+
         exportButton.addEventListener(
             "click",
             exportData
@@ -3891,6 +5303,7 @@ function setupEvents() {
         getElement(
             "importButton"
         );
+
 
     const importFileInput =
         getElement(
@@ -3917,11 +5330,17 @@ function setupEvents() {
                 const file =
                     event.target.files[0];
 
+
                 if (file) {
-                    importData(file);
+
+                    importData(
+                        file
+                    );
                 }
 
-                event.target.value = "";
+
+                event.target.value =
+                    "";
             }
         );
     }
@@ -3932,7 +5351,9 @@ function setupEvents() {
             "resetButton"
         );
 
+
     if (resetButton) {
+
         resetButton.addEventListener(
             "click",
             resetPlanner
@@ -3940,13 +5361,18 @@ function setupEvents() {
     }
 
 
-    /* Tagging */
+    /* =====================================================
+       TAGGING
+       ===================================================== */
+
     const addTaggingButton =
         getElement(
             "addTaggingButton"
         );
 
+
     if (addTaggingButton) {
+
         addTaggingButton.addEventListener(
             "click",
             addResponsibleIndividualGroup
@@ -3959,6 +5385,7 @@ function setupEvents() {
             "taggingInput"
         );
 
+
     if (taggingInput) {
 
         taggingInput.addEventListener(
@@ -3966,7 +5393,8 @@ function setupEvents() {
             event => {
 
                 if (
-                    event.key === "Enter"
+                    event.key ===
+                    "Enter"
                 ) {
 
                     event.preventDefault();
@@ -3978,13 +5406,18 @@ function setupEvents() {
     }
 
 
-    /* Category page */
+    /* =====================================================
+       CATEGORY PAGE
+       ===================================================== */
+
     const backButton =
         getElement(
             "backToDashboardButton"
         );
 
+
     if (backButton) {
+
         backButton.addEventListener(
             "click",
             showDashboard
@@ -3997,7 +5430,9 @@ function setupEvents() {
             "addItemButton"
         );
 
+
     if (addItemButton) {
+
         addItemButton.addEventListener(
             "click",
             addItemToCurrentCategory
@@ -4010,7 +5445,9 @@ function setupEvents() {
             "itemSearch"
         );
 
+
     if (itemSearch) {
+
         itemSearch.addEventListener(
             "input",
             () => {
@@ -4019,13 +5456,18 @@ function setupEvents() {
                     currentCategory ===
                     "hidden"
                 ) {
+
                     renderHiddenItems();
+
                 } else if (
                     currentCategory !==
-                    "dashboard" &&
+                        "dashboard" &&
                     currentCategory !==
-                    "tagging"
+                        "tagging" &&
+                    currentCategory !==
+                        "budget"
                 ) {
+
                     renderCategory();
                 }
             }
@@ -4038,19 +5480,24 @@ function setupEvents() {
             "itemStatusFilter"
         );
 
+
     if (itemStatusFilter) {
+
         itemStatusFilter.addEventListener(
             "change",
             () => {
 
                 if (
                     currentCategory !==
-                    "dashboard" &&
+                        "dashboard" &&
                     currentCategory !==
-                    "tagging" &&
+                        "tagging" &&
                     currentCategory !==
-                    "hidden"
+                        "hidden" &&
+                    currentCategory !==
+                        "budget"
                 ) {
+
                     renderCategory();
                 }
             }
@@ -4058,23 +5505,34 @@ function setupEvents() {
     }
 
 
-    /* Item modal */
+    /* =====================================================
+       ITEM MODAL
+       ===================================================== */
+
     const notButton =
-        getElement("notButton");
+        getElement(
+            "notButton"
+        );
 
     const progressButton =
-        getElement("progressButton");
+        getElement(
+            "progressButton"
+        );
 
     const doneButton =
-        getElement("doneButton");
+        getElement(
+            "doneButton"
+        );
 
 
     if (notButton) {
+
         notButton.addEventListener(
             "click",
             () => {
 
-                modalStatus = "not";
+                modalStatus =
+                    "not";
 
                 updateStatusButtons();
             }
@@ -4083,11 +5541,13 @@ function setupEvents() {
 
 
     if (progressButton) {
+
         progressButton.addEventListener(
             "click",
             () => {
 
-                modalStatus = "progress";
+                modalStatus =
+                    "progress";
 
                 updateStatusButtons();
             }
@@ -4096,11 +5556,13 @@ function setupEvents() {
 
 
     if (doneButton) {
+
         doneButton.addEventListener(
             "click",
             () => {
 
-                modalStatus = "done";
+                modalStatus =
+                    "done";
 
                 updateStatusButtons();
             }
@@ -4113,6 +5575,7 @@ function setupEvents() {
             "closeModalButton"
         );
 
+
     const closeModalButtonTop =
         getElement(
             "closeModalButtonTop"
@@ -4120,6 +5583,7 @@ function setupEvents() {
 
 
     if (closeModalButton) {
+
         closeModalButton.addEventListener(
             "click",
             closeModal
@@ -4128,6 +5592,7 @@ function setupEvents() {
 
 
     if (closeModalButtonTop) {
+
         closeModalButtonTop.addEventListener(
             "click",
             closeModal
@@ -4140,7 +5605,9 @@ function setupEvents() {
             "clearButton"
         );
 
+
     if (clearButton) {
+
         clearButton.addEventListener(
             "click",
             clearItem
@@ -4153,7 +5620,9 @@ function setupEvents() {
             "saveButton"
         );
 
+
     if (saveButton) {
+
         saveButton.addEventListener(
             "click",
             saveItem
@@ -4166,7 +5635,9 @@ function setupEvents() {
             "disableItemButton"
         );
 
+
     if (disableItemButton) {
+
         disableItemButton.addEventListener(
             "click",
             toggleCurrentItemVisibility
@@ -4179,7 +5650,9 @@ function setupEvents() {
             "deleteCustomItemButton"
         );
 
+
     if (deleteCustomItemButton) {
+
         deleteCustomItemButton.addEventListener(
             "click",
             deleteCurrentCustomItem
@@ -4188,18 +5661,19 @@ function setupEvents() {
 
 
     /*
-     * Important:
-     * There is deliberately NO backdrop click
-     * handler. Clicking outside the modal will
-     * therefore not close it.
+     * Deliberately NO backdrop click handler.
      */
 
 
-    /* Management modal */
+    /* =====================================================
+       MANAGEMENT MODAL
+       ===================================================== */
+
     const managementCloseButton =
         getElement(
             "managementCloseButton"
         );
+
 
     const managementCancelButton =
         getElement(
@@ -4208,6 +5682,7 @@ function setupEvents() {
 
 
     if (managementCloseButton) {
+
         managementCloseButton.addEventListener(
             "click",
             closeManagementModal
@@ -4216,6 +5691,7 @@ function setupEvents() {
 
 
     if (managementCancelButton) {
+
         managementCancelButton.addEventListener(
             "click",
             closeManagementModal
@@ -4228,7 +5704,9 @@ function setupEvents() {
             "managementSaveButton"
         );
 
+
     if (managementSaveButton) {
+
         managementSaveButton.addEventListener(
             "click",
             saveManagement
@@ -4241,6 +5719,7 @@ function setupEvents() {
             "managementNameInput"
         );
 
+
     if (managementNameInput) {
 
         managementNameInput.addEventListener(
@@ -4248,7 +5727,8 @@ function setupEvents() {
             event => {
 
                 if (
-                    event.key === "Enter"
+                    event.key ===
+                    "Enter"
                 ) {
 
                     event.preventDefault();
@@ -4260,20 +5740,27 @@ function setupEvents() {
     }
 
 
-    /* Escape closes modals */
+    /* =====================================================
+       ESCAPE CLOSES MODALS
+       ===================================================== */
+
     document.addEventListener(
         "keydown",
         event => {
 
             if (
-                event.key !== "Escape"
+                event.key !==
+                "Escape"
             ) {
                 return;
             }
 
 
             const overlay =
-                getElement("overlay");
+                getElement(
+                    "overlay"
+                );
+
 
             const managementOverlay =
                 getElement(
@@ -4287,6 +5774,7 @@ function setupEvents() {
                     "open"
                 )
             ) {
+
                 closeModal();
 
                 return;
@@ -4299,6 +5787,7 @@ function setupEvents() {
                     "open"
                 )
             ) {
+
                 closeManagementModal();
             }
         }
@@ -4318,20 +5807,12 @@ document.addEventListener(
 
         setupEvents();
 
+        buildMainCategoryNavigation();
+
         buildNavigation();
 
         populateResponsibleIndividualSelect();
 
         showDashboard();
-
-        toggleCurrentItemVisibility()
-        
-        deleteCurrentCustomItem()
-        
-        saveItem()
-        
-        saveManagement()
-        
-        addItemToCurrentCategory()
     }
 );
